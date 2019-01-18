@@ -35,7 +35,6 @@ APP_NAME=Burdock
 APP_ENV=local
 APP_KEY=base64:NOwK3+2AQLj41zWorz0d1JXe7cKSGRTKMtJs9tSm4/g=
 APP_DEBUG=true
-APP_URL=http://localhost
 ```
 
 アプリケーションキーは次のコマンドで再生成してください。
@@ -43,6 +42,15 @@ APP_URL=http://localhost
 ```
 $ php artisan key:generate
 Application key set successfully.
+```
+
+#### アプリサーバーとプレビューサーバーのURLを設定
+
+アプリサーバーとプレビューサーバーは異なるURLを設定してください。
+
+```
+APP_URL=https://app.com
+PREV_URL=https://prev.app.com
 ```
 
 #### データベース接続設定
