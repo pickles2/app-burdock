@@ -22,6 +22,6 @@ for(var i = 0; i < a.length; i++) {
         // pathをエンコード処理
         path = btoa(unescape(encodeURIComponent(path)));
         // 親フレームにpathを送信
-        window.parent.postMessage(path, 'https://app-burdock.localhost');
+        window.parent.postMessage(path, parent_url);
     });
 };
