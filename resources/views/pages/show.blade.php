@@ -42,6 +42,8 @@ foreach($px2ce_client_resources['js'] as $value) {
 		var project_name = <?php echo json_encode($project->project_name); ?>;
 		var branch_name = <?php echo json_encode($branch_name); ?>;
 		var page_param = <?php echo json_encode($page_param); ?>;
+		// .envよりプレビューサーバーのURLを取得
+		var prev_url = '{{ env('PREV_URL') }}';
 
 		pickles2ContentsEditor.init(
 			{
@@ -51,7 +53,7 @@ foreach($px2ce_client_resources['js'] as $value) {
 				'page_path': '/'+page_param , // <- 編集対象ページのパス
 				'elmCanvas': document.getElementById('canvas'), // <- 編集画面を描画するための器となる要素
 				'preview':{
-					'origin': 'https://prev1.app-burdock.localhost/'// プレビュー用サーバーの情報を設定します。
+					'origin': prev_url// プレビュー用サーバーの情報を設定します。
 				},
 				'lang': 'en', // language
 				'customFields': {
