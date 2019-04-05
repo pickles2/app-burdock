@@ -42,16 +42,6 @@
                     <div></div>
                 </div>
 				<div class="theme-header__gmenu" id="navbarLeftContent">
-                    <ul>
-                        <li><span>&nbsp;</span></li>
-                        <li><a href="">ホーム</a></li>
-                        <li><a href="">サイトマップ</a></li>
-                        <li><a href="">テーマ</a></li>
-                        <li><a href="" class="current">コンテンツ</a></li>
-                        <li><a href="">パブリッシュ</a></li>
-                    </ul>
-                </div>
-				<div class="theme-header__gmenu" id="navbarRightContent">
                     {{-- Navbarの右側 --}}
                     <ul class="">
 						{{-- プロジェクト作成ボタン --}}
@@ -73,9 +63,9 @@
                             {{-- 「プロフィール」と「ログアウト」のドロップダウンメニュー --}}
                             <li class="">
                                 <a class="nav-link dropdown-toggle" href="#" id="dropdown-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ Auth::user()->name }}
+                                    {{ 'ようこそ '.Auth::user()->name.' さん' }}
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">
+                                <div class="dropdown-menu" aria-labelledby="dropdown-user">
                                     <a class="dropdown-item" href="{{ url('profile') }}">
                                         {{ __('Profile') }}
                                     </a>
@@ -94,7 +84,7 @@
                             <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="dropdown-lang" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ __('locale.'.App::getLocale()) }}
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-lang">
+                            <div class="dropdown-menu" aria-labelledby="dropdown-lang">
                                 @if (!App::isLocale('en'))
                                     <a class="dropdown-item" href="{{ locale_url('en') }}">
                                         {{ __('locale.en') }}
@@ -109,7 +99,7 @@
                         </li>
                     </ul>
                 </div>
-				<div class="theme-header__shoulder-menu" style="width: 50px; height: 33px;">
+				{{-- <div class="theme-header__shoulder-menu" style="width: 50px; height: 30px;">
 					<button style="height: 33px;">≡</button>
 					<ul style="display: none; top: 30px; height: 892px;">
                         <li><a href="">ダッシュボード</a></li>
@@ -135,7 +125,7 @@
                         <li><a href="">デペロッパツール</a></li>
                         <li><a href="">終了</a></li>
                     </ul>
-				</div>
+				</div> --}}
 			</div>
 		</header>
 		{{-- フラッシュ・メッセージ --}}

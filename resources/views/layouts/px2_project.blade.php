@@ -103,7 +103,7 @@
                         <li><a href="{{ url('/publish'.'/'.$project->project_name.'/'.$branch_name) }}">パブリッシュ</a></li>
                     </ul>
                 </div>
-				<div class="theme-header__shoulder-menu" style="width: 50px; height: 30px;">
+				{{-- <div class="theme-header__shoulder-menu" style="width: 50px; height: 30px;">
 					<button style="height: 33px;">≡</button>
 					<ul style="display: none; top: 30px; height: 892px;">
                         <li><a href="">ダッシュボード</a></li>
@@ -129,7 +129,7 @@
                         <li><a href="">デペロッパツール</a></li>
                         <li><a href="">終了</a></li>
                     </ul>
-				</div>
+				</div> --}}
 			</div>
 		</header>
 		{{-- フラッシュ・メッセージ --}}

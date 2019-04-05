@@ -44,18 +44,9 @@
 				<div class="theme-header__gmenu" id="navbarLeftContent">
                     {{-- Navbarの右側 --}}
                     <ul class="">
-						{{-- プロジェクト作成ボタン --}}
-                        <li class="">
-                            <a href="{{ url('projects/create') }}" id="new-project" class="btn-success">
-                                {{ __('Create Project') }}
-                            </a>
-                        </li>
-                        {{-- 認証関連のリンク --}}
+						{{-- 認証関連のリンク --}}
                         @guest
-                            {{-- 「ログイン」と「ユーザー登録」へのリンク --}}
-                            <li class="">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
+                            {{-- 「ユーザー登録」へのリンク --}}
                             <li class="">
                                 <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                             </li>
@@ -99,7 +90,7 @@
                         </li>
                     </ul>
                 </div>
-				<div class="theme-header__shoulder-menu" style="width: 50px; height: 30px;">
+				{{-- <div class="theme-header__shoulder-menu" style="width: 50px; height: 30px;">
 					<button style="height: 33px;">≡</button>
 					<ul style="display: none; top: 30px; height: 892px;">
                         <li><a href="">ダッシュボード</a></li>
@@ -125,7 +116,7 @@
                         <li><a href="">デペロッパツール</a></li>
                         <li><a href="">終了</a></li>
                     </ul>
-				</div>
+				</div> --}}
 			</div>
 		</header>
 		{{-- フラッシュ・メッセージ --}}
