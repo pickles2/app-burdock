@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\User;
+use App\Http\Requests\StoreUser;
 
 class HomeController extends Controller
 {
@@ -14,6 +17,7 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('verified');
     }
 
     /**
@@ -21,8 +25,9 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(User $user)
     {
-        return view('top');
+        $user = Auth::user();   #ログインユーザー情報を取得します。
+        return view('top', ['user' => $user]);
     }
 }

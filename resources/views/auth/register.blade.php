@@ -1,7 +1,7 @@
 @php
     $title = __('Register');
 @endphp
-@extends('layouts.px2_main')
+@extends('layouts.px2_login')
 
 @section('content')
 <div class="container">

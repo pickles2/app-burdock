@@ -130,11 +130,9 @@ class ProjectController extends Controller
         $project_path = get_project_workingtree_dir($project_name, $branch_name);
 
         $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-
         chdir($project_path);
         $bd_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all');
         $bd_object = json_decode($bd_json);
-
         chdir($path_current_dir); // 元いたディレクトリへ戻る
 
         return view('projects.show', ['project' => $project, 'branch_name' => $branch_name], compact('bd_object'));

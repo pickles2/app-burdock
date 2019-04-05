@@ -4,43 +4,7 @@
 @extends('layouts.px2_project')
 @section('content')
 <div class="container">
-    <h1 id="project-title">Project_{{ $title }}</h1>
-
-    {{-- 編集・削除ボタン --}}
-    @can('edit', $project)
-        <div class="edit">
-            <a href="{{ url('projects/'.$project->project_name.'/'.$branch_name.'/edit') }}" class="btn btn-primary">
-                {{ __('Edit') }}
-            </a>
-            @component('components.btn-del')
-                @slot('controller', 'projects')
-                @slot('id', $project->id)
-                @slot('name', $project->project_name)
-                @slot('branch', get_git_remote_default_branch_name())
-            @endcomponent
-        </div>
-    @endcan
-
-    {{-- プロジェクトの内容 --}}
-    <dl class="row">
-        <dt class="col-md-2">{{ __('Author') }}:</dt>
-        <dd class="col-md-10">
-                {{ $project->user->name }}
-        </dd>
-        <dt class="col-md-2">{{ __('Created') }}:</dt>
-        <dd class="col-md-10">
-            <time itemprop="dateCreated" datetime="{{ $project->created_at }}">
-                {{ $project->created_at }}
-            </time>
-        </dd>
-        <dt class="col-md-2">{{ __('Updated') }}:</dt>
-        <dd class="col-md-10">
-            <time itemprop="dateModified" datetime="{{ $project->updated_at }}">
-                {{ $project->updated_at }}
-            </time>
-        </dd>
-    </dl>
-    <hr>
+    <h1 id="project-title" style="margin-bottom: 50px;">Project "{{ $title }}"</h1>
     <div class="contents">
         <div class="cont_info"></div>
         <div class="cont_maintask_ui">
@@ -48,7 +12,7 @@
             <div>
                 {{ Auth::user()->project_name }}
             </div>
-            <div class="row">
+            <div class="row" style="margin-bottom: 100px;">
                 <div class="col-sm-3">
                     <a href="{{ url('/sitemaps'.'/'.$project->project_name.'/'.$branch_name) }}" class="px2-btn cont_mainmenu">{{ __('Edit Sitemap')}}</a>
                 </div>
@@ -62,7 +26,7 @@
                     <a href="{{ url('/publish'.'/'.$project->project_name.'/'.$branch_name) }}" class="px2-btn cont_mainmenu">{{ __('To Publish')}}</a>
                 </div>
             </div><!-- / .row -->
-            <ul class="px2-horizontal-list px2-horizontal-list--right">
+            {{-- <ul class="px2-horizontal-list px2-horizontal-list--right">
                 <li><a href="javascript:px.getCurrentProject().open();" class="px2-link px2-link--burette">フォルダを開く</a></li>
                 <li><a href="javascript:px.openInBrowser();" class="px2-link px2-link--burette">ブラウザで開く</a></li>
                 <li><a href="javascript:px.openInTextEditor( contApp.pj.get('path') );" class="px2-link px2-link--burette">外部テキストエディタで開く</a></li>
@@ -72,14 +36,14 @@
             <ul class="px2-horizontal-list px2-horizontal-list--right">
                 <li><a href="javascript:px.subapp('fncs/config/index.html');" class="px2-link px2-link--burette">config.php を編集する</a></li>
                 <li><a href="javascript:px.subapp('fncs/composer/index.html');" class="px2-link px2-link--burette">composer を操作する</a></li>
-            </ul>
+            </ul> --}}
         </div>
-        <div class="alert alert-info">Hint! : <span class="cont_hint">Pickles 2 は PHP製のフレームワークです。Apache + PHP の環境で動作します。</span></div>
+        <div class="alert alert-info">Hint! : <span class="cont_hint">Burdock は Pickles2をベースにしたWebアプリケーションです。</span></div>
         <div class="row">
             <div class="col-sm-12">
-                <h2>README</h2>
+                {{-- <h2>README</h2> --}}
                 <div class="cont_readme_content selectable">
-                    <h1 id="get-start-pickles-2-">Get start "Pickles 2" !</h1>
+                    {{-- <h1 id="get-start-pickles-2-">Get start "Pickles 2" !</h1>
                     <p><a href="http://pickles2.pxt.jp/">Pickles 2</a> は、静的で大きなウェブサイトを効率よく構築できる オープンソースのHTML生成ツールです。</p>
                     <ul>
                         <li>サイトマップ(ページリスト)をCSV形式で管理し、グローバルナビゲーションの生成やカレント処理、パンくず生成、タイトルやメタタグの出力などを自動化します。</li>
@@ -104,7 +68,7 @@
                                 <li>safe_mode が無効に設定されていること</li>
                             </ul>
                         </li>
-                    </ul>
+                    </ul> --}}
                     <h2 id="-license">ライセンス - License</h2>
                     <p>Copyright (c)2001-2018 Tomoya Koyanagi, and Pickles 2 Project<br>MIT License <a href="https://opensource.org/licenses/mit-license.php">https://opensource.org/licenses/mit-license.php</a></p>
                     <h2 id="-author">作者 - Author</h2>
@@ -121,24 +85,24 @@
                         <tbody>
                             <tr>
                                 <th>Project Name</th>
-                                <td class="tpl_name selectable">test</td>
+                                <td class="tpl_name selectable">{{ $bd_object->packages->package_list->projects[0]->name }}</td>
                             </tr>
                             <tr>
                                 <th>Path</th>
-                                <td class="tpl_path selectable">/Users/yuki.shimoyama/Desktop/marble_project/プロジェクト/test</td>
+                                <td class="tpl_path selectable">{{ $bd_object->realpath_docroot }}</td>
                             </tr>
                             <tr>
                                 <th>Home Directory</th>
-                                <td class="tpl_home_dir selectable">px-files/</td>
+                                <td class="tpl_home_dir selectable">{{ $bd_object->packages->package_list->projects[0]->path_homedir }}</td>
                             </tr>
                             <tr>
                                 <th>Entry Script</th>
-                                <td class="tpl_entry_script selectable">.px_execute.php</td>
+                                <td class="tpl_entry_script selectable">{{ $bd_object->packages->package_list->projects[0]->path }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <h3>Optional</h3>
+                {{-- <h3>Optional</h3>
                 <div class="px2-responsive">
                     <table class="px2-table" style="width:100%; table-layout: fixed;">
                         <colgroup><col width="30%"><col width="70%"></colgroup>
@@ -223,30 +187,14 @@
                             <td>broccoli-html-editor</td>
                         </tr>
                     </table>
-                </div>
+                </div> --}}
             </div>
         </div><!-- /.row -->
-        <p><button class="px2-btn" onclick="px.deselectProject(); px.subapp(); return false;">ダッシュボードへ戻る</button></p>
+        {{-- <p><button class="px2-btn" onclick="px.deselectProject(); px.subapp(); return false;">ダッシュボードへ戻る</button></p>
         <p><button class="px2-btn" onclick="px.healthCheck(); return false;">診断ツール</button></p>
-        <p><button class="px2-btn px2-btn--danger" onclick="if(confirm('このプロジェクトを削除してよろしいですか？')){px.deleteProject( px.getCurrentProject().projectId, function(){px.subapp();} );} return false;">このプロジェクトを削除</button></p>
+        <p><button class="px2-btn px2-btn--danger" onclick="if(confirm('このプロジェクトを削除してよろしいですか？')){px.deleteProject( px.getCurrentProject().projectId, function(){px.subapp();} );} return false;">このプロジェクトを削除</button></p> --}}
         <hr>
         <address class="center">(C)Pickles 2 Project.</address>
     </div>
-</div>
-
-
-<div class="container">
-    <dl class="row">
-        <dt class="col-md-2">{{ __('Project Name') }}:</dt>
-        <dd class="col-md-10">{{ $bd_object->config->name }}</dd>
-        <dt class="col-md-2">{{ __('Project Path') }}:</dt>
-        <dd class="col-md-10">{{ $bd_object->realpath_docroot }}</dd>
-        <dt class="col-md-2">{{ __('Home Directory') }}:</dt>
-        <dd class="col-md-10">{{ $bd_object->packages->package_list->projects[0]->path_homedir }}</dd>
-        <dt class="col-md-2">{{ __('Entry Script') }}:</dt>
-        <dd class="col-md-10">{{ $bd_object->packages->package_list->projects[0]->path }}</dd>
-        <dt class="col-md-2">{{ __('Git URL') }}:</dt>
-        <dd class="col-md-10">{{ $project->git_url }}</dd>
-    </dl>
 </div>
 @endsection

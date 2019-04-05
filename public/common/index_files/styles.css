@@ -206,7 +206,7 @@ body {
 
 .cont_top_jumbotron {
   background-color: #f6f6f6;
-  background-image: url("./images/main.png");
+  background-image: url("/common/images/main.png");
   background-position: center center;
   background-size: cover;
   color: #00a0e6;

@@ -25,8 +25,8 @@ class StoreProject extends FormRequest
     public function rules()
     {
         return [
-            'project_name' => 'required|max:191',
-            'git_url' => 'required|nullable|url|max:400',
+            'project_name' => 'required|unique:projects,project_name|max:191',
+            'git_url' => 'required|unique:projects,git_url|url|max:400',
         ];
     }
 }

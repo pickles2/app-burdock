@@ -10,7 +10,7 @@
         @method('POST')
         <div class="form-group">
             <label for="project_name">{{ __('Project Name') }}</label>
-            <input id="project_name" type="text" class="form-control @if ($errors->has('project_name')) is-invalid @endif" name="project_name" value="{{ old('project_name') }}" required autofocus>
+            <input id="project_name" type="text" class="form-control @if ($errors->has('project_name')) is-invalid @endif" name="project_name" value="{{ old('project_name') }}" placeholder="Your Project Name" required autofocus>
                 @if ($errors->has('project_name'))
                     <span class="invalid-feedback" role="alert">
                         {{ $errors->first('project_name') }}
