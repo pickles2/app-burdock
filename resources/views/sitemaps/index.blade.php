@@ -15,9 +15,13 @@
 		</div>
 		<div class="cont_filelist_sitemap" style="height: 745px;">
 			<ul class="listview">
-				<li><a href="javascript:;" data-filename="sitemap.xlsx" data-num="sitemap"><h2>sitemap.xlsx</h2>
+				<li>
+					<a href="javascript:;" data-filename="sitemap.xlsx" data-num="sitemap">
+					<h2>sitemap.xlsx</h2>
 					<ul class="cont_filelist_sitemap__ext-list">
-						<li><lavel>Upload：</lavel><li>
+						<li>
+							<lavel>Upload：</lavel>
+						</li>
 						<li>
 							<form class="form-inline" method="POST" action="{{ url('/upload'.'/'.$project->project_name.'/'.$branch_name) }}" enctype="multipart/form-data">
 								@csrf
@@ -30,7 +34,7 @@
 							</form>
 						</li>
 						<li>
-							@if ($errors->has('file'))
+							@if($errors->has('file'))
 								<span class="invalid-feedback" role="alert">
 									{{ $errors->first('file') }}
 								</span>
@@ -38,14 +42,26 @@
 						</li>
 					</ul>
 					<ul class="cont_filelist_sitemap__ext-list">
-						<li><lavel>Download：</lavel></li>
-						<li><button class="px2-btn" data-filename="sitemap.csv">CSV</button></li>
-						<li><form method="POST" action="{{ url('/download'.'/'.$project->project_name.'/'.$branch_name) }}" enctype="multipart/form-data">
-	                        @csrf
-	                        <input type="hidden" name="file">
-	                        <button type="submit" name="submit" class="px2-btn">{{ __('XLSX')}}</button>
-	                    </form></li>
-						<li><button class="px2-btn px2-btn--danger" data-basefilename="sitemap">Delete</button></li>
+						<li>
+							<lavel>Download：</lavel>
+						</li>
+						<li>
+							<form method="POST" action="{{ url('/download'.'/'.$project->project_name.'/'.$branch_name) }}" enctype="multipart/form-data">
+		                    	@csrf
+		                        <input type="hidden" name="file" value="csv">
+		                        <button type="submit" name="submit" class="px2-btn">{{ __('CSV')}}</button>
+	                    	</form>
+						</li>
+						<li>
+							<form method="POST" action="{{ url('/download'.'/'.$project->project_name.'/'.$branch_name) }}" enctype="multipart/form-data">
+		                    	@csrf
+		                        <input type="hidden" name="file" value="xlsx">
+		                        <button type="submit" name="submit" class="px2-btn">{{ __('XLSX')}}</button>
+	                    	</form>
+						</li>
+						<li>
+							<button class="px2-btn px2-btn--danger" data-basefilename="sitemap">Delete</button>
+						</li>
 					</ul>
 				</a></li>
 			</ul>

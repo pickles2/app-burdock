@@ -36,8 +36,17 @@ class SitemapController extends Controller
     {
         //
         $project_name = $project->project_name;
-        $pathToFile = get_project_workingtree_dir($project_name, $branch_name).'/px-files/sitemaps/sitemap.xlsx';
-        $name = 'sitemap.xlsx';
-        return response()->download($pathToFile, $name);
+
+        if($request->file === 'csv') {
+            // CSVファイルのダウンロード
+            $pathToFile = get_project_workingtree_dir($project_name, $branch_name).'/px-files/sitemaps/sitemap.csv';
+            $name = 'sitemap.csv';
+            return response()->download($pathToFile, $name);
+        } elseif($request->file === 'xlsx') {
+            // XLSXファイルのダウンロード
+            $pathToFile = get_project_workingtree_dir($project_name, $branch_name).'/px-files/sitemaps/sitemap.xlsx';
+            $name = 'sitemap.xlsx';
+            return response()->download($pathToFile, $name);
+        }
     }
 }
