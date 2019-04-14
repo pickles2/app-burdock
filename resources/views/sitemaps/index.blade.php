@@ -27,7 +27,7 @@
 								@csrf
 								@method('POST')
 								<div class="form-group">
-									<input type="file" class="form-control @if ($errors->has('file')) is-invalid @endif" name="file" value="{{ old('file') }}" placeholder="aファイル選択...">
+									<input type="file" class="form-control @if($errors->has('file')) is-invalid @endif" name="file" value="{{ old('file') }}" placeholder="aファイル選択..." accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
 								</div>
 								<button type="submit" class="px2-btn px2-btn--primary">送信</button>
 								<button type="reset" class="px2-btn px2-btn--danger">キャンセル</button>
