@@ -100,6 +100,19 @@ class ProjectController extends Controller
 
         $project_path = get_project_workingtree_dir($project_name, $branch_name);
 
+        // ここから configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
+        $files = null;
+        $file = file($project_path.'/px-files/config.php');
+        for($i = 0; $i < count($file); $i++) {
+            if(strpos($file[$i], "'master_format'=>'xlsx'") !== false) {
+                $files .= str_replace('xlsx', 'timestamp', $file[$i]);
+            } else {
+                $files .= $file[$i];
+            }
+        }
+        file_put_contents($project_path.'/px-files/config.php', $files);
+        // ここまで configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
+
         // 記事作成時に著者のIDを保存する
         $project->user_id = $request->user()->id;
         $project->save();
