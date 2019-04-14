@@ -21,15 +21,22 @@ class SitemapController extends Controller
         //
         $project_name = $project->project_name;
         $file_name = $request->file;
-
         $old_file = $file_name;
-        $new_file = get_project_workingtree_dir($project_name, $branch_name).'/px-files/sitemaps/sitemap.xlsx';
+        $mimetype = $file_name->clientExtension();
 
-        if (!copy($old_file, $new_file)) {
-            echo "failed to copy $file...\n";
+        if($mimetype === 'csv') {
+            $new_file = get_project_workingtree_dir($project_name, $branch_name).'/px-files/sitemaps/sitemap.csv';
+        } elseif($mimetype === 'xlsx') {
+            $new_file = get_project_workingtree_dir($project_name, $branch_name).'/px-files/sitemaps/sitemap.xlsx';
         }
 
-        return redirect('sitemaps/' . $project_name . '/' . $branch_name)->with('my_status', __('Updated a Sitemap.'));
+        if (!copy($old_file, $new_file)) {
+            $message = 'Could not update Sitemap.';
+        } else {
+            $message = 'Updated a Sitemap.';
+        }
+
+        return redirect('sitemaps/' . $project_name . '/' . $branch_name)->with('my_status', __($message));
     }
 
     public function download(Request $request, Project $project, $branch_name)
