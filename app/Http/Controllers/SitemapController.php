@@ -39,6 +39,25 @@ class SitemapController extends Controller
         return view('sitemaps.index', ['project' => $project, 'branch_name' => $branch_name, 'page_param' => $page_param], compact('current'));
     }
 
+    public function uploadAjax(Request $request, Project $project, $branch_name)
+    {
+        $status = 0;
+        if(isset($request->str)) {
+            if(!($request->str === 'text/csv' || $request->str === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
+                $error = 'ファイルがcsvまたはxlsxではありません。';
+            } else {
+                $error = '';
+                $status = 1;
+            }
+        }
+
+        $data = array(
+            "error" => $error,
+            "status" => $status,
+        );
+        return $data;
+    }
+
     public function upload(StoreSitemap $request, Project $project, $branch_name)
     {
         //
