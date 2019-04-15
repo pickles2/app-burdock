@@ -9,6 +9,16 @@ use App\Project;
 
 class PageController extends Controller
 {
+    /**
+     * 各アクションの前に実行させるミドルウェア
+     */
+    public function __construct()
+    {
+        // ログイン・登録完了してなくても閲覧だけはできるようにexcept()で指定します。
+        $this->middleware('auth');
+        $this->middleware('verified');
+    }
+    
     public function index(Request $request, Project $project, $branch_name)
     {
         $page_param = $request->page_path;
