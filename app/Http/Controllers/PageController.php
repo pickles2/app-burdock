@@ -18,7 +18,7 @@ class PageController extends Controller
         $this->middleware('auth');
         $this->middleware('verified');
     }
-    
+
     public function index(Request $request, Project $project, $branch_name)
     {
         $page_param = $request->page_path;
@@ -29,7 +29,6 @@ class PageController extends Controller
 
         $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
         chdir($project_path);
-
         $data_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
         $current = json_decode($data_json);
         $data_json = shell_exec('php .px_execute.php /?PX=px2dthelper.check_editor_mode\&path='.$page_param);

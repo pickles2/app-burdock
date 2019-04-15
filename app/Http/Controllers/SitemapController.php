@@ -4,16 +4,39 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Project;
 use App\Http\Requests\StoreSitemap;
 
 class SitemapController extends Controller
 {
     //
-    public function index(Project $project, $branch_name)
+    /**
+     * 各アクションの前に実行させるミドルウェア
+     */
+    public function __construct()
+    {
+        // ログイン・登録完了してなくても閲覧だけはできるようにexcept()で指定します。
+        $this->middleware('auth');
+        $this->middleware('verified');
+    }
+
+    public function index(Request $request, Project $project, $branch_name)
     {
         //
-        return view('sitemaps.index', ['project' => $project, 'branch_name' => $branch_name]);
+        $page_param = $request->page_path;
+        $page_id = $request->page_id;
+
+        $project_name = $project->project_name;
+        $project_path = get_project_workingtree_dir($project_name, $branch_name);
+
+        $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
+        chdir($project_path);
+        $data_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
+        $current = json_decode($data_json);
+        chdir($path_current_dir); // 元いたディレクトリへ戻る
+
+        return view('sitemaps.index', ['project' => $project, 'branch_name' => $branch_name, 'page_param' => $page_param], compact('current'));
     }
 
     public function upload(StoreSitemap $request, Project $project, $branch_name)

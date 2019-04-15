@@ -63,7 +63,8 @@
 							<button class="px2-btn px2-btn--danger" data-basefilename="sitemap">Delete</button>
 						</li>
 					</ul>
-				</a></li>
+					</a>
+				</li>
 			</ul>
 		</div>
 	</div>
