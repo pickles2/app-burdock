@@ -198,11 +198,30 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Project $project, $branch_name)
+    public function destroy(Request $request, Project $project, $branch_name)
     {
         //
-        $this->authorize('edit', $project);
+        $page_param = $request->page_path;
+        $page_id = $request->page_id;
+
+        $project_name = $project->project_name;
+        $project_path = get_project_workingtree_dir($project_name, $branch_name);
+
+        $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
+        chdir($project_path);
+        $data_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
+        $current = json_decode($data_json);
+        chdir($path_current_dir); // 元いたディレクトリへ戻る
+
         $project->delete();
-        return redirect('/')->with('my_status', __('Deleted a Project.'));
+        \File::deleteDirectory(env('BD_DATA_DIR').'/projects/project_'.$project_name);
+
+        if(\File::exists(env('BD_DATA_DIR').'/projects/project_'.$project_name) === false) {
+            $message = 'Deleted a Project.';
+        } else {
+            $message = 'プロジェクトを削除できませんでした。';
+        }
+
+        return redirect('/')->with('my_status', __($message));
     }
 }
