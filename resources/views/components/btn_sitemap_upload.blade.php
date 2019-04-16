@@ -47,6 +47,7 @@
                                                             errorMessage.innerHTML = data.error;
                                                             submitStatus.disabled = true;
                                                         } else {
+                                                            errorMessage.innerHTML = data.error;
                                                             submitStatus.disabled = false;
                                                         }
 
@@ -59,7 +60,9 @@
                                         <script>
                                             // キャンセルボタンを押した際に送信ボタンをdisabledにする
                                             function cancelButton(e) {
+                                                var errorMessage = document.getElementById("errorMessage");
                                                 var submitStatus = document.getElementById("submitStatus");
+                                                errorMessage.innerHTML = '';
                                                 submitStatus.disabled = true;
                                             }
                                         </script>
