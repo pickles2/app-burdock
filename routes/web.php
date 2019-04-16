@@ -46,6 +46,8 @@ Route::get('sitemaps/{project}/{branch_name}', 'SitemapController@index');
 Route::post('sitemaps/{project}/{branch_name}/uploadAjax', 'SitemapController@uploadAjax');
 Route::post('sitemaps/{project}/{branch_name}/upload', 'SitemapController@upload');
 Route::post('sitemaps/{project}/{branch_name}/download', 'SitemapController@download');
+Route::post('sitemaps/{project}/{branch_name}/destroy', 'SitemapController@destroy');
+
 Route::get('publish/{project}/{branch_name}', 'PublishController@publish');
 
 Route::get('pages/{project}/{branch_name}/index.html', 'PageController@index');

@@ -93,7 +93,7 @@ class SitemapController extends Controller
             $message = 'Updated a Sitemap.';
         }
 
-        return redirect('sitemaps/' . $project_name . '/' . $branch_name)->with('my_status', __($message));
+        return redirect('sitemaps/'.$project_name.'/'.$branch_name)->with('my_status', __($message));
     }
 
     public function download(Request $request, Project $project, $branch_name)
@@ -125,5 +125,36 @@ class SitemapController extends Controller
             $name = $xlsx_file_name;
             return response()->download($pathToFile, $name);
         }
+    }
+
+    public function destroy(Request $request, Project $project, $branch_name)
+    {
+        //
+        $page_param = $request->page_path;
+        $page_id = $request->page_id;
+
+        $project_name = $project->project_name;
+        $project_path = get_project_workingtree_dir($project_name, $branch_name);
+
+        $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
+        chdir($project_path);
+        $data_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
+        $current = json_decode($data_json);
+        chdir($path_current_dir); // 元いたディレクトリへ戻る
+
+        $xlsx_file_name = $request->file_name;
+        $csv_file_name = str_replace('xlsx', 'csv', $xlsx_file_name);
+        $xlsx_file_path = $current->realpath_homedir.'sitemaps/'.$xlsx_file_name;
+        $csv_file_path = $current->realpath_homedir.'sitemaps/'.$csv_file_name;
+        
+        \File::delete($xlsx_file_path, $csv_file_path);
+
+        if(\File::exists($xlsx_file_path) === false && \File::exists($csv_file_path) === false) {
+            $message = $xlsx_file_name.'と'.$csv_file_name.'を削除しました。';
+        } else {
+            $message = 'サイトマップを削除できませんでした。';
+        }
+
+        return redirect('sitemaps/'.$project_name.'/'.$branch_name)->with('my_status', __($message));
     }
 }
