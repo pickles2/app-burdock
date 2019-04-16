@@ -19,23 +19,24 @@
 			<button class="btn px2-btn">ヘルプ</button>
 		</div>
 		<div class="cont_filelist_sitemap" style="height: 630px;">
+			@foreach($get_files as $file)
 			<ul class="listview">
 				<li>
 					<a href="javascript:;" data-filename="sitemap.xlsx" data-num="sitemap">
-					<h2>sitemap.xlsx</h2>
+					<h2>{{ $file->getFilename() }}</h2>
 					<ul class="cont_filelist_sitemap__ext-list">
 						<li>
 							<lavel>Download：</lavel>
 						</li>
 						<li>
-							<form method="POST" action="{{ url('/download'.'/'.$project->project_name.'/'.$branch_name) }}" enctype="multipart/form-data">
+							<form method="POST" action="{{ url('/sitemaps/'.$project->project_name.'/'.$branch_name.'/download?file_name='.$file->getFilename()) }}" enctype="multipart/form-data">
 		                    	@csrf
 		                        <input type="hidden" name="file" value="csv">
 		                        <button type="submit" name="submit" class="px2-btn">{{ __('CSV')}}</button>
 	                    	</form>
 						</li>
 						<li>
-							<form method="POST" action="{{ url('/download'.'/'.$project->project_name.'/'.$branch_name) }}" enctype="multipart/form-data">
+							<form method="POST" action="{{ url('/sitemaps/'.$project->project_name.'/'.$branch_name.'/download?file_name='.$file->getFilename()) }}" enctype="multipart/form-data">
 		                    	@csrf
 		                        <input type="hidden" name="file" value="xlsx">
 		                        <button type="submit" name="submit" class="px2-btn">{{ __('XLSX')}}</button>
@@ -48,6 +49,7 @@
 					</a>
 				</li>
 			</ul>
+			@endforeach
 		</div>
 	</div>
 </div>
