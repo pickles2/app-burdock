@@ -36,7 +36,15 @@ class SitemapController extends Controller
         $current = json_decode($data_json);
         chdir($path_current_dir); // 元いたディレクトリへ戻る
 
-        return view('sitemaps.index', ['project' => $project, 'branch_name' => $branch_name, 'page_param' => $page_param], compact('current'));
+        $sitemap_files = \File::files($current->realpath_homedir.'sitemaps/');
+        foreach($sitemap_files as $file) {
+            if($file->getExtension() === 'xlsx') {
+                $get_files[] = $file;
+            } else {
+                $destroy_files[] = $file;
+            }
+        }
+        return view('sitemaps.index', ['project' => $project, 'branch_name' => $branch_name, 'page_param' => $page_param], compact('current', 'get_files'));
     }
 
     public function uploadAjax(Request $request, Project $project, $branch_name)
@@ -61,16 +69,23 @@ class SitemapController extends Controller
     public function upload(StoreSitemap $request, Project $project, $branch_name)
     {
         //
-        $project_name = $project->project_name;
-        $file_name = $request->file;
-        $old_file = $file_name;
-        $mimetype = $file_name->clientExtension();
+        $page_param = $request->page_path;
+        $page_id = $request->page_id;
 
-        if($mimetype === 'csv') {
-            $new_file = get_project_workingtree_dir($project_name, $branch_name).'/px-files/sitemaps/sitemap.csv';
-        } elseif($mimetype === 'xlsx') {
-            $new_file = get_project_workingtree_dir($project_name, $branch_name).'/px-files/sitemaps/sitemap.xlsx';
-        }
+        $project_name = $project->project_name;
+        $project_path = get_project_workingtree_dir($project_name, $branch_name);
+
+        $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
+        chdir($project_path);
+        $data_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
+        $current = json_decode($data_json);
+        chdir($path_current_dir); // 元いたディレクトリへ戻る
+
+        $upload_file = $request->file;
+        $old_file = $upload_file;
+        $mimetype = $upload_file->clientExtension();
+        $file_name = $upload_file->getClientOriginalName();
+        $new_file = $current->realpath_homedir.'sitemaps/'.$file_name;
 
         if (!copy($old_file, $new_file)) {
             $message = 'Could not update Sitemap.';
@@ -78,24 +93,68 @@ class SitemapController extends Controller
             $message = 'Updated a Sitemap.';
         }
 
-        return redirect('sitemaps/' . $project_name . '/' . $branch_name)->with('my_status', __($message));
+        return redirect('sitemaps/'.$project_name.'/'.$branch_name)->with('my_status', __($message));
     }
 
     public function download(Request $request, Project $project, $branch_name)
     {
         //
+        $page_param = $request->page_path;
+        $page_id = $request->page_id;
+
         $project_name = $project->project_name;
+        $project_path = get_project_workingtree_dir($project_name, $branch_name);
+
+        $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
+        chdir($project_path);
+        $data_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
+        $current = json_decode($data_json);
+        chdir($path_current_dir); // 元いたディレクトリへ戻る
 
         if($request->file === 'csv') {
             // CSVファイルのダウンロード
-            $pathToFile = get_project_workingtree_dir($project_name, $branch_name).'/px-files/sitemaps/sitemap.csv';
-            $name = 'sitemap.csv';
+            $file_name = $request->file_name;
+            $csv_file_name = str_replace('xlsx', 'csv', $file_name);
+            $pathToFile = $current->realpath_homedir.'sitemaps/'.$csv_file_name;
+            $name = $csv_file_name;
             return response()->download($pathToFile, $name);
         } elseif($request->file === 'xlsx') {
             // XLSXファイルのダウンロード
-            $pathToFile = get_project_workingtree_dir($project_name, $branch_name).'/px-files/sitemaps/sitemap.xlsx';
-            $name = 'sitemap.xlsx';
+            $xlsx_file_name = $request->file_name;
+            $pathToFile = $current->realpath_homedir.'sitemaps/'.$xlsx_file_name;
+            $name = $xlsx_file_name;
             return response()->download($pathToFile, $name);
         }
+    }
+
+    public function destroy(Request $request, Project $project, $branch_name)
+    {
+        //
+        $page_param = $request->page_path;
+        $page_id = $request->page_id;
+
+        $project_name = $project->project_name;
+        $project_path = get_project_workingtree_dir($project_name, $branch_name);
+
+        $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
+        chdir($project_path);
+        $data_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
+        $current = json_decode($data_json);
+        chdir($path_current_dir); // 元いたディレクトリへ戻る
+
+        $xlsx_file_name = $request->file_name;
+        $csv_file_name = str_replace('xlsx', 'csv', $xlsx_file_name);
+        $xlsx_file_path = $current->realpath_homedir.'sitemaps/'.$xlsx_file_name;
+        $csv_file_path = $current->realpath_homedir.'sitemaps/'.$csv_file_name;
+        
+        \File::delete($xlsx_file_path, $csv_file_path);
+
+        if(\File::exists($xlsx_file_path) === false && \File::exists($csv_file_path) === false) {
+            $message = $xlsx_file_name.'と'.$csv_file_name.'を削除しました。';
+        } else {
+            $message = 'サイトマップを削除できませんでした。';
+        }
+
+        return redirect('sitemaps/'.$project_name.'/'.$branch_name)->with('my_status', __($message));
     }
 }

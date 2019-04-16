@@ -14,11 +14,11 @@
 	        <h1>サイトマップのアップロード</h1>
 	        <div>
 	            <div class="px2dt-git-commit">
-                    <ul class="listview">
+                    <ul class="listview" style="margin: 20px 20px;">
         				<li>
-                            <ul class="cont_filelist_sitemap__ext-list" style="margin: 20px 20px;">
+                            <ul class="cont_filelist_sitemap__ext-list" style="margin: 40px 20px;">
                                 <li>
-        							<form class="form-inline" method="POST" action="{{ url('/upload'.'/'.$project_name.'/'.$branch_name) }}" enctype="multipart/form-data">
+        							<form class="form-inline" method="POST" action="{{ url('/sitemaps/'.$project_name.'/'.$branch_name.'/upload') }}" enctype="multipart/form-data">
         								@csrf
         								@method('POST')
         								<div class="form-group">
@@ -33,6 +33,7 @@
                                                     for ( var i = 0 ; i < num ; i++ ) {
                                                         str += file[i].type;
                                                     }
+                                                    // ajaxでファイルのmimetypeを取得しコントローラーに送信
                     								$.ajax({
                     									url: "/sitemaps/{{ $project_name }}/{{ $branch_name }}/uploadAjax",
                     									type: 'post',
@@ -41,11 +42,12 @@
                     										_token : '{{ csrf_token() }}'
                     									},
                     								}).done(function(data){
-                    									// ajaxで取得してきたパスとIDでページ遷移
+                    									// ajaxで取得してきた値で処理分け
                                                         if(data.status === 0) {
                                                             errorMessage.innerHTML = data.error;
                                                             submitStatus.disabled = true;
                                                         } else {
+                                                            errorMessage.innerHTML = data.error;
                                                             submitStatus.disabled = false;
                                                         }
 
@@ -54,7 +56,16 @@
                 							</script>
         								</div>
         								<button id="submitStatus" type="submit" class="px2-btn px2-btn--primary" disabled="disabled">送信</button>
-        								<button type="reset" class="px2-btn px2-btn--danger">キャンセル</button>
+        								<button type="reset" class="px2-btn px2-btn--danger" onclick="cancelButton(event);">キャンセル</button>
+                                        <script>
+                                            // キャンセルボタンを押した際に送信ボタンをdisabledにする
+                                            function cancelButton(e) {
+                                                var errorMessage = document.getElementById("errorMessage");
+                                                var submitStatus = document.getElementById("submitStatus");
+                                                errorMessage.innerHTML = '';
+                                                submitStatus.disabled = true;
+                                            }
+                                        </script>
         							</form>
                                 </li>
                                 <li>
