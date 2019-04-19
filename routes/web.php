@@ -54,3 +54,4 @@ Route::get('pages/{project}/{branch_name}/index.html', 'PageController@index');
 Route::post('pages/{project}/{branch_name}/ajax', 'PageController@ajax');
 Route::get('pages/{project}/{branch_name}', 'PageController@show');
 Route::post('pages/{project}/{branch_name}', 'PageController@gpi');
+Route::post('pages/{project}/{branch_name}/editAjax', 'Ajax\PageController@editAjax');

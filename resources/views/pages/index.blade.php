@@ -3,6 +3,9 @@
 @endphp
 @extends('layouts.px2_project')
 @section('content')
+<div class="container">
+	<div id="flash_alert" class="alert alert-success" style="display: none;"></div>
+</div>
 <div class="contents" style="margin: 0px; padding: 0px; left: 0px; top: 0px; right: 0px; height: 100vh;">
 	<div class="container" data-original-title="" title="">
 		<h1 data-original-title="" title="">コンテンツ</h1>
@@ -138,12 +141,17 @@
 				<div class="col-xs-3" data-original-title="" title="">
 					<div class="cont_workspace_search" data-original-title="" title="">
 						<div class="input-group input-group-sm" data-original-title="" title="">
-							<form action="javascript;;" id="cont_search_form" data-original-title="" title="">
+							{{-- <form action="javascript;;" id="cont_search_form" data-original-title="" title=""> --}}
 								<div class="input-group" data-original-title="" title="">
 									<input type="text" class="form-control" placeholder="Search..." data-original-title="" title="">
 									<span class="input-group-btn" data-original-title="" title="">
 										<button class="px2-btn px2-btn--primary" type="submit" data-original-title="" title="">検索</button>
 									</span>
+									@component('components.btn_contents_commit')
+						                @slot('controller', 'page')
+										@slot('project_name', $project->project_name)
+										@slot('branch_name', $branch_name)
+						            @endcomponent
 								</div>
 								<!-- /input-group -->
 								<div class="btn-group btn-group-justified" data-toggle="buttons" data-original-title="" title="">
@@ -154,7 +162,7 @@
 										<input type="radio" name="list-label" value="path" data-original-title="" title="">path
 									</label>
 								</div>
-							</form>
+							{{-- </form> --}}
 						</div>
 					</div>
 					<!-- /.cont_workspace_search -->
