@@ -17,6 +17,8 @@ class CreateProjectsTable extends Migration
             $table->increments('id');
             $table->string('project_name');
             $table->text('git_url')->nullable();
+            $table->text('git_username');
+            $table->text('git_password');
             $table->timestamps();
             $table->integer('user_id')->unsigned()->default(1);
             $table->foreign('user_id')

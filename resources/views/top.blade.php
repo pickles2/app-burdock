@@ -65,10 +65,36 @@
                                         </div>
     								</td>
     							</tr>
+                                <tr>
+    								<th>Git Username</th>
+    								<td>
+    									<div class="overflow:hidden;">
+                                            <input type="text" name="git_username" class="form-control @if($errors->has('git_username'))is-invalid @endif" value="{{ old('git_username') }}" placeholder="Your Git Username">
+                                            @if ($errors->has('git_username'))
+                                                <span class="invalid-feedback" role="alert">
+                                                    {{ $errors->first('git_username') }}
+                                                </span>
+                                            @endif
+                                        </div>
+    								</td>
+    							</tr>
+                                <tr>
+    								<th>Git Password</th>
+    								<td>
+    									<div class="overflow:hidden;">
+                                            <input type="text" name="git_password" class="form-control @if($errors->has('git_password'))is-invalid @endif" value="{{ old('git_password') }}" placeholder="Your Git Password">
+                                            @if ($errors->has('git_password'))
+                                                <span class="invalid-feedback" role="alert">
+                                                    {{ $errors->first('git_password') }}
+                                                </span>
+                                            @endif
+                                        </div>
+    								</td>
+    							</tr>
     						</tbody>
                         </table>
     					<p class="center">
-                            <button type="submit" name="submit" class="px2-btn px2-btn--primary px2-btn--block">新規プロジェクト作成</button>
+                            <button type="submit" name="submit" class="px2-btn px2-btn--primary px2-btn--block" onclick="uploadSitemap(event);">新規プロジェクト作成</button>
                         </p>
     				</form>
     			</div>
