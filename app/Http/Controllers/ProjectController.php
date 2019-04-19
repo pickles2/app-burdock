@@ -60,19 +60,13 @@ class ProjectController extends Controller
     public function store(StoreProject $request)
     {
         //
-        $project = new Project;
-        $project->project_name = $request->project_name;
-        $project->git_url = $request->git_url;
-        $project->git_username = \Crypt::encryptString($request->git_username);
-        $project->git_password = \Crypt::encryptString($request->git_password);
-
         $bd_data_dir = env('BD_DATA_DIR');
         $projects_name = 'projects';
-        $project_name = $project->project_name;
+        $project_name = $request->project_name;
         $branchs_name = 'branches';
         $branch_name = 'master';
 
-        $git_url = $project->git_url;
+        $git_url = $request->git_url;
         $git_username = $request->git_username;
         $git_password = $request->git_password;
 
@@ -132,10 +126,15 @@ class ProjectController extends Controller
             } else {
                 chdir($path_current_dir); // 元いたディレクトリへ戻る
                 // 記事作成時に著者のIDを保存する
+                $project = new Project;
+                $project->project_name = $project_name;
                 $project->user_id = $request->user()->id;
+                $project->git_url = $git_url;
+                $project->git_username = \Crypt::encryptString($git_username);
+                $project->git_password = \Crypt::encryptString($git_password);
                 $project->save();
                 $message = __('Created new Project.');
-                $redirect = 'projects/'.urlencode($project->project_name).'/'.urlencode($branch_name);
+                $redirect = 'projects/'.urlencode($project_name).'/'.urlencode($branch_name);
             }
         } else {
             chdir($path_current_dir); // 元いたディレクトリへ戻る

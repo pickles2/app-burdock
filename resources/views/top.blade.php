@@ -66,7 +66,7 @@
     								</td>
     							</tr>
                                 <tr>
-    								<th>Git Username</th>
+    								<th>Git Username <span class="must">Required</span></th>
     								<td>
     									<div class="overflow:hidden;">
                                             <input type="text" name="git_username" class="form-control @if($errors->has('git_username'))is-invalid @endif" value="{{ old('git_username') }}" placeholder="Your Git Username">
@@ -79,7 +79,7 @@
     								</td>
     							</tr>
                                 <tr>
-    								<th>Git Password</th>
+    								<th>Git Password <span class="must">Required</span></th>
     								<td>
     									<div class="overflow:hidden;">
                                             <input type="text" name="git_password" class="form-control @if($errors->has('git_password'))is-invalid @endif" value="{{ old('git_password') }}" placeholder="Your Git Password">
