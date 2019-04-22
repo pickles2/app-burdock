@@ -27,6 +27,8 @@ class StoreProject extends FormRequest
         return [
             'project_name' => 'required|unique:projects,project_name|max:191',
             'git_url' => 'required|unique:projects,git_url|url|max:400',
+            'git_username' => 'required',
+            'git_password' => 'required',
         ];
     }
 }

@@ -47,25 +47,6 @@ class SitemapController extends Controller
         return view('sitemaps.index', ['project' => $project, 'branch_name' => $branch_name, 'page_param' => $page_param], compact('current', 'get_files'));
     }
 
-    public function uploadAjax(Request $request, Project $project, $branch_name)
-    {
-        $status = 0;
-        if(isset($request->str)) {
-            if(!($request->str === 'text/csv' || $request->str === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
-                $error = 'ファイルがcsvまたはxlsxではありません。';
-            } else {
-                $error = '';
-                $status = 1;
-            }
-        }
-
-        $data = array(
-            "error" => $error,
-            "status" => $status,
-        );
-        return $data;
-    }
-
     public function upload(StoreSitemap $request, Project $project, $branch_name)
     {
         //
@@ -90,6 +71,22 @@ class SitemapController extends Controller
         if (!copy($old_file, $new_file)) {
             $message = 'Could not update Sitemap.';
         } else {
+            $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
+            chdir($project_path);
+            shell_exec('git remote set-url origin https://'.urlencode(\Crypt::decryptString($project->git_username)).':'.urlencode(\Crypt::decryptString($project->git_password)).str_replace('https://', '@', $project->git_url));
+            shell_exec('git fetch');
+            $check = shell_exec('git diff origin/master');
+
+            if($check === null) {
+                $result = false;
+            } else {
+                shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
+                shell_exec('git add *');
+                shell_exec('git commit -m "Edit Sitemap"');
+                shell_exec('git push origin master:master');
+            }
+            chdir($path_current_dir); // 元いたディレクトリへ戻る
+
             $message = 'Updated a Sitemap.';
         }
 
@@ -146,7 +143,7 @@ class SitemapController extends Controller
         $csv_file_name = str_replace('xlsx', 'csv', $xlsx_file_name);
         $xlsx_file_path = $current->realpath_homedir.'sitemaps/'.$xlsx_file_name;
         $csv_file_path = $current->realpath_homedir.'sitemaps/'.$csv_file_name;
-        
+
         \File::delete($xlsx_file_path, $csv_file_path);
 
         if(\File::exists($xlsx_file_path) === false && \File::exists($csv_file_path) === false) {

@@ -3,6 +3,9 @@
 @endphp
 @extends('layouts.px2_project')
 @section('content')
+<div class="container">
+	<div id="flash_alert" class="alert alert-success" style="display: none;"></div>
+</div>
 <div class="contents" style="margin: 0px; padding: 0px; left: 0px; top: 0px; right: 0px; height: 100vh;">
 	<div class="container" data-original-title="" title="">
 		<h1 data-original-title="" title="">コンテンツ</h1>
@@ -37,7 +40,7 @@
 							<div class="cont_page_info-btn">
 								<div class="btn-group">
 									<a href="{{ url('/pages/'.$project->project_name.'/'.$branch_name.'?page_path='.$page_param) }}" class="btn px2-btn px2-btn--primary px2-btn--lg btn--edit" style="padding-left: 5em; padding-right: 5em; font: inherit;" target="_blank">{{ __('Edit')}}</a>
-									<a href="{{ url(env('PREV_URL').$page_param) }}" class="btn px2-btn px2-btn--lg btn--preview" target="_blank" style="font: inherit;">ブラウザでプレビュー</a>
+									<a href="{{ url('https://'.$project->project_name.'.'.env('PREV_URL').'/'.$page_param) }}" class="btn px2-btn px2-btn--lg btn--preview" target="_blank" style="font: inherit;">ブラウザでプレビュー</a>
 									<!-- <button type="button" class="btn px2-btn px2-btn--lg btn--resources">リソース</button> -->
 									<button type="button" class="btn px2-btn px2-btn--lg dropdown-toggle" data-toggle="dropdown">
 										<span class="caret"></span>
@@ -98,7 +101,7 @@
 						<div class="preview_window_frame--inner" data-original-title="" title="">
 							<script>
 							// .envよりプレビューサーバーのURLを取得
-							var prev_url = '{{ env('PREV_URL') }}';
+							var prev_url = '{{ 'https://'.$project->project_name.'.'.env('PREV_URL') }}';
 							// 外部サイトに送るAPP_URLとスクリプトをbase64でエンコード
 							var jsBase64 = '{{ base64_encode("var parent_url = '".env('APP_URL')."';".file_get_contents('../resources/views/pages/js/script.js')) }}';
 
@@ -131,19 +134,24 @@
 								});
 							};
 							</script>
-							<iframe id="ifrm" data-original-title="" title="" src="{{ url(env('PREV_URL').$page_param) }}"></iframe>
+							<iframe id="ifrm" data-original-title="" title="" src="{{ url('https://'.$project->project_name.'.'.env('PREV_URL').'/'.$page_param) }}"></iframe>
 						</div>
 					</div>
 				</div>
 				<div class="col-xs-3" data-original-title="" title="">
 					<div class="cont_workspace_search" data-original-title="" title="">
 						<div class="input-group input-group-sm" data-original-title="" title="">
-							<form action="javascript;;" id="cont_search_form" data-original-title="" title="">
+							{{-- <form action="javascript;;" id="cont_search_form" data-original-title="" title=""> --}}
 								<div class="input-group" data-original-title="" title="">
 									<input type="text" class="form-control" placeholder="Search..." data-original-title="" title="">
 									<span class="input-group-btn" data-original-title="" title="">
 										<button class="px2-btn px2-btn--primary" type="submit" data-original-title="" title="">検索</button>
 									</span>
+									@component('components.btn_contents_commit')
+						                @slot('controller', 'page')
+										@slot('project_name', $project->project_name)
+										@slot('branch_name', $branch_name)
+						            @endcomponent
 								</div>
 								<!-- /input-group -->
 								<div class="btn-group btn-group-justified" data-toggle="buttons" data-original-title="" title="">
@@ -154,7 +162,7 @@
 										<input type="radio" name="list-label" value="path" data-original-title="" title="">path
 									</label>
 								</div>
-							</form>
+							{{-- </form> --}}
 						</div>
 					</div>
 					<!-- /.cont_workspace_search -->

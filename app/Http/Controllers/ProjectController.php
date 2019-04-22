@@ -60,20 +60,17 @@ class ProjectController extends Controller
     public function store(StoreProject $request)
     {
         //
-        $project = new Project;
-        $project->project_name = $request->project_name;
-        $project->git_url = $request->git_url;
-
         $bd_data_dir = env('BD_DATA_DIR');
         $projects_name = 'projects';
-        $project_name = $project->project_name;
+        $project_name = $request->project_name;
         $branchs_name = 'branches';
         $branch_name = 'master';
 
-        $git_url = $project->git_url;
+        $git_url = $request->git_url;
+        $git_username = $request->git_username;
+        $git_password = $request->git_password;
 
         $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-
         if (!is_dir($bd_data_dir)) {
             mkdir($bd_data_dir);
         }
@@ -84,50 +81,69 @@ class ProjectController extends Controller
         }
         chdir($projects_name);
 
-        if (!is_dir("project_" . $project_name)) {
-            mkdir("project_" . $project_name);
+        if (!is_dir($project_name)) {
+            mkdir($project_name);
         }
-        chdir("project_" . $project_name);
+        chdir($project_name);
 
         if (!is_dir($branchs_name)) {
             mkdir($branchs_name);
         }
         chdir($branchs_name);
-
         $path_composer = realpath(__DIR__.'/../../common/composer/composer.phar');
         shell_exec($path_composer . ' create-project pickles2/preset-get-start-pickles2 ./' . $branch_name);
         chdir($branch_name);
-
         $project_path = get_project_workingtree_dir($project_name, $branch_name);
-
-        // ここから configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
-        $files = null;
-        $file = file($project_path.'/px-files/config.php');
-        for($i = 0; $i < count($file); $i++) {
-            if(strpos($file[$i], "'master_format'=>'xlsx'") !== false) {
-                $files .= str_replace('xlsx', 'timestamp', $file[$i]);
-            } else {
-                $files .= $file[$i];
+        // .px_execute.phpの存在確認
+        if(\File::exists($project_path.'/.px_execute.php')) {
+            // ここから configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
+            $files = null;
+            $file = file($project_path.'/px-files/config.php');
+            for($i = 0; $i < count($file); $i++) {
+                if(strpos($file[$i], "'master_format'=>'xlsx'") !== false) {
+                    $files .= str_replace('xlsx', 'timestamp', $file[$i]);
+                } else {
+                    $files .= $file[$i];
+                }
             }
+            file_put_contents($project_path.'/px-files/config.php', $files);
+            // ここまで configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
+            shell_exec('git remote set-url origin https://'.urlencode($git_username).':'.urlencode($git_password).str_replace('https://', '@', urlencode($git_url)));
+            shell_exec('git init');
+            shell_exec('git add *');
+            shell_exec('git commit -m "Create project"');
+            if( strlen($git_url) ){
+                shell_exec('git remote add origin '.escapeshellarg($git_url));
+            }
+            $result = shell_exec('git push -u origin master');
+
+            // git pushの結果によって処理わけ
+            if($result === null) {
+                chdir($path_current_dir); // 元いたディレクトリへ戻る
+                \File::deleteDirectory(env('BD_DATA_DIR').'/projects/'.$project_name);
+                $message = 'Gitをプッシュできませんでした。URL/Username/Passwordが正しいか確認し、もう一度やり直してください。';
+                $redirect = '/';
+            } else {
+                chdir($path_current_dir); // 元いたディレクトリへ戻る
+                // 記事作成時に著者のIDを保存する
+                $project = new Project;
+                $project->project_name = $project_name;
+                $project->user_id = $request->user()->id;
+                $project->git_url = $git_url;
+                $project->git_username = \Crypt::encryptString($git_username);
+                $project->git_password = \Crypt::encryptString($git_password);
+                $project->save();
+                $message = __('Created new Project.');
+                $redirect = 'projects/'.urlencode($project_name).'/'.urlencode($branch_name);
+            }
+        } else {
+            chdir($path_current_dir); // 元いたディレクトリへ戻る
+            \File::deleteDirectory(env('BD_DATA_DIR').'/projects/'.$project_name);
+            $message = 'プロジェクトを作成できませんでした。もう一度やり直してください。';
+            $redirect = '/';
         }
-        file_put_contents($project_path.'/px-files/config.php', $files);
-        // ここまで configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
 
-        // 記事作成時に著者のIDを保存する
-        $project->user_id = $request->user()->id;
-        $project->save();
-
-        shell_exec('git init');
-        shell_exec('git add -A');
-        shell_exec('git commit -m "Create project"');
-        if( strlen($git_url) ){
-            shell_exec('git remote add origin ' . escapeshellarg($git_url));
-        }
-        shell_exec('git push origin master');
-
-        chdir($path_current_dir); // 元いたディレクトリへ戻る
-
-        return redirect('projects/' . urlencode($project->project_name) . '/' . urlencode($branch_name))->with('my_status', __('Created new Project.'));
+        return redirect($redirect)->with('my_status', __($message));
     }
 
     /**
@@ -181,7 +197,7 @@ class ProjectController extends Controller
         $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
 
         chdir($bd_data_dir . '/projects/');
-        rename('project_'. $project->project_name, 'project_'. $request->project_name);
+        rename($project->project_name, $request->project_name);
 
         $project->project_name = $request->project_name;
         $project->git_url = $request->git_url;
@@ -214,9 +230,9 @@ class ProjectController extends Controller
         chdir($path_current_dir); // 元いたディレクトリへ戻る
 
         $project->delete();
-        \File::deleteDirectory(env('BD_DATA_DIR').'/projects/project_'.$project_name);
+        \File::deleteDirectory(env('BD_DATA_DIR').'/projects/'.$project_name);
 
-        if(\File::exists(env('BD_DATA_DIR').'/projects/project_'.$project_name) === false) {
+        if(\File::exists(env('BD_DATA_DIR').'/projects/'.$project_name) === false) {
             $message = 'Deleted a Project.';
         } else {
             $message = 'プロジェクトを削除できませんでした。';

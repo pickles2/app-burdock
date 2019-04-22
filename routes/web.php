@@ -43,7 +43,7 @@ Route::delete('projects/{project}/{branch_name}', 'ProjectController@destroy');
 // Route::resource('projects', 'ProjectController');
 
 Route::get('sitemaps/{project}/{branch_name}', 'SitemapController@index');
-Route::post('sitemaps/{project}/{branch_name}/uploadAjax', 'SitemapController@uploadAjax');
+Route::post('sitemaps/{project}/{branch_name}/uploadAjax', 'Ajax\SitemapController@uploadAjax');
 Route::post('sitemaps/{project}/{branch_name}/upload', 'SitemapController@upload');
 Route::post('sitemaps/{project}/{branch_name}/download', 'SitemapController@download');
 Route::post('sitemaps/{project}/{branch_name}/destroy', 'SitemapController@destroy');
@@ -54,3 +54,4 @@ Route::get('pages/{project}/{branch_name}/index.html', 'PageController@index');
 Route::post('pages/{project}/{branch_name}/ajax', 'PageController@ajax');
 Route::get('pages/{project}/{branch_name}', 'PageController@show');
 Route::post('pages/{project}/{branch_name}', 'PageController@gpi');
+Route::post('pages/{project}/{branch_name}/editAjax', 'Ajax\PageController@editAjax');

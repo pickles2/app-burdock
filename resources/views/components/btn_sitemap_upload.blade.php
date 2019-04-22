@@ -25,6 +25,9 @@
         									<input type="file" class="form-control @if($errors->has('file')) is-invalid @endif" name="file" value="{{ old('file') }}" placeholder="aファイル選択..." accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="width: 700px;" onchange="uploadFile(event);">
                                             <script>
                                                 function uploadFile(e) {
+                                                    // 処理前に Loading 画像を表示
+                                                    dispLoading("処理中...");
+
                     								var errorMessage = document.getElementById("errorMessage");
                                                     var submitStatus = document.getElementById("submitStatus");
                                                     var file = e.target.files;  //選択ファイルを配列形式で取得
@@ -50,12 +53,14 @@
                                                             errorMessage.innerHTML = data.error;
                                                             submitStatus.disabled = false;
                                                         }
-
+                                                    }).always(function(data){
+                                                        // 処理終了時にLading 画像を消す
+                                                        removeLoading();
                     								});
                     							}
                 							</script>
         								</div>
-        								<button id="submitStatus" type="submit" class="px2-btn px2-btn--primary" disabled="disabled">送信</button>
+        								<button id="submitStatus" type="submit" class="px2-btn px2-btn--primary" disabled="disabled" onclick="uploadSitemap(event);">送信</button>
         								<button type="reset" class="px2-btn px2-btn--danger" onclick="cancelButton(event);">キャンセル</button>
                                         <script>
                                             // キャンセルボタンを押した際に送信ボタンをdisabledにする
