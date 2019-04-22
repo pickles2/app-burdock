@@ -47,25 +47,6 @@ class SitemapController extends Controller
         return view('sitemaps.index', ['project' => $project, 'branch_name' => $branch_name, 'page_param' => $page_param], compact('current', 'get_files'));
     }
 
-    public function uploadAjax(Request $request, Project $project, $branch_name)
-    {
-        $status = 0;
-        if(isset($request->str)) {
-            if(!($request->str === 'text/csv' || $request->str === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
-                $error = 'ファイルがcsvまたはxlsxではありません。';
-            } else {
-                $error = '';
-                $status = 1;
-            }
-        }
-
-        $data = array(
-            "error" => $error,
-            "status" => $status,
-        );
-        return $data;
-    }
-
     public function upload(StoreSitemap $request, Project $project, $branch_name)
     {
         //
@@ -146,7 +127,7 @@ class SitemapController extends Controller
         $csv_file_name = str_replace('xlsx', 'csv', $xlsx_file_name);
         $xlsx_file_path = $current->realpath_homedir.'sitemaps/'.$xlsx_file_name;
         $csv_file_path = $current->realpath_homedir.'sitemaps/'.$csv_file_name;
-        
+
         \File::delete($xlsx_file_path, $csv_file_path);
 
         if(\File::exists($xlsx_file_path) === false && \File::exists($csv_file_path) === false) {
