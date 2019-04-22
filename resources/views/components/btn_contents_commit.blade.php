@@ -44,10 +44,14 @@
                                                     $('#{{ $id_attr }}').modal('hide');
                                                     flashAlert.innerHTML = data.message;
                                                     flashAlert.style.display = "block";
-                                                    setTimeout(function(){
+                                                    setTimeout(function() {
                                                         $('#flash_alert').fadeOut(500);
                                                     }, 2000);
+                                                    setTimeout(function() {
+                                                        flashAlert.innerHTML = '';
+                                                    }, 3000);
                                                     cancelButton(event);
+
                                                 }).always(function(data){
                                                     // 処理終了時にLading 画像を消す
                                                     removeLoading();
