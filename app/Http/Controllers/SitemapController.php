@@ -71,6 +71,22 @@ class SitemapController extends Controller
         if (!copy($old_file, $new_file)) {
             $message = 'Could not update Sitemap.';
         } else {
+            $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
+            chdir($project_path);
+            shell_exec('git remote set-url origin https://'.urlencode(\Crypt::decryptString($project->git_username)).':'.urlencode(\Crypt::decryptString($project->git_password)).str_replace('https://', '@', $project->git_url));
+            shell_exec('git fetch');
+            $check = shell_exec('git diff origin/master');
+
+            if($check === null) {
+                $result = false;
+            } else {
+                shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
+                shell_exec('git add *');
+                shell_exec('git commit -m "Edit Sitemap"');
+                shell_exec('git push origin master:master');
+            }
+            chdir($path_current_dir); // 元いたディレクトリへ戻る
+
             $message = 'Updated a Sitemap.';
         }
 
