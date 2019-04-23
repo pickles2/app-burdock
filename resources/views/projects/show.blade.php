@@ -23,7 +23,7 @@
                     <a href="{{ url('pages/'.$project->project_name.'/'.$branch_name.'/index.html?page_path='.'%2Findex.html')}}" class="px2-btn cont_mainmenu">{{ __('Edit Contents')}}</a>
                 </div>
                 <div class="col-sm-3">
-                    <a href="{{ url('/publish'.'/'.$project->project_name.'/'.$branch_name) }}" class="px2-btn cont_mainmenu">{{ __('To Publish')}}</a>
+                    <a href="{{ url('/publish'.'/'.$project->project_name.'/'.$branch_name) }}" class="px2-btn cont_mainmenu" onclick="uploadSitemap(event);">{{ __('To Publish')}}</a>
                 </div>
             </div><!-- / .row -->
             {{-- <ul class="px2-horizontal-list px2-horizontal-list--right">

@@ -100,7 +100,7 @@
                         <li><a href="{{ url('sitemaps/'.$project->project_name.'/'.$branch_name.'/') }}" @if (Request::is('sitemaps/'.$project->project_name.'/'.$branch_name)) class="current" @endif>サイトマップ</a></li>
                         <li><a href="">テーマ</a></li>
                         <li><a href="{{ url('pages/'.$project->project_name.'/'.$branch_name.'/index.html?page_path='.'%2Findex.html')}}" @if (Request::is('pages/'.$project->project_name.'/'.$branch_name.'/index.html')) class="current" @endif>コンテンツ</a></li>
-                        <li><a href="{{ url('/publish'.'/'.$project->project_name.'/'.$branch_name) }}">パブリッシュ</a></li>
+                        <li><a href="{{ url('/publish'.'/'.$project->project_name.'/'.$branch_name) }}" onclick="uploadSitemap(event);">パブリッシュ</a></li>
                     </ul>
                 </div>
 				{{-- <div class="theme-header__shoulder-menu" style="width: 50px; height: 30px;">
