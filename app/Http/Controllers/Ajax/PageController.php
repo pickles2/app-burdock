@@ -35,7 +35,7 @@ class PageController extends Controller
         if($check === null) {
             $result = false;
         } else {
-            shell_exec('git add *');
+            shell_exec('git add -A');
             shell_exec('git commit -m "'.$request->str.'"');
             shell_exec('git push origin master:master');
             shell_exec('git fetch');

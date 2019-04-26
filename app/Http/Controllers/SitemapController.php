@@ -81,7 +81,7 @@ class SitemapController extends Controller
                 $result = false;
             } else {
                 shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
-                shell_exec('git add *');
+                shell_exec('git add -A');
                 shell_exec('git commit -m "Edit Sitemap"');
                 shell_exec('git push origin master:master');
             }
