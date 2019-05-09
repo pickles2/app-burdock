@@ -201,6 +201,8 @@ class ProjectController extends Controller
 
         $project->project_name = $request->project_name;
         $project->git_url = $request->git_url;
+		$project->git_username = \Crypt::encryptString($request->git_username);
+		$project->git_password = \Crypt::encryptString($request->git_password);
         $project->save();
 
         chdir($path_current_dir); // 元いたディレクトリへ戻る
