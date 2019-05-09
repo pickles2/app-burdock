@@ -1,7 +1,7 @@
 @php
     $title = __('User') . ': ' . $user->name;
 @endphp
-@extends('layouts.px2_top')
+@extends('layouts.px2_login')
 @section('content')
 <div class="container">
     <h1>{{ $title }}</h1>
