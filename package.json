@@ -20,6 +20,6 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
-        "px2style": "file:px2style"
+        "px2style": "file:submodules/px2style"
     }
 }
