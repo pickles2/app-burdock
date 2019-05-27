@@ -2,10 +2,10 @@
 <html lang="{{ app()->getLocale() }}">
 <head>
 	<meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	{{-- CSRF トークン --}}
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 
 	<title>@if (! Request::is('/')){{ $title }} | @endif{{ env('APP_NAME') }}</title>
 
@@ -15,140 +15,126 @@
 	<script src="/common/scripts/jquery-2.2.4.min.js" type="text/javascript"></script>
 	<!-- Bootstrap -->
 	<link rel="stylesheet" href="/common/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/common/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="/common/bootstrap/css/bootstrap.css">
 	<script src="/common/bootstrap/js/bootstrap.min.js"></script>
 	<!-- normalize & FESS -->
 	<link rel="stylesheet" href="/common/styles/contents.css" type="text/css">
-    <link rel="stylesheet" href="/common/styles/fess.css" type="text/css">
+	<link rel="stylesheet" href="/common/styles/fess.css" type="text/css">
 	<!-- Pickles 2 Style -->
 	<link rel="stylesheet" href="/common/px2style/dist/styles.css" charset="utf-8">
 	<script src="/common/px2style/dist/scripts.js" charset="utf-8"></script>
-    <!-- Local Resources -->
+	<!-- Local Resources -->
 	<link rel="stylesheet" href="/common/index_files/style.css" type="text/css" data-original-title="" title="">
-    <link rel="stylesheet" href="/common/index_files/styles.css" type="text/css" data-original-title="" title="">
+	<link rel="stylesheet" href="/common/index_files/styles.css" type="text/css" data-original-title="" title="">
 	{{-- CSS --}}
 	@yield('stylesheet')
 	@yield('javascript')
 </head>
 <body>
 	<div class="theme_wrap">
-		<header class="theme-header" style="border-bottom-color: rgb(0, 160, 230); color: rgb(0, 160, 230);">
-			<div class="theme-header__inner clearfix">
-				<div class="theme-header__px2logo" style="width: 45px; height: 45px;">
-					<img src="/common/images/logo.svg">
+
+		<header class="px2-header">
+			<div class="px2-header__inner">
+				<div class="px2-header__px2logo">
+					<a href="{{ url('/') }}"><img src="/common/images/logo.svg" alt="Pickles 2" /></a>
 				</div>
-				<div class="theme-header__id" style="opacity: 1;">
-					<div><a class="app_name" href="{{ url('/') }}">{{ config('app.name') }}</a></div>
-                    <div>{{ 'Project_'.$project->project_name }}</div>
-                </div>
-				<div class="theme-header__gmenu" id="navbarLeftContent">
-                    {{-- Navbarの右側 --}}
-                    <ul class="">
-                        {{-- 認証関連のリンク --}}
-                        @guest
-                            {{-- 「ログイン」と「ユーザー登録」へのリンク --}}
-                            <li class="">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                            <li class="">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                            </li>
-                        @else
-                            {{-- 「プロフィール」と「ログアウト」のドロップダウンメニュー --}}
-                            <li class="">
-                                <a class="nav-link dropdown-toggle" href="#" id="dropdown-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ 'ようこそ '.Auth::user()->name.' さん' }}
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="dropdown-user">
-                                    <a class="dropdown-item" href="{{ url('profile') }}">
-                                        {{ __('Profile') }}
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
-                                                 document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                        <li class="">
-                            <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="dropdown-lang" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ __('locale.'.App::getLocale()) }}
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="dropdown-lang">
-                                @if (!App::isLocale('en'))
-                                    <a class="dropdown-item" href="{{ locale_url('en') }}">
-                                        {{ __('locale.en') }}
-                                    </a>
-                                @endif
-                                @if (!App::isLocale('ja'))
-                                    <a class="dropdown-item" href="{{ locale_url('ja') }}">
-                                        {{ __('locale.ja') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-				<div class="theme-header__gmenu" id="navbarRightContent">
-                    <ul>
-                        <li><span>&nbsp;</span></li>
-                        <li><a href="{{ url('projects/'.$project->project_name.'/'.$branch_name.'/') }}" @if (Request::is('projects/'.$project->project_name.'/'.$branch_name)) class="current" @endif>ホーム</a></li>
-                        <li><a href="{{ url('sitemaps/'.$project->project_name.'/'.$branch_name.'/') }}" @if (Request::is('sitemaps/'.$project->project_name.'/'.$branch_name)) class="current" @endif>サイトマップ</a></li>
-                        <li><a href="">テーマ</a></li>
-                        <li><a href="{{ url('pages/'.$project->project_name.'/'.$branch_name.'/index.html?page_path='.'%2Findex.html')}}" @if (Request::is('pages/'.$project->project_name.'/'.$branch_name.'/index.html')) class="current" @endif>コンテンツ</a></li>
-                        <li><a href="{{ url('/publish'.'/'.$project->project_name.'/'.$branch_name) }}" onclick="uploadSitemap(event);">パブリッシュ</a></li>
-                    </ul>
-                </div>
-				{{-- <div class="theme-header__shoulder-menu" style="width: 50px; height: 30px;">
-					<button style="height: 33px;">≡</button>
-					<ul style="display: none; top: 30px; height: 892px;">
-                        <li><a href="">ダッシュボード</a></li>
-                        <li><a href="">フォルダを開く</a></li>
-                        <li><a href="">ブラウザで開く</a></li>
-                        <li><a href="">テキストエディタで開く</a></li>
-                        <li><a href="">Gitクライアントで開く</a></li>
-                        <li><a href="">コマンドラインで開く</a></li>
-                        <li><a href="">プロジェクト共有設定(config.php)</a></li>
-                        <li><a href="">composer</a></li>
-                        <li><a href="">git</a></li>
-                        <li><a href="">プレビュー</a></li>
-                        <li><a href="">検索</a></li>
-                        <li><a href="">モジュール</a></li>
-                        <li><a href="">スタイルガイド生成</a></li>
-                        <li><a href="">コンテンツを一括加工</a></li>
-                        <li><a href="">コンテンツを移動する</a></li>
-                        <li><a href="">GUI編集コンテンツを一括再構成</a></li>
-                        <li><a href="">キャッシュを消去</a></li>
-                        <li><a href="">システム情報</a></li>
-                        <li><a href="">Pickles 2 アプリケーション設定</a></li>
-                        <li><a href="">ヘルプ</a></li>
-                        <li><a href="">デペロッパツール</a></li>
-                        <li><a href="">終了</a></li>
-                    </ul>
-				</div> --}}
+				<div class="px2-header__block">
+					<div class="px2-header__id">
+						<span>{{ 'Project_'.$project->project_name }}</span>
+					</div>
+					<div class="px2-header__global-menu">
+						<ul>
+							@guest
+								{{-- 認証関連のリンク --}}
+								{{-- 「ログイン」と「ユーザー登録」へのリンク --}}
+								<li><a href="{{ route('login') }}" data-name="login">{{ __('Login') }}</a></li>
+								<li><a href="{{ route('register') }}" data-name="register">{{ __('Register') }}</a></li>
+							@else
+								<li><a href="{{ url('projects/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="home">ホーム</a></li>
+								<li><a href="{{ url('sitemaps/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="sitemaps">サイトマップ</a></li>
+								<li><a href="{{ url('themes/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="themes">テーマ</a></li>
+								<li><a href="{{ url('pages/'.$project->project_name.'/'.$branch_name.'/index.html?page_path='.'%2Findex.html')}}" data-name="pages">コンテンツ</a></li>
+								<li><a href="{{ url('publish/'.$project->project_name.'/'.$branch_name) }}" data-name="publish" onclick="uploadSitemap(event);">パブリッシュ</a></li>
+
+								{{-- 認証関連のリンク --}}
+								{{-- 「プロフィール」と「ログアウト」のドロップダウンメニュー --}}
+								<li>
+									<a class="nav-link dropdown-toggle" href="#" id="dropdown-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ 'ようこそ '.Auth::user()->name.' さん' }}</a>
+									<ul>
+										<li><a class="dropdown-item" href="{{ url('profile') }}">
+											{{ __('Profile') }}
+										</a></li>
+										<li><a class="dropdown-item" href="{{ route('logout') }}"
+											onclick="event.preventDefault();
+														document.getElementById('logout-form').submit();">
+											{{ __('Logout') }}
+										</a>
+										<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+											@csrf
+										</form></li>
+									</ul>
+								</li>
+
+								<li>
+									<a href="javascript:void(0)">{{ __('locale.'.App::getLocale()) }}</a>
+									<ul>
+										@if (!App::isLocale('en'))
+											<li><a class="dropdown-item" href="{{ locale_url('en') }}">{{ __('locale.en') }}</a></li>
+										@endif
+										@if (!App::isLocale('ja'))
+											<li><a class="dropdown-item" href="{{ locale_url('ja') }}">{{ __('locale.ja') }}</a></li>
+										@endif
+									</ul>
+								</li>
+							@endguest
+						</ul>
+					</div>
+				</div>
+				<div class="px2-header__shoulder-menu">
+					<button>≡</button>
+					<ul>
+						<li><a href="{{ url('/') }}">ダッシュボード</a></li>
+						@guest
+						@else
+						<li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+							<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+								@csrf
+							</form></li>
+						@endguest
+					</ul>
+				</div>
 			</div>
 		</header>
+
 		{{-- フラッシュ・メッセージ --}}
-        @if (session('my_status'))
-            <div class="container mt-2">
-                <div class="alert alert-success">
-                    {{ session('my_status') }}
-                </div>
-            </div>
-        @endif
-        <div>
-            @yield('content')
-        </div>
+		@if (session('my_status'))
+			<div class="container mt-2">
+				<div class="alert alert-success">
+					{{ session('my_status') }}
+				</div>
+			</div>
+		@endif
+		<div>
+			@yield('content')
+		</div>
 		<footer class="theme-footer">
 		</footer>
 	</div>
 	{{-- JavaScript --}}
-    {{-- <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/custom.js') }}"></script> --}}
-    @yield('script')
+	{{-- <script src="{{ asset('js/app.js') }}"></script>
+	<script src="{{ asset('js/custom.js') }}"></script> --}}
+	<script>
+	window.addEventListener('load', function(){
+		var current = '';
+		@if (Request::is('projects/'.$project->project_name.'/'.$branch_name)) current = 'home'; @endif
+		@if (Request::is('sitemaps/'.$project->project_name.'/'.$branch_name)) current = 'sitemaps'; @endif
+		@if (Request::is('themes/'.$project->project_name.'/'.$branch_name)) current = 'themes'; @endif
+		@if (Request::is('pages/'.$project->project_name.'/'.$branch_name.'/index.html')) current = 'pages'; @endif
+		@if (Request::is('publish/'.$project->project_name.'/'.$branch_name)) current = 'publish'; @endif
+
+		px2style.header.init({'current': current});
+	});
+	</script>
+	@yield('script')
 </body>
 </html>
