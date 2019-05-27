@@ -1,7 +1,7 @@
 @php
     $title = __('Edit') . ': ' . $project->project_name;
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.px2_login')
 @section('content')
 <div class="container">
     <h1>{{ $title }}</h1>
@@ -23,6 +23,24 @@
                 @if ($errors->has('git_url'))
                     <span class="invalid-feedback" role="alert">
                         {{ $errors->first('git_url') }}
+                    </span>
+                @endif
+        </div>
+		<div class="form-group">
+            <label for="git_username">{{ __('Git Username') }}</label>
+            <input id="git_username" type="text" class="form-control @if ($errors->has('git_username')) is-invalid @endif" name="git_username" value="{{ old('git_username', \Crypt::decryptString($project->git_username)) }}">
+                @if ($errors->has('git_username'))
+                    <span class="invalid-feedback" role="alert">
+                        {{ $errors->first('git_username') }}
+                    </span>
+                @endif
+        </div>
+		<div class="form-group">
+            <label for="git_password">{{ __('Git Password') }}</label>
+            <input id="git_password" type="text" class="form-control @if ($errors->has('git_password')) is-invalid @endif" name="git_password" value="{{ old('git_password', Crypt::decryptString($project->git_password)) }}">
+                @if ($errors->has('git_url'))
+                    <span class="invalid-feedback" role="alert">
+                        {{ $errors->first('git_password') }}
                     </span>
                 @endif
         </div>
