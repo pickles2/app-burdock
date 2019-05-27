@@ -56,4 +56,26 @@ class PageController extends Controller
         );
         return $data;
     }
+
+	public function searchAjax(Request $request, Project $project, $branch_name)
+	{
+		//
+		$page_path = $request->path_path;
+        $project_name = $project->project_name;
+        $project_path = get_project_workingtree_dir($project_name, $branch_name);
+		$str = $request->str;
+
+        $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
+        chdir($project_path);
+        $result = shell_exec('php .px_execute.php /?PX=px2dthelper.search_sitemap\&keyword='.urlencode($str));
+        chdir($path_current_dir); // 元いたディレクトリへ戻る
+
+        $info = json_decode($result);
+
+        $data = array(
+			"info" => $info,
+        );
+        return $data;
+
+	}
 }

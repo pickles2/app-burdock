@@ -143,9 +143,35 @@
 						<div class="input-group input-group-sm" data-original-title="" title="">
 							{{-- <form action="javascript;;" id="cont_search_form" data-original-title="" title=""> --}}
 								<div class="input-group" data-original-title="" title="">
-									<input type="text" class="form-control" placeholder="Search..." data-original-title="" title="">
+									<input id="searchText" type="text" class="form-control" placeholder="Search..." value="">
 									<span class="input-group-btn" data-original-title="" title="">
-										<button class="px2-btn px2-btn--primary" type="submit" data-original-title="" title="">検索</button>
+										<button class="px2-btn px2-btn--primary" type="submit" onclick="contentsSearch(event);">検索</button>
+										<script>
+                                            function contentsSearch(e) {
+                                                // 処理前に Loading 画像を表示
+                                                dispLoading("処理中...");
+
+                								var sholderNavi = document.getElementById("sholderNavi");
+                                                var flashAlert = document.getElementById("flash_alert");
+                                                var str = document.getElementById("searchText").value;
+
+                                                // ajaxでファイルのmimetypeを取得しコントローラーに送信
+                								$.ajax({
+                									url: "/pages/{{ $project->project_name }}/{{ $branch_name }}/searchAjax",
+                									type: 'post',
+                									data : {
+                										"str" : str,
+                										_token : '{{ csrf_token() }}'
+                									},
+                								}).done(function(data){
+                									console.log(data.info);
+
+                                                }).always(function(data){
+                                                    // 処理終了時にLading 画像を消す
+                                                    removeLoading();
+                								});
+                							}
+            							</script>
 									</span>
 									@component('components.btn_contents_commit')
 						                @slot('controller', 'page')
@@ -166,7 +192,7 @@
 						</div>
 					</div>
 					<!-- /.cont_workspace_search -->
-					<div class="cont_workspace_container" data-original-title="" title="" style="height: 100vh; margin-top: 10px;">
+					<div id="sholderNavi" class="cont_workspace_container" data-original-title="" title="" style="height: 100vh; margin-top: 10px;">
 						<div class="cont_sitemap_parent" data-original-title="" title="">
 							@if($current->navigation_info->parent_info !== false)
 							<ul class="listview">
