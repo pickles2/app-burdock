@@ -26,7 +26,8 @@
                                             <script>
                                                 function uploadFile(e) {
                                                     // 処理前に Loading 画像を表示
-                                                    dispLoading("処理中...");
+                                                    px2style.loading();
+													px2style.loadingMessage("しばらくお待ちください。");
 
                     								var errorMessage = document.getElementById("errorMessage");
                                                     var submitStatus = document.getElementById("submitStatus");
@@ -55,7 +56,7 @@
                                                         }
                                                     }).always(function(data){
                                                         // 処理終了時にLading 画像を消す
-                                                        removeLoading();
+                                                        px2style.closeLoading();
                     								});
                     							}
                 							</script>
