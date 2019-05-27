@@ -15,6 +15,8 @@ use Illuminate\Contracts\Console\Kernel;
 
 Auth::routes(['verify' => true]);
 
+// --------------------------------------
+// ダッシュボード
 Route::get('/', 'HomeController@index');
 
 // Route::get('users', 'UserController@index');
@@ -27,11 +29,15 @@ Route::get('/', 'HomeController@index');
 
 // Route::resource('users', 'UserController');
 
+// --------------------------------------
+// プロフィール
 Route::get('profile', 'ProfileController@show');
 Route::get('profile/edit', 'ProfileController@edit');
 Route::put('profile', 'ProfileController@update');
 Route::delete('profile', 'ProfileController@destroy');
 
+// --------------------------------------
+// プロジェクト Home
 // Route::get('projects', 'ProjectController@index'); //プロジェクト一覧は封印
 Route::get('projects/create', 'ProjectController@create');
 Route::post('projects', 'ProjectController@store');
@@ -42,17 +48,35 @@ Route::delete('projects/{project}/{branch_name}', 'ProjectController@destroy');
 
 // Route::resource('projects', 'ProjectController');
 
+// --------------------------------------
+// サイトマップ
 Route::get('sitemaps/{project}/{branch_name}', 'SitemapController@index');
 Route::post('sitemaps/{project}/{branch_name}/uploadAjax', 'Ajax\SitemapController@uploadAjax');
 Route::post('sitemaps/{project}/{branch_name}/upload', 'SitemapController@upload');
 Route::post('sitemaps/{project}/{branch_name}/download', 'SitemapController@download');
 Route::post('sitemaps/{project}/{branch_name}/destroy', 'SitemapController@destroy');
 
-Route::get('publish/{project}/{branch_name}', 'PublishController@publish');
+// --------------------------------------
+// テーマ
+Route::get('themes/{project}/{branch_name}', 'ThemeController@index');
 
+// --------------------------------------
+// コンテンツ
 Route::get('pages/{project}/{branch_name}/index.html', 'PageController@index');
 Route::post('pages/{project}/{branch_name}/ajax', 'PageController@ajax');
 Route::get('pages/{project}/{branch_name}', 'PageController@show');
 Route::post('pages/{project}/{branch_name}', 'PageController@gpi');
 Route::post('pages/{project}/{branch_name}/editAjax', 'Ajax\PageController@editAjax');
 Route::post('pages/{project}/{branch_name}/searchAjax', 'Ajax\PageController@searchAjax');
+
+// --------------------------------------
+// パブリッシュ
+Route::get('publish/{project}/{branch_name}', 'PublishController@publish');
+
+// --------------------------------------
+// ステージング切り替え (Plum)
+Route::get('staging/{project}/{branch_name}', 'StagingController@index');
+
+// --------------------------------------
+// 配信 (Indigo)
+Route::get('delivery/{project}/{branch_name}', 'DeliveryController@index');
