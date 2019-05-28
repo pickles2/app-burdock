@@ -40,7 +40,15 @@
 				</div>
 				<div class="px2-header__block">
 					<div class="px2-header__id">
-						<span>{{ 'Project_'.$project->project_name }}</span>
+						@guest
+							<span><a class="app_name" href="{{ url('/') }}">{{ config('app.name') }}</a></span>
+						@else
+							@if(! Request::is('*profile*'))
+								<span>{{ 'Project_'.$project->project_name }}</span>
+							@else
+								<span><a class="app_name" href="{{ url('/') }}">{{ config('app.name') }}</a></span>
+							@endif
+						@endguest
 					</div>
 					<div class="px2-header__global-menu">
 						<ul>
@@ -49,12 +57,25 @@
 								{{-- 「ログイン」と「ユーザー登録」へのリンク --}}
 								<li><a href="{{ route('login') }}" data-name="login">{{ __('Login') }}</a></li>
 								<li><a href="{{ route('register') }}" data-name="register">{{ __('Register') }}</a></li>
+								<li>
+									<a href="javascript:void(0)">{{ __('locale.'.App::getLocale()) }}</a>
+									<ul>
+										@if (!App::isLocale('en'))
+											<li><a class="dropdown-item" href="{{ locale_url('en') }}">{{ __('locale.en') }}</a></li>
+										@endif
+										@if (!App::isLocale('ja'))
+											<li><a class="dropdown-item" href="{{ locale_url('ja') }}">{{ __('locale.ja') }}</a></li>
+										@endif
+									</ul>
+								</li>
 							@else
-								<li><a href="{{ url('projects/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="home">ホーム</a></li>
-								<li><a href="{{ url('sitemaps/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="sitemaps">サイトマップ</a></li>
-								<li><a href="{{ url('themes/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="themes">テーマ</a></li>
-								<li><a href="{{ url('pages/'.$project->project_name.'/'.$branch_name.'/index.html?page_path='.'%2Findex.html')}}" data-name="pages">コンテンツ</a></li>
-								<li><a href="{{ url('publish/'.$project->project_name.'/'.$branch_name) }}" data-name="publish" onclick="uploadSitemap(event);">パブリッシュ</a></li>
+								@if(! Request::is('*profile*'))
+									<li><a href="{{ url('projects/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="home">ホーム</a></li>
+									<li><a href="{{ url('sitemaps/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="sitemaps">サイトマップ</a></li>
+									<li><a href="{{ url('themes/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="themes">テーマ</a></li>
+									<li><a href="{{ url('pages/'.$project->project_name.'/'.$branch_name.'/index.html?page_path='.'%2Findex.html')}}" data-name="pages">コンテンツ</a></li>
+									<li><a href="{{ url('publish/'.$project->project_name.'/'.$branch_name) }}" data-name="publish" onclick="uploadSitemap(event);">パブリッシュ</a></li>
+								@endif
 
 								{{-- 認証関連のリンク --}}
 								{{-- 「プロフィール」と「ログアウト」のドロップダウンメニュー --}}
@@ -123,18 +144,28 @@
 	{{-- JavaScript --}}
 	{{-- <script src="{{ asset('js/app.js') }}"></script>
 	<script src="{{ asset('js/custom.js') }}"></script> --}}
-	<script>
-	window.addEventListener('load', function(){
-		var current = '';
-		@if (Request::is('projects/'.$project->project_name.'/'.$branch_name)) current = 'home'; @endif
-		@if (Request::is('sitemaps/'.$project->project_name.'/'.$branch_name)) current = 'sitemaps'; @endif
-		@if (Request::is('themes/'.$project->project_name.'/'.$branch_name)) current = 'themes'; @endif
-		@if (Request::is('pages/'.$project->project_name.'/'.$branch_name.'/index.html')) current = 'pages'; @endif
-		@if (Request::is('publish/'.$project->project_name.'/'.$branch_name)) current = 'publish'; @endif
-
-		px2style.header.init({'current': current});
-	});
-	</script>
+	@guest
+		<script>
+		window.addEventListener('load', function(){
+			var current = '';
+			px2style.header.init({'current': current});
+		});
+		</script>
+	@else
+		<script>
+		window.addEventListener('load', function(){
+			var current = '';
+			@if(! Request::is('*profile*'))
+				@if (Request::is('projects/'.$project->project_name.'/'.$branch_name)) current = 'home'; @endif
+				@if (Request::is('sitemaps/'.$project->project_name.'/'.$branch_name)) current = 'sitemaps'; @endif
+				@if (Request::is('themes/'.$project->project_name.'/'.$branch_name)) current = 'themes'; @endif
+				@if (Request::is('pages/'.$project->project_name.'/'.$branch_name.'/index.html')) current = 'pages'; @endif
+				@if (Request::is('publish/'.$project->project_name.'/'.$branch_name)) current = 'publish'; @endif
+			@endif
+			px2style.header.init({'current': current});
+		});
+		</script>
+	@endguest
 	@yield('script')
 </body>
 </html>
