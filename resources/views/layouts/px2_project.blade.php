@@ -115,6 +115,8 @@
 					<button>≡</button>
 					<ul>
 						<li><a href="{{ url('/') }}">ダッシュボード</a></li>
+						<li><a href="{{ url('staging/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="staging">ステージング管理</a></li>
+						<li><a href="{{ url('delivery/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="delivery">配信管理</a></li>
 						@guest
 						@else
 						<li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
@@ -161,6 +163,8 @@
 				@if (Request::is('themes/'.$project->project_name.'/'.$branch_name)) current = 'themes'; @endif
 				@if (Request::is('pages/'.$project->project_name.'/'.$branch_name.'/index.html')) current = 'pages'; @endif
 				@if (Request::is('publish/'.$project->project_name.'/'.$branch_name)) current = 'publish'; @endif
+				@if (Request::is('staging/'.$project->project_name.'/'.$branch_name)) current = 'staging'; @endif
+				@if (Request::is('delivery/'.$project->project_name.'/'.$branch_name)) current = 'delivery'; @endif
 			@endif
 			px2style.header.init({'current': current});
 		});
