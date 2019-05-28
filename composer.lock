@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bc5fe6439431f61c49f1e6ad877f41eb",
+    "content-hash": "7fdbb308886208f6df9ca3bc09133199",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -2058,6 +2058,117 @@
             ],
             "abandoned": "phpoffice/phpspreadsheet",
             "time": "2018-11-22T23:07:24+00:00"
+        },
+        {
+            "name": "pickles2/lib-indigo",
+            "version": "0.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pickles2/lib-indigo.git",
+                "reference": "bf1e25d92652e64b234bf344dc4031a991393990"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pickles2/lib-indigo/zipball/bf1e25d92652e64b234bf344dc4031a991393990",
+                "reference": "bf1e25d92652e64b234bf344dc4031a991393990",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "tomk79/filesystem": "^1.0.8"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "px2package": {
+                    "name": "lib-indigo",
+                    "type": "plugin"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "php/main.php",
+                    "php/publish.php",
+                    "php/gitManager.php",
+                    "php/pdoManager.php",
+                    "php/db/tsReserve.php",
+                    "php/db/tsOutput.php",
+                    "php/db/tsBackup.php",
+                    "php/screen/initScreen.php",
+                    "php/screen/historyScreen.php",
+                    "php/screen/backupScreen.php",
+                    "php/check.php",
+                    "php/define.php",
+                    "php/common.php",
+                    "php/ajax.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Natsuki Gushikawa",
+                    "email": "natsuki.gushikawa@imjp.co.jp"
+                }
+            ],
+            "keywords": [
+                "indigo"
+            ],
+            "time": "2018-08-31T09:03:29+00:00"
+        },
+        {
+            "name": "pickles2/lib-plum",
+            "version": "0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pickles2/lib-plum.git",
+                "reference": "8e656727573eb767dd44645c708d5cf3d6c1fc21"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pickles2/lib-plum/zipball/8e656727573eb767dd44645c708d5cf3d6c1fc21",
+                "reference": "8e656727573eb767dd44645c708d5cf3d6c1fc21",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.1.0",
+                "tomk79/filesystem": "^1.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "px2package": {
+                    "name": "lib-plum",
+                    "type": "plugin"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "php/main.php",
+                    "php/plum_deploy.php",
+                    "php/plum_git.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kyota Hiyoshi",
+                    "email": "hiyoshi-kyota@imjp.co.jp"
+                }
+            ],
+            "keywords": [
+                "plum"
+            ],
+            "time": "2018-10-18T16:32:10+00:00"
         },
         {
             "name": "pickles2/lib-px2-contents-editor",
