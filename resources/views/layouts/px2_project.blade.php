@@ -43,7 +43,7 @@
 						@guest
 							<span><a class="app_name" href="{{ url('/') }}">{{ config('app.name') }}</a></span>
 						@else
-							@if(! Request::is('*profile*'))
+							@if(! Request::is('*profile*') && ! Request::is('/'))
 								<span>{{ 'Project_'.$project->project_name }}</span>
 							@else
 								<span><a class="app_name" href="{{ url('/') }}">{{ config('app.name') }}</a></span>
@@ -69,7 +69,7 @@
 									</ul>
 								</li>
 							@else
-								@if(! Request::is('*profile*'))
+								@if(! Request::is('*profile*') && ! Request::is('/'))
 									<li><a href="{{ url('projects/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="home">ホーム</a></li>
 									<li><a href="{{ url('sitemaps/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="sitemaps">サイトマップ</a></li>
 									<li><a href="{{ url('themes/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="themes">テーマ</a></li>
@@ -155,7 +155,7 @@
 		<script>
 		window.addEventListener('load', function(){
 			var current = '';
-			@if(! Request::is('*profile*'))
+			@if(! Request::is('*profile*') && ! Request::is('/'))
 				@if (Request::is('projects/'.$project->project_name.'/'.$branch_name)) current = 'home'; @endif
 				@if (Request::is('sitemaps/'.$project->project_name.'/'.$branch_name)) current = 'sitemaps'; @endif
 				@if (Request::is('themes/'.$project->project_name.'/'.$branch_name)) current = 'themes'; @endif
