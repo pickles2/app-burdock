@@ -1,5 +1,5 @@
 @php
-	$title = __('Contents');
+	$title = __('Sitemaps');
 @endphp
 @extends('layouts.px2_project')
 

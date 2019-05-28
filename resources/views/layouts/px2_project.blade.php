@@ -57,8 +57,7 @@
 								{{-- 「ログイン」と「ユーザー登録」へのリンク --}}
 								<li><a href="{{ route('login') }}" data-name="login">{{ __('Login') }}</a></li>
 								<li><a href="{{ route('register') }}" data-name="register">{{ __('Register') }}</a></li>
-								<li>
-									<a href="javascript:void(0)">{{ __('locale.'.App::getLocale()) }}</a>
+								<li><a href="javascript:void(0)">{{ __('locale.'.App::getLocale()) }}</a>
 									<ul>
 										@if (!App::isLocale('en'))
 											<li><a class="dropdown-item" href="{{ locale_url('en') }}">{{ __('locale.en') }}</a></li>
@@ -74,7 +73,7 @@
 									<li><a href="{{ url('sitemaps/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="sitemaps">サイトマップ</a></li>
 									<li><a href="{{ url('themes/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="themes">テーマ</a></li>
 									<li><a href="{{ url('pages/'.$project->project_name.'/'.$branch_name.'/index.html?page_path='.'%2Findex.html')}}" data-name="pages">コンテンツ</a></li>
-									<li><a href="{{ url('publish/'.$project->project_name.'/'.$branch_name) }}" data-name="publish" onclick="uploadSitemap(event);">パブリッシュ</a></li>
+									<li><a href="{{ url('publish/'.$project->project_name.'/'.$branch_name) }}" data-name="publish">パブリッシュ</a></li>
 								@endif
 
 								{{-- 認証関連のリンク --}}
@@ -82,17 +81,11 @@
 								<li>
 									<a class="nav-link dropdown-toggle" href="#" id="dropdown-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ 'ようこそ '.Auth::user()->name.' さん' }}</a>
 									<ul>
-										<li><a class="dropdown-item" href="{{ url('profile') }}">
-											{{ __('Profile') }}
-										</a></li>
-										<li><a class="dropdown-item" href="{{ route('logout') }}"
-											onclick="event.preventDefault();
-														document.getElementById('logout-form').submit();">
-											{{ __('Logout') }}
-										</a>
-										<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-											@csrf
-										</form></li>
+										<li><a class="dropdown-item" href="{{ url('profile') }}">{{ __('Profile') }}</a></li>
+										<li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+											<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+												@csrf
+											</form></li>
 									</ul>
 								</li>
 

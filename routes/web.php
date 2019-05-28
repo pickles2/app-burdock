@@ -71,7 +71,8 @@ Route::post('pages/{project}/{branch_name}/searchAjax', 'Ajax\PageController@sea
 
 // --------------------------------------
 // パブリッシュ
-Route::get('publish/{project}/{branch_name}', 'PublishController@publish');
+Route::get('publish/{project}/{branch_name}', 'PublishController@index');
+Route::get('publish/{project}/{branch_name}/publish_run', 'PublishController@publish');
 
 // --------------------------------------
 // ステージング切り替え (Plum)
