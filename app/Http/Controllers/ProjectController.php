@@ -100,7 +100,7 @@ class ProjectController extends Controller
             // ここまで configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
             clearstatcache();
             chdir($path_branches_dir);
-            shell_exec('git remote set-url origin https://'.$git_username.':'.$git_password.str_replace('https://', '@', urlencode($git_url)));
+            shell_exec('git remote set-url origin https://'.urlencode($git_username).':'.urlencode($git_password).str_replace('https://', '@', urlencode($git_url)));
             shell_exec('git init');
             shell_exec('git add *');
             shell_exec('git commit -m "Create project"');
