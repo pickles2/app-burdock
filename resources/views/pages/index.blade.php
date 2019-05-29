@@ -141,7 +141,7 @@
 				<div class="col-xs-3" data-original-title="" title="">
 					<div class="cont_workspace_search" data-original-title="" title="">
 						<div class="input-group input-group-sm" data-original-title="" title="">
-							{{-- <form action="javascript;;" id="cont_search_form" data-original-title="" title=""> --}}
+
 								<div class="input-group" data-original-title="" title="">
 									<input id="searchText" type="text" class="form-control" placeholder="Search..." value="">
 									<span class="input-group-btn" data-original-title="" title="">
@@ -180,7 +180,7 @@
 										@slot('branch_name', $branch_name)
 						            @endcomponent
 								</div>
-								<!-- /input-group -->
+
 								<div class="btn-group btn-group-justified" data-toggle="buttons" data-original-title="" title="">
 									<label class="btn px2-btn active" data-original-title="" title="">
 										<input type="radio" name="list-label" value="title" checked="checked" data-original-title="" title="">title
@@ -189,7 +189,7 @@
 										<input type="radio" name="list-label" value="path" data-original-title="" title="">path
 									</label>
 								</div>
-							{{-- </form> --}}
+
 						</div>
 					</div>
 					<!-- /.cont_workspace_search -->
