@@ -48,6 +48,78 @@ class StagingController extends Controller
 				$destroy_files[] = $file;
 			}
 		}
-		return view('staging.index', ['project' => $project, 'branch_name' => $branch_name, 'page_param' => $page_param], compact('current', 'get_files'));
+
+
+		$plum = new \hk\plum\main(
+			array(
+				// POST
+				'_POST' => $_POST,
+
+				// GET
+				'_GET' => $_GET,
+
+				// プレビューサーバ定義
+				'preview_server' => array(
+
+					// プレビューサーバの数だけ設定する
+					//
+					//   string 'name':
+					//     - プレビューサーバ名(任意)
+					//   string 'path':
+					//     - プレビューサーバ(デプロイ先)のパス
+					//   string 'url':
+					//     - プレビューサーバのURL
+					//       Webサーバのvirtual host等で設定したURL
+					//
+					array(
+						'name' => 'preview1',
+						'path' => './../repos/preview1/',
+						'url' => 'http://preview1.localhost/'
+					)
+				),
+
+				// Git情報定義
+				'git' => array(
+					
+					// リポジトリのパス
+					// ウェブプロジェクトのリポジトリパスを設定。
+					'repository' => './../repos/master/',
+
+					// プロトコル
+					// ※現在はhttpsのみ対応
+					'protocol' => 'https',
+
+					// ホスト
+					// Gitリポジトリのhostを設定。
+					'host' => 'host.com',
+
+					// GitリポジトリのURL
+					// Gitリポジトリのhost以下のパスを設定。
+					'url' => 'host.com/path/to.git',
+
+					// ユーザ名
+					// Gitリポジトリのユーザ名を設定。
+					'username' => 'user',
+
+					// パスワード
+					// Gitリポジトリのパスワードを設定。
+					'password' => 'pass'
+				)
+			)
+		);
+		$plum_std_out = $plum->run();
+
+
+
+		return view(
+			'staging.index',
+			[
+				'project' => $project,
+				'branch_name' => $branch_name,
+				'page_param' => $page_param,
+				'plum_std_out' => $plum_std_out,
+			],
+			compact('current', 'get_files')
+		);
 	}
 }
