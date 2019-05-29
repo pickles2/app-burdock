@@ -53,7 +53,7 @@ class DeliveryController extends Controller
 
 
 		// parameter.phpのmk_indigo_optionsメソッド
-		$parameter = $this->mk_indigo_options();
+		$parameter = $this->mk_indigo_options( $project_name, $branch_name );
 
 		// load indigo\main
 		$indigo = new \indigo\main($parameter);
@@ -105,7 +105,7 @@ class DeliveryController extends Controller
 
 
 		// parameter.phpのmk_indigo_optionsメソッド
-		$parameter = $this->mk_indigo_options();
+		$parameter = $this->mk_indigo_options( $project_name, $branch_name );
 
 		// load indigo\main
 		$indigo = new \indigo\ajax($parameter);
@@ -128,7 +128,7 @@ class DeliveryController extends Controller
 	/**
 	 * Indigoのオプションを生成する
 	 */
-	private function mk_indigo_options(){
+	private function mk_indigo_options( $project_name, $branch_name ){
 
 		$parameter = array(
 			// POST
@@ -141,10 +141,10 @@ class DeliveryController extends Controller
 			'realpath_workdir' => '/var/www/html/sample-lib-indigo/[directoryName(ex. indigo_dir)]/',
 
 			// リソースディレクトリ（ドキュメントルートからの相対パス）
-			'relativepath_resourcedir'	=> './../[directoryName(ex. res)]/',
+			'relativepath_resourcedir'	=> '/common/lib-indigo/res/',
 
 			// ajax呼出クラス（ドキュメントルートからの相対パス）
-			'realpath_ajax_call' => './ajax.php',
+			'realpath_ajax_call' => '/delivery/'.urlencode($project_name).'/'.urlencode($branch_name).'/indigoAjaxAPI',
 			
 			// 画面表示上のタイムゾーン
 			'time_zone' => 'Asia/Tokyo',
@@ -154,15 +154,9 @@ class DeliveryController extends Controller
 
 			// DB設定
 			'db' => array(
-
-				// 'mysql' or null（nullの場合はSQLite3を使用）　※バージョン0.1.0時点ではmysql未対応
+				// 'mysql' or null (nullの場合はSQLite3を使用)
+				// ※バージョン0.1.0時点ではmysql未対応
 				'db_type' => null,
-
-				// 以下mysql用の設定項目
-				'mysql_db_name' => '',
-				'mysql_db_host' => '',
-				'mysql_db_user' => '',
-				'mysql_db_pass' => ''
 			),
 
 			// 予約最大件数
