@@ -82,7 +82,7 @@
     								<th>Git Password <span class="must">Required</span></th>
     								<td>
     									<div class="overflow:hidden;">
-                                            <input type="text" name="git_password" class="form-control @if($errors->has('git_password'))is-invalid @endif" value="{{ old('git_password') }}" placeholder="Your Git Password">
+                                            <input type="password" name="git_password" class="form-control @if($errors->has('git_password'))is-invalid @endif" value="{{ old('git_password') }}" placeholder="Your Git Password">
                                             @if ($errors->has('git_password'))
                                                 <span class="invalid-feedback" role="alert">
                                                     {{ $errors->first('git_password') }}

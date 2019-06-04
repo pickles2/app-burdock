@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\User;
 
 class MasterDataSeeder extends Seeder
 {
@@ -12,14 +13,15 @@ class MasterDataSeeder extends Seeder
     public function run()
     {
         // 管理ユーザーを作成
-        DB::table('users')->insert([
-            'name' => 'admin',
-            'email' => 'admin@localhost',
-            'password' => bcrypt('admin'),
-            'lang' => 'ja',
-            'email_verified_at' => date('Y-m-d H:i:s'),
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
-        ]);
+        $date = date('Y-m-d H:i:s');
+        $user = new User;
+        $user->name = 'admin';
+        $user->email = 'admin@localhost';
+        $user->password = bcrypt('admin');
+        $user->lang = 'ja';
+        $user->email_verified_at = $date;
+        $user->created_at = $date;
+        $user->updated_at = $date;
+        $user->save();
     }
 }

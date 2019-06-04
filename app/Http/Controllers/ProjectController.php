@@ -71,29 +71,27 @@ class ProjectController extends Controller
         $git_password = $request->git_password;
 
         $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-        if (!is_dir($bd_data_dir)) {
-            mkdir($bd_data_dir);
-        }
-        chdir($bd_data_dir);
+        $path_branches_dir = $bd_data_dir.'/projects/'.urlencode($project_name).'/branches/'.urlencode($branch_name).'/';
 
-        if (!is_dir($projects_name)) {
-            mkdir($projects_name);
-        }
-        chdir($projects_name);
+        \File::makeDirectory($path_branches_dir, 0777, true, true);
 
-        if (!is_dir($project_name)) {
-            mkdir($project_name);
-        }
-        chdir($project_name);
-
-        if (!is_dir($branchs_name)) {
-            mkdir($branchs_name);
-        }
-        chdir($branchs_name);
         $path_composer = realpath(__DIR__.'/../../common/composer/composer.phar');
-        shell_exec($path_composer . ' create-project pickles2/preset-get-start-pickles2 ./' . $branch_name);
-        chdir($branch_name);
+        chdir($path_branches_dir);
+        shell_exec($path_composer . ' create-project pickles2/preset-get-start-pickles2 ./');
+        chdir($path_current_dir);
+        clearstatcache();
+
         $project_path = get_project_workingtree_dir($project_name, $branch_name);
+
+        // 記事作成時に著者のIDを保存する
+        $project = new Project;
+        $project->project_name = $project_name;
+        $project->user_id = $request->user()->id;
+        $project->git_url = $git_url;
+        $project->git_username = \Crypt::encryptString($git_username);
+        $project->git_password = \Crypt::encryptString($git_password);
+        $project->save();
+
         // .px_execute.phpの存在確認
         if(\File::exists($project_path.'/.px_execute.php')) {
             // ここから configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
@@ -107,15 +105,40 @@ class ProjectController extends Controller
                 }
             }
             file_put_contents($project_path.'/px-files/config.php', $files);
+
             // ここまで configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
-            shell_exec('git remote set-url origin https://'.urlencode($git_username).':'.urlencode($git_password).str_replace('https://', '@', urlencode($git_url)));
+            clearstatcache();
+            chdir($path_branches_dir);
+            $git_url_plus_auth = $git_url;
+            if( strlen($git_username) ){
+                $parsed_git_url = parse_url($git_url_plus_auth);
+                $git_url_plus_auth = '';
+                $git_url_plus_auth .= $parsed_git_url['scheme'].'://';
+                $git_url_plus_auth .= urlencode($git_username);
+                $git_url_plus_auth .= ':'.urlencode($git_password);
+                $git_url_plus_auth .= '@';
+                $git_url_plus_auth .= $parsed_git_url['host'];
+                if( array_key_exists('port', $parsed_git_url) && strlen($parsed_git_url['port']) ){
+                    $git_url_plus_auth .= ':'.$parsed_git_url['port'];
+                }
+                $git_url_plus_auth .= $parsed_git_url['path'];
+                if( array_key_exists('query', $parsed_git_url) && strlen($parsed_git_url['query']) ){
+                    $git_url_plus_auth .= '?'.$parsed_git_url['query'];
+                }
+            }
+
+            shell_exec('git remote set-url origin '.escapeshellarg($git_url));
             shell_exec('git init');
             shell_exec('git add *');
             shell_exec('git commit -m "Create project"');
             if( strlen($git_url) ){
                 shell_exec('git remote add origin '.escapeshellarg($git_url));
             }
-            $result = shell_exec('git push -u origin master');
+
+            // push するときは認証情報が必要なので、
+            // 認証情報付きのURLで実行する
+            $result = shell_exec('git push -u '.escapeshellarg($git_url_plus_auth).' master:master');
+            chdir($path_current_dir);
 
             // git pushの結果によって処理わけ
             if($result === null) {
@@ -125,14 +148,6 @@ class ProjectController extends Controller
                 $redirect = '/';
             } else {
                 chdir($path_current_dir); // 元いたディレクトリへ戻る
-                // 記事作成時に著者のIDを保存する
-                $project = new Project;
-                $project->project_name = $project_name;
-                $project->user_id = $request->user()->id;
-                $project->git_url = $git_url;
-                $project->git_username = \Crypt::encryptString($git_username);
-                $project->git_password = \Crypt::encryptString($git_password);
-                $project->save();
                 $message = __('Created new Project.');
                 $redirect = 'projects/'.urlencode($project_name).'/'.urlencode($branch_name);
             }
