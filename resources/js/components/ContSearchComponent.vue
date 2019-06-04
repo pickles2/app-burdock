@@ -1,91 +1,47 @@
 <template>
-    <!-- <div>
-        <p>
-            Count : <span :class="numberClasses">{{ number }}</span>
-        </p>
-        <button @click="countDown">−１</button>
-        <button @click="countUp">＋１</button>
-    </div> -->
-	<div class="col-xs-3" data-original-title="" title="">
-		<div class="cont_workspace_search" data-original-title="" title="">
-			<div class="input-group input-group-sm" data-original-title="" title="">
-
-					<div class="input-group" data-original-title="" title="">
-						<input id="searchText" type="text" class="form-control" placeholder="Search..." value="">
-						<span class="input-group-btn" data-original-title="" title="">
-							<button class="px2-btn px2-btn--primary" type="submit" onclick="contentsSearch(event);">検索</button>
-							<script>
-								function contentsSearch(e) {
-									// 処理前に Loading 画像を表示
-									px2style.loading();
-									px2style.loadingMessage("しばらくお待ちください。");
-
-									var sholderNavi = document.getElementById("sholderNavi");
-									var flashAlert = document.getElementById("flash_alert");
-									var str = document.getElementById("searchText").value;
-
-									// ajaxでファイルのmimetypeを取得しコントローラーに送信
-									$.ajax({
-										url: "/pages/{{ $project->project_name }}/{{ $branch_name }}/searchAjax",
-										type: 'post',
-										data : {
-											"str" : str,
-											_token : '{{ csrf_token() }}'
-										},
-									}).done(function(data){
-										console.log(data.info);
-
-									}).always(function(data){
-										// 処理終了時にLading 画像を消す
-										px2style.closeLoading();
-									});
-								}
-							</script>
-						</span>
-						@component('components.btn_contents_commit')
-							@slot('controller', 'page')
-							@slot('project_name', $project->project_name)
-							@slot('branch_name', $branch_name)
-						@endcomponent
-					</div>
-
-					<div class="btn-group btn-group-justified" data-toggle="buttons" data-original-title="" title="">
-						<label class="btn px2-btn active" data-original-title="" title="">
-							<input type="radio" name="list-label" value="title" checked="checked" data-original-title="" title="">title
-						</label>
-						<label class="btn px2-btn" data-original-title="" title="">
-							<input type="radio" name="list-label" value="path" data-original-title="" title="">path
-						</label>
-					</div>
-
-			</div>
+	<div>
+		<div class="input-group" data-original-title="" title="">
+			<input v-model="str" type="text" name="title" placeholder="Search...">
+			<span class="input-group-btn" data-original-title="" title="">
+				<button class="px2-btn px2-btn--primary" v-on:click="contentsSearch">検索</button>
+			</span>
+			<!-- <div v-for="result in results">
+				<span v-html="result.title"></span>
+			</div> -->
 		</div>
-	
+		<div class="cont_sitemap_search" data-original-title="" title="" style="display: block;">
+			<ul v-if="results.length" class="listview">
+				<li v-for="result in results">
+					<a v-bind:href="result.path" style="padding-left: 1em; font-size: 12px;">{{ result.title }}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
 </template>
 
 <script>
 export default {
-    name: "ContSearchComponent",
-    data () {
-        return {
-            number: 0
-        }
-    },
-    computed: {
-        numberClasses: function () {
-            return {
-                'positive': (this.number > 0),
-                'negative': (this.number < 0)
-            }
-        }
-    },
+	// メソッドで使う&テンプレート内で使う変数を定義
+	data () {
+    	return {
+			props: [
+				"projectName",
+				"branchName"
+			],
+    		str: '',
+			results: []
+		}
+	},
+	// (読み込み時に)実行するメソッド
     methods: {
-        countDown: function () {
-            this.number--
-        },
-        countUp: function () {
-            this.number++
-        }
+        contentsSearch(){
+			var data = {
+                'str': this.str
+            };
+            axios.post('/pages/'+projectName+'/'+branchName+'/searchAjax',data).then(res => {
+					this.results = res.data.info
+            })
+		}
     }
 }
 </script>
