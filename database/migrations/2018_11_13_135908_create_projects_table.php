@@ -14,13 +14,13 @@ class CreateProjectsTable extends Migration
     public function up()
     {
         Schema::create('projects', function (Blueprint $table) {
-            $table->increments('id');
+            $table->uuid('id', 36)->primary();
             $table->string('project_name');
             $table->text('git_url')->nullable();
-            $table->text('git_username');
-            $table->text('git_password');
+            $table->text('git_username')->nullable();
+            $table->text('git_password')->nullable();
             $table->timestamps();
-            $table->integer('user_id')->unsigned()->default(1);
+            $table->uuid('user_id')->nullable();
             $table->foreign('user_id')
                   ->references('id')->on('users')
                   ->onDelete('cascade');
