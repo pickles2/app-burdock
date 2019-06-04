@@ -109,14 +109,35 @@ class ProjectController extends Controller
             // ここまで configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
             clearstatcache();
             chdir($path_branches_dir);
-            shell_exec('git remote set-url origin https://'.urlencode($git_username).':'.urlencode($git_password).str_replace('https://', '@', urlencode($git_url)));
+            $git_url_plus_auth = $git_url;
+            if( strlen($git_username) ){
+                $parsed_git_url = parse_url($git_url_plus_auth);
+                $git_url_plus_auth = '';
+                $git_url_plus_auth .= $parsed_git_url['scheme'].'://';
+                $git_url_plus_auth .= urlencode($git_username);
+                $git_url_plus_auth .= ':'.urlencode($git_password);
+                $git_url_plus_auth .= '@';
+                $git_url_plus_auth .= $parsed_git_url['host'];
+                if( array_key_exists('port', $parsed_git_url) && strlen($parsed_git_url['port']) ){
+                    $git_url_plus_auth .= ':'.$parsed_git_url['port'];
+                }
+                $git_url_plus_auth .= $parsed_git_url['path'];
+                if( array_key_exists('query', $parsed_git_url) && strlen($parsed_git_url['query']) ){
+                    $git_url_plus_auth .= '?'.$parsed_git_url['query'];
+                }
+            }
+
+            shell_exec('git remote set-url origin '.escapeshellarg($git_url));
             shell_exec('git init');
             shell_exec('git add *');
             shell_exec('git commit -m "Create project"');
             if( strlen($git_url) ){
                 shell_exec('git remote add origin '.escapeshellarg($git_url));
             }
-            $result = shell_exec('git push -u origin master');
+
+            // push するときは認証情報が必要なので、
+            // 認証情報付きのURLで実行する
+            $result = shell_exec('git push -u '.escapeshellarg($git_url_plus_auth).' master:master');
             chdir($path_current_dir);
 
             // git pushの結果によって処理わけ
