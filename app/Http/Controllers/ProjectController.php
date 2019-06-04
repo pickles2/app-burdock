@@ -83,6 +83,15 @@ class ProjectController extends Controller
 
         $project_path = get_project_workingtree_dir($project_name, $branch_name);
 
+        // 記事作成時に著者のIDを保存する
+        $project = new Project;
+        $project->project_name = $project_name;
+        $project->user_id = $request->user()->id;
+        $project->git_url = $git_url;
+        $project->git_username = \Crypt::encryptString($git_username);
+        $project->git_password = \Crypt::encryptString($git_password);
+        $project->save();
+
         // .px_execute.phpの存在確認
         if(\File::exists($project_path.'/.px_execute.php')) {
             // ここから configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
@@ -118,14 +127,6 @@ class ProjectController extends Controller
                 $redirect = '/';
             } else {
                 chdir($path_current_dir); // 元いたディレクトリへ戻る
-                // 記事作成時に著者のIDを保存する
-                $project = new Project;
-                $project->project_name = $project_name;
-                $project->user_id = $request->user()->id;
-                $project->git_url = $git_url;
-                $project->git_username = \Crypt::encryptString($git_username);
-                $project->git_password = \Crypt::encryptString($git_password);
-                $project->save();
                 $message = __('Created new Project.');
                 $redirect = 'projects/'.urlencode($project_name).'/'.urlencode($branch_name);
             }
