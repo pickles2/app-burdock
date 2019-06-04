@@ -30,6 +30,11 @@ Route::get('/', 'HomeController@index');
 // Route::resource('users', 'UserController');
 
 // --------------------------------------
+// WASABIへのログイン
+Route::get('oauth/callback/wasabi', 'OauthCallbackController@wasabi_callback');
+
+
+// --------------------------------------
 // プロフィール
 Route::get('profile', 'ProfileController@show');
 Route::get('profile/edit', 'ProfileController@edit');

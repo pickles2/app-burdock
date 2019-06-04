@@ -101,6 +101,17 @@
     		</div>
     	</div>
        </div>
+
+@php
+$query = http_build_query([
+    'client_id' => env('BD_WASABI_CLIENT_ID'),
+    'redirect_uri' => 'http'.($_SERVER['HTTPS']?'s':'').'://'.$_SERVER['SERVER_NAME'].'/oauth/callback/wasabi',
+    'response_type' => 'code',
+    'scope' => '*',
+]);
+@endphp
+<a href="{{ env('BD_WASABI_URL') }}oauth/authorize?{{$query}}" target="_blank">WASABIアカウントでログイン</a>
+
 	<div class="cont_top_footer">
 		<p>(C)Pickles 2 Project.</p>
 	</div>
