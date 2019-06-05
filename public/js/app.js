@@ -49275,10 +49275,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+	// view側から変数をプロパティとして渡す
+	props: ["projectName", "branchName"],
 	// メソッドで使う&テンプレート内で使う変数を定義
 	data: function data() {
 		return {
-			props: ["projectName", "branchName"],
 			str: '',
 			results: []
 		};
@@ -49292,7 +49293,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var data = {
 				'str': this.str
 			};
-			axios.post('/pages/' + projectName + '/' + branchName + '/searchAjax', data).then(function (res) {
+			axios.post('/pages/' + this.projectName + '/' + this.branchName + '/searchAjax', data).then(function (res) {
 				_this.results = res.data.info;
 			});
 		}

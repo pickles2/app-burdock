@@ -21,13 +21,14 @@
 
 <script>
 export default {
+	// view側から変数をプロパティとして渡す
+	props: [
+		"projectName",
+		"branchName"
+	],
 	// メソッドで使う&テンプレート内で使う変数を定義
 	data () {
     	return {
-			props: [
-				"projectName",
-				"branchName"
-			],
     		str: '',
 			results: []
 		}
@@ -38,9 +39,9 @@ export default {
 			var data = {
                 'str': this.str
             };
-            axios.post('/pages/'+projectName+'/'+branchName+'/searchAjax',data).then(res => {
-					this.results = res.data.info
-            })
+            axios.post('/pages/'+this.projectName+'/'+this.branchName+'/searchAjax',data).then(res => {
+					this.results = res.data.info;
+            });
 		}
     }
 }
