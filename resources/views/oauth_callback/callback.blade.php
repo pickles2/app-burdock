@@ -9,16 +9,11 @@
     @if(isset($error) && $error)
         <p>{{ $error->message }}</p>
     @else
-        <p>{{ $request->code }}</p>
-
-        <p>{{ $request->error }}</p>
-
-        <p>{{ $request->state }}</p>
-
-        <p>{{ $data['access_token'] }}</p>
-
-        <p>{{ var_dump($data['user_info']) }}</p>
+        <p>認証に成功しました。</p>
     @endif
 
+    <div>
+        <a href="{{ url('/') }}" class="btn btn-primary">ダッシュボードへ戻る</a>
+    </div>
 </div>
 @endsection

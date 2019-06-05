@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\User;
-use App\OauthAccesskey;
+use App\OauthAccessToken;
 use GuzzleHttp\Client as Client;
 
 class OauthCallbackController extends Controller
@@ -122,24 +122,27 @@ class OauthCallbackController extends Controller
                 $user->lang = $remote_user_info->lang;
                 $user->save();
             }
+
+            // このユーザーでログイン状態になる
+            Auth::login($user, true);
         }
 
-        $oauth_accesskey = OauthAccesskey::where([
+        $oauth_access_token = OauthAccessToken::where([
             'user_id' => $user->id,
             'remote_service_name' => env('BD_WASABI_URL'),
         ])->first();
-        if( !$oauth_accesskey ){
-            $oauth_accesskey = new OauthAccesskey();
+        if( !$oauth_access_token ){
+            $oauth_access_token = new OauthAccessToken();
         }
-        $oauth_accesskey->user_id = $user->id;
-        $oauth_accesskey->remote_service_name = env('BD_WASABI_URL');
-        $oauth_accesskey->remote_user_id = $remote_user_info->id;
-        $oauth_accesskey->remote_email = $remote_user_info->email;
-        $oauth_accesskey->remote_lang = $remote_user_info->lang;
-        $oauth_accesskey->remote_icon = $remote_user_info->icon;
-        $oauth_accesskey->access_token = $data['access_token'];
-        $oauth_accesskey->save();
+        $oauth_access_token->user_id = $user->id;
+        $oauth_access_token->remote_service_name = env('BD_WASABI_URL');
+        $oauth_access_token->remote_user_id = $remote_user_info->id;
+        $oauth_access_token->remote_email = $remote_user_info->email;
+        $oauth_access_token->remote_lang = $remote_user_info->lang;
+        $oauth_access_token->remote_icon = $remote_user_info->icon;
+        $oauth_access_token->access_token = $data['access_token'];
+        $oauth_access_token->save();
 
-        return view('oauth_callback.callback', ['request' => $request, 'data' => $data]);
+        return redirect('/');
     }
 }

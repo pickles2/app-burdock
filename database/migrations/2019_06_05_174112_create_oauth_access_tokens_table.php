@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOauthAccesskeysTable extends Migration
+class CreateOauthAccessTokensTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateOauthAccesskeysTable extends Migration
      */
     public function up()
     {
-        Schema::create('oauth_accesskeys', function (Blueprint $table) {
+        Schema::create('oauth_access_tokens', function (Blueprint $table) {
             $table->uuid('user_id')->nullable();
             $table->string('remote_service_name');
             $table->string('remote_user_id')->nullable();
@@ -38,6 +38,6 @@ class CreateOauthAccesskeysTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('oauth_accesskeys');
+        Schema::dropIfExists('oauth_access_tokens');
     }
 }
