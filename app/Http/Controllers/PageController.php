@@ -35,7 +35,7 @@ class PageController extends Controller
         $editor_type = json_decode($data_json);
         chdir($path_current_dir); // 元いたディレクトリへ戻る
 
-        return view('pages.index', ['project' => $project, 'branch_name' => $branch_name, 'page_param' => $page_param], compact('current', 'editor_type'));
+        return view('pages.index', ['project' => $project, 'branch_name' => $branch_name, 'page_id' => $page_id, 'page_param' => $page_param], compact('current', 'editor_type'));
     }
 
 

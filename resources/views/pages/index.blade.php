@@ -181,7 +181,7 @@
 					            @endcomponent
 							</div> --}}
 							<div id="app">
-								<cont-search-component project-name="{{ $project->project_name}}" branch-name="{{$branch_name}}"></cont-search-component>
+								<cont-search-component project-name="{{ $project->project_name}}" branch-name="{{$branch_name}}" page-id="{{ $page_id }}"></cont-search-component>
 							</div>
 							<div class="btn-group btn-group-justified" data-toggle="buttons" data-original-title="" title="">
 								<label class="btn px2-btn active" data-original-title="" title="">

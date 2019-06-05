@@ -12,7 +12,11 @@
 		<div class="cont_sitemap_search" data-original-title="" title="" style="display: block;">
 			<ul v-if="results.length" class="listview">
 				<li v-for="result in results">
-					<a v-bind:href="result.path" style="padding-left: 1em; font-size: 12px;">{{ result.title }}</a>
+					<a v-if="(result.logical_path.match(/>/g) || []).length === 0" v-bind:href="result.path" style="padding-left: 1em; font-size: 12px;" data-id="result.id" data-page-path="result.path" data-content="result.content" v-bind:class="{current: result.id === pageId}">{{ result.title }}</a>
+					<a v-else-if="(result.logical_path.match(/>/g) || []).length === 1" v-bind:href="result.path" style="padding-left: 2em; font-size: 12px;" data-id="result.id" data-page-path="result.path" data-content="result.content" v-bind:class="{current: result.id === pageId}">{{ result.title }}</a>
+					<a v-else-if="(result.logical_path.match(/>/g) || []).length === 2" v-bind:href="result.path" style="padding-left: 2.6em; font-size: 12px;" data-id="result.id" data-page-path="result.path" data-content="result.content" v-bind:class="{current: result.id === pageId}">{{ result.title }}</a>
+					<a v-else-if="(result.logical_path.match(/>/g) || []).length === 3" v-bind:href="result.path" style="padding-left: 3.9em; font-size: 12px;" data-id="result.id" data-page-path="result.path" data-content="result.content" v-bind:class="{current: result.id === pageId}">{{ result.title }}</a>
+					<a v-else v-bind:href="result.path" style="padding-left: 5.2em; font-size: 12px;" data-id="result.id" data-page-path="result.path" data-content="result.content" v-bind:class="{current: result.id === pageId}">{{ result.title }}</a>
 				</li>
 			</ul>
 		</div>
@@ -24,7 +28,8 @@ export default {
 	// view側から変数をプロパティとして渡す
 	props: [
 		"projectName",
-		"branchName"
+		"branchName",
+		"pageId"
 	],
 	// メソッドで使う&テンプレート内で使う変数を定義
 	data () {

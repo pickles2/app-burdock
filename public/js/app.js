@@ -49273,10 +49273,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	// view側から変数をプロパティとして渡す
-	props: ["projectName", "branchName"],
+	props: ["projectName", "branchName", "pageId"],
 	// メソッドで使う&テンプレート内で使う変数を定義
 	data: function data() {
 		return {
@@ -49371,17 +49376,95 @@ var render = function() {
               { staticClass: "listview" },
               _vm._l(_vm.results, function(result) {
                 return _c("li", [
-                  _c(
-                    "a",
-                    {
-                      staticStyle: {
-                        "padding-left": "1em",
-                        "font-size": "12px"
-                      },
-                      attrs: { href: result.path }
-                    },
-                    [_vm._v(_vm._s(result.title))]
-                  )
+                  (result.logical_path.match(/>/g) || []).length === 0
+                    ? _c(
+                        "a",
+                        {
+                          class: { current: result.id === _vm.pageId },
+                          staticStyle: {
+                            "padding-left": "1em",
+                            "font-size": "12px"
+                          },
+                          attrs: {
+                            href: result.path,
+                            "data-id": "result.id",
+                            "data-page-path": "result.path",
+                            "data-content": "result.content"
+                          }
+                        },
+                        [_vm._v(_vm._s(result.title))]
+                      )
+                    : (result.logical_path.match(/>/g) || []).length === 1
+                    ? _c(
+                        "a",
+                        {
+                          class: { current: result.id === _vm.pageId },
+                          staticStyle: {
+                            "padding-left": "2em",
+                            "font-size": "12px"
+                          },
+                          attrs: {
+                            href: result.path,
+                            "data-id": "result.id",
+                            "data-page-path": "result.path",
+                            "data-content": "result.content"
+                          }
+                        },
+                        [_vm._v(_vm._s(result.title))]
+                      )
+                    : (result.logical_path.match(/>/g) || []).length === 2
+                    ? _c(
+                        "a",
+                        {
+                          class: { current: result.id === _vm.pageId },
+                          staticStyle: {
+                            "padding-left": "2.6em",
+                            "font-size": "12px"
+                          },
+                          attrs: {
+                            href: result.path,
+                            "data-id": "result.id",
+                            "data-page-path": "result.path",
+                            "data-content": "result.content"
+                          }
+                        },
+                        [_vm._v(_vm._s(result.title))]
+                      )
+                    : (result.logical_path.match(/>/g) || []).length === 3
+                    ? _c(
+                        "a",
+                        {
+                          class: { current: result.id === _vm.pageId },
+                          staticStyle: {
+                            "padding-left": "3.9em",
+                            "font-size": "12px"
+                          },
+                          attrs: {
+                            href: result.path,
+                            "data-id": "result.id",
+                            "data-page-path": "result.path",
+                            "data-content": "result.content"
+                          }
+                        },
+                        [_vm._v(_vm._s(result.title))]
+                      )
+                    : _c(
+                        "a",
+                        {
+                          class: { current: result.id === _vm.pageId },
+                          staticStyle: {
+                            "padding-left": "5.2em",
+                            "font-size": "12px"
+                          },
+                          attrs: {
+                            href: result.path,
+                            "data-id": "result.id",
+                            "data-page-path": "result.path",
+                            "data-content": "result.content"
+                          }
+                        },
+                        [_vm._v(_vm._s(result.title))]
+                      )
                 ])
               }),
               0
