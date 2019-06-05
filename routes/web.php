@@ -30,7 +30,7 @@ Route::get('/', 'HomeController@index');
 // Route::resource('users', 'UserController');
 
 // --------------------------------------
-// WASABIへのログイン
+// OAuth コールバック
 Route::get('oauth/callback/wasabi', 'OauthCallbackController@wasabi_callback');
 
 

@@ -66,6 +66,20 @@
                             </div>
                         </div>
                     </form>
+                    @if (env('BD_WASABI_URL'))
+                        @php
+                        $query = http_build_query([
+                            'client_id' => env('BD_WASABI_CLIENT_ID'),
+                            'redirect_uri' => 'http'.($_SERVER['HTTPS']?'s':'').'://'.$_SERVER['SERVER_NAME'].'/oauth/callback/wasabi',
+                            'response_type' => 'code',
+                            'scope' => '*',
+                        ]);
+                        @endphp
+                        <div class="form-group row mb-0">
+                            <p><a href="{{ env('BD_WASABI_URL') }}oauth/authorize?{{$query}}" class="btn btn-default">WASABIアカウントでログインする</a></p>
+                        </div>
+                    @endif
+
                 </div>
             </div>
         </div>
