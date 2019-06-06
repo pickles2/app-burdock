@@ -49385,10 +49385,15 @@ var render = function() {
                             "font-size": "12px"
                           },
                           attrs: {
-                            href: result.path,
-                            "data-id": "result.id",
-                            "data-page-path": "result.path",
-                            "data-content": "result.content"
+                            href:
+                              "/pages/" +
+                              _vm.projectName +
+                              "/" +
+                              _vm.branchName +
+                              "/index.html?page_path=" +
+                              result.path +
+                              "&page_id=" +
+                              result.id
                           }
                         },
                         [_vm._v(_vm._s(result.title))]
@@ -49403,10 +49408,15 @@ var render = function() {
                             "font-size": "12px"
                           },
                           attrs: {
-                            href: result.path,
-                            "data-id": "result.id",
-                            "data-page-path": "result.path",
-                            "data-content": "result.content"
+                            href:
+                              "/pages/" +
+                              _vm.projectName +
+                              "/" +
+                              _vm.branchName +
+                              "/index.html?page_path=" +
+                              result.path +
+                              "&page_id=" +
+                              result.id
                           }
                         },
                         [_vm._v(_vm._s(result.title))]
@@ -49421,10 +49431,15 @@ var render = function() {
                             "font-size": "12px"
                           },
                           attrs: {
-                            href: result.path,
-                            "data-id": "result.id",
-                            "data-page-path": "result.path",
-                            "data-content": "result.content"
+                            href:
+                              "/pages/" +
+                              _vm.projectName +
+                              "/" +
+                              _vm.branchName +
+                              "/index.html?page_path=" +
+                              result.path +
+                              "&page_id=" +
+                              result.id
                           }
                         },
                         [_vm._v(_vm._s(result.title))]
@@ -49439,10 +49454,15 @@ var render = function() {
                             "font-size": "12px"
                           },
                           attrs: {
-                            href: result.path,
-                            "data-id": "result.id",
-                            "data-page-path": "result.path",
-                            "data-content": "result.content"
+                            href:
+                              "/pages/" +
+                              _vm.projectName +
+                              "/" +
+                              _vm.branchName +
+                              "/index.html?page_path=" +
+                              result.path +
+                              "&page_id=" +
+                              result.id
                           }
                         },
                         [_vm._v(_vm._s(result.title))]
@@ -49456,10 +49476,15 @@ var render = function() {
                             "font-size": "12px"
                           },
                           attrs: {
-                            href: result.path,
-                            "data-id": "result.id",
-                            "data-page-path": "result.path",
-                            "data-content": "result.content"
+                            href:
+                              "/pages/" +
+                              _vm.projectName +
+                              "/" +
+                              _vm.branchName +
+                              "/index.html?page_path=" +
+                              result.path +
+                              "&page_id=" +
+                              result.id
                           }
                         },
                         [_vm._v(_vm._s(result.title))]
