@@ -181,15 +181,7 @@
 					            @endcomponent
 							</div> --}}
 							<div id="app">
-								<cont-search-component project-name="{{ $project->project_name}}" branch-name="{{$branch_name}}" page-id="{{ $page_id }}"></cont-search-component>
-							</div>
-							<div class="btn-group btn-group-justified" data-toggle="buttons" data-original-title="" title="">
-								<label class="btn px2-btn active" data-original-title="" title="">
-									<input type="radio" name="list-label" value="title" checked="checked" data-original-title="" title="">title
-								</label>
-								<label class="btn px2-btn" data-original-title="" title="">
-									<input type="radio" name="list-label" value="path" data-original-title="" title="">path
-								</label>
+								<cont-search-component project-name="{{ $project->project_name}}" branch-name="{{ $branch_name }}" page-id="{{ $page_id }}"></cont-search-component>
 							</div>
 						</div>
 					</div>

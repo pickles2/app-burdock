@@ -49277,6 +49277,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	// view側から変数をプロパティとして渡す
@@ -49285,7 +49300,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	data: function data() {
 		return {
 			str: '',
-			results: []
+			results: [],
+			isTitle: true,
+			isPath: false
 		};
 	},
 
@@ -49297,9 +49314,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var data = {
 				'str': this.str
 			};
+			if (data.str === '') {
+				data.str = '/';
+			}
 			axios.post('/pages/' + this.projectName + '/' + this.branchName + '/searchAjax', data).then(function (res) {
 				_this.results = res.data.info;
 			});
+		},
+		changeTitleClass: function changeTitleClass() {
+			this.isTitle = true;
+			this.isPath = false;
+		},
+		changePathClass: function changePathClass() {
+			this.isTitle = false;
+			this.isPath = true;
 		}
 	}
 });
@@ -49314,47 +49342,60 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c(
-      "div",
+      "form",
       {
-        staticClass: "input-group",
-        attrs: { "data-original-title": "", title: "" }
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.contentsSearch($event)
+          }
+        }
       },
       [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.str,
-              expression: "str"
-            }
-          ],
-          attrs: { type: "text", name: "title", placeholder: "Search..." },
-          domProps: { value: _vm.str },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.str = $event.target.value
-            }
-          }
-        }),
-        _vm._v(" "),
         _c(
-          "span",
+          "div",
           {
-            staticClass: "input-group-btn",
+            staticClass: "input-group",
             attrs: { "data-original-title": "", title: "" }
           },
           [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.str,
+                  expression: "str"
+                }
+              ],
+              attrs: { type: "text", name: "title", placeholder: "Search..." },
+              domProps: { value: _vm.str },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.str = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
             _c(
-              "button",
+              "span",
               {
-                staticClass: "px2-btn px2-btn--primary",
-                on: { click: _vm.contentsSearch }
+                staticClass: "input-group-btn",
+                attrs: { "data-original-title": "", title: "" }
               },
-              [_vm._v("検索")]
+              [
+                _c(
+                  "button",
+                  {
+                    staticClass: "px2-btn px2-btn--primary",
+                    on: { click: _vm.contentsSearch }
+                  },
+                  [_vm._v("検索")]
+                )
+              ]
             )
           ]
         )
@@ -49364,9 +49405,69 @@ var render = function() {
     _c(
       "div",
       {
+        staticClass: "btn-group btn-group-justified",
+        attrs: {
+          "data-toggle": "buttons",
+          "data-original-title": "",
+          title: ""
+        }
+      },
+      [
+        _c(
+          "label",
+          {
+            staticClass: "btn px2-btn active",
+            attrs: { "data-original-title": "", title: "" },
+            on: { click: _vm.changeTitleClass }
+          },
+          [
+            _c("input", {
+              attrs: {
+                type: "radio",
+                name: "list-label",
+                value: "title",
+                checked: "checked",
+                "data-original-title": "",
+                title: ""
+              }
+            }),
+            _vm._v("title\n\t\t")
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "label",
+          {
+            staticClass: "btn px2-btn",
+            attrs: { "data-original-title": "", title: "" },
+            on: { click: _vm.changePathClass }
+          },
+          [
+            _c("input", {
+              attrs: {
+                type: "radio",
+                name: "list-label",
+                value: "path",
+                "data-original-title": "",
+                title: ""
+              }
+            }),
+            _vm._v("path\n\t\t")
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
         staticClass: "cont_sitemap_search",
-        staticStyle: { display: "block" },
-        attrs: { "data-original-title": "", title: "" }
+        class: [_vm.isTitle === true ? "show" : "hidden"],
+        attrs: {
+          id: "cont_sitemap_search_title",
+          "data-original-title": "",
+          title: ""
+        }
       },
       [
         _vm.results.length
@@ -49375,7 +49476,7 @@ var render = function() {
               { staticClass: "listview" },
               _vm._l(_vm.results, function(result) {
                 return _c("li", [
-                  (result.logical_path.match(/>/g) || []).length === 0
+                  result.id === ""
                     ? _c(
                         "a",
                         {
@@ -49398,7 +49499,7 @@ var render = function() {
                         },
                         [_vm._v(_vm._s(result.title))]
                       )
-                    : (result.logical_path.match(/>/g) || []).length === 1
+                    : result.logical_path === ""
                     ? _c(
                         "a",
                         {
@@ -49421,59 +49522,16 @@ var render = function() {
                         },
                         [_vm._v(_vm._s(result.title))]
                       )
-                    : (result.logical_path.match(/>/g) || []).length === 2
-                    ? _c(
-                        "a",
-                        {
-                          class: { current: result.id === _vm.pageId },
-                          staticStyle: {
-                            "padding-left": "2.6em",
-                            "font-size": "12px"
-                          },
-                          attrs: {
-                            href:
-                              "/pages/" +
-                              _vm.projectName +
-                              "/" +
-                              _vm.branchName +
-                              "/index.html?page_path=" +
-                              result.path +
-                              "&page_id=" +
-                              result.id
-                          }
-                        },
-                        [_vm._v(_vm._s(result.title))]
-                      )
-                    : (result.logical_path.match(/>/g) || []).length === 3
-                    ? _c(
-                        "a",
-                        {
-                          class: { current: result.id === _vm.pageId },
-                          staticStyle: {
-                            "padding-left": "3.9em",
-                            "font-size": "12px"
-                          },
-                          attrs: {
-                            href:
-                              "/pages/" +
-                              _vm.projectName +
-                              "/" +
-                              _vm.branchName +
-                              "/index.html?page_path=" +
-                              result.path +
-                              "&page_id=" +
-                              result.id
-                          }
-                        },
-                        [_vm._v(_vm._s(result.title))]
-                      )
                     : _c(
                         "a",
                         {
                           class: { current: result.id === _vm.pageId },
-                          staticStyle: {
-                            "padding-left": "5.2em",
-                            "font-size": "12px"
+                          staticStyle: { "font-size": "12px" },
+                          style: {
+                            paddingLeft:
+                              (result.logical_path.split(/>/).length + 1) *
+                                1.3 +
+                              "em"
                           },
                           attrs: {
                             href:
@@ -49489,6 +49547,54 @@ var render = function() {
                         },
                         [_vm._v(_vm._s(result.title))]
                       )
+                ])
+              }),
+              0
+            )
+          : _vm._e()
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "cont_sitemap_search",
+        class: [_vm.isPath === true ? "show" : "hidden"],
+        attrs: {
+          id: "cont_sitemap_search_path",
+          "data-original-title": "",
+          title: ""
+        }
+      },
+      [
+        _vm.results.length
+          ? _c(
+              "ul",
+              { staticClass: "listview" },
+              _vm._l(_vm.results, function(result) {
+                return _c("li", [
+                  _c(
+                    "a",
+                    {
+                      class: { current: result.id === _vm.pageId },
+                      staticStyle: {
+                        "padding-left": "1em",
+                        "font-size": "12px"
+                      },
+                      attrs: {
+                        href:
+                          "/pages/" +
+                          _vm.projectName +
+                          "/" +
+                          _vm.branchName +
+                          "/index.html?page_path=" +
+                          result.path +
+                          "&page_id=" +
+                          result.id
+                      }
+                    },
+                    [_vm._v(_vm._s(result.path))]
+                  )
                 ])
               }),
               0
