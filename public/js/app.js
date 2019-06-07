@@ -49292,6 +49292,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	// view側から変数をプロパティとして渡す
@@ -49302,7 +49304,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			str: '',
 			results: [],
 			isTitle: true,
-			isPath: false
+			isPath: false,
+			isResult: false
 		};
 	},
 
@@ -49319,6 +49322,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}
 			axios.post('/pages/' + this.projectName + '/' + this.branchName + '/searchAjax', data).then(function (res) {
 				_this.results = res.data.info;
+				_this.isResult = true;
 			});
 		},
 		changeTitleClass: function changeTitleClass() {
@@ -49551,6 +49555,10 @@ var render = function() {
               }),
               0
             )
+          : _vm.isResult === true && _vm.str.length >= 1
+          ? _c("p", { staticClass: "listview" }, [
+              _vm._v("該当するページがありません。")
+            ])
           : _vm._e()
       ]
     ),
@@ -49599,6 +49607,10 @@ var render = function() {
               }),
               0
             )
+          : _vm.isResult === true && _vm.str.length >= 1
+          ? _c("p", { staticClass: "listview" }, [
+              _vm._v("該当するページがありません。")
+            ])
           : _vm._e()
       ]
     )
