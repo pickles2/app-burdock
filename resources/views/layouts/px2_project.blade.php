@@ -107,14 +107,10 @@
 				<div class="px2-header__shoulder-menu">
 					<button>≡</button>
 					<ul>
-						<li><a href="{{ url('/') }}">ダッシュボード</a></li>
-						@if (isset($project) && $project->project_name && isset($branch_name))
-						<li><a href="{{ url('staging/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="staging">ステージング管理</a></li>
-						<li><a href="{{ url('delivery/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="delivery">配信管理</a></li>
-						<li><a href="{{ url('files-and-folders/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="files-and-folders">ファイルとフォルダ</a></li>
-						@endif
 						@guest
+						<li><a href="{{ url('/') }}">HOME</a></li>
 						@else
+						<li><a href="{{ url('/') }}">ダッシュボード</a></li>
 							@if(! Request::is('*profile*') && ! Request::is('/'))
 								<li><a href="{{ url('staging/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="staging">ステージング管理</a></li>
 								<li><a href="{{ url('delivery/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="delivery">配信管理</a></li>
