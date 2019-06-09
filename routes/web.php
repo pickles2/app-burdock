@@ -86,4 +86,4 @@ Route::get('delivery/{project}/{branch_name}/indigoAjaxAPI', 'DeliveryController
 // --------------------------------------
 // ファイルとフォルダ (remote-finder)
 Route::get('files-and-folders/{project}/{branch_name}', 'FilesAndFoldersController@index');
-Route::get('files-and-folders/{project}/{branch_name}/gpi', 'FilesAndFoldersController@remoteFinderGPI');
+Route::post('files-and-folders/{project}/{branch_name}/gpi', 'FilesAndFoldersController@remoteFinderGPI');

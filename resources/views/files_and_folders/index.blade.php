@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="container">
-	<h1>{{ __('Files And Folders'); }}</h1>
+	<h1>{{ __('Files And Folders') }}</h1>
 	<div class="contents">
 		<div id="cont-finder"></div>
 	</div>
@@ -17,34 +17,28 @@
 @endsection
 
 @section('script')
-<script src="/common/remote-finder/dist/scripts/remote-finder.js"></script>
+<script src="/common/remote-finder/dist/remote-finder.js"></script>
 
 <script>
-	$(function() {
+	$(window).on('load', function(){
 		var remoteFinder = window.remoteFinder = new RemoteFinder(
 			document.getElementById('cont-finder'),
 			{
 				"gpiBridge": function(input, callback){ // required
-					fetch("/files-and-folders/{{$project}}/{{$branch_name}}/gpi", {
-						method: "post",
+					$.ajax({
+						type : 'post',
+						url : "/files-and-folders/{{ $project->project_name }}/{{ $branch_name }}/gpi",
 						headers: {
-							'content-type': 'application/json'
+							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 						},
-						body: JSON.stringify(input)
-					}).then(function (response) {
-						var contentType = response.headers.get('content-type').toLowerCase();
-						if(contentType.indexOf('application/json') === 0 || contentType.indexOf('text/json') === 0) {
-							response.json().then(function(json){
-								callback(json);
-							});
-						} else {
-							response.text().then(function(text){
-								callback(text);
-							});
+						contentType: 'application/json',
+						dataType: 'json',
+						data: JSON.stringify({
+ 							'data': JSON.stringify(input)
+						}),
+						success: function(data){
+							callback(data);
 						}
-					}).catch(function (response) {
-						console.log(response);
-						callback(response);
 					});
 				},
 				"open": function(fileinfo, callback){

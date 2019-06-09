@@ -37,20 +37,22 @@ class FilesAndFoldersController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function remoteFinderGPI(Request $request, Project $project, $branch_name){
+		$realpath_basedir = get_project_workingtree_dir($project->project_name, $branch_name);
 
-		$remoteFinder = new tomk79\remoteFinder\main(array(
-			'default' => '/path/to/root_dir/'
+		$remoteFinder = new \tomk79\remoteFinder\main(array(
+			'default' => realpath($realpath_basedir).'/',
 		), array(
 			'paths_invisible' => array(
-				'/invisibles/*',
-				'*.hide'
 			),
 			'paths_readonly' => array(
-				'/readonly/*',
+				'/.git/*',
+				'/vendor/*',
+				'/node_modules/*',
 			),
 		));
-		$value = $remoteFinder->gpi( json_decode( $_REQUEST['data'] ) );
-		return $value;
+
+		$value = $remoteFinder->gpi( json_decode( $request->data ) );
+		return json_encode($value);
 	}
 
 }
