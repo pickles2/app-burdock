@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7fdbb308886208f6df9ca3bc09133199",
+    "content-hash": "4e64049a6f3ea7ca088cc78295047390",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -4016,6 +4016,46 @@
             ],
             "description": "Convert Excel(*.xlsx) to HTML table. with PHPExcel.",
             "time": "2016-10-18T08:03:45+00:00"
+        },
+        {
+            "name": "tomk79/remote-finder",
+            "version": "0.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tomk79/node-remote-finder.git",
+                "reference": "c7454e9476250ed02e71f1a25442e7c99a9403e6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tomk79/node-remote-finder/zipball/c7454e9476250ed02e71f1a25442e7c99a9403e6",
+                "reference": "c7454e9476250ed02e71f1a25442e7c99a9403e6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "tomk79/filesystem": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "php/main.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tomoya Koyanagi",
+                    "email": "tomk79@gmail.com"
+                }
+            ],
+            "description": "Finder や Explorer のように、サーバー上のファイルとフォルダを操作するUIを提供します。",
+            "time": "2019-06-09T01:21:44+00:00"
         },
         {
             "name": "tomk79/request",
