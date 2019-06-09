@@ -111,12 +111,14 @@
 						@if (isset($project) && $project->project_name && isset($branch_name))
 						<li><a href="{{ url('staging/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="staging">ステージング管理</a></li>
 						<li><a href="{{ url('delivery/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="delivery">配信管理</a></li>
+						<li><a href="{{ url('files-and-folders/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="files-and-folders">ファイルとフォルダ</a></li>
 						@endif
 						@guest
 						@else
 							@if(! Request::is('*profile*') && ! Request::is('/'))
 								<li><a href="{{ url('staging/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="staging">ステージング管理</a></li>
 								<li><a href="{{ url('delivery/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="delivery">配信管理</a></li>
+								<li><a href="{{ url('files-and-folders/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="files-and-folders">ファイルとフォルダ</a></li>
 							@endif
 						<li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
 							<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
