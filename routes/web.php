@@ -81,7 +81,9 @@ Route::get('publish/{project}/{branch_name}/publish_run', 'PublishController@pub
 
 // --------------------------------------
 // ステージング切り替え (Plum)
+// TODO: ↓ POST と GET を同じコントロールで受け取りたい。 1行で済む書き方はない？
 Route::get('staging/{project}/{branch_name}', 'StagingController@index');
+Route::post('staging/{project}/{branch_name}', 'StagingController@index');
 
 // --------------------------------------
 // 配信 (Indigo)
