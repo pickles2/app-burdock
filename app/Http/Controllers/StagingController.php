@@ -28,7 +28,7 @@ class StagingController extends Controller
 	 */
 	public function index(Request $request, Project $project, $branch_name){
 
-        $realpath_pj_git_root = get_project_workingtree_dir($project->project_name, $branch_name);
+        $realpath_pj_git_root = './../bd_data/projects/'.urlencode($project->project_name).'/stagings/master/';
 
 		$plum = new \hk\plum\main(
 			array(
@@ -52,12 +52,12 @@ class StagingController extends Controller
 					//
 					array(
 						'name' => 'preview1',
-						'path' => './../bd_data/projects/'.urlencode($project->project_name).'/stagings/preview1/',
+						'path' => './../bd_data/projects/'.urlencode($project->project_name).'/stagings/previews/preview1/',
 						'url' => 'https://preview1.'.urlencode($project->id).'.burdock.localhost/'
 					),
 					array(
 						'name' => 'preview2',
-						'path' => './../bd_data/projects/'.urlencode($project->project_name).'/stagings/preview2/',
+						'path' => './../bd_data/projects/'.urlencode($project->project_name).'/stagings/previews/preview2/',
 						'url' => 'https://preview2.'.urlencode($project->id).'.burdock.localhost/'
 					),
 				),
