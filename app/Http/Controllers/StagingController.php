@@ -29,15 +29,13 @@ class StagingController extends Controller
 	public function index(Request $request, Project $project, $branch_name){
 
         $realpath_pj_git_root = get_project_workingtree_dir($project->project_name, $branch_name);
-		$parsed_git_url = parse_url( $project->git_url );
 
 		$plum = new \hk\plum\main(
 			array(
-				// POST
-				'_POST' => $_POST,
 
-				// GET
-				'_GET' => $_GET,
+				'additional_params' => array(
+					'_token' => csrf_token(),
+				),
 
 				// プレビューサーバ定義
 				'preview_server' => array(
@@ -71,17 +69,8 @@ class StagingController extends Controller
 					// ウェブプロジェクトのリポジトリパスを設定。
 					'repository' => $realpath_pj_git_root,
 
-					// プロトコル
-					// ※現在はhttpsのみ対応
-					'protocol' => $parsed_git_url['scheme'],
-
-					// ホスト
-					// Gitリポジトリのhostを設定。
-					'host' => $parsed_git_url['host'],
-
 					// GitリポジトリのURL
-					// Gitリポジトリのhost以下のパスを設定。
-					'url' => $parsed_git_url['path'],
+					'url' => $project->git_url,
 
 					// ユーザ名
 					// Gitリポジトリのユーザ名を設定。
