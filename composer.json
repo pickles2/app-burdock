@@ -14,7 +14,8 @@
         "pickles2/lib-indigo": "^0.1.3",
         "pickles2/lib-plum": "^0.1.2",
         "pickles2/lib-px2-contents-editor": "^2.0",
-        "pickles2/px2style": "^2.0"
+        "pickles2/px2style": "^2.0",
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
