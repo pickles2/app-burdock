@@ -54,3 +54,19 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+
+//for Echo
+import Echo from 'laravel-echo';
+window.io = require('socket.io-client');
+
+//接続情報
+window.Echo = new Echo({
+    broadcaster: 'socket.io',
+    host: 'http://localhost:6001',
+});
+
+//購読するチャネルの設定
+window.Echo.channel('public-event')
+    .listen('PublicEvent', (e) => {
+        console.log(e);
+});
