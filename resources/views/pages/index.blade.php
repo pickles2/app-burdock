@@ -21,7 +21,7 @@
 				<ul>
 					@if($current->navigation_info->breadcrumb_info !== false)
 					@foreach($current->navigation_info->breadcrumb_info as $breadcrumb_info)
-					<li><a href="{{ url('/pages/'.$project->project_name.'/'.$branch_name.'/index.html?page_path='.$breadcrumb_info->path) }}">{{ $breadcrumb_info->title }}</a></li>
+					<li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'/index.html?page_path='.$breadcrumb_info->path) }}">{{ $breadcrumb_info->title }}</a></li>
 					@endforeach
 					@endif
 					<li><strong>{{ $current->page_info->title }}</strong></li>
@@ -39,8 +39,8 @@
 							</div>
 							<div class="cont_page_info-btn">
 								<div class="btn-group">
-									<a href="{{ url('/pages/'.$project->project_name.'/'.$branch_name.'?page_path='.$page_param) }}" class="btn px2-btn px2-btn--primary px2-btn--lg btn--edit" style="padding-left: 5em; padding-right: 5em; font: inherit;" target="_blank">{{ __('Edit')}}</a>
-									<a href="{{ url('https://'.$project->project_name.'.'.env('PREV_URL').'/'.$page_param) }}" class="btn px2-btn px2-btn--lg btn--preview" target="_blank" style="font: inherit;">ブラウザでプレビュー</a>
+									<a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'?page_path='.$page_param) }}" class="btn px2-btn px2-btn--primary px2-btn--lg btn--edit" style="padding-left: 5em; padding-right: 5em; font: inherit;" target="_blank">{{ __('Edit')}}</a>
+									<a href="{{ url('https://'.$project->project_code.'.'.env('PREV_URL').'/'.$page_param) }}" class="btn px2-btn px2-btn--lg btn--preview" target="_blank" style="font: inherit;">ブラウザでプレビュー</a>
 									<!-- <button type="button" class="btn px2-btn px2-btn--lg btn--resources">リソース</button> -->
 									<button type="button" class="btn px2-btn px2-btn--lg dropdown-toggle" data-toggle="dropdown">
 										<span class="caret"></span>
@@ -101,7 +101,7 @@
 						<div class="preview_window_frame--inner" data-original-title="" title="">
 							<script>
 							// .envよりプレビューサーバーのURLを取得
-							var prev_url = '{{ 'https://'.$project->project_name.'.'.env('PREV_URL') }}';
+							var prev_url = '{{ 'https://'.$project->project_code.'.'.env('PREV_URL') }}';
 							// 外部サイトに送るAPP_URLとスクリプトをbase64でエンコード
 							var jsBase64 = '{{ base64_encode("var parent_url = '".env('APP_URL')."';".file_get_contents('../resources/views/pages/js/script.js')) }}';
 
@@ -122,7 +122,7 @@
 								// 受信したイベントデータをajaxでコントローラーに送信
 								var decodeEventData = decodeURIComponent(escape(atob(event.data)));
 								$.ajax({
-									url: "/pages/{{ $project->project_name }}/{{ $branch_name }}/ajax?page_path={{ $page_param }}",
+									url: "/pages/{{ $project->project_code }}/{{ $branch_name }}/ajax?page_path={{ $page_param }}",
 									type: 'post',
 									data : {
 										"path_path" : JSON.stringify(decodeEventData),
@@ -134,7 +134,7 @@
 								});
 							};
 							</script>
-							<iframe id="ifrm" data-original-title="" title="" src="{{ url('https://'.$project->project_name.'.'.env('PREV_URL').'/'.$page_param) }}"></iframe>
+							<iframe id="ifrm" data-original-title="" title="" src="{{ url('https://'.$project->project_code.'.'.env('PREV_URL').'/'.$page_param) }}"></iframe>
 						</div>
 					</div>
 				</div>
@@ -143,7 +143,7 @@
 						<div class="input-group input-group-sm" data-original-title="" title="">
 							{{-- Vueコンポーネント --}}
 							<div id="app">
-								<cont-search-component project-name="{{ $project->project_name}}" branch-name="{{ $branch_name }}" page-id="{{ $page_id }}"></cont-search-component>
+								<cont-search-component project-name="{{ $project->project_code}}" branch-name="{{ $branch_name }}" page-id="{{ $page_id }}"></cont-search-component>
 							</div>
 						</div>
 					</div>
@@ -152,7 +152,7 @@
 						<div class="cont_sitemap_parent" data-original-title="" title="">
 							@if($current->navigation_info->parent_info !== false)
 							<ul class="listview">
-						        <li><a href="{{ url('/pages/'.$project->project_name.'/'.$branch_name.'/index.html?page_path='.$current->navigation_info->parent_info->path.'&page_id='.$current->navigation_info->parent_info->id) }}"><span class="glyphicon glyphicon-level-up"></span><span>{{ $current->navigation_info->parent_info->title }}</span></a></li>
+						        <li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'/index.html?page_path='.$current->navigation_info->parent_info->path.'&page_id='.$current->navigation_info->parent_info->id) }}"><span class="glyphicon glyphicon-level-up"></span><span>{{ $current->navigation_info->parent_info->title }}</span></a></li>
 						    </ul>
 							@endif
 						</div>
@@ -160,11 +160,11 @@
 							<ul class="listview">
 							@if($current->navigation_info->bros_info !== false)
 							@foreach($current->navigation_info->bros_info as $bros_info)
-								<li><a href="{{ url('/pages/'.$project->project_name.'/'.$branch_name.'/index.html?page_path='.$bros_info->path.'&page_id='.$bros_info->id) }}" @if ($page_param == $bros_info->path) class="current" @endif>{{ $bros_info->title }}</a>
+								<li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'/index.html?page_path='.$bros_info->path.'&page_id='.$bros_info->id) }}" @if ($page_param == $bros_info->path) class="current" @endif>{{ $bros_info->title }}</a>
 								@if($current->navigation_info->children_info !== false && $page_param === $bros_info->path)
 									<ul>
 									@foreach($current->navigation_info->children_info as $children_info)
-										<li><a href="{{ url('/pages/'.$project->project_name.'/'.$branch_name.'/index.html?page_path='.$children_info->path.'&page_id='.$children_info->id) }}" style="font-size: 80%;">{{ $children_info->title }}</a></li>
+										<li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'/index.html?page_path='.$children_info->path.'&page_id='.$children_info->id) }}" style="font-size: 80%;">{{ $children_info->title }}</a></li>
 									@endforeach
 									</ul>
 								@endif
