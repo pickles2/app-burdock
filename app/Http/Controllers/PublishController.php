@@ -25,8 +25,7 @@ class PublishController extends Controller
 		$page_param = $request->page_path;
 		$page_id = $request->page_id;
 
-		$project_name = $project->project_name;
-		$project_path = get_project_workingtree_dir($project_name, $branch_name);
+		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
 
 		return view('publish.index', ['project' => $project, 'branch_name' => $branch_name, 'page_param' => $page_param] );
 	}
@@ -35,8 +34,7 @@ class PublishController extends Controller
 	public function publish(Request $request, Project $project, $branch_name)
 	{
 		//
-		$project_name = $project->project_name;
-		$project_path = get_project_workingtree_dir($project_name, $branch_name);
+		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
 		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
 
 		chdir($project_path);
@@ -44,6 +42,6 @@ class PublishController extends Controller
 
 		chdir($path_current_dir); // 元いたディレクトリへ戻る
 
-		return redirect('publish/' . $project->project_name . '/' . $branch_name)->with('my_status', __('Publish is complete.'));
+		return redirect('publish/' . $project->project->project_code . '/' . $branch_name)->with('my_status', __('Publish is complete.'));
 	}
 }

@@ -10,7 +10,7 @@
 		<div class="btn-group cont_buttons" role="group">
 			@component('components.btn_sitemap_upload')
                 @slot('controller', 'sitemap')
-				@slot('project_name', $project->project_name)
+				@slot('project_code', $project->project_code)
 				@slot('branch_name', $branch_name)
 				@slot('errors', $errors)
             @endcomponent
@@ -30,14 +30,14 @@
 								<lavel>Download：</lavel>
 							</li>
 							<li>
-								<form method="POST" action="{{ url('/sitemaps/'.$project->project_name.'/'.$branch_name.'/download?file_name='.$file->getFilename()) }}" enctype="multipart/form-data">
+								<form method="POST" action="{{ url('/sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/download?file_name='.$file->getFilename()) }}" enctype="multipart/form-data">
 			                    	@csrf
 			                        <input type="hidden" name="file" value="csv">
 			                        <button type="submit" name="submit" class="px2-btn">{{ __('CSV')}}</button>
 		                    	</form>
 							</li>
 							<li>
-								<form method="POST" action="{{ url('/sitemaps/'.$project->project_name.'/'.$branch_name.'/download?file_name='.$file->getFilename()) }}" enctype="multipart/form-data">
+								<form method="POST" action="{{ url('/sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/download?file_name='.$file->getFilename()) }}" enctype="multipart/form-data">
 			                    	@csrf
 			                        <input type="hidden" name="file" value="xlsx">
 			                        <button type="submit" name="submit" class="px2-btn">{{ __('XLSX')}}</button>
@@ -46,7 +46,7 @@
 							<li>
 								@component('components.btn_sitemap_destroy')
 					                @slot('controller', 'sitemap')
-									@slot('project_name', $project->project_name)
+									@slot('project_code', $project->project_code)
 									@slot('branch_name', $branch_name)
 									@slot('file_name', $file->getFilename())
 					            @endcomponent

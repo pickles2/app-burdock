@@ -141,17 +141,17 @@ class ProjectController extends Controller
 			// git pushの結果によって処理わけ
 			if($result === null) {
 				chdir($path_current_dir); // 元いたディレクトリへ戻る
-				\File::deleteDirectory(env('BD_DATA_DIR').'/projects/'.$project->project_name);
+				\File::deleteDirectory(env('BD_DATA_DIR').'/projects/'.$project->project_code);
 				$message = 'Gitをプッシュできませんでした。URL/Username/Passwordが正しいか確認し、もう一度やり直してください。';
 				$redirect = '/';
 			} else {
 				chdir($path_current_dir); // 元いたディレクトリへ戻る
 				$message = __('Created new Project.');
-				$redirect = 'projects/'.urlencode($project->project_name).'/'.urlencode($branch_name);
+				$redirect = 'projects/'.urlencode($project->project_code).'/'.urlencode($branch_name);
 			}
 		} else {
 			chdir($path_current_dir); // 元いたディレクトリへ戻る
-			\File::deleteDirectory(env('BD_DATA_DIR').'/projects/'.$project->project_name);
+			\File::deleteDirectory(env('BD_DATA_DIR').'/projects/'.$project->project_code);
 			$message = 'プロジェクトを作成できませんでした。もう一度やり直してください。';
 			$redirect = '/';
 		}
