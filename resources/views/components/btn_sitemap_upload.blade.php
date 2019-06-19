@@ -18,7 +18,7 @@
         				<li>
                             <ul class="cont_filelist_sitemap__ext-list" style="margin: 40px 20px;">
                                 <li>
-        							<form class="form-inline" method="POST" action="{{ url('/sitemaps/'.$project_name.'/'.$branch_name.'/upload') }}" enctype="multipart/form-data">
+        							<form class="form-inline" method="POST" action="{{ url('/sitemaps/'.urlencode($project_code).'/'.urlencode($branch_name).'/upload') }}" enctype="multipart/form-data">
         								@csrf
         								@method('POST')
         								<div class="form-group">
@@ -39,7 +39,7 @@
                                                     }
                                                     // ajaxでファイルのmimetypeを取得しコントローラーに送信
                     								$.ajax({
-                    									url: "/sitemaps/{{ $project_name }}/{{ $branch_name }}/uploadAjax",
+                    									url: "/sitemaps/{{ urlencode($project_code) }}/{{ urlencode($branch_name) }}/uploadAjax",
                     									type: 'post',
                     									data : {
                     										"str" : str,

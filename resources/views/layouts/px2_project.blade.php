@@ -69,11 +69,11 @@
 								</li>
 							@else
 								@if(! Request::is('*profile*') && ! Request::is('/'))
-									<li><a href="{{ url('projects/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="home">ホーム</a></li>
-									<li><a href="{{ url('sitemaps/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="sitemaps">サイトマップ</a></li>
-									<li><a href="{{ url('themes/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="themes">テーマ</a></li>
-									<li><a href="{{ url('pages/'.$project->project_name.'/'.$branch_name.'/index.html?page_path='.'%2Findex.html')}}" data-name="pages">コンテンツ</a></li>
-									<li><a href="{{ url('publish/'.$project->project_name.'/'.$branch_name) }}" data-name="publish">パブリッシュ</a></li>
+									<li><a href="{{ url('projects/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="home">ホーム</a></li>
+									<li><a href="{{ url('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="sitemaps">サイトマップ</a></li>
+									<li><a href="{{ url('themes/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="themes">テーマ</a></li>
+									<li><a href="{{ url('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/index.html?page_path='.'%2Findex.html')}}" data-name="pages">コンテンツ</a></li>
+									<li><a href="{{ url('publish/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}" data-name="publish">パブリッシュ</a></li>
 								@endif
 
 								{{-- 認証関連のリンク --}}
@@ -107,14 +107,13 @@
 				<div class="px2-header__shoulder-menu">
 					<button>≡</button>
 					<ul>
-						@guest
-						<li><a href="{{ url('/') }}">HOME</a></li>
-						@else
 						<li><a href="{{ url('/') }}">ダッシュボード</a></li>
+						@guest
+						@else
 							@if(! Request::is('*profile*') && ! Request::is('/'))
-								<li><a href="{{ url('staging/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="staging">ステージング管理</a></li>
-								<li><a href="{{ url('delivery/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="delivery">配信管理</a></li>
-								<li><a href="{{ url('files-and-folders/'.$project->project_name.'/'.$branch_name.'/') }}" data-name="files-and-folders">ファイルとフォルダ</a></li>
+								<li><a href="{{ url('staging/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="staging">ステージング管理</a></li>
+								<li><a href="{{ url('delivery/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="delivery">配信管理</a></li>
+								<li><a href="{{ url('files-and-folders/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="files-and-folders">ファイルとフォルダ</a></li>
 							@endif
 						<li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
 							<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -155,13 +154,13 @@
 		window.addEventListener('load', function(){
 			var current = '';
 			@if(! Request::is('*profile*') && ! Request::is('/'))
-				@if (Request::is('projects/'.$project->project_name.'/'.$branch_name)) current = 'home'; @endif
-				@if (Request::is('sitemaps/'.$project->project_name.'/'.$branch_name)) current = 'sitemaps'; @endif
-				@if (Request::is('themes/'.$project->project_name.'/'.$branch_name)) current = 'themes'; @endif
-				@if (Request::is('pages/'.$project->project_name.'/'.$branch_name.'/index.html')) current = 'pages'; @endif
-				@if (Request::is('publish/'.$project->project_name.'/'.$branch_name)) current = 'publish'; @endif
-				@if (Request::is('staging/'.$project->project_name.'/'.$branch_name)) current = 'staging'; @endif
-				@if (Request::is('delivery/'.$project->project_name.'/'.$branch_name)) current = 'delivery'; @endif
+				@if (Request::is('projects/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'home'; @endif
+				@if (Request::is('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'sitemaps'; @endif
+				@if (Request::is('themes/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'themes'; @endif
+				@if (Request::is('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/index.html')) current = 'pages'; @endif
+				@if (Request::is('publish/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'publish'; @endif
+				@if (Request::is('staging/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'staging'; @endif
+				@if (Request::is('delivery/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'delivery'; @endif
 			@endif
 			px2style.header.init({'current': current});
 		});
