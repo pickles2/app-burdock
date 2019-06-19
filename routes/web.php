@@ -89,3 +89,8 @@ Route::post('staging/{project}/{branch_name}', 'StagingController@index');
 // 配信 (Indigo)
 Route::get('delivery/{project}/{branch_name}', 'DeliveryController@index');
 Route::get('delivery/{project}/{branch_name}/indigoAjaxAPI', 'DeliveryController@indigoAjaxAPI');
+
+// --------------------------------------
+// ファイルとフォルダ (remote-finder)
+Route::get('files-and-folders/{project}/{branch_name}', 'FilesAndFoldersController@index');
+Route::post('files-and-folders/{project}/{branch_name}/gpi', 'FilesAndFoldersController@remoteFinderGPI');
