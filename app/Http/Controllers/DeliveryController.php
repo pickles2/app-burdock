@@ -31,8 +31,8 @@ class DeliveryController extends Controller
 		$page_param = $request->page_path;
 		$page_id = $request->page_id;
 
-		$project_name = $project->project_name;
-		$project_path = get_project_workingtree_dir($project_name, $branch_name);
+		$project_code = $project->project_code;
+		$project_path = get_project_workingtree_dir($project_code, $branch_name);
 
 		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
 		chdir($project_path);
@@ -53,7 +53,7 @@ class DeliveryController extends Controller
 
 
 		// parameter.phpのmk_indigo_optionsメソッド
-		$parameter = $this->mk_indigo_options( $project_name, $branch_name );
+		$parameter = $this->mk_indigo_options( $project_code, $branch_name );
 
 		// load indigo\main
 		$indigo = new \indigo\main($parameter);
@@ -83,8 +83,8 @@ class DeliveryController extends Controller
 		$page_param = $request->page_path;
 		$page_id = $request->page_id;
 
-		$project_name = $project->project_name;
-		$project_path = get_project_workingtree_dir($project_name, $branch_name);
+		$project_code = $project->project_code;
+		$project_path = get_project_workingtree_dir($project_code, $branch_name);
 
 		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
 		chdir($project_path);
@@ -105,7 +105,7 @@ class DeliveryController extends Controller
 
 
 		// parameter.phpのmk_indigo_optionsメソッド
-		$parameter = $this->mk_indigo_options( $project_name, $branch_name );
+		$parameter = $this->mk_indigo_options( $project_code, $branch_name );
 
 		// load indigo\main
 		$indigo = new \indigo\ajax($parameter);
@@ -128,7 +128,7 @@ class DeliveryController extends Controller
 	/**
 	 * Indigoのオプションを生成する
 	 */
-	private function mk_indigo_options( $project_name, $branch_name ){
+	private function mk_indigo_options( $project_code, $branch_name ){
 
 		$parameter = array(
 			// POST
@@ -144,7 +144,7 @@ class DeliveryController extends Controller
 			'relativepath_resourcedir'	=> '/common/lib-indigo/res/',
 
 			// ajax呼出クラス（ドキュメントルートからの相対パス）
-			'realpath_ajax_call' => '/delivery/'.urlencode($project_name).'/'.urlencode($branch_name).'/indigoAjaxAPI',
+			'realpath_ajax_call' => '/delivery/'.urlencode($project_code).'/'.urlencode($branch_name).'/indigoAjaxAPI',
 			
 			// 画面表示上のタイムゾーン
 			'time_zone' => 'Asia/Tokyo',

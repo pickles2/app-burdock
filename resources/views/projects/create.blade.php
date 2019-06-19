@@ -18,6 +18,15 @@
                 @endif
         </div>
         <div class="form-group">
+            <label for="project_code">{{ __('Project Code') }}</label>
+            <input id="project_code" type="text" class="form-control @if ($errors->has('project_code')) is-invalid @endif" name="project_code" value="{{ old('project_code') }}" placeholder="Your Project Name" required autofocus>
+                @if ($errors->has('project_code'))
+                    <span class="invalid-feedback" role="alert">
+                        {{ $errors->first('project_code') }}
+                    </span>
+                @endif
+        </div>
+        <div class="form-group">
             <label for="git_url">{{ __('Git URL') }}</label>
             <input id="git_url" type="text" class="form-control @if ($errors->has('git_url')) is-invalid @endif" name="git_url"  value="{{ old('git_url') }}">
                 @if ($errors->has('git_url'))
