@@ -24,12 +24,13 @@ class PublishEvent implements ShouldBroadcast
 	public $alert_array;
 	public $time_array;
 	public $publish_file;
+	public $end_publish;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($stdout, $stderr, $parse, $judge, $queue_count, $alert_array, $time_array, $publish_file)
+    public function __construct($stdout, $stderr, $parse, $judge, $queue_count, $alert_array, $time_array, $publish_file, $end_publish)
     {
         //
 		$this->stdout = $stdout;
@@ -40,6 +41,7 @@ class PublishEvent implements ShouldBroadcast
 		$this->alert_array = $alert_array;
 		$this->time_array = $time_array;
 		$this->publish_file = $publish_file;
+		$this->end_publish = $end_publish;
     }
 
     /**
@@ -63,6 +65,7 @@ class PublishEvent implements ShouldBroadcast
 			'alert_array' => $this->alert_array,
 			'time_array' => $this->time_array,
 			'publish_file' => $this->publish_file,
+			'end_publish' => $this->end_publish,
 		];
 	}
 }

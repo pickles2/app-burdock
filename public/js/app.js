@@ -60571,6 +60571,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	// view側から変数をプロパティとして渡す
@@ -60589,7 +60596,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			k: 0,
 			alert_array: [],
 			time_array: [],
-			publish_file: ''
+			publish_file: '',
+			isPublishButton: true,
+			isPublish: false,
+			isPublishResult: false
 		};
 	},
 	mounted: function mounted() {
@@ -60642,7 +60652,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				// パブリッシュしているファイル情報を配列で出力
 				if (e.publish_file !== '') {
 					_this2.publish_file = e.publish_file;
-					console.log(e.publish_file);
+					_this2.isPublishButton = false;
+					_this2.isPublish = true;
+				}
+				if (e.end_publish === 1) {
+					_this2.isPublish = false;
+					_this2.isPublishResult = true;
 				}
 			});
 		}
@@ -60658,25 +60673,33 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { attrs: { id: "targetId" } }, [
-    _c("div", { staticClass: "contents" }, [
-      _c(
-        "form",
-        {
-          on: {
-            submit: function($event) {
-              $event.preventDefault()
-              return _vm.publish($event)
+    _c(
+      "div",
+      {
+        staticClass: "contents",
+        class: [_vm.isPublishButton === true ? "show" : "hidden"]
+      },
+      [
+        _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.publish($event)
+              }
             }
-          }
-        },
-        [_vm._m(0)]
-      )
-    ]),
+          },
+          [_vm._m(0)]
+        )
+      ]
+    ),
     _vm._v(" "),
     _c(
       "div",
       {
         staticClass: "cont_scene",
+        class: [_vm.isPublish === true ? "show" : "hidden"],
         attrs: { id: "cont_before_publish-progress" }
       },
       [
@@ -60729,21 +60752,39 @@ var render = function() {
       ]
     ),
     _vm._v(" "),
-    _c("div", [
-      _vm.alert_array[7]
-        ? _c("p", { staticStyle: { "white-space": "pre-wrap" } }, [
-            _vm._v(
-              _vm._s(_vm.alert_array[7] + "件のエラーが検出されています。")
-            )
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.time_array[2]
-        ? _c("p", { staticStyle: { "white-space": "pre-wrap" } }, [
-            _vm._v(_vm._s("time: " + _vm.time_array[2] + " sec"))
-          ])
-        : _vm._e()
-    ])
+    _c(
+      "div",
+      {
+        staticClass: "cont_results cont_results-error",
+        class: [_vm.isPublishResult === true ? "show" : "hidden"]
+      },
+      [
+        _c("div", { staticClass: "cont_results-messageBox" }, [
+          _c("div", { staticClass: "cont_results-total_file_count" }, [
+            _vm._v("total: "),
+            _c("strong", [_vm._v(_vm._s(_vm.parse_count))]),
+            _vm._v(" files.")
+          ]),
+          _vm._v(" "),
+          _vm.alert_array[7] !== ""
+            ? _c("div", { staticClass: "cont_results-errorMessage" }, [
+                _vm._v(
+                  _vm._s(_vm.alert_array[7]) + "件のエラーが検出されています。"
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _c("div", { staticClass: "cont_results-spentTime" }, [
+            _vm._v("time: "),
+            _c("span", [_vm._v(_vm._s(_vm.time_array[2]) + " sec")])
+          ]),
+          _vm._v(" "),
+          _vm._m(2),
+          _vm._v(" "),
+          _vm._m(3)
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -60776,6 +60817,30 @@ var staticRenderFns = [
           ])
         ]
       )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _c("button", { staticClass: "px2-btn px2-btn--primary px2-btn--lg" }, [
+        _vm._v("パブリッシュされたファイルを確認する")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", { staticClass: "horizontal" }, [
+      _c("li", { staticClass: "horizontal-li" }, [
+        _c(
+          "a",
+          { staticClass: "px2-link px2-link--burette", attrs: { href: "#" } },
+          [_vm._v("パブリッシュレポート")]
+        )
+      ])
     ])
   }
 ]
