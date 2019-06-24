@@ -73,6 +73,7 @@ Route::post('pages/{project}/{branch_name}/searchAjax', 'Ajax\PageController@sea
 // パブリッシュ
 Route::get('publish/{project}/{branch_name}', 'PublishController@index');
 Route::get('publish/{project}/{branch_name}/publish_run', 'PublishController@publish');
+Route::post('publish/{project}/{branch_name}/publishAjax', 'Ajax\PublishController@publishAjax');
 
 // --------------------------------------
 // ステージング切り替え (Plum)
@@ -86,8 +87,3 @@ Route::get('delivery/{project}/{branch_name}', 'DeliveryController@index');
 Route::get('delivery/{project}/{branch_name}/indigoAjaxAPI', 'DeliveryController@indigoAjaxAPI');
 
 // --------------------------------------
-// テスト (ブロードキャスト)
-Route::get('/public-event', function(){
-    broadcast(new \App\Events\PublicEvent);
-    return 'public';
-});

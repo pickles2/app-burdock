@@ -70,7 +70,7 @@
 "use strict";
 
 
-var bind = __webpack_require__(17);
+var bind = __webpack_require__(18);
 var isBuffer = __webpack_require__(44);
 
 /*global toString:true*/
@@ -409,7 +409,7 @@ module.exports = g;
  */
 
 var keys = __webpack_require__(75);
-var hasBinary = __webpack_require__(28);
+var hasBinary = __webpack_require__(29);
 var sliceBuffer = __webpack_require__(77);
 var after = __webpack_require__(78);
 var utf8 = __webpack_require__(79);
@@ -1684,10 +1684,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(18);
+    adapter = __webpack_require__(19);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(18);
+    adapter = __webpack_require__(19);
   }
   return adapter;
 }
@@ -1934,8 +1934,8 @@ function plural(ms, n, name) {
 var debug = __webpack_require__(64)('socket.io-parser');
 var Emitter = __webpack_require__(66);
 var binary = __webpack_require__(67);
-var isArray = __webpack_require__(23);
-var isBuf = __webpack_require__(24);
+var isArray = __webpack_require__(24);
+var isBuf = __webpack_require__(25);
 
 /**
  * Protocol version.
@@ -4520,6 +4520,115 @@ Emitter.prototype.hasListeners = function(event){
 
 /***/ }),
 /* 15 */
+/***/ (function(module, exports) {
+
+/* globals __VUE_SSR_CONTEXT__ */
+
+// IMPORTANT: Do NOT use ES2015 features in this file.
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7132,7 +7241,7 @@ Popper.Defaults = Defaults;
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -17737,7 +17846,7 @@ return jQuery;
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17755,7 +17864,7 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17766,7 +17875,7 @@ var settle = __webpack_require__(47);
 var buildURL = __webpack_require__(49);
 var parseHeaders = __webpack_require__(50);
 var isURLSameOrigin = __webpack_require__(51);
-var createError = __webpack_require__(19);
+var createError = __webpack_require__(20);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -17924,7 +18033,7 @@ module.exports = function xhrAdapter(config) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17949,7 +18058,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17961,7 +18070,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17987,7 +18096,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports) {
 
 /**
@@ -18032,7 +18141,7 @@ module.exports = function parseuri(str) {
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -18043,7 +18152,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {
@@ -18070,7 +18179,7 @@ function isBuf(obj) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11).Buffer))
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -18079,13 +18188,13 @@ function isBuf(obj) {
  */
 
 var eio = __webpack_require__(71);
-var Socket = __webpack_require__(31);
-var Emitter = __webpack_require__(32);
+var Socket = __webpack_require__(32);
+var Emitter = __webpack_require__(33);
 var parser = __webpack_require__(10);
-var on = __webpack_require__(33);
-var bind = __webpack_require__(34);
+var on = __webpack_require__(34);
+var bind = __webpack_require__(35);
 var debug = __webpack_require__(4)('socket.io-client:manager');
-var indexOf = __webpack_require__(30);
+var indexOf = __webpack_require__(31);
 var Backoff = __webpack_require__(87);
 
 /**
@@ -18649,7 +18758,7 @@ Manager.prototype.onreconnect = function () {
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -18708,7 +18817,7 @@ function polling (opts) {
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -18719,7 +18828,7 @@ var Transport = __webpack_require__(13);
 var parseqs = __webpack_require__(5);
 var parser = __webpack_require__(2);
 var inherit = __webpack_require__(6);
-var yeast = __webpack_require__(29);
+var yeast = __webpack_require__(30);
 var debug = __webpack_require__(7)('engine.io-client:polling');
 
 /**
@@ -18959,7 +19068,7 @@ Polling.prototype.uri = function () {
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {/* global Blob File */
@@ -19030,7 +19139,7 @@ function hasBinary (obj) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11).Buffer))
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19105,7 +19214,7 @@ module.exports = yeast;
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports) {
 
 
@@ -19120,7 +19229,7 @@ module.exports = function(arr, obj){
 };
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -19129,13 +19238,13 @@ module.exports = function(arr, obj){
  */
 
 var parser = __webpack_require__(10);
-var Emitter = __webpack_require__(32);
+var Emitter = __webpack_require__(33);
 var toArray = __webpack_require__(86);
-var on = __webpack_require__(33);
-var bind = __webpack_require__(34);
+var on = __webpack_require__(34);
+var bind = __webpack_require__(35);
 var debug = __webpack_require__(4)('socket.io-client:socket');
 var parseqs = __webpack_require__(5);
-var hasBin = __webpack_require__(28);
+var hasBin = __webpack_require__(29);
 
 /**
  * Module exports.
@@ -19564,7 +19673,7 @@ Socket.prototype.binary = function (binary) {
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -19733,7 +19842,7 @@ Emitter.prototype.hasListeners = function(event){
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 
@@ -19763,7 +19872,7 @@ function on (obj, ev, fn) {
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 /**
@@ -19792,120 +19901,11 @@ module.exports = function(obj, fn){
 
 
 /***/ }),
-/* 35 */
-/***/ (function(module, exports) {
-
-/* globals __VUE_SSR_CONTEXT__ */
-
-// IMPORTANT: Do NOT use ES2015 features in this file.
-// This module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle.
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  functionalTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier /* server only */
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-    options._compiled = true
-  }
-
-  // functional template
-  if (functionalTemplate) {
-    options.functional = true
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = injectStyles
-  }
-
-  if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    } else {
-      // for template-only hot-reload because in that case the render fn doesn't
-      // go through the normalizer
-      options._injectStyles = hook
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
-      }
-    }
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
-
-
-/***/ }),
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(37);
-module.exports = __webpack_require__(98);
+module.exports = __webpack_require__(101);
 
 
 /***/ }),
@@ -19930,9 +19930,10 @@ window.Vue = __webpack_require__(88);
  */
 
 Vue.component('example-component', __webpack_require__(92));
-
 // 追加
 Vue.component('cont-search-component', __webpack_require__(95));
+// 追加
+Vue.component('publish-component', __webpack_require__(98));
 
 var app = new Vue({
   el: '#app'
@@ -19947,7 +19948,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_laravel_echo__ = __webpack_require__(60);
 
 window._ = __webpack_require__(39);
-window.Popper = __webpack_require__(15).default;
+window.Popper = __webpack_require__(16).default;
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -19956,9 +19957,9 @@ window.Popper = __webpack_require__(15).default;
  */
 
 try {
-    window.$ = window.jQuery = __webpack_require__(16);
+  window.$ = window.jQuery = __webpack_require__(17);
 
-    __webpack_require__(41);
+  __webpack_require__(41);
 } catch (e) {}
 
 /**
@@ -19980,9 +19981,9 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 var token = document.head.querySelector('meta[name="csrf-token"]');
 
 if (token) {
-    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+  window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {
-    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+  console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
 /**
@@ -20008,13 +20009,8 @@ window.io = __webpack_require__(61);
 
 //接続情報
 window.Echo = new __WEBPACK_IMPORTED_MODULE_0_laravel_echo__["a" /* default */]({
-    broadcaster: 'socket.io',
-    host: 'http://localhost:6001'
-});
-
-//購読するチャネルの設定
-window.Echo.channel('public-event').listen('PublicEvent', function (e) {
-    console.log(e);
+  broadcaster: 'socket.io',
+  host: window.location.hostname + ':6001'
 });
 
 /***/ }),
@@ -37170,7 +37166,7 @@ module.exports = function(module) {
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(16), __webpack_require__(15)) :
+   true ? factory(exports, __webpack_require__(17), __webpack_require__(16)) :
   typeof define === 'function' && define.amd ? define(['exports', 'jquery', 'popper.js'], factory) :
   (global = global || self, factory(global.bootstrap = {}, global.jQuery, global.Popper));
 }(this, function (exports, $, Popper) { 'use strict';
@@ -41615,7 +41611,7 @@ module.exports = __webpack_require__(43);
 
 
 var utils = __webpack_require__(0);
-var bind = __webpack_require__(17);
+var bind = __webpack_require__(18);
 var Axios = __webpack_require__(45);
 var defaults = __webpack_require__(8);
 
@@ -41650,9 +41646,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(21);
+axios.Cancel = __webpack_require__(22);
 axios.CancelToken = __webpack_require__(58);
-axios.isCancel = __webpack_require__(20);
+axios.isCancel = __webpack_require__(21);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -41795,7 +41791,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 "use strict";
 
 
-var createError = __webpack_require__(19);
+var createError = __webpack_require__(20);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -42185,7 +42181,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(55);
-var isCancel = __webpack_require__(20);
+var isCancel = __webpack_require__(21);
 var defaults = __webpack_require__(8);
 var isAbsoluteURL = __webpack_require__(56);
 var combineURLs = __webpack_require__(57);
@@ -42345,7 +42341,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 "use strict";
 
 
-var Cancel = __webpack_require__(21);
+var Cancel = __webpack_require__(22);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -43701,7 +43697,7 @@ var Echo = function () {
 
 var url = __webpack_require__(62);
 var parser = __webpack_require__(10);
-var Manager = __webpack_require__(25);
+var Manager = __webpack_require__(26);
 var debug = __webpack_require__(4)('socket.io-client');
 
 /**
@@ -43786,8 +43782,8 @@ exports.connect = lookup;
  * @api public
  */
 
-exports.Manager = __webpack_require__(25);
-exports.Socket = __webpack_require__(31);
+exports.Manager = __webpack_require__(26);
+exports.Socket = __webpack_require__(32);
 
 
 /***/ }),
@@ -43799,7 +43795,7 @@ exports.Socket = __webpack_require__(31);
  * Module dependencies.
  */
 
-var parseuri = __webpack_require__(22);
+var parseuri = __webpack_require__(23);
 var debug = __webpack_require__(4)('socket.io-client:url');
 
 /**
@@ -44714,8 +44710,8 @@ Emitter.prototype.hasListeners = function(event){
  * Module requirements
  */
 
-var isArray = __webpack_require__(23);
-var isBuf = __webpack_require__(24);
+var isArray = __webpack_require__(24);
+var isBuf = __webpack_require__(25);
 var toString = Object.prototype.toString;
 var withNativeBlob = typeof Blob === 'function' || (typeof Blob !== 'undefined' && toString.call(Blob) === '[object BlobConstructor]');
 var withNativeFile = typeof File === 'function' || (typeof File !== 'undefined' && toString.call(File) === '[object FileConstructor]');
@@ -45134,12 +45130,12 @@ module.exports.parser = __webpack_require__(2);
  * Module dependencies.
  */
 
-var transports = __webpack_require__(26);
+var transports = __webpack_require__(27);
 var Emitter = __webpack_require__(14);
 var debug = __webpack_require__(7)('engine.io-client:socket');
-var index = __webpack_require__(30);
+var index = __webpack_require__(31);
 var parser = __webpack_require__(2);
-var parseuri = __webpack_require__(22);
+var parseuri = __webpack_require__(23);
 var parseqs = __webpack_require__(5);
 
 /**
@@ -45276,7 +45272,7 @@ Socket.protocol = parser.protocol; // this is an int
 
 Socket.Socket = Socket;
 Socket.Transport = __webpack_require__(13);
-Socket.transports = __webpack_require__(26);
+Socket.transports = __webpack_require__(27);
 Socket.parser = __webpack_require__(2);
 
 /**
@@ -45912,7 +45908,7 @@ try {
  */
 
 var XMLHttpRequest = __webpack_require__(12);
-var Polling = __webpack_require__(27);
+var Polling = __webpack_require__(28);
 var Emitter = __webpack_require__(14);
 var inherit = __webpack_require__(6);
 var debug = __webpack_require__(7)('engine.io-client:polling-xhr');
@@ -47061,7 +47057,7 @@ function coerce(val) {
  * Module requirements.
  */
 
-var Polling = __webpack_require__(27);
+var Polling = __webpack_require__(28);
 var inherit = __webpack_require__(6);
 
 /**
@@ -47311,7 +47307,7 @@ var Transport = __webpack_require__(13);
 var parser = __webpack_require__(2);
 var parseqs = __webpack_require__(5);
 var inherit = __webpack_require__(6);
-var yeast = __webpack_require__(29);
+var yeast = __webpack_require__(30);
 var debug = __webpack_require__(7)('engine.io-client:websocket');
 
 var BrowserWebSocket, NodeWebSocket;
@@ -59940,7 +59936,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(35)
+var normalizeComponent = __webpack_require__(15)
 /* script */
 var __vue_script__ = __webpack_require__(93)
 /* template */
@@ -60059,7 +60055,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(35)
+var normalizeComponent = __webpack_require__(15)
 /* script */
 var __vue_script__ = __webpack_require__(96)
 /* template */
@@ -60483,6 +60479,317 @@ if (false) {
 
 /***/ }),
 /* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(15)
+/* script */
+var __vue_script__ = __webpack_require__(99)
+/* template */
+var __vue_template__ = __webpack_require__(100)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/PublishComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-18176c19", Component.options)
+  } else {
+    hotAPI.reload("data-v-18176c19", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 99 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	// view側から変数をプロパティとして渡す
+	props: ["projectName", "branchName"],
+	// メソッドで使う&テンプレート内で使う変数を定義
+	data: function data() {
+		return {
+			info: '',
+			message: '',
+			messages: '',
+			error: '',
+			errors: '',
+			parse: '',
+			queue_count: '',
+			parse_count: '',
+			k: 0,
+			alert_array: [],
+			time_array: [],
+			publish_file: ''
+		};
+	},
+	mounted: function mounted() {
+		this.connectChannel();
+	},
+
+	// (読み込み時に)実行するメソッド
+	methods: {
+		publish: function publish() {
+			var _this = this;
+
+			var data = 'publish';
+			axios.post('/publish/' + this.projectName + '/' + this.branchName + '/publishAjax', data).then(function (res) {
+				_this.info = res.data.info;
+			});
+		},
+
+
+		// 購読するチャンネルの設定
+		connectChannel: function connectChannel() {
+			var _this2 = this;
+
+			window.Echo.channel('publish-event').listen('PublishEvent', function (e) {
+				// 標準出力
+				_this2.message = e.message;
+				// 標準出力の全文
+				_this2.messages = _this2.messages + _this2.message;
+				// 標準エラー出力
+				_this2.error = e.error;
+				// 標準エラー出力の全文
+				_this2.errors = _this2.errors + _this2.error;
+				// 標準出力が数値または数値+改行コードだった場合parseに代入
+				if (e.judge === 1) {
+					_this2.parse = e.parse;
+				}
+				// パブリッシュファイル件数を計算して出力
+				if (e.queue_count !== '') {
+					_this2.queue_count = e.queue_count;
+					_this2.parse_count = String(_this2.k);
+					_this2.k++;
+				}
+				// アラートを配列で出力
+				if (e.alert_array !== '') {
+					_this2.alert_array = e.alert_array;
+				}
+				// パブリッシュにかかった時間を配列で出力
+				if (e.time_array !== '') {
+					_this2.time_array = e.time_array;
+				}
+				// パブリッシュしているファイル情報を配列で出力
+				if (e.publish_file !== '') {
+					_this2.publish_file = e.publish_file;
+					console.log(e.publish_file);
+				}
+			});
+		}
+	}
+});
+
+/***/ }),
+/* 100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { attrs: { id: "targetId" } }, [
+    _c("div", { staticClass: "contents" }, [
+      _c(
+        "form",
+        {
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.publish($event)
+            }
+          }
+        },
+        [_vm._m(0)]
+      )
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "cont_scene",
+        attrs: { id: "cont_before_publish-progress" }
+      },
+      [
+        _c("div", { staticClass: "cont_canvas" }, [
+          _c("div", { staticClass: "unit cont_progress" }, [
+            _c("div", { staticClass: "text-center" }, [
+              _c("p", [_vm._v("パブリッシュしています。")]),
+              _vm._v(" "),
+              _c("p", [_vm._v("そのまましばらくお待ちください...")]),
+              _vm._v(" "),
+              _vm.queue_count !== ""
+                ? _c("div", [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "cont_progress-phase",
+                        staticStyle: { "font-weight": "bold" }
+                      },
+                      [_vm._v("Publishing...")]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "cont_progress-row" }, [
+                      _vm._v(_vm._s(_vm.publish_file))
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "cont_progress-currentTask" }, [
+                      _vm._v(_vm._s(_vm.queue_count))
+                    ])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _c("div", { staticClass: "cont_progress-bar" }, [
+                _c("div", { staticClass: "progress" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "progress-bar progress-bar-striped active",
+                      style: { width: _vm.parse + "%" },
+                      attrs: { role: "progressbar" }
+                    },
+                    [_vm._v(_vm._s(_vm.parse) + "%")]
+                  )
+                ])
+              ])
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _vm._m(1)
+      ]
+    ),
+    _vm._v(" "),
+    _c("div", [
+      _vm.alert_array[7]
+        ? _c("p", { staticStyle: { "white-space": "pre-wrap" } }, [
+            _vm._v(
+              _vm._s(_vm.alert_array[7] + "件のエラーが検出されています。")
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.time_array[2]
+        ? _c("p", { staticStyle: { "white-space": "pre-wrap" } }, [
+            _vm._v(_vm._s("time: " + _vm.time_array[2] + " sec"))
+          ])
+        : _vm._e()
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _c("button", { staticClass: "px2-btn px2-btn--primary" }, [
+        _vm._v("フルパブリッシュ")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "cont_buttons" }, [
+      _c(
+        "div",
+        {
+          staticClass: "btn-group btn-group-justified",
+          attrs: { role: "group" }
+        },
+        [
+          _c("div", { staticClass: "btn-group", attrs: { role: "group" } }, [
+            _c("button", { staticClass: "px2-btn px2-btn--block" }, [
+              _vm._v("キャンセル")
+            ])
+          ])
+        ]
+      )
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-18176c19", module.exports)
+  }
+}
+
+/***/ }),
+/* 101 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
