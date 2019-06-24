@@ -112,16 +112,21 @@ class PublishController extends Controller
 							$parse = '';
 							$queue_count = '';
 						}
-		            } else if ($sock === $pipes[2]) {
-		                $stderr = fgets($sock);
+					} else if ($sock === $pipes[2]) {
+						$stderr = fgets($sock);
 						$alert_array = '';
 						$time_array = '';
 						$publish_file = '';
-		            }
-		        }
-		    }
+					}
+					if(preg_match('/PX Command END/', $stdout)) {
+						$end_publish = 1;
+					} else {
+						$end_publish = 0;
+					}
+				}
+			}
 			// ブロードキャストイベントに標準出力、標準エラー出力、パース結果を渡す、判定変数、キュー数、アラート配列、経過時間配列、パブリッシュファイルを渡す
-			broadcast(new \App\Events\PublishEvent($stdout, $stderr, $parse, $judge, $queue_count, $alert_array, $time_array, $publish_file));
+			broadcast(new \App\Events\PublishEvent($stdout, $stderr, $parse, $judge, $queue_count, $alert_array, $time_array, $publish_file, $end_publish));
 		}
 		fclose($pipes[1]);
 		fclose($pipes[2]);

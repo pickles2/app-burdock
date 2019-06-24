@@ -1,11 +1,11 @@
 <template>
 	<div id="targetId">
-		<div class="contents">
+		<div class="contents" v-bind:class="[isPublishButton === true ? 'show' : 'hidden']">
 			<form v-on:submit.prevent="publish">
 				<p><button class="px2-btn px2-btn--primary">フルパブリッシュ</button></p>
 			</form>
 		</div>
-		<div class="cont_scene" id="cont_before_publish-progress">
+		<div class="cont_scene" id="cont_before_publish-progress" v-bind:class="[isPublish === true ? 'show' : 'hidden']">
 			<div class="cont_canvas">
 				<div class="unit cont_progress">
 					<div class="text-center">
@@ -32,9 +32,16 @@
 				</div>
 			</div>
 		</div>
-		<div>
-			<p v-if="alert_array[7]" style="white-space: pre-wrap">{{ alert_array[7] + '件のエラーが検出されています。'}}</p>
-			<p v-if="time_array[2]" style="white-space: pre-wrap">{{ 'time: ' + time_array[2] + ' sec'}}</p>
+		<div class="cont_results cont_results-error" v-bind:class="[isPublishResult === true ? 'show' : 'hidden']">
+			<div class="cont_results-messageBox">
+				<div class="cont_results-total_file_count">total: <strong>{{ parse_count }}</strong> files.</div>
+				<div v-if="alert_array[7] !== ''" class="cont_results-errorMessage">{{ alert_array[7] }}件のエラーが検出されています。</div>
+				<div class="cont_results-spentTime">time: <span>{{ time_array[2] }} sec</span></div>
+				<p><button class="px2-btn px2-btn--primary px2-btn--lg">パブリッシュされたファイルを確認する</button></p>
+				<ul class="horizontal">
+					<li class="horizontal-li"><a href="#" class="px2-link px2-link--burette">パブリッシュレポート</a></li>
+				</ul>
+			</div>
 		</div>
 	</div>
 </template>
@@ -61,6 +68,9 @@ export default {
 			alert_array: [],
 			time_array: [],
 			publish_file: '',
+			isPublishButton: true,
+			isPublish: false,
+			isPublishResult: false,
 		}
 	},
 	mounted() {
@@ -107,7 +117,12 @@ export default {
 				// パブリッシュしているファイル情報を配列で出力
 				if(e.publish_file !== '') {
 					this.publish_file = e.publish_file;
-					console.log(e.publish_file);
+					this.isPublishButton = false;
+					this.isPublish = true;
+				}
+				if(e.end_publish === 1) {
+					this.isPublish = false;
+					this.isPublishResult = true;
 				}
 			})
 		}
