@@ -34,9 +34,6 @@ class PublishController extends Controller
 		    1 => array('pipe', 'w'),
 		    2 => array('pipe', 'w'),
 		);
-		ob_start();
-		var_dump(__LINE__);
-		error_log(ob_get_clean(),3,__DIR__.'/__dump.txt');
 		$proc = proc_open('php .px_execute.php /?PX=publish.run', $desc, $pipes);
 		stream_set_blocking($pipes[1], 0);
 		stream_set_blocking($pipes[2], 0);
