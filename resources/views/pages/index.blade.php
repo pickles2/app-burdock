@@ -143,7 +143,7 @@
 						<div class="input-group input-group-sm" data-original-title="" title="">
 							{{-- Vueコンポーネント --}}
 							<div id="app">
-								<cont-search-component project-name="{{ $project->project_code}}" branch-name="{{ $branch_name }}" page-id="{{ $page_id }}"></cont-search-component>
+								<cont-search-component project-code="{{ $project->project_code}}" branch-name="{{ $branch_name }}" page-id="{{ $page_id }}"></cont-search-component>
 							</div>
 						</div>
 					</div>

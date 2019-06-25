@@ -24,8 +24,8 @@ class PublishController extends Controller
     public function publishAjax(Request $request, Project $project, $branch_name)
     {
 		//
-		$project_name = $project->project_name;
-		$project_path = get_project_workingtree_dir($project_name, $branch_name);
+		$project_code = $project->project_code;
+		$project_path = get_project_workingtree_dir($project_code, $branch_name);
 		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
 
 		chdir($project_path);

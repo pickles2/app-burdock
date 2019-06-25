@@ -15,6 +15,7 @@ class CreateProjectsTable extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->uuid('id', 36)->primary();
+			$table->string('project_code');
             $table->string('project_name');
             $table->text('git_url')->nullable();
             $table->text('git_username')->nullable();

@@ -27,7 +27,7 @@
 				"gpiBridge": function(input, callback){ // required
 					$.ajax({
 						type : 'post',
-						url : "/files-and-folders/{{ $project->project_name }}/{{ $branch_name }}/gpi",
+						url : "/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/gpi",
 						headers: {
 							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 						},

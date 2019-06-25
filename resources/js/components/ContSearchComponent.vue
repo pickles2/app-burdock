@@ -4,7 +4,7 @@
 			<div class="input-group" data-original-title="" title="">
 				<input v-model="str" type="text" name="title" placeholder="Search...">
 				<span class="input-group-btn" data-original-title="" title="">
-					<button class="px2-btn px2-btn--primary" v-on:click="contentsSearch">検索</button>
+					<button class="px2-btn px2-btn--primary">検索</button>
 				</span>
 			</div>
 		</form>
@@ -20,11 +20,11 @@
 			<ul v-if="results.length" class="listview">
 				<li v-for="result in results">
 					<!-- idが空だった場合＝トップページ -->
-					<a v-if="result.id === ''" v-bind:href="'/pages/'+projectName+'/'+branchName+'/index.html?page_path='+result.path+'&page_id='+result.id" style="padding-left: 1em; font-size: 12px;" v-bind:class="{current: result.id === pageId}">{{ result.title }}</a>
+					<a v-if="result.id === ''" v-bind:href="'/pages/'+projectCode+'/'+branchName+'/index.html?page_path='+result.path+'&page_id='+result.id" style="padding-left: 1em; font-size: 12px;" v-bind:class="{current: result.id === pageId}">{{ result.title }}</a>
 					<!-- ロジカルパスが空だった場合＝カテゴリトップ -->
-					<a v-else-if="result.logical_path === ''" v-bind:href="'/pages/'+projectName+'/'+branchName+'/index.html?page_path='+result.path+'&page_id='+result.id" style="padding-left: 2em; font-size: 12px;" v-bind:class="{current: result.id === pageId}">{{ result.title }}</a>
+					<a v-else-if="result.logical_path === ''" v-bind:href="'/pages/'+projectCode+'/'+branchName+'/index.html?page_path='+result.path+'&page_id='+result.id" style="padding-left: 2em; font-size: 12px;" v-bind:class="{current: result.id === pageId}">{{ result.title }}</a>
 					<!-- その他ページ -->
-					<a v-else v-bind:href="'/pages/'+projectName+'/'+branchName+'/index.html?page_path='+result.path+'&page_id='+result.id" style="font-size: 12px;" v-bind:class="{current: result.id === pageId}" v-bind:style="{paddingLeft: (result.logical_path.split(/>/).length+1)*1.3+'em'}">{{ result.title }}</a>
+					<a v-else v-bind:href="'/pages/'+projectCode+'/'+branchName+'/index.html?page_path='+result.path+'&page_id='+result.id" style="font-size: 12px;" v-bind:class="{current: result.id === pageId}" v-bind:style="{paddingLeft: (result.logical_path.split(/>/).length+1)*1.3+'em'}">{{ result.title }}</a>
 				</li>
 			</ul>
 			<p v-else-if="isResult === true && str.length >= 1" class="listview">該当するページがありません。</p>
@@ -32,7 +32,7 @@
 		<div id="cont_sitemap_search_path" class="cont_sitemap_search" v-bind:class="[isPath === true ? 'show' : 'hidden']" data-original-title="" title="" style="">
 			<ul v-if="results.length" class="listview">
 				<li v-for="result in results">
-					<a v-bind:href="'/pages/'+projectName+'/'+branchName+'/index.html?page_path='+result.path+'&page_id='+result.id" style="padding-left: 1em; font-size: 12px;" v-bind:class="{current: result.id === pageId}">{{ result.path }}</a>
+					<a v-bind:href="'/pages/'+projectCode+'/'+branchName+'/index.html?page_path='+result.path+'&page_id='+result.id" style="padding-left: 1em; font-size: 12px;" v-bind:class="{current: result.id === pageId}">{{ result.path }}</a>
 				</li>
 			</ul>
 			<p v-else-if="isResult === true && str.length >= 1" class="listview">該当するページがありません。</p>
@@ -44,7 +44,7 @@
 export default {
 	// view側から変数をプロパティとして渡す
 	props: [
-		"projectName",
+		"projectCode",
 		"branchName",
 		"pageId"
 	],
@@ -67,7 +67,7 @@ export default {
 			if(data.str === '') {
 				data.str = '/';
 			}
-            axios.post('/pages/'+this.projectName+'/'+this.branchName+'/searchAjax',data).then(res => {
+            axios.post('/pages/'+this.projectCode+'/'+this.branchName+'/searchAjax',data).then(res => {
 					this.results = res.data.info;
 					this.isResult = true;
             })

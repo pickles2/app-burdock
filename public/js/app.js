@@ -60148,7 +60148,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	// view側から変数をプロパティとして渡す
-	props: ["projectName", "branchName", "pageId"],
+	props: ["projectCode", "branchName", "pageId"],
 	// メソッドで使う&テンプレート内で使う変数を定義
 	data: function data() {
 		return {
@@ -60171,7 +60171,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			if (data.str === '') {
 				data.str = '/';
 			}
-			axios.post('/pages/' + this.projectName + '/' + this.branchName + '/searchAjax', data).then(function (res) {
+			axios.post('/pages/' + this.projectCode + '/' + this.branchName + '/searchAjax', data).then(function (res) {
 				_this.results = res.data.info;
 				_this.isResult = true;
 			});
@@ -60235,23 +60235,7 @@ var render = function() {
               }
             }),
             _vm._v(" "),
-            _c(
-              "span",
-              {
-                staticClass: "input-group-btn",
-                attrs: { "data-original-title": "", title: "" }
-              },
-              [
-                _c(
-                  "button",
-                  {
-                    staticClass: "px2-btn px2-btn--primary",
-                    on: { click: _vm.contentsSearch }
-                  },
-                  [_vm._v("検索")]
-                )
-              ]
-            )
+            _vm._m(0)
           ]
         )
       ]
@@ -60343,7 +60327,7 @@ var render = function() {
                           attrs: {
                             href:
                               "/pages/" +
-                              _vm.projectName +
+                              _vm.projectCode +
                               "/" +
                               _vm.branchName +
                               "/index.html?page_path=" +
@@ -60366,7 +60350,7 @@ var render = function() {
                           attrs: {
                             href:
                               "/pages/" +
-                              _vm.projectName +
+                              _vm.projectCode +
                               "/" +
                               _vm.branchName +
                               "/index.html?page_path=" +
@@ -60391,7 +60375,7 @@ var render = function() {
                           attrs: {
                             href:
                               "/pages/" +
-                              _vm.projectName +
+                              _vm.projectCode +
                               "/" +
                               _vm.branchName +
                               "/index.html?page_path=" +
@@ -60443,7 +60427,7 @@ var render = function() {
                       attrs: {
                         href:
                           "/pages/" +
-                          _vm.projectName +
+                          _vm.projectCode +
                           "/" +
                           _vm.branchName +
                           "/index.html?page_path=" +
@@ -60467,7 +60451,25 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "span",
+      {
+        staticClass: "input-group-btn",
+        attrs: { "data-original-title": "", title: "" }
+      },
+      [
+        _c("button", { staticClass: "px2-btn px2-btn--primary" }, [
+          _vm._v("検索")
+        ])
+      ]
+    )
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -60581,7 +60583,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	// view側から変数をプロパティとして渡す
-	props: ["projectName", "branchName"],
+	props: ["projectCode", "branchName"],
 	// メソッドで使う&テンプレート内で使う変数を定義
 	data: function data() {
 		return {
@@ -60612,7 +60614,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var _this = this;
 
 			var data = 'publish';
-			axios.post('/publish/' + this.projectName + '/' + this.branchName + '/publishAjax', data).then(function (res) {
+			axios.post('/publish/' + this.projectCode + '/' + this.branchName + '/publishAjax', data).then(function (res) {
 				_this.info = res.data.info;
 			});
 		},

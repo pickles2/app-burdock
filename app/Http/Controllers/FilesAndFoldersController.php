@@ -37,7 +37,7 @@ class FilesAndFoldersController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function remoteFinderGPI(Request $request, Project $project, $branch_name){
-		$realpath_basedir = get_project_workingtree_dir($project->project_name, $branch_name);
+		$realpath_basedir = get_project_workingtree_dir($project->project_code, $branch_name);
 
 		$remoteFinder = new \tomk79\remoteFinder\main(array(
 			'default' => realpath($realpath_basedir).'/',
