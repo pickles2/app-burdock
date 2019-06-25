@@ -1,6 +1,6 @@
 <template>
-	<div id="targetId">
-		<div class="contents" v-bind:class="[isPublishButton === true ? 'show' : 'hidden']">
+	<div id="targetId" class="contents" style="height: 70vh;">
+		<div v-bind:class="[isPublishButton === true ? 'show' : 'hidden']">
 			<form v-on:submit.prevent="publish">
 				<p><button class="px2-btn px2-btn--primary">フルパブリッシュ</button></p>
 			</form>

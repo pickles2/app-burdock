@@ -60674,14 +60674,15 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "targetId" } }, [
-    _c(
-      "div",
-      {
-        staticClass: "contents",
-        class: [_vm.isPublishButton === true ? "show" : "hidden"]
-      },
-      [
+  return _c(
+    "div",
+    {
+      staticClass: "contents",
+      staticStyle: { height: "70vh" },
+      attrs: { id: "targetId" }
+    },
+    [
+      _c("div", { class: [_vm.isPublishButton === true ? "show" : "hidden"] }, [
         _c(
           "form",
           {
@@ -60694,100 +60695,101 @@ var render = function() {
           },
           [_vm._m(0)]
         )
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "cont_scene",
-        class: [_vm.isPublish === true ? "show" : "hidden"],
-        attrs: { id: "cont_before_publish-progress" }
-      },
-      [
-        _c("div", { staticClass: "cont_canvas" }, [
-          _c("div", { staticClass: "unit cont_progress" }, [
-            _c("div", { staticClass: "text-center" }, [
-              _c("p", [_vm._v("パブリッシュしています。")]),
-              _vm._v(" "),
-              _c("p", [_vm._v("そのまましばらくお待ちください...")]),
-              _vm._v(" "),
-              _vm.queue_count !== ""
-                ? _c("div", [
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "cont_scene",
+          class: [_vm.isPublish === true ? "show" : "hidden"],
+          attrs: { id: "cont_before_publish-progress" }
+        },
+        [
+          _c("div", { staticClass: "cont_canvas" }, [
+            _c("div", { staticClass: "unit cont_progress" }, [
+              _c("div", { staticClass: "text-center" }, [
+                _c("p", [_vm._v("パブリッシュしています。")]),
+                _vm._v(" "),
+                _c("p", [_vm._v("そのまましばらくお待ちください...")]),
+                _vm._v(" "),
+                _vm.queue_count !== ""
+                  ? _c("div", [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "cont_progress-phase",
+                          staticStyle: { "font-weight": "bold" }
+                        },
+                        [_vm._v("Publishing...")]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "cont_progress-row" }, [
+                        _vm._v(_vm._s(_vm.publish_file))
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "cont_progress-currentTask" }, [
+                        _vm._v(_vm._s(_vm.queue_count))
+                      ])
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("div", { staticClass: "cont_progress-bar" }, [
+                  _c("div", { staticClass: "progress" }, [
                     _c(
                       "div",
                       {
-                        staticClass: "cont_progress-phase",
-                        staticStyle: { "font-weight": "bold" }
+                        staticClass: "progress-bar progress-bar-striped active",
+                        style: { width: _vm.parse + "%" },
+                        attrs: { role: "progressbar" }
                       },
-                      [_vm._v("Publishing...")]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "cont_progress-row" }, [
-                      _vm._v(_vm._s(_vm.publish_file))
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "cont_progress-currentTask" }, [
-                      _vm._v(_vm._s(_vm.queue_count))
-                    ])
+                      [_vm._v(_vm._s(_vm.parse) + "%")]
+                    )
                   ])
-                : _vm._e(),
-              _vm._v(" "),
-              _c("div", { staticClass: "cont_progress-bar" }, [
-                _c("div", { staticClass: "progress" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "progress-bar progress-bar-striped active",
-                      style: { width: _vm.parse + "%" },
-                      attrs: { role: "progressbar" }
-                    },
-                    [_vm._v(_vm._s(_vm.parse) + "%")]
-                  )
                 ])
               ])
             ])
+          ]),
+          _vm._v(" "),
+          _vm._m(1)
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "cont_results cont_results-error",
+          class: [_vm.isPublishResult === true ? "show" : "hidden"]
+        },
+        [
+          _c("div", { staticClass: "cont_results-messageBox" }, [
+            _c("div", { staticClass: "cont_results-total_file_count" }, [
+              _vm._v("total: "),
+              _c("strong", [_vm._v(_vm._s(_vm.parse_count))]),
+              _vm._v(" files.")
+            ]),
+            _vm._v(" "),
+            _vm.alert_array[7] !== ""
+              ? _c("div", { staticClass: "cont_results-errorMessage" }, [
+                  _vm._v(
+                    _vm._s(_vm.alert_array[7]) +
+                      "件のエラーが検出されています。"
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("div", { staticClass: "cont_results-spentTime" }, [
+              _vm._v("time: "),
+              _c("span", [_vm._v(_vm._s(_vm.time_array[2]) + " sec")])
+            ]),
+            _vm._v(" "),
+            _vm._m(2),
+            _vm._v(" "),
+            _vm._m(3)
           ])
-        ]),
-        _vm._v(" "),
-        _vm._m(1)
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "cont_results cont_results-error",
-        class: [_vm.isPublishResult === true ? "show" : "hidden"]
-      },
-      [
-        _c("div", { staticClass: "cont_results-messageBox" }, [
-          _c("div", { staticClass: "cont_results-total_file_count" }, [
-            _vm._v("total: "),
-            _c("strong", [_vm._v(_vm._s(_vm.parse_count))]),
-            _vm._v(" files.")
-          ]),
-          _vm._v(" "),
-          _vm.alert_array[7] !== ""
-            ? _c("div", { staticClass: "cont_results-errorMessage" }, [
-                _vm._v(
-                  _vm._s(_vm.alert_array[7]) + "件のエラーが検出されています。"
-                )
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _c("div", { staticClass: "cont_results-spentTime" }, [
-            _vm._v("time: "),
-            _c("span", [_vm._v(_vm._s(_vm.time_array[2]) + " sec")])
-          ]),
-          _vm._v(" "),
-          _vm._m(2),
-          _vm._v(" "),
-          _vm._m(3)
-        ])
-      ]
-    )
-  ])
+        ]
+      )
+    ]
+  )
 }
 var staticRenderFns = [
   function() {
