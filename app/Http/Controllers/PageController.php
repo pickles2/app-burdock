@@ -24,8 +24,7 @@ class PageController extends Controller
         $page_param = $request->page_path;
         $page_id = $request->page_id;
 
-        $project_name = $project->project_name;
-        $project_path = get_project_workingtree_dir($project_name, $branch_name);
+        $project_path = get_project_workingtree_dir($project->project_code, $branch_name);
 
         $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
         chdir($project_path);
@@ -42,8 +41,7 @@ class PageController extends Controller
     public function ajax(Request $request, Project $project, $branch_name)
     {
         $page_path = $request->path_path;
-        $project_name = $project->project_name;
-        $project_path = get_project_workingtree_dir($project_name, $branch_name);
+        $project_path = get_project_workingtree_dir($project->project_code, $branch_name);
 
         $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
         chdir($project_path);
@@ -68,8 +66,7 @@ class PageController extends Controller
         $page_param = $request->page_path;
         $client_resources_dist = realpath(__DIR__.'/../../../public/assets/px2ce_resources');
 
-        $project_name = $project->project_name;
-        $project_path = get_project_workingtree_dir($project_name, $branch_name);
+        $project_path = get_project_workingtree_dir($project->project_code, $branch_name);
         $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
         chdir($project_path);
         $result = shell_exec('php .px_execute.php /sample_pages/?PX=px2dthelper.px2ce.client_resources\&dist='.$client_resources_dist);
@@ -84,8 +81,7 @@ class PageController extends Controller
     {
         //
         $page_param = $request->page_path;
-        $project_name = $project->project_name;
-        $project_path = get_project_workingtree_dir($project_name, $branch_name);
+        $project_path = get_project_workingtree_dir($project->project_code, $branch_name);
 
         $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
         chdir($project_path);

@@ -1,6 +1,6 @@
 <template>
-	<div id="targetId">
-		<div class="contents" v-bind:class="[isPublishButton === true ? 'show' : 'hidden']">
+	<div id="targetId" class="contents" style="height: 70vh;">
+		<div v-bind:class="[isPublishButton === true ? 'show' : 'hidden']">
 			<form v-on:submit.prevent="publish">
 				<p><button class="px2-btn px2-btn--primary">フルパブリッシュ</button></p>
 			</form>
@@ -50,7 +50,7 @@
 export default {
 	// view側から変数をプロパティとして渡す
 	props: [
-		"projectName",
+		"projectCode",
 		"branchName"
 	],
 	// メソッドで使う&テンプレート内で使う変数を定義
@@ -80,7 +80,7 @@ export default {
     methods: {
 		publish() {
 			var data = 'publish';
-			axios.post('/publish/'+this.projectName+'/'+this.branchName+'/publishAjax',data).then(res => {
+			axios.post('/publish/'+this.projectCode+'/'+this.branchName+'/publishAjax',data).then(res => {
 				this.info = res.data.info;
 			})
 		},

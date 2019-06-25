@@ -39,11 +39,11 @@ foreach($px2ce_client_resources['js'] as $value) {
 	</script>
 
 	<script type="text/javascript">
-		var project_name = <?php echo json_encode($project->project_name); ?>;
+		var project_code = <?php echo json_encode($project->project_code); ?>;
 		var branch_name = <?php echo json_encode($branch_name); ?>;
 		var page_param = <?php echo json_encode($page_param); ?>;
 		// .envよりプレビューサーバーのURLを取得
-		var prev_url = '{{ 'https://'.$project->project_name.'.'.env('PREV_URL') }}';
+		var prev_url = '{{ 'https://'.$project->project_code.'.'.env('PREV_URL') }}';
 
 		pickles2ContentsEditor.init(
 			{
@@ -69,7 +69,7 @@ foreach($px2ce_client_resources['js'] as $value) {
 				'gpiBridge': function(input, callback){
 					console.log(input);
 					$.ajax({
-						"url": '/pages/'+project_name+'/'+branch_name+'?page_path='+page_param, // ←呼び出し元が決める
+						"url": '/pages/'+project_code+'/'+branch_name+'?page_path='+page_param, // ←呼び出し元が決める
 						"method": 'post',
 						'data': {
 							'data':JSON.stringify(input),

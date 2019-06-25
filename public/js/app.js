@@ -60148,7 +60148,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	// view側から変数をプロパティとして渡す
-	props: ["projectName", "branchName", "pageId"],
+	props: ["projectCode", "branchName", "pageId"],
 	// メソッドで使う&テンプレート内で使う変数を定義
 	data: function data() {
 		return {
@@ -60171,7 +60171,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			if (data.str === '') {
 				data.str = '/';
 			}
-			axios.post('/pages/' + this.projectName + '/' + this.branchName + '/searchAjax', data).then(function (res) {
+			axios.post('/pages/' + this.projectCode + '/' + this.branchName + '/searchAjax', data).then(function (res) {
 				_this.results = res.data.info;
 				_this.isResult = true;
 			});
@@ -60235,23 +60235,7 @@ var render = function() {
               }
             }),
             _vm._v(" "),
-            _c(
-              "span",
-              {
-                staticClass: "input-group-btn",
-                attrs: { "data-original-title": "", title: "" }
-              },
-              [
-                _c(
-                  "button",
-                  {
-                    staticClass: "px2-btn px2-btn--primary",
-                    on: { click: _vm.contentsSearch }
-                  },
-                  [_vm._v("検索")]
-                )
-              ]
-            )
+            _vm._m(0)
           ]
         )
       ]
@@ -60343,7 +60327,7 @@ var render = function() {
                           attrs: {
                             href:
                               "/pages/" +
-                              _vm.projectName +
+                              _vm.projectCode +
                               "/" +
                               _vm.branchName +
                               "/index.html?page_path=" +
@@ -60366,7 +60350,7 @@ var render = function() {
                           attrs: {
                             href:
                               "/pages/" +
-                              _vm.projectName +
+                              _vm.projectCode +
                               "/" +
                               _vm.branchName +
                               "/index.html?page_path=" +
@@ -60391,7 +60375,7 @@ var render = function() {
                           attrs: {
                             href:
                               "/pages/" +
-                              _vm.projectName +
+                              _vm.projectCode +
                               "/" +
                               _vm.branchName +
                               "/index.html?page_path=" +
@@ -60443,7 +60427,7 @@ var render = function() {
                       attrs: {
                         href:
                           "/pages/" +
-                          _vm.projectName +
+                          _vm.projectCode +
                           "/" +
                           _vm.branchName +
                           "/index.html?page_path=" +
@@ -60467,7 +60451,25 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "span",
+      {
+        staticClass: "input-group-btn",
+        attrs: { "data-original-title": "", title: "" }
+      },
+      [
+        _c("button", { staticClass: "px2-btn px2-btn--primary" }, [
+          _vm._v("検索")
+        ])
+      ]
+    )
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -60581,7 +60583,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	// view側から変数をプロパティとして渡す
-	props: ["projectName", "branchName"],
+	props: ["projectCode", "branchName"],
 	// メソッドで使う&テンプレート内で使う変数を定義
 	data: function data() {
 		return {
@@ -60612,7 +60614,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			var _this = this;
 
 			var data = 'publish';
-			axios.post('/publish/' + this.projectName + '/' + this.branchName + '/publishAjax', data).then(function (res) {
+			axios.post('/publish/' + this.projectCode + '/' + this.branchName + '/publishAjax', data).then(function (res) {
 				_this.info = res.data.info;
 			});
 		},
@@ -60672,14 +60674,15 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "targetId" } }, [
-    _c(
-      "div",
-      {
-        staticClass: "contents",
-        class: [_vm.isPublishButton === true ? "show" : "hidden"]
-      },
-      [
+  return _c(
+    "div",
+    {
+      staticClass: "contents",
+      staticStyle: { height: "70vh" },
+      attrs: { id: "targetId" }
+    },
+    [
+      _c("div", { class: [_vm.isPublishButton === true ? "show" : "hidden"] }, [
         _c(
           "form",
           {
@@ -60692,100 +60695,101 @@ var render = function() {
           },
           [_vm._m(0)]
         )
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "cont_scene",
-        class: [_vm.isPublish === true ? "show" : "hidden"],
-        attrs: { id: "cont_before_publish-progress" }
-      },
-      [
-        _c("div", { staticClass: "cont_canvas" }, [
-          _c("div", { staticClass: "unit cont_progress" }, [
-            _c("div", { staticClass: "text-center" }, [
-              _c("p", [_vm._v("パブリッシュしています。")]),
-              _vm._v(" "),
-              _c("p", [_vm._v("そのまましばらくお待ちください...")]),
-              _vm._v(" "),
-              _vm.queue_count !== ""
-                ? _c("div", [
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "cont_scene",
+          class: [_vm.isPublish === true ? "show" : "hidden"],
+          attrs: { id: "cont_before_publish-progress" }
+        },
+        [
+          _c("div", { staticClass: "cont_canvas" }, [
+            _c("div", { staticClass: "unit cont_progress" }, [
+              _c("div", { staticClass: "text-center" }, [
+                _c("p", [_vm._v("パブリッシュしています。")]),
+                _vm._v(" "),
+                _c("p", [_vm._v("そのまましばらくお待ちください...")]),
+                _vm._v(" "),
+                _vm.queue_count !== ""
+                  ? _c("div", [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "cont_progress-phase",
+                          staticStyle: { "font-weight": "bold" }
+                        },
+                        [_vm._v("Publishing...")]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "cont_progress-row" }, [
+                        _vm._v(_vm._s(_vm.publish_file))
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "cont_progress-currentTask" }, [
+                        _vm._v(_vm._s(_vm.queue_count))
+                      ])
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("div", { staticClass: "cont_progress-bar" }, [
+                  _c("div", { staticClass: "progress" }, [
                     _c(
                       "div",
                       {
-                        staticClass: "cont_progress-phase",
-                        staticStyle: { "font-weight": "bold" }
+                        staticClass: "progress-bar progress-bar-striped active",
+                        style: { width: _vm.parse + "%" },
+                        attrs: { role: "progressbar" }
                       },
-                      [_vm._v("Publishing...")]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "cont_progress-row" }, [
-                      _vm._v(_vm._s(_vm.publish_file))
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "cont_progress-currentTask" }, [
-                      _vm._v(_vm._s(_vm.queue_count))
-                    ])
+                      [_vm._v(_vm._s(_vm.parse) + "%")]
+                    )
                   ])
-                : _vm._e(),
-              _vm._v(" "),
-              _c("div", { staticClass: "cont_progress-bar" }, [
-                _c("div", { staticClass: "progress" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "progress-bar progress-bar-striped active",
-                      style: { width: _vm.parse + "%" },
-                      attrs: { role: "progressbar" }
-                    },
-                    [_vm._v(_vm._s(_vm.parse) + "%")]
-                  )
                 ])
               ])
             ])
+          ]),
+          _vm._v(" "),
+          _vm._m(1)
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "cont_results cont_results-error",
+          class: [_vm.isPublishResult === true ? "show" : "hidden"]
+        },
+        [
+          _c("div", { staticClass: "cont_results-messageBox" }, [
+            _c("div", { staticClass: "cont_results-total_file_count" }, [
+              _vm._v("total: "),
+              _c("strong", [_vm._v(_vm._s(_vm.parse_count))]),
+              _vm._v(" files.")
+            ]),
+            _vm._v(" "),
+            _vm.alert_array[7] !== ""
+              ? _c("div", { staticClass: "cont_results-errorMessage" }, [
+                  _vm._v(
+                    _vm._s(_vm.alert_array[7]) +
+                      "件のエラーが検出されています。"
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("div", { staticClass: "cont_results-spentTime" }, [
+              _vm._v("time: "),
+              _c("span", [_vm._v(_vm._s(_vm.time_array[2]) + " sec")])
+            ]),
+            _vm._v(" "),
+            _vm._m(2),
+            _vm._v(" "),
+            _vm._m(3)
           ])
-        ]),
-        _vm._v(" "),
-        _vm._m(1)
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "cont_results cont_results-error",
-        class: [_vm.isPublishResult === true ? "show" : "hidden"]
-      },
-      [
-        _c("div", { staticClass: "cont_results-messageBox" }, [
-          _c("div", { staticClass: "cont_results-total_file_count" }, [
-            _vm._v("total: "),
-            _c("strong", [_vm._v(_vm._s(_vm.parse_count))]),
-            _vm._v(" files.")
-          ]),
-          _vm._v(" "),
-          _vm.alert_array[7] !== ""
-            ? _c("div", { staticClass: "cont_results-errorMessage" }, [
-                _vm._v(
-                  _vm._s(_vm.alert_array[7]) + "件のエラーが検出されています。"
-                )
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _c("div", { staticClass: "cont_results-spentTime" }, [
-            _vm._v("time: "),
-            _c("span", [_vm._v(_vm._s(_vm.time_array[2]) + " sec")])
-          ]),
-          _vm._v(" "),
-          _vm._m(2),
-          _vm._v(" "),
-          _vm._m(3)
-        ])
-      ]
-    )
-  ])
+        ]
+      )
+    ]
+  )
 }
 var staticRenderFns = [
   function() {

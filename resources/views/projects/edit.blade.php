@@ -5,7 +5,7 @@
 @section('content')
 <div class="container">
     <h1>{{ $title }}</h1>
-    <form action="{{ url('projects/'.$project->project_name.'/'.$branch_name) }}" method="post">
+    <form action="{{ url('projects/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}" method="post">
         @csrf
         @method('PUT')
         <div class="form-group">
@@ -14,6 +14,15 @@
                 @if ($errors->has('project_name'))
                     <span class="invalid-feedback" role="alert">
                         {{ $errors->first('project_name') }}
+                    </span>
+                @endif
+        </div>
+        <div class="form-group">
+            <label for="project_code">{{ __('Project Code') }}</label>
+            <input id="project_code" type="text" class="form-control @if ($errors->has('project_code')) is-invalid @endif" name="project_code" value="{{ old('project_code', $project->project_code) }}" required autofocus>
+                @if ($errors->has('project_code'))
+                    <span class="invalid-feedback" role="alert">
+                        {{ $errors->first('project_code') }}
                     </span>
                 @endif
         </div>
