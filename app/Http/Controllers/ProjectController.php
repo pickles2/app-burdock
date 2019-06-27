@@ -125,12 +125,12 @@ class ProjectController extends Controller
 				}
 			}
 
-			shell_exec('git remote set-url origin '.escapeshellarg($git_url));
+			shell_exec('git remote set-url '.$project->project_code.' '.escapeshellarg($git_url));
 			shell_exec('git init');
 			shell_exec('git add *');
 			shell_exec('git commit -m "Create project"');
 			if( strlen($git_url) ){
-				shell_exec('git remote add origin '.escapeshellarg($git_url));
+				shell_exec('git remote add '.$project->project_code.' '.escapeshellarg($git_url));
 			}
 
 			// push するときは認証情報が必要なので、
