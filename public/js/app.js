@@ -60580,10 +60580,56 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	// view側から変数をプロパティとして渡す
-	props: ["projectCode", "branchName"],
+	props: ["projectCode", "branchName", "logExist"],
 	// メソッドで使う&テンプレート内で使う変数を定義
 	data: function data() {
 		return {
@@ -60592,7 +60638,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			messages: '',
 			error: '',
 			errors: '',
-			parse: '',
+			parse: 0,
 			queue_count: '',
 			parse_count: '',
 			k: 0,
@@ -60601,7 +60647,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			publish_file: '',
 			isPublishButton: true,
 			isPublish: false,
-			isPublishResult: false
+			isPublishResult: false,
+			isPublishError: false
 		};
 	},
 	mounted: function mounted() {
@@ -60610,9 +60657,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 	// (読み込み時に)実行するメソッド
 	methods: {
-		publish: function publish() {
+		publish: function publish(reset) {
 			var _this = this;
 
+			console.log(this.logExist);
+			if (reset === 1) {
+				this.message = '';
+				this.messages = '';
+				this.error = '';
+				this.errors = '';
+				this.parse = 0;
+				this.queue_count = '';
+				this.parse_count = '0';
+				this.k = 0;
+				this.alert_array = [];
+				this.time_array = [];
+				this.publish_file = '';
+				this.isPublishButton = false;
+				this.isPublish = false;
+				this.isPublishResult = false;
+				this.isPublishError = false;
+			}
 			var data = 'publish';
 			axios.post('/publish/' + this.projectCode + '/' + this.branchName + '/publishAjax', data).then(function (res) {
 				_this.info = res.data.info;
@@ -60627,8 +60692,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			window.Echo.channel('publish-event').listen('PublishEvent', function (e) {
 				// 標準出力
 				_this2.message = e.message;
+				console.log(e.message);
 				// 標準出力の全文
-				_this2.messages = _this2.messages + _this2.message;
+				_this2.messages = _this2.messages + '\n' + _this2.message;
 				// 標準エラー出力
 				_this2.error = e.error;
 				// 標準エラー出力の全文
@@ -60646,10 +60712,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				// アラートを配列で出力
 				if (e.alert_array !== '') {
 					_this2.alert_array = e.alert_array;
+					_this2.isPublishError = true;
 				}
 				// パブリッシュにかかった時間を配列で出力
 				if (e.time_array !== '') {
 					_this2.time_array = e.time_array;
+					console.log(_this2.time_array);
 				}
 				// パブリッシュしているファイル情報を配列で出力
 				if (e.publish_file !== '') {
@@ -60664,6 +60732,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			});
 		}
 	}
+
+	// computed: {
+	// 	isPublish: function() {
+	// 		if(this.logExist === '1') {
+	// 			this.isPublishButton = true;
+	// 		}
+	// 		return this.isPublish
+	// 	}
+	// }
 });
 
 /***/ }),
@@ -60676,26 +60753,36 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    {
-      staticClass: "contents",
-      staticStyle: { height: "70vh" },
-      attrs: { id: "targetId" }
-    },
+    { staticClass: "contents", staticStyle: { height: "70vh" } },
     [
-      _c("div", { class: [_vm.isPublishButton === true ? "show" : "hidden"] }, [
-        _c(
-          "form",
-          {
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
-                return _vm.publish($event)
-              }
-            }
-          },
-          [_vm._m(0)]
-        )
-      ]),
+      _c(
+        "div",
+        {
+          staticClass: "cont_scene",
+          class: [_vm.isPublishButton === true ? "show" : "hidden"],
+          attrs: { id: "cont_before_publish" }
+        },
+        [
+          _c("div", { staticClass: "unit center" }, [
+            _c("p", [_vm._v("パブリッシュは実行されていません。")]),
+            _vm._v(" "),
+            _c("p", [_vm._v("次のボタンを押して、パブリッシュを実行します。")]),
+            _vm._v(" "),
+            _c("p", [
+              _c(
+                "button",
+                {
+                  staticClass: "px2-btn px2-btn--primary",
+                  on: { click: _vm.publish }
+                },
+                [_vm._v("パブリッシュする")]
+              )
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _vm._m(0),
       _vm._v(" "),
       _c(
         "div",
@@ -60707,7 +60794,7 @@ var render = function() {
         [
           _c("div", { staticClass: "cont_canvas" }, [
             _c("div", { staticClass: "unit cont_progress" }, [
-              _c("div", { staticClass: "text-center" }, [
+              _c("div", { staticClass: "center" }, [
                 _c("p", [_vm._v("パブリッシュしています。")]),
                 _vm._v(" "),
                 _c("p", [_vm._v("そのまましばらくお待ちください...")]),
@@ -60757,37 +60844,81 @@ var render = function() {
       _c(
         "div",
         {
-          staticClass: "cont_results cont_results-error",
-          class: [_vm.isPublishResult === true ? "show" : "hidden"]
+          staticClass: "cont_scene",
+          class: [_vm.isPublishResult === true ? "show" : "hidden"],
+          attrs: { id: "cont_after_publish" }
         },
         [
-          _c("div", { staticClass: "cont_results-messageBox" }, [
-            _c("div", { staticClass: "cont_results-total_file_count" }, [
-              _vm._v("total: "),
-              _c("strong", [_vm._v(_vm._s(_vm.parse_count))]),
-              _vm._v(" files.")
-            ]),
-            _vm._v(" "),
-            _vm.alert_array[7] !== ""
-              ? _c("div", { staticClass: "cont_results-errorMessage" }, [
-                  _vm._v(
-                    _vm._s(_vm.alert_array[7]) +
-                      "件のエラーが検出されています。"
-                  )
+          _c("div", { staticClass: "cont_canvas" }, [
+            _c(
+              "div",
+              {
+                staticClass: "cont_results",
+                class: [_vm.isPublishError === true ? "cont_results-error" : ""]
+              },
+              [
+                _c("div", { staticClass: "cont_results-messageBox" }, [
+                  _c("div", { staticClass: "cont_results-total_file_count" }, [
+                    _vm._v("total: "),
+                    _c("strong", [_vm._v(_vm._s(_vm.parse_count))]),
+                    _vm._v(" files.")
+                  ]),
+                  _vm._v(" "),
+                  _vm.alert_array[7] !== ""
+                    ? _c("div", { staticClass: "cont_results-errorMessage" }, [
+                        _vm._v(
+                          _vm._s(_vm.alert_array[7]) +
+                            "件のエラーが検出されています。"
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "cont_results-spentTime" }, [
+                    _vm._v("time: "),
+                    _c("span", [_vm._v(_vm._s(_vm.time_array[2]) + " sec")])
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(2),
+                  _vm._v(" "),
+                  _vm._m(3)
                 ])
-              : _vm._e(),
-            _vm._v(" "),
-            _c("div", { staticClass: "cont_results-spentTime" }, [
-              _vm._v("time: "),
-              _c("span", [_vm._v(_vm._s(_vm.time_array[2]) + " sec")])
-            ]),
-            _vm._v(" "),
-            _vm._m(2),
-            _vm._v(" "),
-            _vm._m(3)
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "cont_buttons" }, [
+            _c(
+              "div",
+              {
+                staticClass: "btn-group btn-group-justified",
+                attrs: { role: "group" }
+              },
+              [
+                _c(
+                  "div",
+                  { staticClass: "btn-group", attrs: { role: "group" } },
+                  [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "px2-btn px2-btn--block",
+                        on: {
+                          click: function($event) {
+                            return _vm.publish(1)
+                          }
+                        }
+                      },
+                      [_vm._v("もう一度パブリッシュする")]
+                    )
+                  ]
+                )
+              ]
+            )
           ])
         ]
-      )
+      ),
+      _vm._v(" "),
+      _vm._m(4)
     ]
   )
 }
@@ -60796,11 +60927,36 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("p", [
-      _c("button", { staticClass: "px2-btn px2-btn--primary" }, [
-        _vm._v("フルパブリッシュ")
-      ])
-    ])
+    return _c(
+      "div",
+      {
+        staticClass: "cont_scene hidden",
+        attrs: { id: "cont_after_publish-zero_files" }
+      },
+      [
+        _c("div", { staticClass: "unit center" }, [
+          _c("p", [
+            _vm._v("パブリッシュを実行しましたが、何も出力されませんでした。")
+          ]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v("パブリッシュ対象範囲に何も含まれていない可能性があります。")
+          ]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v(
+              "次のボタンを押し、パブリッシュ範囲の設定を変えてもう一度パブリッシュを実行してみてください。"
+            )
+          ]),
+          _vm._v(" "),
+          _c("p", [
+            _c("button", { staticClass: "px2-btn px2-btn--primary" }, [
+              _vm._v("パブリッシュする")
+            ])
+          ])
+        ])
+      ]
+    )
   },
   function() {
     var _vm = this
@@ -60846,6 +61002,89 @@ var staticRenderFns = [
         )
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "cont_scene hidden", attrs: { id: "cont_on_publish" } },
+      [
+        _c("p", [_vm._v("ただいまパブリッシュプロセスが進行しています。")]),
+        _vm._v(" "),
+        _c("p", [_vm._v("しばらくお待ち下さい...。")]),
+        _vm._v(" "),
+        _c("p", [
+          _c(
+            "a",
+            {
+              staticClass: "glyphicon glyphicon-menu-right",
+              attrs: { href: "#" }
+            },
+            [_vm._v("しばらく待ってもこの状態から復旧しない場合は...詳細")]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "cont_recovery_on_publish hidden" }, [
+          _c("h2", [_vm._v("これはどういう状態ですか？")]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v(
+              "Pickles 2 のパブリッシュプロセスは、二重起動を避けるために、次のパスにロックファイルを生成します。"
+            )
+          ]),
+          _vm._v(" "),
+          _c("ul", [
+            _c("li", [
+              _c("code", [_vm._v("./px-files/_sys/ram/publish/applock.txt")])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v(
+              "このファイルは、パブリッシュ開始時に生成され、パブリッシュ完了時に削除されます。"
+            )
+          ]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v(
+              "パブリッシュ中であれば、このファイルが存在することは健康な状態です。しかし、パブリッシュの途中でプロセスが異常終了した場合(途中でアプリを落とす、なども含む)、このファイルが残ってしまうため、次のパブリッシュが実行できない状態になります。"
+            )
+          ]),
+          _vm._v(" "),
+          _c("h2", [_vm._v("復旧方法")]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v("ロックファイル "),
+            _c("code", [_vm._v("./px-files/_sys/ram/publish/applock.txt")]),
+            _vm._v(" を手動で"),
+            _c("a", { attrs: { href: "#" } }, [_vm._v("削除します")]),
+            _vm._v("。")
+          ]),
+          _vm._v(" "),
+          _c("ul", { staticClass: "notes" }, [
+            _c("li", { staticClass: "notes-li" }, [
+              _vm._v(
+                "※ただし、バックグラウンドでプロセスが進行中ではないか、事前に確認してください。"
+              )
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "notes-li" }, [
+              _vm._v("※"),
+              _c("code", [_vm._v("applock.txt")]),
+              _vm._v(
+                " をテキストファイルで開くと、このファイルを生成したプロセスの "
+              ),
+              _c("strong", [_vm._v("プロセスID")]),
+              _vm._v(" と "),
+              _c("strong", [_vm._v("最終アクセス日時")]),
+              _vm._v(" が記載されています。この情報が手がかりになるはずです。")
+            ])
+          ])
+        ])
+      ]
+    )
   }
 ]
 render._withStripped = true
