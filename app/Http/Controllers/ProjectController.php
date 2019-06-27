@@ -83,7 +83,7 @@ class ProjectController extends Controller
 		// 記事作成時に著者のIDを保存する
 		$project = new Project;
 		$project->project_code = $request->project_code;
-		$project->project_name = $project->project_name;
+		$project->project_name = $request->project_name;
 		$project->user_id = $request->user()->id;
 		$project->git_url = $git_url;
 		$project->git_username = \Crypt::encryptString($git_username);
