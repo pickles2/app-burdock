@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreProject extends FormRequest
+class StoreSitemap extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,14 @@ class StoreProject extends FormRequest
      */
     public function rules()
     {
+        /**
+        * 検証用の関数
+        *   $attribute: 検証中の属性名
+        *   $value    : 検証中の属性の値
+        *   $fail     : 失敗時に呼び出すメソッド?
+        **/
         return [
-            'project_code' => 'required|unique:projects,project_code|max:191',
-            'git_url' => 'required|unique:projects,git_url|url|max:400',
-            'git_username' => 'required',
-            'git_password' => 'required',
+            
         ];
     }
 }

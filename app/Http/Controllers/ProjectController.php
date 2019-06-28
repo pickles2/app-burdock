@@ -83,7 +83,7 @@ class ProjectController extends Controller
 		// 記事作成時に著者のIDを保存する
 		$project = new Project;
 		$project->project_code = $request->project_code;
-		$project->project_name = $project->project_name;
+		$project->project_name = $request->project_name;
 		$project->user_id = $request->user()->id;
 		$project->git_url = $git_url;
 		$project->git_username = \Crypt::encryptString($git_username);
@@ -125,12 +125,12 @@ class ProjectController extends Controller
 				}
 			}
 
-			shell_exec('git remote set-url origin '.escapeshellarg($git_url));
+			shell_exec('git remote set-url '.$project->project_code.' '.escapeshellarg($git_url));
 			shell_exec('git init');
 			shell_exec('git add *');
 			shell_exec('git commit -m "Create project"');
 			if( strlen($git_url) ){
-				shell_exec('git remote add origin '.escapeshellarg($git_url));
+				shell_exec('git remote add '.$project->project_code.' '.escapeshellarg($git_url));
 			}
 
 			// push するときは認証情報が必要なので、

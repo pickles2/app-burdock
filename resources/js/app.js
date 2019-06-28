@@ -16,9 +16,10 @@ window.Vue = require('vue');
  */
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
-
 // 追加
 Vue.component('cont-search-component', require('./components/ContSearchComponent.vue'));
+// 追加
+Vue.component('publish-component', require('./components/PublishComponent.vue'));
 
 const app = new Vue({
     el: '#app'

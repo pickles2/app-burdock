@@ -1,6 +1,7 @@
 /node_modules
 /public/hot
 /public/storage
+/public/projects
 /storage/*.key
 #/composer.lock
 /vendor
@@ -14,3 +15,5 @@ yarn-error.log
 .env
 .phpunit.result.cache
 /bd_data
+/laravel-echo-server.lock
+/dump.rdb
