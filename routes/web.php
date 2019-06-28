@@ -76,6 +76,10 @@ Route::get('publish/{project}/{branch_name}/publish_run', 'PublishController@pub
 Route::post('publish/{project}/{branch_name}/publishAjax', 'Ajax\PublishController@publishAjax');
 
 // --------------------------------------
+// Git
+Route::get('git/{project}/{branch_name}', 'GitController@index');
+
+// --------------------------------------
 // ステージング切り替え (Plum)
 // TODO: ↓ POST と GET を同じコントロールで受け取りたい。 1行で済む書き方はない？
 Route::get('staging/{project}/{branch_name}', 'StagingController@index');
