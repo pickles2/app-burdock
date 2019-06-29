@@ -84,6 +84,12 @@ Route::post('git/{project}/{branch_name}/git-commit', 'GitController@gitCommit')
 Route::post('git/{project}/{branch_name}/git-push', 'GitController@gitPush');
 
 // --------------------------------------
+// Composer
+Route::get('composer/{project}/{branch_name}', 'ComposerController@index');
+Route::post('composer/{project}/{branch_name}/composer-install', 'ComposerController@install');
+Route::post('composer/{project}/{branch_name}/composer-update', 'ComposerController@update');
+
+// --------------------------------------
 // ステージング切り替え (Plum)
 Route::match(['get', 'post'], 'staging/{project}/{branch_name}', 'StagingController@index');
 

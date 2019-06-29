@@ -30,7 +30,8 @@
             "app/helpers/locale_url.php",
             "app/helpers/get_project_workingtree_dir.php",
             "app/helpers/get_git_remote_default_branch_name.php",
-            "app/helpers/git.php"
+            "app/helpers/git.php",
+            "app/helpers/composer.php"
         ],
         "classmap": [
             "database/seeds",
