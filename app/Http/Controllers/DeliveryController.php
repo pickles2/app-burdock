@@ -53,7 +53,7 @@ class DeliveryController extends Controller
 
 
 		// parameter.phpのmk_indigo_optionsメソッド
-		$parameter = $this->mk_indigo_options( $project_code, $branch_name );
+		$parameter = $this->mk_indigo_options( $project, $branch_name );
 
 		// load indigo\main
 		$indigo = new \indigo\main($parameter);
@@ -105,7 +105,7 @@ class DeliveryController extends Controller
 
 
 		// parameter.phpのmk_indigo_optionsメソッド
-		$parameter = $this->mk_indigo_options( $project_code, $branch_name );
+		$parameter = $this->mk_indigo_options( $project, $branch_name );
 
 		// load indigo\main
 		$indigo = new \indigo\ajax($parameter);
@@ -128,7 +128,7 @@ class DeliveryController extends Controller
 	/**
 	 * Indigoのオプションを生成する
 	 */
-	private function mk_indigo_options( $project_code, $branch_name ){
+	private function mk_indigo_options( $project, $branch_name ){
 
 		$parameter = array(
 			// POST
@@ -138,13 +138,13 @@ class DeliveryController extends Controller
 			'_GET' => $_GET,
 
 			// indigo作業用ディレクトリ（絶対パス）
-			'realpath_workdir' => '/var/www/html/sample-lib-indigo/[directoryName(ex. indigo_dir)]/',
+			'realpath_workdir' => env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/indigo/workdir/',
 
 			// リソースディレクトリ（ドキュメントルートからの相対パス）
 			'relativepath_resourcedir'	=> '/common/lib-indigo/res/',
 
 			// ajax呼出クラス（ドキュメントルートからの相対パス）
-			'realpath_ajax_call' => '/delivery/'.urlencode($project_code).'/'.urlencode($branch_name).'/indigoAjaxAPI',
+			'realpath_ajax_call' => '/delivery/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/indigoAjaxAPI',
 			
 			// 画面表示上のタイムゾーン
 			'time_zone' => 'Asia/Tokyo',
@@ -169,16 +169,10 @@ class DeliveryController extends Controller
 			'server' => array(
 					array(
 							// 任意の名前
-							'name' => 'server1',
+							'name' => 'www1',
 							// 同期先絶対パス
-							'real_path' => '/var/www/html/indigo-test-project/'
+							'real_path' => env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/indigo/production/',
 					),
-					array(
-							// 任意の名前
-							'name' => 'server2',
-							// 同期先絶対パス
-							'real_path' => '/var/www/html/indigo-test-project2/'
-					)
 			),
 
 			// 同期除外ディレクトリ、またはファイル
@@ -189,18 +183,19 @@ class DeliveryController extends Controller
 
 			// Git情報定義
 			'git' => array(
-
-				// Gitリポジトリのurl（現在はhttpsプロトコルのみ対応）
-				'giturl' => 'https://github.com/gk-r/indigo-test-project.git',
+				
+				// GitリポジトリのURL
+				'giturl' => $project->git_url,
 
 				// ユーザ名
-				// Gitリポジトリのユーザ名を設定
-				'username' => 'hoge',
+				// Gitリポジトリのユーザ名を設定。
+				'username' => \Crypt::decryptString( $project->git_username ),
 
 				// パスワード
-				// Gitリポジトリのパスワードを設定
-				'password' => 'fuga'
+				// Gitリポジトリのパスワードを設定。
+				'password' => \Crypt::decryptString( $project->git_password ),
 			)
+
 		);
 		return $parameter;
 	}
