@@ -50,8 +50,6 @@ class DeliveryController extends Controller
 		}
 
 
-
-
 		// parameter.phpのmk_indigo_optionsメソッド
 		$parameter = $this->mk_indigo_options( $project, $branch_name );
 
@@ -129,13 +127,9 @@ class DeliveryController extends Controller
 	 * Indigoのオプションを生成する
 	 */
 	private function mk_indigo_options( $project, $branch_name ){
+		$user = Auth::user();
 
 		$parameter = array(
-			// POST
-			'_POST' => $_POST,
-
-			// GET
-			'_GET' => $_GET,
 
 			// 追加するパラメータ
 			'additional_params' => array(
@@ -155,7 +149,7 @@ class DeliveryController extends Controller
 			'time_zone' => 'Asia/Tokyo',
 
 			// ユーザID
-			'user_id' => 'user01',
+			'user_id' => $user->id,
 
 			// DB設定
 			'db' => array(
@@ -172,12 +166,12 @@ class DeliveryController extends Controller
 
 			// 本番環境パス（同期先）※バージョン0.1.0時点では先頭の設定内容のみ有効
 			'server' => array(
-					array(
-							// 任意の名前
-							'name' => 'www1',
-							// 同期先絶対パス
-							'real_path' => env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/indigo/production/',
-					),
+				array(
+					// 任意の名前
+					'name' => 'www1',
+					// 同期先絶対パス
+					'real_path' => env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/indigo/production/',
+				),
 			),
 
 			// 同期除外ディレクトリ、またはファイル
