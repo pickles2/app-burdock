@@ -28,28 +28,6 @@ class DeliveryController extends Controller
 	 */
 	public function index(Request $request, Project $project, $branch_name){
 
-		$page_param = $request->page_path;
-		$page_id = $request->page_id;
-
-		$project_code = $project->project_code;
-		$project_path = get_project_workingtree_dir($project_code, $branch_name);
-
-		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-		chdir($project_path);
-		$data_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
-		$current = json_decode($data_json);
-		chdir($path_current_dir); // 元いたディレクトリへ戻る
-
-		$sitemap_files = \File::files($current->realpath_homedir.'sitemaps/');
-		foreach($sitemap_files as $file) {
-			if($file->getExtension() === 'xlsx') {
-				$get_files[] = $file;
-			} else {
-				$destroy_files[] = $file;
-			}
-		}
-
-
 		// parameter.phpのmk_indigo_optionsメソッド
 		$parameter = $this->mk_indigo_options( $project, $branch_name );
 
@@ -63,10 +41,8 @@ class DeliveryController extends Controller
 			[
 				'project' => $project,
 				'branch_name' => $branch_name,
-				'page_param' => $page_param,
 				'indigo_std_out' => $indigo_std_out,
-			],
-			compact('current', 'get_files')
+			]
 		);
 	}
 
@@ -78,48 +54,14 @@ class DeliveryController extends Controller
 	 */
 	public function indigoAjaxAPI(Request $request, Project $project, $branch_name){
 
-		$page_param = $request->page_path;
-		$page_id = $request->page_id;
-
-		$project_code = $project->project_code;
-		$project_path = get_project_workingtree_dir($project_code, $branch_name);
-
-		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-		chdir($project_path);
-		$data_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
-		$current = json_decode($data_json);
-		chdir($path_current_dir); // 元いたディレクトリへ戻る
-
-		$sitemap_files = \File::files($current->realpath_homedir.'sitemaps/');
-		foreach($sitemap_files as $file) {
-			if($file->getExtension() === 'xlsx') {
-				$get_files[] = $file;
-			} else {
-				$destroy_files[] = $file;
-			}
-		}
-
-
-
-
 		// parameter.phpのmk_indigo_optionsメソッド
 		$parameter = $this->mk_indigo_options( $project, $branch_name );
 
 		// load indigo\main
 		$indigo = new \indigo\ajax($parameter);
-		$indigo_std_out = $indigo->run();
+		$indigo_std_out = $indigo->get_commit_hash();
 
-
-		return view(
-			'delivery.index',
-			[
-				'project' => $project,
-				'branch_name' => $branch_name,
-				'page_param' => $page_param,
-				'indigo_std_out' => $indigo_std_out,
-			],
-			compact('current', 'get_files')
-		);
+		return $indigo_std_out;
 	}
 
 
