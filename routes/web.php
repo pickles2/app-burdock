@@ -77,14 +77,12 @@ Route::post('publish/{project}/{branch_name}/publishAjax', 'Ajax\PublishControll
 
 // --------------------------------------
 // ステージング切り替え (Plum)
-// TODO: ↓ POST と GET を同じコントロールで受け取りたい。 1行で済む書き方はない？
-Route::get('staging/{project}/{branch_name}', 'StagingController@index');
-Route::post('staging/{project}/{branch_name}', 'StagingController@index');
+Route::match(['get', 'post'], 'staging/{project}/{branch_name}', 'StagingController@index');
 
 // --------------------------------------
 // 配信 (Indigo)
-Route::get('delivery/{project}/{branch_name}', 'DeliveryController@index');
-Route::get('delivery/{project}/{branch_name}/indigoAjaxAPI', 'DeliveryController@indigoAjaxAPI');
+Route::match(['get', 'post'], 'delivery/{project}/{branch_name}', 'DeliveryController@index');
+Route::match(['get', 'post'], 'delivery/{project}/{branch_name}/indigoAjaxAPI', 'DeliveryController@indigoAjaxAPI');
 
 // --------------------------------------
 // ファイルとフォルダ (remote-finder)

@@ -42,6 +42,7 @@ class StagingController extends Controller
 		$plum = new \hk\plum\main(
 			array(
 
+				// 追加するパラメータ
 				'additional_params' => array(
 					'_token' => csrf_token(),
 				),

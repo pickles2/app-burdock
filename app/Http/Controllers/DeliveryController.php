@@ -137,6 +137,11 @@ class DeliveryController extends Controller
 			// GET
 			'_GET' => $_GET,
 
+			// 追加するパラメータ
+			'additional_params' => array(
+				'_token' => csrf_token(),
+			),
+
 			// indigo作業用ディレクトリ（絶対パス）
 			'realpath_workdir' => env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/indigo/workdir/',
 
