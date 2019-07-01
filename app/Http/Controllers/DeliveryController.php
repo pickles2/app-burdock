@@ -68,8 +68,9 @@ class DeliveryController extends Controller
 	/**
 	 * Indigoのオプションを生成する
 	 */
-	private function mk_indigo_options( $project, $branch_name ){
+	public function mk_indigo_options( $project, $branch_name ){
 		$user = Auth::user();
+		$user_id = ($user ? $user->email : null);
 
 		$fs = new \tomk79\filesystem();
 		$fs->mkdir_r(env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/indigo/workdir/');
@@ -95,7 +96,7 @@ class DeliveryController extends Controller
 			'time_zone' => 'Asia/Tokyo',
 
 			// ユーザID
-			'user_id' => $user->email,
+			'user_id' => $user_id,
 
 			// DB設定
 			'db' => array(
