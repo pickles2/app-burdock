@@ -95,7 +95,7 @@ Route::match(['get', 'post'], 'staging/{project}/{branch_name}', 'StagingControl
 
 // --------------------------------------
 // 配信 (Indigo)
-Route::get('delivery/{project}/{branch_name}', 'DeliveryController@index');
+Route::match(['get', 'post'], 'delivery/{project}/{branch_name}', 'DeliveryController@index');
 Route::match(['get', 'post'], 'delivery/{project}/{branch_name}/indigoAjaxAPI', 'DeliveryController@indigoAjaxAPI');
 
 // --------------------------------------

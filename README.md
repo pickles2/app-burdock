@@ -50,7 +50,8 @@ Application key set successfully.
 
 ```
 APP_URL=https://app.com
-PREV_URL=https://prev.app.com
+PREV_URL=prev.app.com
+BD_PLUM_STAGING_DOMAIN=staging.app.com
 ```
 
 #### データベース接続設定
