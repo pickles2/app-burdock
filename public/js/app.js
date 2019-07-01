@@ -60669,7 +60669,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				this.parse = 0;
 				this.queue_count = '';
 				this.parse_count = '0';
-				this.k = 0;
 				this.alert_array = [];
 				this.time_array = [];
 				this.publish_file = '';
@@ -60706,8 +60705,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				// パブリッシュファイル件数を計算して出力
 				if (e.queue_count !== '') {
 					_this2.queue_count = e.queue_count;
-					_this2.parse_count = String(_this2.k);
-					_this2.k++;
+					_this2.parse_count = String(e.total_files);
 				}
 				// アラートを配列で出力
 				if (e.alert_array !== '') {

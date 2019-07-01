@@ -39,6 +39,7 @@ class PublishController extends Controller
 		stream_set_blocking($pipes[2], 0);
 		// 標準出力が------------かどうかを判定する変数
 		$reserve = 0;
+		$total_files = -1;
 		while (feof($pipes[1]) === false || feof($pipes[2]) === false) {
 			$stdout = $stderr = '';
 			$read = array($pipes[1], $pipes[2]);
@@ -104,6 +105,7 @@ class PublishController extends Controller
 								$parse = strval(floor($numerator/$denominator*100));
 								// キュー数に標準出力を代入
 								$queue_count = $stdout;
+								$total_files++;
 							} else {
 								$parse = '';
 								$queue_count = '';
@@ -126,7 +128,7 @@ class PublishController extends Controller
 				}
 			}
 			// ブロードキャストイベントに標準出力、標準エラー出力、パース結果を渡す、判定変数、キュー数、アラート配列、経過時間配列、パブリッシュファイルを渡す
-			broadcast(new \App\Events\PublishEvent($stdout, $stderr, $parse, $judge, $queue_count, $alert_array, $time_array, $publish_file, $end_publish));
+			broadcast(new \App\Events\PublishEvent($stdout, $stderr, $parse, $judge, $queue_count, $alert_array, $time_array, $publish_file, $end_publish, $total_files));
 		}
 		fclose($pipes[1]);
 		fclose($pipes[2]);
