@@ -123,8 +123,7 @@ class DeliveryController extends Controller
 
 			// 同期除外ディレクトリ、またはファイル
 			'ignore' => array(
-				'.git',
-				'.htaccess'
+				'.git'
 			),
 
 			// Git情報定義
