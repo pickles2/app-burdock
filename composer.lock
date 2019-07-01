@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "772d5b07158288f6c629457de1782288",
+    "content-hash": "8f8abd4e256d9af713c3aded8f8cd75d",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -2119,16 +2119,16 @@
         },
         {
             "name": "pickles2/lib-indigo",
-            "version": "dev-develop",
+            "version": "0.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pickles2/lib-indigo.git",
-                "reference": "d461022573838e1b92e8bf52dab4cec70bd574ef"
+                "reference": "2bd02e024576285c38b4940682dbae6388508ab2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pickles2/lib-indigo/zipball/d461022573838e1b92e8bf52dab4cec70bd574ef",
-                "reference": "d461022573838e1b92e8bf52dab4cec70bd574ef",
+                "url": "https://api.github.com/repos/pickles2/lib-indigo/zipball/2bd02e024576285c38b4940682dbae6388508ab2",
+                "reference": "2bd02e024576285c38b4940682dbae6388508ab2",
                 "shasum": ""
             },
             "require": {
@@ -2176,7 +2176,7 @@
             "keywords": [
                 "indigo"
             ],
-            "time": "2019-07-01T06:12:07+00:00"
+            "time": "2019-07-01T08:37:59+00:00"
         },
         {
             "name": "pickles2/lib-plum",
@@ -6340,9 +6340,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "pickles2/lib-indigo": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
