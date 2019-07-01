@@ -35,12 +35,40 @@
 <script src="/common/lib-indigo/res/scripts/common.js"></script>
 
 <script>
-	$(function() {
+	// Initialize Indigo
+	window.addEventListener('load', function(){
 		var dateFormat = 'yy-mm-dd';
+		
 		$.datepicker.setDefaults($.datepicker.regional["ja"]);
+		
 		$("#datepicker").datepicker({
 			dateFormat: dateFormat
 		});
+
+		var indigo = new window.Indigo({
+			ajaxBridge: function(data, callback){
+				var rtn = '';
+				var error = false;
+				data._token = '{{ csrf_token() }}';
+				$.ajax ({
+					type: 'POST',
+					url: '/delivery/{{ $project->project_code }}/{{ $branch_name }}/indigoAjaxAPI',
+					data: data,
+					dataType: 'json',
+					success: function(data, dataType) {
+						rtn = data;
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.error(jqXHR, textStatus, errorThrown);
+						error = textStatus;
+					},
+					complete: function(){
+						callback(rtn, error);
+					}
+				});
+			}
+		});
+		indigo.init();
 	});
 </script>
 @endsection

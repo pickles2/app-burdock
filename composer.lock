@@ -2123,12 +2123,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pickles2/lib-indigo.git",
-                "reference": "e271ffc6f425262341d6fe49fec26d7b41c6319a"
+                "reference": "2e4fef2807bf202a15349d2310426bec859eef53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pickles2/lib-indigo/zipball/e271ffc6f425262341d6fe49fec26d7b41c6319a",
-                "reference": "e271ffc6f425262341d6fe49fec26d7b41c6319a",
+                "url": "https://api.github.com/repos/pickles2/lib-indigo/zipball/2e4fef2807bf202a15349d2310426bec859eef53",
+                "reference": "2e4fef2807bf202a15349d2310426bec859eef53",
                 "shasum": ""
             },
             "require": {
@@ -2176,7 +2176,7 @@
             "keywords": [
                 "indigo"
             ],
-            "time": "2019-06-30T21:00:19+00:00"
+            "time": "2019-06-30T23:30:02+00:00"
         },
         {
             "name": "pickles2/lib-plum",

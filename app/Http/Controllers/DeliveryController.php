@@ -59,7 +59,7 @@ class DeliveryController extends Controller
 
 		// load indigo\main
 		$indigo = new \indigo\ajax($parameter);
-		$indigo_std_out = $indigo->get_commit_hash();
+		$indigo_std_out = $indigo->ajax_run();
 
 		return $indigo_std_out;
 	}
