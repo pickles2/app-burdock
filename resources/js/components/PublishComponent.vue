@@ -136,7 +136,6 @@ export default {
 				this.parse = 0;
 				this.queue_count = '';
 				this.parse_count = '0';
-				this.k = 0;
 				this.alert_array = [];
 				this.time_array = [];
 				this.publish_file = '';
@@ -170,8 +169,7 @@ export default {
 				// パブリッシュファイル件数を計算して出力
 				if(e.queue_count !== '') {
 					this.queue_count = e.queue_count;
-					this.parse_count = String(this.k);
-					this.k++;
+					this.parse_count = String(e.total_files);
 				}
 				// アラートを配列で出力
 				if(e.alert_array !== '') {
