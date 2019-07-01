@@ -13,10 +13,15 @@
 @endsection
 
 @section('stylesheet')
+<!-- plum -->
 <link rel="stylesheet" href="/common/lib-plum/res/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/common/lib-plum/res/styles/common.css">
 @endsection
 @section('script')
+<!-- jquery -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<!-- plum -->
 <script src="/common/lib-plum/res/bootstrap/js/bootstrap.min.js"></script>
 <script src="/common/lib-plum/res/scripts/common.js"></script>
 @endsection
