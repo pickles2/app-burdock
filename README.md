@@ -118,6 +118,41 @@ $ php artisan serve
 ブラウザではじめの画面が表示されたら完了です。
 
 
+## Redis で WebSocket 環境をセットアップする
+
+WebSocket環境を利用すると、サーバーとの間で非同期に対話する機能を追加できます。 特にパブリッシュなどの時間がかかる処理の利便性が向上します。
+
+このセットアップはオプションです。
+
+Redis と Laravel Echo Server がインストールされている必要があります。
+
+```
+$ brew install redis
+$ npm install -g laravel-echo-server
+```
+
+Laravel Echo Server をセットアップします。
+次のコマンドで質問に答えていくと、 `laravel-echo-server.json` が作成されます。
+
+```
+$ laravel-echo-server init
+```
+
+`.env` ファイルを開き、 `BROADCAST_DRIVER` を `redis` に設定します。
+
+```
+BROADCAST_DRIVER=redis
+```
+
+
+次のコマンドで Redis と Laravel Echo Server を起動します。
+
+```
+$ redis-server
+$ laravel-echo-server start
+```
+
+
 ## 更新履歴 - Change log
 
 ### Burdock v0.0.1 (リリース日未定)
