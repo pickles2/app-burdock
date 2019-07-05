@@ -73,7 +73,9 @@ Route::post('pages/{project}/{branch_name}/searchAjax', 'Ajax\PageController@sea
 // パブリッシュ
 Route::get('publish/{project}/{branch_name}', 'PublishController@index');
 Route::get('publish/{project}/{branch_name}/publish_run', 'PublishController@publish');
+Route::get('publish/{project}/{branch_name}/deleteApplock', 'PublishController@deleteApplock');
 Route::post('publish/{project}/{branch_name}/publishAjax', 'Ajax\PublishController@publishAjax');
+Route::post('publish/{project}/{branch_name}/readCsvAjax', 'Ajax\PublishController@readCsvAjax');
 
 // --------------------------------------
 // Git

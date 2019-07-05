@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorePublish;
 use App\Http\Controllers\Controller;
 use App\Project;
+use Carbon\Carbon;
 
 class PublishController extends Controller
 {
@@ -20,6 +21,63 @@ class PublishController extends Controller
         $this->middleware('auth');
         $this->middleware('verified');
     }
+
+	public function readCsvAjax(Request $request, Project $project, $branch_name)
+	{
+		//
+		$fs = new \tomk79\filesystem;
+		$project_name = $project->project_code;
+		$project_path = get_project_workingtree_dir($project_name, $branch_name);
+		$publish_log_file = $project_path.'/px-files/_sys/ram/publish/publish_log.csv';
+		$alert_log_file = $project_path.'/px-files/_sys/ram/publish/alert_log.csv';
+		$applock_file = $project_path.'/px-files/_sys/ram/publish/applock.txt';
+
+		if(\File::exists($publish_log_file)) {
+			$exists_publish_log = true;
+			$publish_log = $fs->read_csv($publish_log_file);
+			$publish_files = count($publish_log) - 1;
+		} else {
+			$exists_publish_log = false;
+			$publish_log = false;
+			$publish_files = 0;
+		}
+
+		if(\File::exists($alert_log_file)) {
+			$exists_alert_log = true;
+			$alert_log = $fs->read_csv($alert_log_file);
+			$alert_files = count($alert_log) - 1;
+		} else {
+			$exists_alert_log = false;
+			$alert_log = false;
+			$alert_files = 0;
+		}
+
+		if(\File::exists($applock_file)) {
+			$exists_applock = true;
+		} else {
+			$exists_applock = false;
+		}
+
+		if($publish_log) {
+			$dt1 = new Carbon($publish_log[array_key_last($publish_log)][0]);
+			$dt2 = new Carbon($publish_log[1][0]);
+			$diff_seconds = $dt1->diffInSeconds($dt2);
+		} else {
+			$diff_seconds = 0;
+		}
+
+		$data = array(
+			"publish_log" => $publish_log,
+			"alert_log" => $alert_log,
+			"publish_files" => $publish_files,
+			"alert_files" => $alert_files,
+			'diff_seconds' => $diff_seconds,
+			'exists_publish_log' => $exists_publish_log,
+			'exists_alert_log' => $exists_alert_log,
+			'exists_applock' => $exists_applock
+        );
+        return $data;
+	}
 
     public function publishAjax(Request $request, Project $project, $branch_name)
     {
@@ -39,7 +97,6 @@ class PublishController extends Controller
 		stream_set_blocking($pipes[2], 0);
 		// 標準出力が------------かどうかを判定する変数
 		$reserve = 0;
-		$total_files = -1;
 		while (feof($pipes[1]) === false || feof($pipes[2]) === false) {
 			$stdout = $stderr = '';
 			$read = array($pipes[1], $pipes[2]);
@@ -105,7 +162,6 @@ class PublishController extends Controller
 								$parse = strval(floor($numerator/$denominator*100));
 								// キュー数に標準出力を代入
 								$queue_count = $stdout;
-								$total_files++;
 							} else {
 								$parse = '';
 								$queue_count = '';
@@ -128,7 +184,7 @@ class PublishController extends Controller
 				}
 			}
 			// ブロードキャストイベントに標準出力、標準エラー出力、パース結果を渡す、判定変数、キュー数、アラート配列、経過時間配列、パブリッシュファイルを渡す
-			broadcast(new \App\Events\PublishEvent($stdout, $stderr, $parse, $judge, $queue_count, $alert_array, $time_array, $publish_file, $end_publish, $total_files));
+			broadcast(new \App\Events\PublishEvent($parse, $judge, $queue_count, $publish_file, $end_publish));
 		}
 		fclose($pipes[1]);
 		fclose($pipes[2]);
