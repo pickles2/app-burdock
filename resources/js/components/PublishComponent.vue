@@ -129,7 +129,9 @@ export default {
 			// パブリッシュリカバリ画面の表示・非表示
 			isRecoveryOnPublish: false,
 			// アップロックを削除するためのリンクパス
-			deleteApplock: '/publish/'+this.projectCode+'/'+this.branchName+'/deleteApplock'
+			deleteApplock: '/publish/'+this.projectCode+'/'+this.branchName+'/deleteApplock',
+			// existsAlertLogをバインディング
+			exists_alert_log: this.existsAlertLog
 		}
 	},
 	// レンダリング前にpublish_log.csvの有無によって処理分け
@@ -195,6 +197,9 @@ export default {
 						this.alert = res.data.alert_files;
 						// パブリッシュにかかった時間を取得
 						this.time = res.data.diff_seconds;
+						// alert_log.csvの有無
+						this.exists_alert_log = res.data.exists_alert_log;
+						console.log(res.data.exists_alert_log);
 						this.publish_status = 3;
 					})
 				}
@@ -239,8 +244,8 @@ export default {
 		// アラート情報の表示・非表示
 		classAlertLog: function () {
 			return {
-				show: this.existsAlertLog === '1',
-				hidden: this.existsAlertLog === ''
+				show: this.exists_alert_log === '1' || this.exists_alert_log === true,
+				hidden: this.exists_alert_log === '' || this.exists_alert_log === false
 			}
 		},
 		// パブリッシュ中のWAIT画面の表示・非表示
