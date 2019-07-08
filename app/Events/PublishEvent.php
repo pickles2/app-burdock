@@ -21,12 +21,14 @@ class PublishEvent implements ShouldBroadcast
 	public $queue_count;
 	public $publish_file;
 	public $end_publish;
+	public $process;
+	public $pipes;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($parse, $judge, $queue_count, $publish_file, $end_publish)
+    public function __construct($parse, $judge, $queue_count, $publish_file, $end_publish, $process, $pipes)
     {
         //
 		$this->parse = $parse;
@@ -34,6 +36,8 @@ class PublishEvent implements ShouldBroadcast
 		$this->queue_count = $queue_count;
 		$this->publish_file = $publish_file;
 		$this->end_publish = $end_publish;
+		$this->process = $process;
+		$this->pipes = $pipes;
     }
 
     /**
@@ -53,7 +57,9 @@ class PublishEvent implements ShouldBroadcast
 			'judge' => $this->judge,
 			'queue_count' => $this->queue_count,
 			'publish_file' => $this->publish_file,
-			'end_publish' => $this->end_publish
+			'end_publish' => $this->end_publish,
+			'process' => $this->process,
+			'pipes' => $this->pipes
 		];
 	}
 }

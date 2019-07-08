@@ -183,8 +183,9 @@ class PublishController extends Controller
 					}
 				}
 			}
+			$process = proc_get_status($proc);
 			// ブロードキャストイベントに標準出力、標準エラー出力、パース結果を渡す、判定変数、キュー数、アラート配列、経過時間配列、パブリッシュファイルを渡す
-			broadcast(new \App\Events\PublishEvent($parse, $judge, $queue_count, $publish_file, $end_publish));
+			broadcast(new \App\Events\PublishEvent($parse, $judge, $queue_count, $publish_file, $end_publish, $process, $pipes));
 		}
 		fclose($pipes[1]);
 		fclose($pipes[2]);
@@ -198,4 +199,32 @@ class PublishController extends Controller
         );
         return $data;
     }
+
+	public function publishCancelAjax(Request $request, Project $project, $branch_name)
+    {
+		//
+		$project_code = $project->project_code;
+		$project_path = get_project_workingtree_dir($project_code, $branch_name);
+		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
+
+		chdir($project_path);
+		// パブリッシュのプロセスを強制終了
+		$kill_info = exec('kill -USR1 '.$request->process);
+		chdir($path_current_dir); // 元いたディレクトリへ戻る
+
+		// applock.txtを削除
+		$applock_file = $project_path.'/px-files/_sys/ram/publish/applock.txt';
+		\File::delete($applock_file);
+
+		// 削除の結果をテキストで返す
+		if(\File::exists($applock_file)) {
+			$message = 'ロックファイルを削除できませんでした。';
+		} else {
+			$message = 'ロックファイルを削除しました。';
+		}
+        $data = array(
+			"message" => $message,
+        );
+        return $data;
+	}
 }

@@ -60661,7 +60661,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			// アップロックを削除するためのリンクパス
 			deleteApplock: '/publish/' + this.projectCode + '/' + this.branchName + '/deleteApplock',
 			// existsAlertLogをバインディング
-			exists_alert_log: this.existsAlertLog
+			exists_alert_log: this.existsAlertLog,
+			process: []
 		};
 	},
 
@@ -60712,6 +60713,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			// Ajax\PublishController@publishAjaxの返り値
 			window.Echo.channel('publish-event').listen('PublishEvent', function (e) {
+				_this2.process = e.process.pid;
 				_this2.publish_status = 2;
 				// 標準出力が数値または数値+改行コードだった場合parseに代入
 				if (e.judge === 1) {
@@ -60735,7 +60737,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						_this2.time = res.data.diff_seconds;
 						// alert_log.csvの有無
 						_this2.exists_alert_log = res.data.exists_alert_log;
-						console.log(res.data.exists_alert_log);
 						_this2.publish_status = 3;
 					});
 				}
@@ -60747,6 +60748,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			} else {
 				this.isRecoveryOnPublish = false;
 			}
+		},
+		publishCancel: function publishCancel() {
+			var _this3 = this;
+
+			var data = {
+				'process': this.process
+				// AjaxでAjax\PublishController@publishAjaxにpost処理
+			};axios.post('/publish/' + this.projectCode + '/' + this.branchName + '/publishCancelAjax', data).then(function (res) {
+				// Ajax\PublishController@readCsvAjaxにpost処理
+				axios.post('/publish/' + _this3.projectCode + '/' + _this3.branchName + '/readCsvAjax').then(function (res) {
+					_this3.total_files = res.data.publish_files;
+					// アラート件数を取得
+					_this3.alert = res.data.alert_files;
+					// パブリッシュにかかった時間を取得
+					_this3.time = res.data.diff_seconds;
+					// alert_log.csvの有無
+					_this3.exists_alert_log = res.data.exists_alert_log;
+					_this3.publish_status = 3;
+				});
+			});
 		},
 		prepare: function prepare() {
 			alert('準備中の機能です。');
@@ -60884,7 +60905,31 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _vm._m(1)
+          _c("div", { staticClass: "cont_buttons" }, [
+            _c(
+              "div",
+              {
+                staticClass: "btn-group btn-group-justified",
+                attrs: { role: "group" }
+              },
+              [
+                _c(
+                  "div",
+                  { staticClass: "btn-group", attrs: { role: "group" } },
+                  [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "px2-btn px2-btn--block",
+                        on: { click: _vm.publishCancel }
+                      },
+                      [_vm._v("キャンセル")]
+                    )
+                  ]
+                )
+              ]
+            )
+          ])
         ]
       ),
       _vm._v(" "),
@@ -61018,7 +61063,7 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _vm._m(2),
+              _vm._m(1),
               _vm._v(" "),
               _c("p", [
                 _vm._v(
@@ -61044,7 +61089,7 @@ var render = function() {
                 _vm._v("。")
               ]),
               _vm._v(" "),
-              _vm._m(3)
+              _vm._m(2)
             ]
           )
         ]
@@ -61087,27 +61132,6 @@ var staticRenderFns = [
         ])
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "cont_buttons" }, [
-      _c(
-        "div",
-        {
-          staticClass: "btn-group btn-group-justified",
-          attrs: { role: "group" }
-        },
-        [
-          _c("div", { staticClass: "btn-group", attrs: { role: "group" } }, [
-            _c("button", { staticClass: "px2-btn px2-btn--block" }, [
-              _vm._v("キャンセル")
-            ])
-          ])
-        ]
-      )
-    ])
   },
   function() {
     var _vm = this

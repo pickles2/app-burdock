@@ -76,6 +76,7 @@ Route::get('publish/{project}/{branch_name}/publish_run', 'PublishController@pub
 Route::get('publish/{project}/{branch_name}/deleteApplock', 'PublishController@deleteApplock');
 Route::post('publish/{project}/{branch_name}/publishAjax', 'Ajax\PublishController@publishAjax');
 Route::post('publish/{project}/{branch_name}/readCsvAjax', 'Ajax\PublishController@readCsvAjax');
+Route::post('publish/{project}/{branch_name}/publishCancelAjax', 'Ajax\PublishController@publishCancelAjax');
 
 // --------------------------------------
 // Git
