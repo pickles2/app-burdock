@@ -37,7 +37,7 @@
 			<div class="cont_buttons">
 				<div class="btn-group btn-group-justified" role="group">
 					<div class="btn-group" role="group">
-						<button class="px2-btn px2-btn--block">キャンセル</button>
+						<button class="px2-btn px2-btn--block" v-on:click="publishCancel">キャンセル</button>
 					</div>
 				</div>
 			</div>
@@ -131,7 +131,8 @@ export default {
 			// アップロックを削除するためのリンクパス
 			deleteApplock: '/publish/'+this.projectCode+'/'+this.branchName+'/deleteApplock',
 			// existsAlertLogをバインディング
-			exists_alert_log: this.existsAlertLog
+			exists_alert_log: this.existsAlertLog,
+			process: []
 		}
 	},
 	// レンダリング前にpublish_log.csvの有無によって処理分け
@@ -176,6 +177,7 @@ export default {
 		connectChannel() {
 			// Ajax\PublishController@publishAjaxの返り値
 			window.Echo.channel('publish-event').listen('PublishEvent', (e) => {
+				this.process = e.process.pid;
 				this.publish_status = 2;
 				// 標準出力が数値または数値+改行コードだった場合parseに代入
 				if(e.judge === 1) {
@@ -199,7 +201,6 @@ export default {
 						this.time = res.data.diff_seconds;
 						// alert_log.csvの有無
 						this.exists_alert_log = res.data.exists_alert_log;
-						console.log(res.data.exists_alert_log);
 						this.publish_status = 3;
 					})
 				}
@@ -212,6 +213,26 @@ export default {
 			} else {
 				this.isRecoveryOnPublish = false;
 			}
+		},
+
+		publishCancel() {
+			var data = {
+                'process': this.process
+            }
+			// AjaxでAjax\PublishController@publishAjaxにpost処理
+			axios.post('/publish/'+this.projectCode+'/'+this.branchName+'/publishCancelAjax',data).then(res => {
+				// Ajax\PublishController@readCsvAjaxにpost処理
+				axios.post('/publish/'+this.projectCode+'/'+this.branchName+'/readCsvAjax').then(res => {
+					this.total_files = res.data.publish_files;
+					// アラート件数を取得
+					this.alert = res.data.alert_files;
+					// パブリッシュにかかった時間を取得
+					this.time = res.data.diff_seconds;
+					// alert_log.csvの有無
+					this.exists_alert_log = res.data.exists_alert_log;
+					this.publish_status = 3;
+				})
+			})
 		},
 
 		prepare() {

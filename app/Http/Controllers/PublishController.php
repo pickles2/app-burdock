@@ -88,8 +88,8 @@ class PublishController extends Controller
 	public function deleteApplock(Request $request, Project $project, $branch_name)
 	{
 		//
-		$project_name = $project->project_code;
-		$project_path = get_project_workingtree_dir($project_name, $branch_name);
+		$project_code = $project->project_code;
+		$project_path = get_project_workingtree_dir($project_code, $branch_name);
 		$applock_file = $project_path.'/px-files/_sys/ram/publish/applock.txt';
 		\File::delete($applock_file);
 
