@@ -8,7 +8,7 @@
 </button>
 
 {{-- モーダルウィンドウ --}}
-<div class="modal fade" id="{{ $id_attr }}" tabindex="-1" role="dialog" aria-labelledby="{{ $id_attr }}-label" aria-hidden="true">
+<div class="modal fade" id="{{ $id_attr }}" role="dialog" aria-labelledby="{{ $id_attr }}-label" aria-hidden="true">
     <div style="position: absolute; left: 0px; top: 0px; padding-top: 4em; overflow: auto; width: 100%; height: 100%;">
 	    <div class="dialog_box" style="width: 80%; margin: 3em auto;">
 	        <h1>サイトマップのアップロード</h1>
