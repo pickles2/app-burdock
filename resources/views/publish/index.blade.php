@@ -2,7 +2,9 @@
 	$title = __('Publish');
 @endphp
 @extends('layouts.px2_project')
-
+@section('stylesheet')
+	<link rel="stylesheet" href="{{ asset('/cont/publish/style.css') }}" type="text/css">
+@endsection
 @section('content')
 <div class="container">
 	<h1>パブリッシュ</h1>
