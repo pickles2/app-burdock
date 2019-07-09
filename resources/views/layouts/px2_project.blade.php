@@ -14,7 +14,6 @@
 	<!-- jQuery -->
 	<script src="/common/scripts/jquery-2.2.4.min.js" type="text/javascript"></script>
 	<!-- Bootstrap -->
-	<link rel="stylesheet" href="/common/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/common/bootstrap/css/bootstrap.css">
 	<script src="/common/bootstrap/js/bootstrap.min.js"></script>
 	<!-- normalize & FESS -->
@@ -142,7 +141,6 @@
 		</footer>
 	</div>
 	{{-- JavaScript --}}
-	<script src="{{ asset('/js/app.js') }}"></script>
 	{{-- <script src="{{ asset('js/custom.js') }}"></script> --}}
 	@guest
 		<script>
