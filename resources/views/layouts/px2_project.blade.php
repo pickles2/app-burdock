@@ -14,7 +14,6 @@
 	<!-- jQuery -->
 	<script src="/common/scripts/jquery-2.2.4.min.js" type="text/javascript"></script>
 	<!-- Bootstrap -->
-	<link rel="stylesheet" href="/common/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/common/bootstrap/css/bootstrap.css">
 	<script src="/common/bootstrap/js/bootstrap.min.js"></script>
 	<!-- normalize & FESS -->
@@ -111,6 +110,8 @@
 						@guest
 						@else
 							@if(! Request::is('*profile*') && ! Request::is('/'))
+								<li><a href="{{ url('composer/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="composer">Composer</a></li>
+								<li><a href="{{ url('git/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="git">Git</a></li>
 								<li><a href="{{ url('staging/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="staging">ステージング管理</a></li>
 								<li><a href="{{ url('delivery/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="delivery">配信管理</a></li>
 								<li><a href="{{ url('files-and-folders/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="files-and-folders">ファイルとフォルダ</a></li>
@@ -127,7 +128,7 @@
 
 		{{-- フラッシュ・メッセージ --}}
 		@if (session('my_status'))
-			<div class="container mt-2">
+			<div id="session-my-status" class="container mt-2">
 				<div class="alert alert-success">
 					{{ session('my_status') }}
 				</div>
@@ -140,7 +141,6 @@
 		</footer>
 	</div>
 	{{-- JavaScript --}}
-	<script src="{{ asset('/js/app.js') }}"></script>
 	{{-- <script src="{{ asset('js/custom.js') }}"></script> --}}
 	@guest
 		<script>

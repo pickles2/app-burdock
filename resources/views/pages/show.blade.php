@@ -43,7 +43,7 @@ foreach($px2ce_client_resources['js'] as $value) {
 		var branch_name = <?php echo json_encode($branch_name); ?>;
 		var page_param = <?php echo json_encode($page_param); ?>;
 		// .envよりプレビューサーバーのURLを取得
-		var prev_url = '{{ 'https://'.$project->project_code.'.'.env('PREV_URL') }}';
+		var prev_url = '{{ 'https://'.$branch_name.'.'.$project->project_code.'.'.env('PREV_URL') }}';
 
 		pickles2ContentsEditor.init(
 			{

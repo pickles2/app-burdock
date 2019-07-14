@@ -27,7 +27,7 @@
 						<h2>{{ $file->getFilename() }}</h2>
 						<ul class="cont_filelist_sitemap__ext-list">
 							<li>
-								<lavel>Download：</lavel>
+								<label>Download：</label>
 							</li>
 							<li>
 								<form method="POST" action="{{ url('/sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/download?file_name='.$file->getFilename()) }}" enctype="multipart/form-data">

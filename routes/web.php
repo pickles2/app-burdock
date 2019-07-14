@@ -78,18 +78,33 @@ Route::post('pages/{project}/{branch_name}/searchAjax', 'Ajax\PageController@sea
 // パブリッシュ
 Route::get('publish/{project}/{branch_name}', 'PublishController@index');
 Route::get('publish/{project}/{branch_name}/publish_run', 'PublishController@publish');
+Route::get('publish/{project}/{branch_name}/deleteApplock', 'PublishController@deleteApplock');
 Route::post('publish/{project}/{branch_name}/publishAjax', 'Ajax\PublishController@publishAjax');
+Route::post('publish/{project}/{branch_name}/readCsvAjax', 'Ajax\PublishController@readCsvAjax');
+Route::post('publish/{project}/{branch_name}/publishCancelAjax', 'Ajax\PublishController@publishCancelAjax');
+
+// --------------------------------------
+// Git
+Route::get('git/{project}/{branch_name}', 'GitController@index');
+Route::get('git/{project}/{branch_name}/git-status', 'GitController@gitStatus');
+Route::post('git/{project}/{branch_name}/git-pull', 'GitController@gitPull');
+Route::post('git/{project}/{branch_name}/git-commit', 'GitController@gitCommit');
+Route::post('git/{project}/{branch_name}/git-push', 'GitController@gitPush');
+
+// --------------------------------------
+// Composer
+Route::get('composer/{project}/{branch_name}', 'ComposerController@index');
+Route::post('composer/{project}/{branch_name}/composer-install', 'ComposerController@install');
+Route::post('composer/{project}/{branch_name}/composer-update', 'ComposerController@update');
 
 // --------------------------------------
 // ステージング切り替え (Plum)
-// TODO: ↓ POST と GET を同じコントロールで受け取りたい。 1行で済む書き方はない？
-Route::get('staging/{project}/{branch_name}', 'StagingController@index');
-Route::post('staging/{project}/{branch_name}', 'StagingController@index');
+Route::match(['get', 'post'], 'staging/{project}/{branch_name}', 'StagingController@index');
 
 // --------------------------------------
 // 配信 (Indigo)
-Route::get('delivery/{project}/{branch_name}', 'DeliveryController@index');
-Route::get('delivery/{project}/{branch_name}/indigoAjaxAPI', 'DeliveryController@indigoAjaxAPI');
+Route::match(['get', 'post'], 'delivery/{project}/{branch_name}', 'DeliveryController@index');
+Route::match(['get', 'post'], 'delivery/{project}/{branch_name}/indigoAjaxAPI', 'DeliveryController@indigoAjaxAPI');
 
 // --------------------------------------
 // ファイルとフォルダ (remote-finder)

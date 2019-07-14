@@ -15,5 +15,6 @@ yarn-error.log
 .env
 .phpunit.result.cache
 /bd_data
+/laravel-echo-server.json
 /laravel-echo-server.lock
 /dump.rdb

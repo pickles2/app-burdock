@@ -1,6 +1,6 @@
 <template>
 	<div class="contents" style="height: 70vh;">
-		<div class="cont_scene" id="cont_before_publish" v-bind:class="[isPublishButton === true ? 'show' : 'hidden']">
+		<div class="cont_scene" id="cont_before_publish" v-bind:class="classPublishButton">
 			<div class="unit center">
 				<p>パブリッシュは実行されていません。</p>
 				<p>次のボタンを押して、パブリッシュを実行します。</p>
@@ -15,13 +15,13 @@
 				<p><button class="px2-btn px2-btn--primary">パブリッシュする</button></p>
 			</div>
 		</div>
-		<div class="cont_scene" id="cont_before_publish-progress" v-bind:class="[isPublish === true ? 'show' : 'hidden']">
+		<div class="cont_scene" id="cont_before_publish-progress" v-bind:class="classPublishProgress">
 			<div class="cont_canvas">
 				<div class="unit cont_progress">
 					<div class="center">
 						<p>パブリッシュしています。</p>
 						<p>そのまましばらくお待ちください...</p>
-						<div v-if="queue_count !== ''">
+						<div>
 							<div class="cont_progress-phase" style="font-weight: bold;">Publishing...</div>
 							<div class="cont_progress-row">{{ publish_file }}</div>
 							<div class="cont_progress-currentTask">{{ queue_count }}</div>
@@ -37,21 +37,21 @@
 			<div class="cont_buttons">
 				<div class="btn-group btn-group-justified" role="group">
 					<div class="btn-group" role="group">
-						<button class="px2-btn px2-btn--block">キャンセル</button>
+						<button class="px2-btn px2-btn--block" v-on:click="publishCancel">キャンセル</button>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="cont_scene" id="cont_after_publish" v-bind:class="[isPublishResult === true ? 'show' : 'hidden']">
+		<div class="cont_scene" id="cont_after_publish" v-bind:class="classPublishLog">
 			<div class="cont_canvas">
-				<div class="cont_results" v-bind:class="[isPublishError === true ? 'cont_results-error' : '']">
+				<div class="cont_results">
 					<div class="cont_results-messageBox">
-						<div class="cont_results-total_file_count">total: <strong>{{ parse_count }}</strong> files.</div>
-						<div v-if="alert_array[7] !== ''" class="cont_results-errorMessage">{{ alert_array[7] }}件のエラーが検出されています。</div>
-						<div class="cont_results-spentTime">time: <span>{{ time_array[2] }} sec</span></div>
-						<p><button class="px2-btn px2-btn--primary px2-btn--lg">パブリッシュされたファイルを確認する</button></p>
+						<div class="cont_results-total_file_count">total: <strong>{{ total_files }}</strong> files.</div>
+						<div class="cont_results-errorMessage" v-bind:class="classAlertLog">{{ alert }}件のエラーが検出されています。</div>
+						<div class="cont_results-spentTime">time: <span>{{ time }} sec</span></div>
+						<p><button class="px2-btn px2-btn--primary px2-btn--lg" v-on:click="prepare">パブリッシュされたファイルを確認する</button></p>
 						<ul class="horizontal">
-							<li class="horizontal-li"><a href="#" class="px2-link px2-link--burette">パブリッシュレポート</a></li>
+							<li class="horizontal-li"><a href="#" class="px2-link px2-link--burette" v-on:click="prepare">パブリッシュレポート</a></li>
 						</ul>
 					</div>
 				</div>
@@ -64,29 +64,24 @@
 				</div>
 			</div>
 		</div>
-		<div class="cont_scene hidden" id="cont_on_publish">
+		<div class="cont_scene" id="cont_on_publish" v-bind:class="classPublishWait">
 			<p>ただいまパブリッシュプロセスが進行しています。</p>
 			<p>しばらくお待ち下さい...。</p>
-			<p><a href="#" class="glyphicon glyphicon-menu-right">しばらく待ってもこの状態から復旧しない場合は...詳細</a></p>
-			<div class="cont_recovery_on_publish hidden">
-
+			<p><a href="#" class="glyphicon glyphicon-menu-right" v-on:click="recoveryOnPublish">しばらく待ってもこの状態から復旧しない場合は...詳細</a></p>
+			<div class="cont_recovery_on_publish" v-bind:class="[isRecoveryOnPublish === true ? 'show' : 'hidden']">
 				<h2>これはどういう状態ですか？</h2>
 				<p>Pickles 2 のパブリッシュプロセスは、二重起動を避けるために、次のパスにロックファイルを生成します。</p>
 				<ul>
 					<li><code>./px-files/_sys/ram/publish/applock.txt</code></li>
 				</ul>
-
 				<p>このファイルは、パブリッシュ開始時に生成され、パブリッシュ完了時に削除されます。</p>
 				<p>パブリッシュ中であれば、このファイルが存在することは健康な状態です。しかし、パブリッシュの途中でプロセスが異常終了した場合(途中でアプリを落とす、なども含む)、このファイルが残ってしまうため、次のパブリッシュが実行できない状態になります。</p>
-
 				<h2>復旧方法</h2>
-				<p>ロックファイル <code>./px-files/_sys/ram/publish/applock.txt</code> を手動で<a href="#">削除します</a>。</p>
-
+				<p>ロックファイル <code>./px-files/_sys/ram/publish/applock.txt</code> を手動で<a v-bind:href="deleteApplock">削除します</a>。</p>
 				<ul class="notes">
 					<li class="notes-li">※ただし、バックグラウンドでプロセスが進行中ではないか、事前に確認してください。</li>
 					<li class="notes-li">※<code>applock.txt</code> をテキストファイルで開くと、このファイルを生成したプロセスの <strong>プロセスID</strong> と <strong>最終アクセス日時</strong> が記載されています。この情報が手がかりになるはずです。</li>
 				</ul>
-
 			</div>
 		</div>
 	</div>
@@ -98,54 +93,81 @@ export default {
 	props: [
 		"projectCode",
 		"branchName",
-		"logExist"
+		// publish_log.csvの有無
+		"existsPublishLog",
+		// alert_log.csvの有無
+		"existsAlertLog",
+		// applock.txtの有無
+		"existsApplock",
+		// publish_log.csvの行数（先頭行を除く）
+		"publishFiles",
+		// alert_log.cscの行数（先頭行を除く）
+		"alertFiles",
+		// publish_log.csvの最終行と1行目の時間の差分
+		"diffSeconds",
+		"sessionMyStatus"
 	],
 	// メソッドで使う&テンプレート内で使う変数を定義
 	data () {
     	return {
+			// Ajax\PublishController@publishAjaxからの返り値
 			info: '',
-			message: '',
-			messages: '',
-			error: '',
-			errors: '',
+			// PublishEventからの返り値（プログレスバーの％）
 			parse: 0,
+			// PublishEventからの返り値（パブリシュファイル件数）
 			queue_count: '',
-			parse_count: '',
-			k: 0,
-			alert_array: [],
-			time_array: [],
+			// PublishEventからの返り値（パブリッシュファイル情報）
 			publish_file: '',
-			isPublishButton: true,
-			isPublish: false,
-			isPublishResult: false,
-			isPublishError: false,
+			// パブリッシュの状態（1:未パブリッシュ/2:パブリッシュ中/3:パブリッシュ後/999:パブリッシュ中のリロード）
+			publish_status: '',
+			// publishFilesをバインディング
+			total_files: this.publishFiles,
+			// alertFilesをバインディング
+			alert: this.alertFiles,
+			// diffSecondsをバインディング
+			time: this.diffSeconds,
+			// パブリッシュリカバリ画面の表示・非表示
+			isRecoveryOnPublish: false,
+			// アップロックを削除するためのリンクパス
+			deleteApplock: '/publish/'+this.projectCode+'/'+this.branchName+'/deleteApplock',
+			// existsAlertLogをバインディング
+			exists_alert_log: this.existsAlertLog,
+			process: []
 		}
 	},
+	// レンダリング前にpublish_log.csvの有無によって処理分け
+	created () {
+		if(this.existsPublishLog === '') {
+			this.publish_status = 1;
+		} else if(this.existsPublishLog === '1' && this.existsApplock === '1') {
+			this.publish_status = 999;
+		} else {
+			this.publish_status = 3;
+		}
+		// フラッシュメッセージが出ていれば2000ミリ秒後に削除
+		if(this.sessionMyStatus !== '') {
+			setTimeout(function() {
+				var flashMessage = document.getElementById("session-my-status").remove();
+			}, 2000);
+		}
+	},
+
 	mounted() {
 		this.connectChannel();
  	},
 	// (読み込み時に)実行するメソッド
     methods: {
 		publish(reset) {
-			console.log(this.logExist);
+			this.publish_status = 999;
 			if(reset === 1) {
-				this.message = '';
-				this.messages = '';
-				this.error = '';
-				this.errors = '';
 				this.parse = 0;
 				this.queue_count = '';
-				this.parse_count = '0';
-				this.k = 0;
-				this.alert_array = [];
-				this.time_array = [];
 				this.publish_file = '';
-				this.isPublishButton = false;
-				this.isPublish = false;
-				this.isPublishResult = false;
-				this.isPublishError = false;
+				this.alert = '';
+				this.time = '';
 			}
 			var data = 'publish';
+			// AjaxでAjax\PublishController@publishAjaxにpost処理
 			axios.post('/publish/'+this.projectCode+'/'+this.branchName+'/publishAjax',data).then(res => {
 				this.info = res.data.info;
 			})
@@ -153,16 +175,10 @@ export default {
 
 		// 購読するチャンネルの設定
 		connectChannel() {
+			// Ajax\PublishController@publishAjaxの返り値
 			window.Echo.channel('publish-event').listen('PublishEvent', (e) => {
-				// 標準出力
-				this.message = e.message;
-				console.log(e.message);
-				// 標準出力の全文
-				this.messages = this.messages + '\n' + this.message;
-				// 標準エラー出力
-				this.error = e.error;
-				// 標準エラー出力の全文
-				this.errors = this.errors + this.error;
+				this.process = e.process.pid;
+				this.publish_status = 2;
 				// 標準出力が数値または数値+改行コードだった場合parseに代入
 				if(e.judge === 1) {
 					this.parse = e.parse;
@@ -170,40 +186,96 @@ export default {
 				// パブリッシュファイル件数を計算して出力
 				if(e.queue_count !== '') {
 					this.queue_count = e.queue_count;
-					this.parse_count = String(this.k);
-					this.k++;
-				}
-				// アラートを配列で出力
-				if(e.alert_array !== '') {
-					this.alert_array = e.alert_array;
-					this.isPublishError = true;
-				}
-				// パブリッシュにかかった時間を配列で出力
-				if(e.time_array !== '') {
-					this.time_array = e.time_array;
-					console.log(this.time_array);
 				}
 				// パブリッシュしているファイル情報を配列で出力
 				if(e.publish_file !== '') {
 					this.publish_file = e.publish_file;
-					this.isPublishButton = false;
-					this.isPublish = true;
 				}
 				if(e.end_publish === 1) {
-					this.isPublish = false;
-					this.isPublishResult = true;
+					// Ajax\PublishController@readCsvAjaxにpost処理
+					axios.post('/publish/'+this.projectCode+'/'+this.branchName+'/readCsvAjax').then(res => {
+						this.total_files = res.data.publish_files;
+						// アラート件数を取得
+						this.alert = res.data.alert_files;
+						// パブリッシュにかかった時間を取得
+						this.time = res.data.diff_seconds;
+						// alert_log.csvの有無
+						this.exists_alert_log = res.data.exists_alert_log;
+						this.publish_status = 3;
+					})
 				}
 			})
+		},
+
+		recoveryOnPublish() {
+			if(this.isRecoveryOnPublish === false) {
+				this.isRecoveryOnPublish = true;
+			} else {
+				this.isRecoveryOnPublish = false;
+			}
+		},
+
+		publishCancel() {
+			var data = {
+                'process': this.process
+            }
+			// AjaxでAjax\PublishController@publishAjaxにpost処理
+			axios.post('/publish/'+this.projectCode+'/'+this.branchName+'/publishCancelAjax',data).then(res => {
+				// Ajax\PublishController@readCsvAjaxにpost処理
+				axios.post('/publish/'+this.projectCode+'/'+this.branchName+'/readCsvAjax').then(res => {
+					this.total_files = res.data.publish_files;
+					// アラート件数を取得
+					this.alert = res.data.alert_files;
+					// パブリッシュにかかった時間を取得
+					this.time = res.data.diff_seconds;
+					// alert_log.csvの有無
+					this.exists_alert_log = res.data.exists_alert_log;
+					this.publish_status = 3;
+				})
+			})
+		},
+
+		prepare() {
+			alert('準備中の機能です。');
 		}
 	},
 
-	// computed: {
-	// 	isPublish: function() {
-	// 		if(this.logExist === '1') {
-	// 			this.isPublishButton = true;
-	// 		}
-	// 		return this.isPublish
-	// 	}
-	// }
+	computed: {
+		// 未パブリッシュ時のパブリッシュボタンの表示・非表示
+		classPublishButton: function () {
+			return {
+				show: this.publish_status === 1,
+				hidden: this.publish_status !== 1
+			}
+		},
+		// パブリッシュ中のプログレスバーの表示・非表示
+		classPublishProgress: function () {
+			return {
+				show: this.publish_status === 2,
+				hidden: this.publish_status !== 2
+			}
+		},
+		// パブリッシュ後のログ情報の表示・非表示
+		classPublishLog: function () {
+			return {
+				show: this.publish_status === 3,
+				hidden: this.publish_status !== 3
+			}
+		},
+		// アラート情報の表示・非表示
+		classAlertLog: function () {
+			return {
+				show: this.exists_alert_log === '1' || this.exists_alert_log === true,
+				hidden: this.exists_alert_log === '' || this.exists_alert_log === false
+			}
+		},
+		// パブリッシュ中のWAIT画面の表示・非表示
+		classPublishWait: function () {
+			return {
+				show: this.publish_status === 999,
+				hidden: this.publish_status !== 999
+			}
+		}
+	}
 }
 </script>

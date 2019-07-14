@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorePublish;
 use App\Http\Controllers\Controller;
 use App\Project;
+use Carbon\Carbon;
 
 class PublishController extends Controller
 {
@@ -20,6 +21,63 @@ class PublishController extends Controller
         $this->middleware('auth');
         $this->middleware('verified');
     }
+
+	public function readCsvAjax(Request $request, Project $project, $branch_name)
+	{
+		//
+		$fs = new \tomk79\filesystem;
+		$project_name = $project->project_code;
+		$project_path = get_project_workingtree_dir($project_name, $branch_name);
+		$publish_log_file = $project_path.'/px-files/_sys/ram/publish/publish_log.csv';
+		$alert_log_file = $project_path.'/px-files/_sys/ram/publish/alert_log.csv';
+		$applock_file = $project_path.'/px-files/_sys/ram/publish/applock.txt';
+
+		if(\File::exists($publish_log_file)) {
+			$exists_publish_log = true;
+			$publish_log = $fs->read_csv($publish_log_file);
+			$publish_files = count($publish_log) - 1;
+		} else {
+			$exists_publish_log = false;
+			$publish_log = false;
+			$publish_files = 0;
+		}
+
+		if(\File::exists($alert_log_file)) {
+			$exists_alert_log = true;
+			$alert_log = $fs->read_csv($alert_log_file);
+			$alert_files = count($alert_log) - 1;
+		} else {
+			$exists_alert_log = false;
+			$alert_log = false;
+			$alert_files = 0;
+		}
+
+		if(\File::exists($applock_file)) {
+			$exists_applock = true;
+		} else {
+			$exists_applock = false;
+		}
+
+		if($publish_log) {
+			$dt1 = new Carbon($publish_log[array_key_last($publish_log)][0]);
+			$dt2 = new Carbon($publish_log[1][0]);
+			$diff_seconds = $dt1->diffInSeconds($dt2);
+		} else {
+			$diff_seconds = 0;
+		}
+
+		$data = array(
+			"publish_log" => $publish_log,
+			"alert_log" => $alert_log,
+			"publish_files" => $publish_files,
+			"alert_files" => $alert_files,
+			'diff_seconds' => $diff_seconds,
+			'exists_publish_log' => $exists_publish_log,
+			'exists_alert_log' => $exists_alert_log,
+			'exists_applock' => $exists_applock
+        );
+        return $data;
+	}
 
     public function publishAjax(Request $request, Project $project, $branch_name)
     {
@@ -125,8 +183,9 @@ class PublishController extends Controller
 					}
 				}
 			}
+			$process = proc_get_status($proc);
 			// ブロードキャストイベントに標準出力、標準エラー出力、パース結果を渡す、判定変数、キュー数、アラート配列、経過時間配列、パブリッシュファイルを渡す
-			broadcast(new \App\Events\PublishEvent($stdout, $stderr, $parse, $judge, $queue_count, $alert_array, $time_array, $publish_file, $end_publish));
+			broadcast(new \App\Events\PublishEvent($parse, $judge, $queue_count, $publish_file, $end_publish, $process, $pipes));
 		}
 		fclose($pipes[1]);
 		fclose($pipes[2]);
@@ -140,4 +199,32 @@ class PublishController extends Controller
         );
         return $data;
     }
+
+	public function publishCancelAjax(Request $request, Project $project, $branch_name)
+    {
+		//
+		$project_code = $project->project_code;
+		$project_path = get_project_workingtree_dir($project_code, $branch_name);
+		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
+
+		chdir($project_path);
+		// パブリッシュのプロセスを強制終了
+		$kill_info = exec('kill -USR1 '.$request->process);
+		chdir($path_current_dir); // 元いたディレクトリへ戻る
+
+		// applock.txtを削除
+		$applock_file = $project_path.'/px-files/_sys/ram/publish/applock.txt';
+		\File::delete($applock_file);
+
+		// 削除の結果をテキストで返す
+		if(\File::exists($applock_file)) {
+			$message = 'ロックファイルを削除できませんでした。';
+		} else {
+			$message = 'ロックファイルを削除しました。';
+		}
+        $data = array(
+			"message" => $message,
+        );
+        return $data;
+	}
 }

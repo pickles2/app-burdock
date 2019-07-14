@@ -19905,7 +19905,8 @@ module.exports = function(obj, fn){
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(37);
-module.exports = __webpack_require__(101);
+__webpack_require__(101);
+module.exports = __webpack_require__(102);
 
 
 /***/ }),
@@ -60621,35 +60622,66 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	// view側から変数をプロパティとして渡す
-	props: ["projectCode", "branchName", "logExist"],
+	props: ["projectCode", "branchName",
+	// publish_log.csvの有無
+	"existsPublishLog",
+	// alert_log.csvの有無
+	"existsAlertLog",
+	// applock.txtの有無
+	"existsApplock",
+	// publish_log.csvの行数（先頭行を除く）
+	"publishFiles",
+	// alert_log.cscの行数（先頭行を除く）
+	"alertFiles",
+	// publish_log.csvの最終行と1行目の時間の差分
+	"diffSeconds", "sessionMyStatus"],
 	// メソッドで使う&テンプレート内で使う変数を定義
 	data: function data() {
 		return {
+			// Ajax\PublishController@publishAjaxからの返り値
 			info: '',
-			message: '',
-			messages: '',
-			error: '',
-			errors: '',
+			// PublishEventからの返り値（プログレスバーの％）
 			parse: 0,
+			// PublishEventからの返り値（パブリシュファイル件数）
 			queue_count: '',
-			parse_count: '',
-			k: 0,
-			alert_array: [],
-			time_array: [],
+			// PublishEventからの返り値（パブリッシュファイル情報）
 			publish_file: '',
-			isPublishButton: true,
-			isPublish: false,
-			isPublishResult: false,
-			isPublishError: false
+			// パブリッシュの状態（1:未パブリッシュ/2:パブリッシュ中/3:パブリッシュ後/999:パブリッシュ中のリロード）
+			publish_status: '',
+			// publishFilesをバインディング
+			total_files: this.publishFiles,
+			// alertFilesをバインディング
+			alert: this.alertFiles,
+			// diffSecondsをバインディング
+			time: this.diffSeconds,
+			// パブリッシュリカバリ画面の表示・非表示
+			isRecoveryOnPublish: false,
+			// アップロックを削除するためのリンクパス
+			deleteApplock: '/publish/' + this.projectCode + '/' + this.branchName + '/deleteApplock',
+			// existsAlertLogをバインディング
+			exists_alert_log: this.existsAlertLog,
+			process: []
 		};
+	},
+
+	// レンダリング前にpublish_log.csvの有無によって処理分け
+	created: function created() {
+		if (this.existsPublishLog === '') {
+			this.publish_status = 1;
+		} else if (this.existsPublishLog === '1' && this.existsApplock === '1') {
+			this.publish_status = 999;
+		} else {
+			this.publish_status = 3;
+		}
+		// フラッシュメッセージが出ていれば2000ミリ秒後に削除
+		if (this.sessionMyStatus !== '') {
+			setTimeout(function () {
+				var flashMessage = document.getElementById("session-my-status").remove();
+			}, 2000);
+		}
 	},
 	mounted: function mounted() {
 		this.connectChannel();
@@ -60660,25 +60692,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		publish: function publish(reset) {
 			var _this = this;
 
-			console.log(this.logExist);
+			this.publish_status = 999;
 			if (reset === 1) {
-				this.message = '';
-				this.messages = '';
-				this.error = '';
-				this.errors = '';
 				this.parse = 0;
 				this.queue_count = '';
-				this.parse_count = '0';
-				this.k = 0;
-				this.alert_array = [];
-				this.time_array = [];
 				this.publish_file = '';
-				this.isPublishButton = false;
-				this.isPublish = false;
-				this.isPublishResult = false;
-				this.isPublishError = false;
+				this.alert = '';
+				this.time = '';
 			}
 			var data = 'publish';
+			// AjaxでAjax\PublishController@publishAjaxにpost処理
 			axios.post('/publish/' + this.projectCode + '/' + this.branchName + '/publishAjax', data).then(function (res) {
 				_this.info = res.data.info;
 			});
@@ -60689,16 +60712,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		connectChannel: function connectChannel() {
 			var _this2 = this;
 
+			// Ajax\PublishController@publishAjaxの返り値
 			window.Echo.channel('publish-event').listen('PublishEvent', function (e) {
-				// 標準出力
-				_this2.message = e.message;
-				console.log(e.message);
-				// 標準出力の全文
-				_this2.messages = _this2.messages + '\n' + _this2.message;
-				// 標準エラー出力
-				_this2.error = e.error;
-				// 標準エラー出力の全文
-				_this2.errors = _this2.errors + _this2.error;
+				_this2.process = e.process.pid;
+				_this2.publish_status = 2;
 				// 標準出力が数値または数値+改行コードだった場合parseに代入
 				if (e.judge === 1) {
 					_this2.parse = e.parse;
@@ -60706,41 +60723,95 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				// パブリッシュファイル件数を計算して出力
 				if (e.queue_count !== '') {
 					_this2.queue_count = e.queue_count;
-					_this2.parse_count = String(_this2.k);
-					_this2.k++;
-				}
-				// アラートを配列で出力
-				if (e.alert_array !== '') {
-					_this2.alert_array = e.alert_array;
-					_this2.isPublishError = true;
-				}
-				// パブリッシュにかかった時間を配列で出力
-				if (e.time_array !== '') {
-					_this2.time_array = e.time_array;
-					console.log(_this2.time_array);
 				}
 				// パブリッシュしているファイル情報を配列で出力
 				if (e.publish_file !== '') {
 					_this2.publish_file = e.publish_file;
-					_this2.isPublishButton = false;
-					_this2.isPublish = true;
 				}
 				if (e.end_publish === 1) {
-					_this2.isPublish = false;
-					_this2.isPublishResult = true;
+					// Ajax\PublishController@readCsvAjaxにpost処理
+					axios.post('/publish/' + _this2.projectCode + '/' + _this2.branchName + '/readCsvAjax').then(function (res) {
+						_this2.total_files = res.data.publish_files;
+						// アラート件数を取得
+						_this2.alert = res.data.alert_files;
+						// パブリッシュにかかった時間を取得
+						_this2.time = res.data.diff_seconds;
+						// alert_log.csvの有無
+						_this2.exists_alert_log = res.data.exists_alert_log;
+						_this2.publish_status = 3;
+					});
 				}
 			});
+		},
+		recoveryOnPublish: function recoveryOnPublish() {
+			if (this.isRecoveryOnPublish === false) {
+				this.isRecoveryOnPublish = true;
+			} else {
+				this.isRecoveryOnPublish = false;
+			}
+		},
+		publishCancel: function publishCancel() {
+			var _this3 = this;
+
+			var data = {
+				'process': this.process
+				// AjaxでAjax\PublishController@publishAjaxにpost処理
+			};axios.post('/publish/' + this.projectCode + '/' + this.branchName + '/publishCancelAjax', data).then(function (res) {
+				// Ajax\PublishController@readCsvAjaxにpost処理
+				axios.post('/publish/' + _this3.projectCode + '/' + _this3.branchName + '/readCsvAjax').then(function (res) {
+					_this3.total_files = res.data.publish_files;
+					// アラート件数を取得
+					_this3.alert = res.data.alert_files;
+					// パブリッシュにかかった時間を取得
+					_this3.time = res.data.diff_seconds;
+					// alert_log.csvの有無
+					_this3.exists_alert_log = res.data.exists_alert_log;
+					_this3.publish_status = 3;
+				});
+			});
+		},
+		prepare: function prepare() {
+			alert('準備中の機能です。');
+		}
+	},
+
+	computed: {
+		// 未パブリッシュ時のパブリッシュボタンの表示・非表示
+		classPublishButton: function classPublishButton() {
+			return {
+				show: this.publish_status === 1,
+				hidden: this.publish_status !== 1
+			};
+		},
+		// パブリッシュ中のプログレスバーの表示・非表示
+		classPublishProgress: function classPublishProgress() {
+			return {
+				show: this.publish_status === 2,
+				hidden: this.publish_status !== 2
+			};
+		},
+		// パブリッシュ後のログ情報の表示・非表示
+		classPublishLog: function classPublishLog() {
+			return {
+				show: this.publish_status === 3,
+				hidden: this.publish_status !== 3
+			};
+		},
+		// アラート情報の表示・非表示
+		classAlertLog: function classAlertLog() {
+			return {
+				show: this.exists_alert_log === '1' || this.exists_alert_log === true,
+				hidden: this.exists_alert_log === '' || this.exists_alert_log === false
+			};
+		},
+		// パブリッシュ中のWAIT画面の表示・非表示
+		classPublishWait: function classPublishWait() {
+			return {
+				show: this.publish_status === 999,
+				hidden: this.publish_status !== 999
+			};
 		}
 	}
-
-	// computed: {
-	// 	isPublish: function() {
-	// 		if(this.logExist === '1') {
-	// 			this.isPublishButton = true;
-	// 		}
-	// 		return this.isPublish
-	// 	}
-	// }
 });
 
 /***/ }),
@@ -60759,7 +60830,7 @@ var render = function() {
         "div",
         {
           staticClass: "cont_scene",
-          class: [_vm.isPublishButton === true ? "show" : "hidden"],
+          class: _vm.classPublishButton,
           attrs: { id: "cont_before_publish" }
         },
         [
@@ -60788,7 +60859,7 @@ var render = function() {
         "div",
         {
           staticClass: "cont_scene",
-          class: [_vm.isPublish === true ? "show" : "hidden"],
+          class: _vm.classPublishProgress,
           attrs: { id: "cont_before_publish-progress" }
         },
         [
@@ -60799,26 +60870,24 @@ var render = function() {
                 _vm._v(" "),
                 _c("p", [_vm._v("そのまましばらくお待ちください...")]),
                 _vm._v(" "),
-                _vm.queue_count !== ""
-                  ? _c("div", [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "cont_progress-phase",
-                          staticStyle: { "font-weight": "bold" }
-                        },
-                        [_vm._v("Publishing...")]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "cont_progress-row" }, [
-                        _vm._v(_vm._s(_vm.publish_file))
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "cont_progress-currentTask" }, [
-                        _vm._v(_vm._s(_vm.queue_count))
-                      ])
-                    ])
-                  : _vm._e(),
+                _c("div", [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "cont_progress-phase",
+                      staticStyle: { "font-weight": "bold" }
+                    },
+                    [_vm._v("Publishing...")]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "cont_progress-row" }, [
+                    _vm._v(_vm._s(_vm.publish_file))
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "cont_progress-currentTask" }, [
+                    _vm._v(_vm._s(_vm.queue_count))
+                  ])
+                ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "cont_progress-bar" }, [
                   _c("div", { staticClass: "progress" }, [
@@ -60837,7 +60906,31 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _vm._m(1)
+          _c("div", { staticClass: "cont_buttons" }, [
+            _c(
+              "div",
+              {
+                staticClass: "btn-group btn-group-justified",
+                attrs: { role: "group" }
+              },
+              [
+                _c(
+                  "div",
+                  { staticClass: "btn-group", attrs: { role: "group" } },
+                  [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "px2-btn px2-btn--block",
+                        on: { click: _vm.publishCancel }
+                      },
+                      [_vm._v("キャンセル")]
+                    )
+                  ]
+                )
+              ]
+            )
+          ])
         ]
       ),
       _vm._v(" "),
@@ -60845,45 +60938,59 @@ var render = function() {
         "div",
         {
           staticClass: "cont_scene",
-          class: [_vm.isPublishResult === true ? "show" : "hidden"],
+          class: _vm.classPublishLog,
           attrs: { id: "cont_after_publish" }
         },
         [
           _c("div", { staticClass: "cont_canvas" }, [
-            _c(
-              "div",
-              {
-                staticClass: "cont_results",
-                class: [_vm.isPublishError === true ? "cont_results-error" : ""]
-              },
-              [
-                _c("div", { staticClass: "cont_results-messageBox" }, [
-                  _c("div", { staticClass: "cont_results-total_file_count" }, [
-                    _vm._v("total: "),
-                    _c("strong", [_vm._v(_vm._s(_vm.parse_count))]),
-                    _vm._v(" files.")
-                  ]),
-                  _vm._v(" "),
-                  _vm.alert_array[7] !== ""
-                    ? _c("div", { staticClass: "cont_results-errorMessage" }, [
-                        _vm._v(
-                          _vm._s(_vm.alert_array[7]) +
-                            "件のエラーが検出されています。"
-                        )
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "cont_results-spentTime" }, [
-                    _vm._v("time: "),
-                    _c("span", [_vm._v(_vm._s(_vm.time_array[2]) + " sec")])
-                  ]),
-                  _vm._v(" "),
-                  _vm._m(2),
-                  _vm._v(" "),
-                  _vm._m(3)
+            _c("div", { staticClass: "cont_results" }, [
+              _c("div", { staticClass: "cont_results-messageBox" }, [
+                _c("div", { staticClass: "cont_results-total_file_count" }, [
+                  _vm._v("total: "),
+                  _c("strong", [_vm._v(_vm._s(_vm.total_files))]),
+                  _vm._v(" files.")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "cont_results-errorMessage",
+                    class: _vm.classAlertLog
+                  },
+                  [_vm._v(_vm._s(_vm.alert) + "件のエラーが検出されています。")]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "cont_results-spentTime" }, [
+                  _vm._v("time: "),
+                  _c("span", [_vm._v(_vm._s(_vm.time) + " sec")])
+                ]),
+                _vm._v(" "),
+                _c("p", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "px2-btn px2-btn--primary px2-btn--lg",
+                      on: { click: _vm.prepare }
+                    },
+                    [_vm._v("パブリッシュされたファイルを確認する")]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("ul", { staticClass: "horizontal" }, [
+                  _c("li", { staticClass: "horizontal-li" }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "px2-link px2-link--burette",
+                        attrs: { href: "#" },
+                        on: { click: _vm.prepare }
+                      },
+                      [_vm._v("パブリッシュレポート")]
+                    )
+                  ])
                 ])
-              ]
-            )
+              ])
+            ])
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "cont_buttons" }, [
@@ -60918,7 +61025,76 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _vm._m(4)
+      _c(
+        "div",
+        {
+          staticClass: "cont_scene",
+          class: _vm.classPublishWait,
+          attrs: { id: "cont_on_publish" }
+        },
+        [
+          _c("p", [_vm._v("ただいまパブリッシュプロセスが進行しています。")]),
+          _vm._v(" "),
+          _c("p", [_vm._v("しばらくお待ち下さい...。")]),
+          _vm._v(" "),
+          _c("p", [
+            _c(
+              "a",
+              {
+                staticClass: "glyphicon glyphicon-menu-right",
+                attrs: { href: "#" },
+                on: { click: _vm.recoveryOnPublish }
+              },
+              [_vm._v("しばらく待ってもこの状態から復旧しない場合は...詳細")]
+            )
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "cont_recovery_on_publish",
+              class: [_vm.isRecoveryOnPublish === true ? "show" : "hidden"]
+            },
+            [
+              _c("h2", [_vm._v("これはどういう状態ですか？")]),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v(
+                  "Pickles 2 のパブリッシュプロセスは、二重起動を避けるために、次のパスにロックファイルを生成します。"
+                )
+              ]),
+              _vm._v(" "),
+              _vm._m(1),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v(
+                  "このファイルは、パブリッシュ開始時に生成され、パブリッシュ完了時に削除されます。"
+                )
+              ]),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v(
+                  "パブリッシュ中であれば、このファイルが存在することは健康な状態です。しかし、パブリッシュの途中でプロセスが異常終了した場合(途中でアプリを落とす、なども含む)、このファイルが残ってしまうため、次のパブリッシュが実行できない状態になります。"
+                )
+              ]),
+              _vm._v(" "),
+              _c("h2", [_vm._v("復旧方法")]),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v("ロックファイル "),
+                _c("code", [_vm._v("./px-files/_sys/ram/publish/applock.txt")]),
+                _vm._v(" を手動で"),
+                _c("a", { attrs: { href: _vm.deleteApplock } }, [
+                  _vm._v("削除します")
+                ]),
+                _vm._v("。")
+              ]),
+              _vm._v(" "),
+              _vm._m(2)
+            ]
+          )
+        ]
+      )
     ]
   )
 }
@@ -60962,30 +61138,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "cont_buttons" }, [
-      _c(
-        "div",
-        {
-          staticClass: "btn-group btn-group-justified",
-          attrs: { role: "group" }
-        },
-        [
-          _c("div", { staticClass: "btn-group", attrs: { role: "group" } }, [
-            _c("button", { staticClass: "px2-btn px2-btn--block" }, [
-              _vm._v("キャンセル")
-            ])
-          ])
-        ]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("p", [
-      _c("button", { staticClass: "px2-btn px2-btn--primary px2-btn--lg" }, [
-        _vm._v("パブリッシュされたファイルを確認する")
+    return _c("ul", [
+      _c("li", [
+        _c("code", [_vm._v("./px-files/_sys/ram/publish/applock.txt")])
       ])
     ])
   },
@@ -60993,98 +61148,25 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("ul", { staticClass: "horizontal" }, [
-      _c("li", { staticClass: "horizontal-li" }, [
-        _c(
-          "a",
-          { staticClass: "px2-link px2-link--burette", attrs: { href: "#" } },
-          [_vm._v("パブリッシュレポート")]
+    return _c("ul", { staticClass: "notes" }, [
+      _c("li", { staticClass: "notes-li" }, [
+        _vm._v(
+          "※ただし、バックグラウンドでプロセスが進行中ではないか、事前に確認してください。"
         )
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "notes-li" }, [
+        _vm._v("※"),
+        _c("code", [_vm._v("applock.txt")]),
+        _vm._v(
+          " をテキストファイルで開くと、このファイルを生成したプロセスの "
+        ),
+        _c("strong", [_vm._v("プロセスID")]),
+        _vm._v(" と "),
+        _c("strong", [_vm._v("最終アクセス日時")]),
+        _vm._v(" が記載されています。この情報が手がかりになるはずです。")
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "cont_scene hidden", attrs: { id: "cont_on_publish" } },
-      [
-        _c("p", [_vm._v("ただいまパブリッシュプロセスが進行しています。")]),
-        _vm._v(" "),
-        _c("p", [_vm._v("しばらくお待ち下さい...。")]),
-        _vm._v(" "),
-        _c("p", [
-          _c(
-            "a",
-            {
-              staticClass: "glyphicon glyphicon-menu-right",
-              attrs: { href: "#" }
-            },
-            [_vm._v("しばらく待ってもこの状態から復旧しない場合は...詳細")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "cont_recovery_on_publish hidden" }, [
-          _c("h2", [_vm._v("これはどういう状態ですか？")]),
-          _vm._v(" "),
-          _c("p", [
-            _vm._v(
-              "Pickles 2 のパブリッシュプロセスは、二重起動を避けるために、次のパスにロックファイルを生成します。"
-            )
-          ]),
-          _vm._v(" "),
-          _c("ul", [
-            _c("li", [
-              _c("code", [_vm._v("./px-files/_sys/ram/publish/applock.txt")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("p", [
-            _vm._v(
-              "このファイルは、パブリッシュ開始時に生成され、パブリッシュ完了時に削除されます。"
-            )
-          ]),
-          _vm._v(" "),
-          _c("p", [
-            _vm._v(
-              "パブリッシュ中であれば、このファイルが存在することは健康な状態です。しかし、パブリッシュの途中でプロセスが異常終了した場合(途中でアプリを落とす、なども含む)、このファイルが残ってしまうため、次のパブリッシュが実行できない状態になります。"
-            )
-          ]),
-          _vm._v(" "),
-          _c("h2", [_vm._v("復旧方法")]),
-          _vm._v(" "),
-          _c("p", [
-            _vm._v("ロックファイル "),
-            _c("code", [_vm._v("./px-files/_sys/ram/publish/applock.txt")]),
-            _vm._v(" を手動で"),
-            _c("a", { attrs: { href: "#" } }, [_vm._v("削除します")]),
-            _vm._v("。")
-          ]),
-          _vm._v(" "),
-          _c("ul", { staticClass: "notes" }, [
-            _c("li", { staticClass: "notes-li" }, [
-              _vm._v(
-                "※ただし、バックグラウンドでプロセスが進行中ではないか、事前に確認してください。"
-              )
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "notes-li" }, [
-              _vm._v("※"),
-              _c("code", [_vm._v("applock.txt")]),
-              _vm._v(
-                " をテキストファイルで開くと、このファイルを生成したプロセスの "
-              ),
-              _c("strong", [_vm._v("プロセスID")]),
-              _vm._v(" と "),
-              _c("strong", [_vm._v("最終アクセス日時")]),
-              _vm._v(" が記載されています。この情報が手がかりになるはずです。")
-            ])
-          ])
-        ])
-      ]
-    )
   }
 ]
 render._withStripped = true
@@ -61098,6 +61180,12 @@ if (false) {
 
 /***/ }),
 /* 101 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 102 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
