@@ -28,7 +28,12 @@ foreach($px2ce_client_resources['js'] as $value) {
 		pickles2ContentsEditor = new Pickles2ContentsEditor(); // px2ce client
 	</script>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js"></script>
+	<!-- Ace Editor -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.4/ace.js"></script>
+
+	<!-- Keypress -->
+	<script src="/common/dmauro-Keypress/keypress.js"></script>
+
 	<script>
 	var editor = ace.edit("editor");
 	editor.setTheme("ace/theme/monokai");
@@ -82,15 +87,6 @@ foreach($px2ce_client_resources['js'] as $value) {
 					});
 					return;
 				},
-				'clipboard': {
-					// クリップボード操作の機能を拡張できます。
-					'set': function( data, type ){
-					// クリップボードにコピーする機能を実装してください。
-					},
-					'get': function( type ){
-					// クリップボードからデータを取得する機能を実装してください。
-					}
-				},
 				'complete': function(){
 					window.open('about:blank','_self').close();
 				},
@@ -105,10 +101,9 @@ foreach($px2ce_client_resources['js'] as $value) {
 			function(){
 				// コールバック
 				// 初期化完了！
+				console.info('Standby!');
 			}
 		);
-		console.log($(window).width());
-		console.log($(window).height());
 	</script>
 </div>
 @endsection
