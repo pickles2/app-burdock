@@ -13,7 +13,7 @@ const mix = require('laravel-mix');
 
 mix.js('resources/js/app.js', 'public/js')
 	.sass('resources/sass/app.scss', 'public/css')
-	.copyDirectory('submodules/px2style/dist', 'public/common/px2style/dist')
+	.copyDirectory('vendor/pickles2/px2style/dist', 'public/common/px2style/dist')
 	.copyDirectory('vendor/pickles2/lib-plum/res', 'public/common/lib-plum/res')
 	.copyDirectory('vendor/pickles2/lib-indigo/res', 'public/common/lib-indigo/res')
 	.copyDirectory('vendor/tomk79/remote-finder/dist', 'public/common/remote-finder/dist')

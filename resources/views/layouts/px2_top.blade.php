@@ -100,7 +100,7 @@
                     </ul>
                 </div>
 				{{-- <div class="theme-header__shoulder-menu" style="width: 50px; height: 30px;">
-					<button style="height: 33px;">≡</button>
+					<button><span class="px2-header__hamburger"></span></button>
 					<ul style="display: none; top: 30px; height: 892px;">
                         <li><a href="">ダッシュボード</a></li>
                         <li><a href="">フォルダを開く</a></li>
