@@ -63,99 +63,100 @@ class ProjectController extends Controller
 		$bd_data_dir = env('BD_DATA_DIR');
 		$branch_name = 'master';
 
-		$git_url = $request->git_url;
-		$git_username = $request->git_username;
-		$git_password = $request->git_password;
+		// $git_url = $request->git_url;
+		// $git_username = $request->git_username;
+		// $git_password = $request->git_password;
 
-		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-		$path_branches_dir = $bd_data_dir.'/projects/'.urlencode($request->project_code).'/branches/'.urlencode($branch_name).'/';
-
-		\File::makeDirectory($path_branches_dir, 0777, true, true);
-
-		$path_composer = realpath(__DIR__.'/../../common/composer/composer.phar');
-		chdir($path_branches_dir);
-		shell_exec($path_composer . ' create-project pickles2/preset-get-start-pickles2 ./');
-		chdir($path_current_dir);
-		clearstatcache();
-
-		$project_path = get_project_workingtree_dir($request->project_code, $branch_name);
+		// $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
+		// $path_branches_dir = $bd_data_dir.'/projects/'.urlencode($request->project_code).'/branches/'.urlencode($branch_name).'/';
+		//
+		// \File::makeDirectory($path_branches_dir, 0777, true, true);
+		//
+		// $path_composer = realpath(__DIR__.'/../../common/composer/composer.phar');
+		// chdir($path_branches_dir);
+		// shell_exec($path_composer . ' create-project pickles2/preset-get-start-pickles2 ./');
+		// chdir($path_current_dir);
+		// clearstatcache();
+		//
+		// $project_path = get_project_workingtree_dir($request->project_code, $branch_name);
 
 		// 記事作成時に著者のIDを保存する
 		$project = new Project;
 		$project->project_code = $request->project_code;
 		$project->project_name = $request->project_name;
 		$project->user_id = $request->user()->id;
-		$project->git_url = $git_url;
-		$project->git_username = \Crypt::encryptString($git_username);
-		$project->git_password = \Crypt::encryptString($git_password);
+		// $project->git_url = $git_url;
+		// $project->git_username = \Crypt::encryptString($git_username);
+		// $project->git_password = \Crypt::encryptString($git_password);
 		$project->save();
 
 		// .px_execute.phpの存在確認
-		if(\File::exists($project_path.'/.px_execute.php')) {
-			// ここから configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
-			$files = null;
-			$file = file($project_path.'/px-files/config.php');
-			for($i = 0; $i < count($file); $i++) {
-				if(strpos($file[$i], "'master_format'=>'xlsx'") !== false) {
-					$files .= str_replace('xlsx', 'timestamp', $file[$i]);
-				} else {
-					$files .= $file[$i];
-				}
-			}
-			file_put_contents($project_path.'/px-files/config.php', $files);
-
-			// ここまで configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
-			clearstatcache();
-			chdir($path_branches_dir);
-			$git_url_plus_auth = $git_url;
-			if( strlen($git_username) ){
-				$parsed_git_url = parse_url($git_url_plus_auth);
-				$git_url_plus_auth = '';
-				$git_url_plus_auth .= $parsed_git_url['scheme'].'://';
-				$git_url_plus_auth .= urlencode($git_username);
-				$git_url_plus_auth .= ':'.urlencode($git_password);
-				$git_url_plus_auth .= '@';
-				$git_url_plus_auth .= $parsed_git_url['host'];
-				if( array_key_exists('port', $parsed_git_url) && strlen($parsed_git_url['port']) ){
-					$git_url_plus_auth .= ':'.$parsed_git_url['port'];
-				}
-				$git_url_plus_auth .= $parsed_git_url['path'];
-				if( array_key_exists('query', $parsed_git_url) && strlen($parsed_git_url['query']) ){
-					$git_url_plus_auth .= '?'.$parsed_git_url['query'];
-				}
-			}
-
-			shell_exec('git remote set-url '.$project->project_code.' '.escapeshellarg($git_url));
-			shell_exec('git init');
-			shell_exec('git add *');
-			shell_exec('git commit -m "Create project"');
-			if( strlen($git_url) ){
-				shell_exec('git remote add '.$project->project_code.' '.escapeshellarg($git_url));
-			}
-
-			// push するときは認証情報が必要なので、
-			// 認証情報付きのURLで実行する
-			$result = shell_exec('git push -u '.escapeshellarg($git_url_plus_auth).' master:master');
-			chdir($path_current_dir);
-
-			// git pushの結果によって処理わけ
-			if($result === null) {
-				chdir($path_current_dir); // 元いたディレクトリへ戻る
-				\File::deleteDirectory(env('BD_DATA_DIR').'/projects/'.$project->project_code);
-				$message = 'Gitをプッシュできませんでした。URL/Username/Passwordが正しいか確認し、もう一度やり直してください。';
-				$redirect = '/';
-			} else {
-				chdir($path_current_dir); // 元いたディレクトリへ戻る
-				$message = __('Created new Project.');
-				$redirect = 'projects/'.urlencode($project->project_code).'/'.urlencode($branch_name);
-			}
-		} else {
-			chdir($path_current_dir); // 元いたディレクトリへ戻る
-			\File::deleteDirectory(env('BD_DATA_DIR').'/projects/'.$project->project_code);
-			$message = 'プロジェクトを作成できませんでした。もう一度やり直してください。';
-			$redirect = '/';
-		}
-
+		// if(\File::exists($project_path.'/.px_execute.php')) {
+		// 	// ここから configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
+		// 	$files = null;
+		// 	$file = file($project_path.'/px-files/config.php');
+		// 	for($i = 0; $i < count($file); $i++) {
+		// 		if(strpos($file[$i], "'master_format'=>'xlsx'") !== false) {
+		// 			$files .= str_replace('xlsx', 'timestamp', $file[$i]);
+		// 		} else {
+		// 			$files .= $file[$i];
+		// 		}
+		// 	}
+		// 	file_put_contents($project_path.'/px-files/config.php', $files);
+		//
+		// 	// ここまで configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
+		// 	clearstatcache();
+		// 	chdir($path_branches_dir);
+		// 	$git_url_plus_auth = $git_url;
+		// 	if( strlen($git_username) ){
+		// 		$parsed_git_url = parse_url($git_url_plus_auth);
+		// 		$git_url_plus_auth = '';
+		// 		$git_url_plus_auth .= $parsed_git_url['scheme'].'://';
+		// 		$git_url_plus_auth .= urlencode($git_username);
+		// 		$git_url_plus_auth .= ':'.urlencode($git_password);
+		// 		$git_url_plus_auth .= '@';
+		// 		$git_url_plus_auth .= $parsed_git_url['host'];
+		// 		if( array_key_exists('port', $parsed_git_url) && strlen($parsed_git_url['port']) ){
+		// 			$git_url_plus_auth .= ':'.$parsed_git_url['port'];
+		// 		}
+		// 		$git_url_plus_auth .= $parsed_git_url['path'];
+		// 		if( array_key_exists('query', $parsed_git_url) && strlen($parsed_git_url['query']) ){
+		// 			$git_url_plus_auth .= '?'.$parsed_git_url['query'];
+		// 		}
+		// 	}
+		//
+		// 	shell_exec('git remote set-url '.$project->project_code.' '.escapeshellarg($git_url));
+		// 	shell_exec('git init');
+		// 	shell_exec('git add *');
+		// 	shell_exec('git commit -m "Create project"');
+		// 	if( strlen($git_url) ){
+		// 		shell_exec('git remote add '.$project->project_code.' '.escapeshellarg($git_url));
+		// 	}
+		//
+		// 	// push するときは認証情報が必要なので、
+		// 	// 認証情報付きのURLで実行する
+		// 	$result = shell_exec('git push -u '.escapeshellarg($git_url_plus_auth).' master:master');
+		// 	chdir($path_current_dir);
+		//
+		// 	// git pushの結果によって処理わけ
+		// 	if($result === null) {
+		// 		chdir($path_current_dir); // 元いたディレクトリへ戻る
+		// 		\File::deleteDirectory(env('BD_DATA_DIR').'/projects/'.$project->project_code);
+		// 		$message = 'Gitをプッシュできませんでした。URL/Username/Passwordが正しいか確認し、もう一度やり直してください。';
+		// 		$redirect = '/';
+		// 	} else {
+		// 		chdir($path_current_dir); // 元いたディレクトリへ戻る
+		// 		$message = __('Created new Project.');
+		// 		$redirect = 'projects/'.urlencode($project->project_code).'/'.urlencode($branch_name);
+		// 	}
+		// } else {
+		// 	chdir($path_current_dir); // 元いたディレクトリへ戻る
+		// 	\File::deleteDirectory(env('BD_DATA_DIR').'/projects/'.$project->project_code);
+		// 	$message = 'プロジェクトを作成できませんでした。もう一度やり直してください。';
+		// 	$redirect = '/';
+		// }
+		$redirect = '/';
+		$message = 'いったんプロジェクトを作成しました。';
 		return redirect($redirect)->with('my_status', __($message));
 	}
 
@@ -168,14 +169,17 @@ class ProjectController extends Controller
 	public function show(Project $project, $branch_name)
 	{
 		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
-
-		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-		chdir($project_path);
-		$bd_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all');
-		$bd_object = json_decode($bd_json);
-		chdir($path_current_dir); // 元いたディレクトリへ戻る
-
-		return view('projects.show', ['project' => $project, 'branch_name' => $branch_name], compact('bd_object'));
+		// px_execute.phpがあるか確認して処理分け
+		if(\File::exists($project_path.'/.px_execute.php')) {
+			$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
+			chdir($project_path);
+			$bd_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all');
+			$bd_object = json_decode($bd_json);
+			chdir($path_current_dir); // 元いたディレクトリへ戻る
+			return view('projects.show', ['project' => $project, 'branch_name' => $branch_name], compact('bd_object'));
+		} else {
+			return redirect('setup/'.$project->project_code.'/'.$branch_name);
+		}
 	}
 
 	/**
