@@ -49,6 +49,12 @@ Route::delete('projects/{project}/{branch_name}', 'ProjectController@destroy');
 // Route::resource('projects', 'ProjectController');
 
 // --------------------------------------
+// セットアップ
+Route::get('setup/{project}/{branch_name}', 'SetupController@index');
+Route::post('setup/{project}/{branch_name}/setupAjax', 'Ajax\SetupController@setupAjax');
+Route::post('setup/{project}/{branch_name}/setupOptionAjax', 'Ajax\SetupController@setupOptionAjax');
+
+// --------------------------------------
 // サイトマップ
 Route::get('sitemaps/{project}/{branch_name}', 'SitemapController@index');
 Route::post('sitemaps/{project}/{branch_name}/uploadAjax', 'Ajax\SitemapController@uploadAjax');

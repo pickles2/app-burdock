@@ -6,7 +6,7 @@
 @section('title', 'Burdock')
 @section('content')
 <div class="theme_wrap">
-	<div class="contents" style="margin: 0px; padding: 0px; left: 0px; top: 33px; right: 0px; height: 892px;">
+	<div class="contents">
 		<div class="cont_top_jumbotron">
 			<p class="center">
 				<img src="common/images/logo_2017.svg" style="width:50%; max-height:120px;" alt="Pickles 2">
@@ -64,7 +64,7 @@
 										</div>
 									</td>
 								</tr>
-								<tr>
+								{{-- <tr>
 									<th>Git URL <span class="must">Required</span></th>
 									<td>
 										<p>プロジェクトをコミットするGit URL（HTTPS）を入力してください。</p>
@@ -104,7 +104,7 @@
 											@endif
 										</div>
 									</td>
-								</tr>
+								</tr> --}}
 							</tbody>
 						</table>
 						<p class="center">
@@ -114,7 +114,7 @@
 				</div>
 			</div>
 		</div>
-	   </div>
+	</div>
 	<div class="cont_top_footer">
 		<p>(C)Pickles 2 Project.</p>
 	</div>
