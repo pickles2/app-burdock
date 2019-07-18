@@ -19,7 +19,11 @@
 					<h1>プロジェクトを選択してください</h1>
 					<div class="cont_project_list unit">
 						<div class="list-group">
-							@foreach($user->projects as $project)
+							{{-- 全プロジェクトが見える用に一時的に変更した箇所 --}}
+							{{-- @foreach($user->projects as $project)
+								<a class="list-group-item" href="{{ url('projects/'.$project->project_code.'/'.get_git_remote_default_branch_name()) }}">{{ $project->project_name }}</a>
+							@endforeach --}}
+							@foreach($projects as $project)
 								<a class="list-group-item" href="{{ url('projects/'.$project->project_code.'/'.get_git_remote_default_branch_name()) }}">{{ $project->project_name }}</a>
 							@endforeach
 						</div>
