@@ -456,6 +456,12 @@ class SetupController extends Controller
 		// ファイルを閉じます。
 		fclose($new_csv);
 
+		// Git情報をDBに保存
+		$project->git_url = $repository;
+		$project->git_username = \Crypt::encryptString($user_name);
+		$project->git_password = \Crypt::encryptString($password);
+		$project->save();
+
 		chdir($path_current_dir); // 元いたディレクトリへ戻る
 
 		$data = array(
