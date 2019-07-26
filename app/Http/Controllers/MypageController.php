@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Http\Requests\StoreUser;
 
-class ProfileController extends Controller
+class MypageController extends Controller
 {
     /**
      * 各アクションの前に実行させるミドルウェア
@@ -36,7 +36,7 @@ class ProfileController extends Controller
         $user = Auth::user();   #ログインユーザー情報を取得します。
         // ページネーション（1ページに5件表示）
         $user->projects = $user->projects()->paginate(5);
-        return view('profile.show', ['user' => $user]);
+        return view('mypage.show', ['user' => $user]);
     }
 
     /**
@@ -51,7 +51,7 @@ class ProfileController extends Controller
         $user = Auth::user();   #ログインユーザー情報を取得します。
         // update, destroyでも同様に
         $this->authorize('edit', $user);
-        return view('profile.edit', ['user' => $user]);
+        return view('mypage.edit', ['user' => $user]);
     }
 
     // 実際の更新処理
@@ -73,7 +73,7 @@ class ProfileController extends Controller
         ]);
         $user->name = $request->name;
         $user->save();
-        return redirect('profile')->with('my_status', __('Updated a user.'));
+        return redirect('mypage')->with('my_status', __('Updated a user.'));
     }
 
     /**

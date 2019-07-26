@@ -37,7 +37,7 @@
         </div>
 		<div class="form-group">
             <label for="git_username">{{ __('Git Username') }}</label>
-            <input id="git_username" type="text" class="form-control @if ($errors->has('git_username')) is-invalid @endif" name="git_username" value="{{ old('git_username', \Crypt::decryptString($project->git_username)) }}">
+            <input id="git_username" type="text" class="form-control @if ($errors->has('git_username')) is-invalid @endif" name="git_username" @if(isset($project->git_username))value="{{ old('git_username', \Crypt::decryptString($project->git_username)) }}"@else value="{{ old('git_username') }}"@endif>
                 @if ($errors->has('git_username'))
                     <span class="invalid-feedback" role="alert">
                         {{ $errors->first('git_username') }}
@@ -46,7 +46,7 @@
         </div>
 		<div class="form-group">
             <label for="git_password">{{ __('Git Password') }}</label>
-            <input id="git_password" type="text" class="form-control @if ($errors->has('git_password')) is-invalid @endif" name="git_password" value="{{ old('git_password', Crypt::decryptString($project->git_password)) }}">
+            <input id="git_password" type="text" class="form-control @if ($errors->has('git_password')) is-invalid @endif" name="git_password" @if(isset($project->git_password))value="{{ old('git_password', \Crypt::decryptString($project->git_password)) }}"@else value="{{ old('git_password')}}"@endif>
                 @if ($errors->has('git_url'))
                     <span class="invalid-feedback" role="alert">
                         {{ $errors->first('git_password') }}

@@ -31,10 +31,10 @@ Route::get('/', 'HomeController@index');
 
 // --------------------------------------
 // プロフィール
-Route::get('profile', 'ProfileController@show');
-Route::get('profile/edit', 'ProfileController@edit');
-Route::put('profile', 'ProfileController@update');
-Route::delete('profile', 'ProfileController@destroy');
+Route::get('mypage', 'MypageController@show');
+Route::get('mypage/edit', 'MypageController@edit');
+Route::put('mypage', 'MypageController@update');
+Route::delete('mypage', 'MypageController@destroy');
 
 // --------------------------------------
 // プロジェクト Home

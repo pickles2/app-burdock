@@ -84,7 +84,7 @@ class RegisterController extends Controller
     protected function registered(Request $request, $user)
     {
         // 登録したら、そのユーザーのプロフィール・ページへ移動
-        return redirect('profile/')->with('my_status',
+        return redirect('mypage/')->with('my_status',
             __('Registration have not yet completed.') .
             __('Check your email for a verification link.')
         );

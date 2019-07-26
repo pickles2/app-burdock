@@ -61270,39 +61270,202 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	// view側から変数をプロパティとして渡す
-	props: ["projectCode", "branchName"],
+	props: ["projectCode", "branchName", "existsSetupLog", "logCheckedOption", "logCheckedInit", "logCloneRepository", "logCloneUserName", "logClonePassword", "logSetupStatus", "logCheckedRepository", "logVendorName", "logProjectName", "logRepository", "logUserName", "logPassword"],
 	// メソッドで使う&テンプレート内で使う変数を定義
 	data: function data() {
 		return {
-			// Ajax\PublishController@publishAjaxからの返り値
 			info: '',
-			// パブリッシュの状態（1:未パブリッシュ/2:パブリッシュ中/3:パブリッシュ後/999:パブリッシュ中のリロード）
 			setup_status: 1,
 			message: '',
+			stderr: '',
 			isSetupBefore: true,
+			cloneRepository: '',
+			cloneRepositoryConfirm: '',
+			isCloneRepositoryEnable: false,
+			cloneNewRepository: '',
+			cloneUserName: '',
+			cloneUserNameConfirm: '',
+			isCloneUserNameEnable: false,
+			cloneNewUserName: '',
+			clonePassword: '',
+			clonePasswordConfirm: '',
+			isClonePasswordEnable: false,
+			cloneNewPassword: '',
 			isSetupDuring: false,
-			isSetupDuringButton: false,
+			isSetupDuringButton: true,
 			isSetupAfter: false,
 			isSetupAfterButton: false,
+			isSetupRestartButton: false,
+			isSetupDisableButton: true,
+			isSetupEnableButton: false,
 			isCheckedOption: 'pickles2',
 			isCheckedInit: true,
+			isCheckedRepository: 'original',
 			repository: '',
-			user_name: '',
+			repositoryConfirm: '',
+			isRepositoryEnable: false,
+			userName: '',
+			userNameConfirm: '',
+			isUserNameEnable: false,
 			password: '',
-			vendor_name: '',
-			project_name: '',
+			passwordConfirm: '',
+			isPasswordEnable: false,
+			vendorName: '',
+			isVendorNameEnable: true,
+			projectName: '',
+			isProjectNameEnable: true,
 			i: 0,
 			fraction: '',
-			rate: ''
+			rate: 0,
+			restart: ''
 		};
 	},
 
-	// レンダリング前に***の有無によって処理分け
+	// レンダリング前にsetupStatusの状態によって処理分け
 	created: function created() {
 		//
+		if (this.existsSetupLog === '') {
+			this.setup_status = 1;
+		} else if (this.existsSetupLog === '1') {
+			this.isCheckedOption = this.logCheckedOption;
+			if (this.logCheckedOption === 'pickles2') {
+				if (this.logCheckedInit === '1') {
+					this.cloneRepository = this.logRepository;
+					this.cloneUserName = this.logUserName;
+					this.clonePassword = this.logPassword;
+				}
+			} else if (this.logCheckedOption === 'git') {
+				if (this.logCheckedRepository === 'original') {
+					this.cloneRepository = this.logRepository;
+					this.cloneUserName = this.logUserName;
+					this.clonePassword = this.logPassword;
+				} else if (this.logCheckedRepository === 'new') {
+					this.cloneNewRepository = this.logRepository;
+					this.cloneNewUserName = this.logUserName;
+					this.cloneNewPassword = this.logPassword;
+				}
+			}
+			if (this.logCheckedRepository === '') {
+				this.isCheckedRepository = 'original';
+			} else {
+				this.isCheckedRepository = this.logCheckedRepository;
+			}
+			this.setupStatus = Number(this.logSetupStatus);
+			this.vendorName = this.logVendorName;
+			this.projectName = this.logProjectName;
+		}
 	},
 	mounted: function mounted() {
 		this.connectChannel();
@@ -61310,68 +61473,187 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 	// (読み込み時に)実行するメソッド
 	methods: {
-		setup: function setup(reset) {
-			var _this = this;
-
-			//
-			var data = {
-				'checked_option': this.isCheckedOption,
-				'repository': this.repository,
-				'user_name': this.user_name,
-				'password': this.password
-			};
-			this.setup_status = 2;
-			this.info = 'Pickles 2 プロジェクトをセットアップしています。この処理はしばらく時間がかかります。';
-			this.isSetupDuringButton = true;
-			// AjaxでAjax\SetupController@setupAjaxにpost処理
-			axios.post('/setup/' + this.projectCode + '/' + this.branchName + '/setupAjax', data).then(function (res) {
-				//
-				_this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
-				_this.isSetupDuringButton = false;
-				_this.isSetupAfterButton = true;
-				console.log(res.data);
-			});
-		},
-
-
 		// 購読するチャンネルの設定
 		connectChannel: function connectChannel() {
-			var _this2 = this;
+			var _this = this;
 
 			// Ajax\SetupController@setupAjaxの返り値
 			window.Echo.channel('setup-event').listen('SetupEvent', function (e) {
 				//
-				_this2.i++;
-				_this2.isSetupBefore = false;
-				_this2.isSetupDuring = true;
+				_this.setup_status = 2;
+				_this.isCheckedOption === e.checked_option;
+				_this.i++;
+				_this.isSetupBefore = false;
+				_this.isSetupDuring = true;
 				if (e.stderr) {
-					_this2.message = _this2.message + e.stderr;
-					if (e.rate !== '') {
-						_this2.fraction = e.numerator + ' / ' + e.denominator;
-						_this2.rate = e.rate;
+					_this.message = _this.message + e.stderr;
+					if (/Generating autoload files/.test(e.stderr)) {
+						_this.stderr = e.stderr;
 					}
 				}
-				console.log(_this2.i + ':' + e.stderr);
+				if (e.std_array[0] === 'Receiving' && e.std_array[1] === 'objects:') {
+					if (/Receiving objects: 100%/.test(e.stderr)) {
+						_this.stderr = e.stderr;
+						_this.fraction = e.denominator + ' / ' + e.denominator;
+						_this.rate = 100;
+					} else if (e.rate !== '') {
+						_this.fraction = e.numerator + ' / ' + e.denominator;
+						_this.rate = e.rate;
+					}
+				}
+				if (/remote: Not Found/.test(e.stderr)) {
+					// リモートリポジトリが存在しない場合
+					_this.errorCloneRepository = 1;
+					_this.setupStatus = 1;
+				} else if (/rejected/.test(e.stderr)) {
+					// リモートリポジトリから拒否された場合
+					_this.errorCloneRepository = 2;
+					_this.setupStatus = 1;
+				} else if (/unable to access/.test(e.stderr)) {
+					// リモートリポジトリにアクセスできない場合
+					_this.errorCloneRepository = 3;
+					_this.setupStatus = 1;
+				} else if (/could not read Username/.test(e.stderr)) {
+					// ユーザー名が見つからないと言われた場合
+					_this.errorCloneUserName = 1;
+					_this.errorClonePassword = 1;
+					_this.setupStatus = 1;
+				} else if (/Authentication failed/.test(e.stderr)) {
+					// 認証に失敗した場合
+					_this.errorCloneUserName = 2;
+					_this.errorClonePassword = 2;
+					_this.setupStatus = 1;
+				} else if (/early EOF/.test(e.stderr)) {
+					// 早期EOFエラーが発生した場合
+					_this.errorCloneRepository = 4;
+					_this.setupStatus = 1;
+				}
+			});
+
+			window.Echo.channel('setup-option-event').listen('SetupOptionEvent', function (e) {
+				//
+				_this.i++;
+
+				if (e.std_array[0] === 'Writing' && e.std_array[1] === 'objects:') {
+					if (/Writing objects: 100%/.test(e.stderr)) {
+						_this.fraction = e.denominator + ' / ' + e.denominator;
+						_this.rate = 100;
+					} else if (e.rate !== '') {
+						_this.fraction = e.numerator + ' / ' + e.denominator;
+						_this.rate = e.rate;
+					}
+				}
+
+				if (/remote: Repository not found/.test(e.stderr)) {
+					// リモートリポジトリが存在しない場合
+					_this.errorRepository = 1;
+					_this.setupStatus = 3;
+				} else if (/rejected/.test(e.stderr)) {
+					// リモートリポジトリから拒否された場合
+					_this.errorRepository = 2;
+					_this.setupStatus = 3;
+				} else if (/unable to access/.test(e.stderr)) {
+					// リモートリポジトリにアクセスできない場合
+					_this.errorRepository = 3;
+					_this.setupStatus = 3;
+				} else if (/Invalid username or password/.test(e.stderr)) {
+					// ユーザー名またはパスワードが違う場合
+					_this.errorUserName = 1;
+					_this.errorPassword = 1;
+					_this.setupStatus = 3;
+				} else if (/new branch/.test(e.stderr)) {
+					// location.href = '/projects/'+this.projectCode+'/'+this.branchName;
+				} else if (/could not read Username/.test(e.stderr)) {
+					// ユーザー名が見つからないと言われた場合
+					_this.errorUserName = 1;
+					_this.errorPassword = 1;
+					_this.setupStatus = 3;
+				}
 			});
 		},
-		next: function next(reset) {
-			this.setup_status = 3;
-		},
-		option: function option(reset) {
+		setup: function setup(reset) {
+			var _this2 = this;
+
+			// 引数が0の場合は新規で1の場合は再セットアップ
+			if (reset === 1) {
+				this.restart = 1;
+			} else {
+				this.restart = 0;
+			}
+			this.setupStatus = 2;
 			var data = {
 				'checked_option': this.isCheckedOption,
 				'checked_init': this.isCheckedInit,
-				'vendor_name': this.vendor_name,
-				'project_name': this.project_name,
+				'clone_repository': this.cloneRepository,
+				'clone_user_name': this.cloneUserName,
+				'clone_password': this.clonePassword,
+				'setup_status': this.setup_status,
+				'restart': this.restart
+			};
+			this.info = 'Pickles 2 プロジェクトをセットアップしています。この処理はしばらく時間がかかります。';
+
+			// AjaxでAjax\SetupController@setupAjaxにpost処理
+			axios.post('/setup/' + this.projectCode + '/' + this.branchName + '/setupAjax', data).then(function (res) {
+				//
+				if (/Generating autoload files/.test(_this2.stderr) && res.data.info === true) {
+					_this2.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
+					_this2.isSetupDuringButton = false;
+					_this2.isSetupAfterButton = true;
+					// this.next();
+				} else if (/Receiving objects: 100%/.test(_this2.stderr) && res.data.info === true) {
+					_this2.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
+					_this2.isSetupDuringButton = false;
+					_this2.isSetupAfterButton = true;
+					// this.next();
+				} else {
+					_this2.info = 'Pickles 2 プロジェクトのセットアップができませんでした。もう一度やり直してください。';
+					_this2.isSetupDuringButton = false;
+					_this2.isSetupRestartButton = true;
+				}
+			});
+		},
+		next: function next(reset) {
+			this.setupStatus = 3;
+		},
+		option: function option(reset) {
+			var _this3 = this;
+
+			this.message = '';
+			this.repositoryConfirm = '';
+			this.userNameConfirm = '';
+			this.passwordConfirm = '';
+			this.setupStatus = 4;
+			var data = {
+				'checked_option': this.isCheckedOption,
+				'checked_init': this.isCheckedInit,
+				'setup_status': this.setup_status,
+				'checked_repository': this.isCheckedRepository,
+				'vendor_name': this.vendorName,
+				'project_name': this.projectName,
 				'repository': this.repository,
-				'user_name': this.user_name,
-				'password': this.password
+				'clone_repository': this.cloneRepository,
+				'clone_new_repository': this.cloneNewRepository,
+				'user_name': this.userName,
+				'clone_user_name': this.cloneUserName,
+				'clone_new_user_name': this.cloneNewUserName,
+				'password': this.password,
+				'clone_password': this.clonePassword,
+				'clone_new_password': this.cloneNewPassword
+
 				// AjaxでAjax\SetupController@setupOptionAjaxにpost処理
 			};axios.post('/setup/' + this.projectCode + '/' + this.branchName + '/setupOptionAjax', data).then(function (res) {
-				//
-				console.log(res.data);
+				if (_this3.rate === 100 && res.data.info === true) {
+					location.href = '/projects/' + _this3.projectCode + '/' + _this3.branchName;
+				} else if (res.data.checked_option === 'pickles2' && res.data.checked_init === false && res.data.info === true) {
+					_this3.rate = 100;
+					_this3.fraction = '100 / 100';
+					location.href = '/projects/' + _this3.projectCode + '/' + _this3.branchName;
+				} else if (res.data.checked_option === 'git' && res.data.checked_repository === 'none' && res.data.info === true) {
+					_this3.rate = 100;
+					_this3.fraction = '100 / 100';
+					location.href = '/projects/' + _this3.projectCode + '/' + _this3.branchName;
+				}
 			});
-			location.href = '/projects/' + this.projectCode + '/' + this.branchName;
 		},
 		prepare: function prepare() {
 			alert('準備中の機能です。');
@@ -61379,32 +61661,392 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	},
 
 	computed: {
-		// 未パブリッシュ時のパブリッシュボタンの表示・非表示
+		// setup_status
+		setupStatus: {
+			get: function get() {
+				//
+			},
+
+			set: function set(value) {
+				if (value === 1) {
+					this.message = '';
+					this.isSetupRestartButton = false;
+					this.isSetupDuring = false;
+					this.isSetupDuringButton = true;
+					this.isSetupBefore = true;
+					this.setup_status = 1;
+				} else if (value === 2) {
+					this.rate = 0;
+					this.fraction = '';
+					this.message = '';
+					this.isSetupRestartButton = false;
+					this.isSetupDuring = false;
+					this.isSetupDuringButton = true;
+					this.isSetupBefore = true;
+					this.isCloneRepositoryEnable = false;
+					this.isCloneUserNameEnable = false;
+					this.isClonePasswordEnable = false;
+					this.setup_status = 2;
+				} else if (value === 3) {
+					this.info = '';
+					this.rate = 0;
+					this.fraction = '';
+					this.message = '';
+					this.setup_status = 3;
+				} else if (value === 4) {
+					this.setup_status = 4;
+				}
+			}
+		},
+		//
 		classModal: function classModal() {
 			return {
-				show: this.setup_status === 2 || this.setup_status === 3,
-				hidden: this.setup_status === 1 || this.setup_status === 4
+				show: this.setup_status === 2 || this.setup_status === 3 || this.setup_status === 4,
+				hidden: this.setup_status === 1 || this.setup_status === 5
 			};
 		},
-
+		//
 		classSetup: function classSetup() {
 			return {
 				show: this.setup_status === 2,
 				hidden: this.setup_status !== 2
 			};
 		},
-
+		//
 		classOption: function classOption() {
 			return {
 				show: this.setup_status === 3,
 				hidden: this.setup_status !== 3
 			};
 		},
-
+		//
+		classOptionPickles2: function classOptionPickles2() {
+			return {
+				show: this.isCheckedOption === 'pickles2',
+				hidden: this.isCheckedOption !== 'pickles2'
+			};
+		},
+		//
+		classOptionGit: function classOptionGit() {
+			return {
+				show: this.isCheckedOption === 'git',
+				hidden: this.isCheckedOption !== 'git'
+			};
+		},
+		//
+		classProgress: function classProgress() {
+			return {
+				show: this.setup_status === 4,
+				hidden: this.setup_status !== 4
+			};
+		},
+		//
 		classCheckedOption: function classCheckedOption() {
 			return {
 				show: this.isCheckedOption === 'git',
 				hidden: this.isCheckedOption !== 'git'
+			};
+		},
+		// Gitリポジトリを初期化するのチェックで処理分け
+		classCheckedInit: function classCheckedInit() {
+			return {
+				show: this.isCheckedInit === true,
+				hidden: this.isCheckedInit !== true
+			};
+		},
+		//
+		classCheckedOriginalRepository: function classCheckedOriginalRepository() {
+			return {
+				show: this.isCheckedRepository === 'original',
+				hidden: this.isCheckedRepository !== 'original'
+			};
+		},
+		//
+		classCheckedNewRepository: function classCheckedNewRepository() {
+			return {
+				show: this.isCheckedRepository === 'new',
+				hidden: this.isCheckedRepository !== 'new'
+			};
+		},
+		// クローン用リポジトリのバリデーション
+		errorCloneRepository: {
+			get: function get() {
+				var result = '';
+				if (this.isCheckedOption === 'git') {
+					if (this.cloneRepository === '') {
+						result = 'リポジトリが未入力です。';
+						this.isCloneRepositoryEnable = false;
+					} else if (/^https(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/.test(this.cloneRepository) === false) {
+						result = 'リポジトリはhttps形式で入力してください。';
+						this.isCloneRepositoryEnable = false;
+					} else {
+						result = '';
+						this.isCloneRepositoryEnable = true;
+					}
+				} else {
+					result = '';
+					this.isCloneRepositoryEnable = true;
+				}
+				return result;
+			},
+
+			set: function set(value) {
+				if (value === 1) {
+					this.cloneRepositoryConfirm = 'リモートリポジトリが存在しません。別のリポジトリを指定してください。';
+				} else if (value === 2) {
+					this.cloneRepositoryConfirm = 'リモートリポジトリに拒否されました。別のリポジトリを指定してください。';
+				} else if (value === 3) {
+					this.cloneRepositoryConfirm = 'リモートリポジトリにアクセスできません。ネットワークを確認してください。';
+				} else if (value === 4) {
+					this.cloneRepositoryConfirm = '早期EOFエラーが発生しました。ネットワークを確認してください。';
+				}
+			}
+		},
+		// クローン用ユーザー名のバリデーション
+		errorCloneUserName: {
+			get: function get() {
+				var result = '';
+				this.isCloneUserNameEnable = true;
+				return result;
+			},
+
+			set: function set(value) {
+				if (value === 1) {
+					this.cloneUserNameConfirm = 'ユーザー名が必要なリポジトリです。ユーザー名を入力してください。';
+				} else if (value === 2) {
+					this.cloneUserNameConfirm = 'ユーザー名またはパスワードに誤りがあります。';
+				}
+			}
+		},
+		// クローン用パスワードのバリデーション
+		errorClonePassword: {
+			get: function get() {
+				var result = '';
+				this.isClonePasswordEnable = true;
+				return result;
+			},
+
+			set: function set(value) {
+				if (value === 1) {
+					this.clonePasswordConfirm = 'パスワードが必要なリポジトリです。パスワードを入力してください。';
+				} else if (value === 2) {
+					this.clonePasswordConfirm = 'ユーザー名またはパスワードに誤りがあります。';
+				}
+			}
+		},
+		// ベンダー名のバリデーション
+		errorVendorName: function errorVendorName() {
+			var result = '';
+			if (/^[A-Za-z0-9]*$/.test(this.vendorName) === false) {
+				result = 'ベンダー名は半角英数字で入力してください。';
+				this.isVendorNameEnable = false;
+			} else {
+				result = '';
+				this.isVendorNameEnable = true;
+			}
+			return result;
+		},
+		// プロジェクト名のバリデーション
+		errorProjectName: function errorProjectName() {
+			var result = '';
+			if (/^[A-Za-z0-9]*$/.test(this.projectName) === false) {
+				result = 'プロジェクト名は半角英数字で入力してください。';
+				this.isProjectNameEnable = false;
+			} else {
+				result = '';
+				this.isProjectNameEnable = true;
+			}
+			return result;
+		},
+		// リポジトリのバリデーション
+		errorRepository: {
+			get: function get() {
+				var result = '';
+				if (this.isCheckedOption === 'pickles2') {
+					if (this.isCheckedInit === true) {
+						if (this.repository === '') {
+							result = 'リポジトリが未入力です。';
+							this.isRepositoryEnable = false;
+						} else if (/^https(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/.test(this.repository) === false) {
+							result = 'リポジトリはhttps形式で入力してください。';
+							this.isRepositoryEnable = false;
+						} else {
+							result = '';
+							this.isRepositoryEnable = true;
+						}
+					} else {
+						result = '';
+						this.isRepositoryEnable = true;
+					}
+				} else if (this.isCheckedOption === 'git') {
+					if (this.isCheckedRepository === 'original') {
+						if (this.cloneRepository === '') {
+							result = 'リポジトリが未入力です。';
+							this.isRepositoryEnable = false;
+						} else if (/^https(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/.test(this.cloneRepository) === false) {
+							result = 'リポジトリはhttps形式で入力してください。';
+							this.isRepositoryEnable = false;
+						} else {
+							result = '';
+							this.isRepositoryEnable = true;
+						}
+					} else if (this.isCheckedRepository === 'new') {
+						if (this.cloneNewRepository === '') {
+							result = 'リポジトリが未入力です。';
+							this.isRepositoryEnable = false;
+						} else if (/^https(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/.test(this.cloneNewRepository) === false) {
+							result = 'リポジトリはhttps形式で入力してください。';
+							this.isRepositoryEnable = false;
+						} else {
+							result = '';
+							this.isRepositoryEnable = true;
+						}
+					} else {
+						result = '';
+						this.isRepositoryEnable = true;
+					}
+				}
+				return result;
+			},
+
+			set: function set(value) {
+				if (value === 1) {
+					this.repositoryConfirm = 'リモートリポジトリが存在しません。別のリポジトリを指定してください。';
+					this.isRepositoryEnable = false;
+				} else if (value === 2) {
+					this.repositoryConfirm = 'リモートリポジトリに拒否されました。別のリポジトリを指定してください。';
+					this.isRepositoryEnable = false;
+				} else {
+					this.repositoryConfirm = 'リモートリポジトリにアクセスできません。ネットワークを確認してください。';
+					this.isRepositoryEnable = true;
+				}
+			}
+		},
+
+		// ユーザー名のバリデーション
+		errorUserName: {
+			get: function get() {
+				var result = '';
+				if (this.isCheckedOption === 'pickles2') {
+					if (this.isCheckedInit === true) {
+						if (this.userName === '') {
+							result = 'ユーザー名が未入力です。';
+							this.isUserNameEnable = false;
+						} else {
+							result = '';
+							this.isUserNameEnable = true;
+						}
+					} else {
+						result = '';
+						this.isUserNameEnable = true;
+					}
+				} else if (this.isCheckedOption === 'git') {
+					if (this.isCheckedRepository === 'original') {
+						if (this.cloneUserName === '') {
+							result = 'ユーザー名が未入力です。';
+							this.isUserNameEnable = false;
+						} else {
+							result = '';
+							this.isUserNameEnable = true;
+						}
+					} else if (this.isCheckedRepository === 'new') {
+						if (this.cloneNewUserName === '') {
+							result = 'ユーザー名が未入力です。';
+							this.isUserNameEnable = false;
+						} else {
+							result = '';
+							this.isUserNameEnable = true;
+						}
+					} else {
+						result = '';
+						this.isUserNameEnable = true;
+					}
+				}
+				return result;
+			},
+
+			set: function set(value) {
+				if (value === 1) {
+					this.userNameConfirm = 'ユーザー名またはパスワードに誤りがあります。';
+					this.isUserNameEnable = false;
+				}
+			}
+		},
+		// パスワードのバリデーション
+		errorPassword: {
+			get: function get() {
+				var result = '';
+				if (this.isCheckedOption === 'pickles2') {
+					if (this.isCheckedInit === true) {
+						if (this.password === '') {
+							result = 'パスワードが未入力です。';
+							this.isPasswordEnable = false;
+						} else {
+							result = '';
+							this.isPasswordEnable = true;
+						}
+					} else {
+						result = '';
+						this.isPasswordEnable = true;
+					}
+				} else if (this.isCheckedOption === 'git') {
+					if (this.isCheckedRepository === 'original') {
+						if (this.clonePassword === '') {
+							result = 'パスワードが未入力です。';
+							this.isPasswordEnable = false;
+						} else {
+							result = '';
+							this.isPasswordEnable = true;
+						}
+					} else if (this.isCheckedRepository === 'new') {
+						if (this.cloneNewPassword === '') {
+							result = 'パスワードが未入力です。';
+							this.isPasswordEnable = false;
+						} else {
+							result = '';
+							this.isPasswordEnable = true;
+						}
+					} else {
+						result = '';
+						this.isPasswordEnable = true;
+					}
+				}
+				return result;
+			},
+
+			set: function set(value) {
+				if (value === 1) {
+					this.passwordConfirm = 'ユーザー名またはパスワードに誤りがあります。';
+					this.isPasswordEnable = false;
+				}
+			}
+		},
+		// プロジェクトをセットアップするボタンのON/OFF
+		classSetupStartEnable: function classSetupStartEnable() {
+			return {
+				show: this.isCloneRepositoryEnable === true && this.isCloneUserNameEnable === true && this.isClonePasswordEnable === true,
+				hidden: this.isCloneRepositoryEnable === false || this.isCloneUserNameEnable === false || this.isClonePasswordEnable === false
+			};
+		},
+		// OK DisabledボタンのON/OFF
+		classSetupStartDisable: function classSetupStartDisable() {
+			return {
+				hidden: this.isCloneRepositoryEnable === true && this.isCloneUserNameEnable === true && this.isClonePasswordEnable === true,
+				show: this.isCloneRepositoryEnable === false || this.isCloneUserNameEnable === false || this.isClonePasswordEnable === false
+			};
+		},
+		// OKボタンのON/OFF
+		classSetupEnable: function classSetupEnable() {
+			return {
+				show: this.isVendorNameEnable === true && this.isProjectNameEnable === true && this.isRepositoryEnable === true && this.isUserNameEnable === true && this.isPasswordEnable === true,
+				hidden: this.isVendorNameEnable === false || this.isProjectNameEnable === false || this.isRepositoryEnable === false || this.isUserNameEnable === false || this.isPasswordEnable === false
+			};
+		},
+		// OK DisabledボタンのON/OFF
+		classSetupDisable: function classSetupDisable() {
+			return {
+				hidden: this.isVendorNameEnable === true && this.isProjectNameEnable === true && this.isRepositoryEnable === true && this.isUserNameEnable === true && this.isPasswordEnable === true,
+				show: this.isVendorNameEnable === false || this.isProjectNameEnable === false || this.isRepositoryEnable === false || this.isUserNameEnable === false || this.isPasswordEnable === false
 			};
 		}
 	}
@@ -61490,13 +62132,71 @@ var render = function() {
                         staticStyle: { "margin-top": "20px" }
                       },
                       [
+                        _c("div", { staticClass: "col-md-12" }, [
+                          _c("div", { staticClass: "col-md-3" }),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "col-md-6 text-danger" }, [
+                            _vm._v(
+                              _vm._s(_vm.errorCloneRepository) +
+                                _vm._s(_vm.cloneRepositoryConfirm)
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-md-12" }, [
+                          _vm._m(0),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "col-md-6" }, [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.cloneRepository,
+                                  expression: "cloneRepository"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "text",
+                                placeholder:
+                                  "https://github.com/pickles2/preset-get-start-pickles2.git"
+                              },
+                              domProps: { value: _vm.cloneRepository },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.cloneRepository = $event.target.value
+                                }
+                              }
+                            })
+                          ])
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group row" }, [
+                      _c("div", { staticClass: "col-md-12" }, [
+                        _c("div", { staticClass: "col-md-3" }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-md-6 text-danger" }, [
+                          _vm._v(
+                            _vm._s(_vm.errorCloneUserName) +
+                              _vm._s(_vm.cloneUserNameConfirm)
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-12" }, [
                         _c(
                           "label",
                           {
-                            staticClass: "col-sm-2",
+                            staticClass: "col-md-3",
                             staticStyle: { "font-weight": "normal" }
                           },
-                          [_vm._v("Repository URL: ")]
+                          [_vm._v("User name: ")]
                         ),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-md-6" }, [
@@ -61505,93 +62205,79 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.repository,
-                                expression: "repository"
+                                value: _vm.cloneUserName,
+                                expression: "cloneUserName"
                               }
                             ],
                             staticClass: "form-control",
-                            attrs: { type: "text" },
-                            domProps: { value: _vm.repository },
+                            attrs: {
+                              type: "text",
+                              placeholder:
+                                "（任意）クローンするリモートリポジトリのユーザー名"
+                            },
+                            domProps: { value: _vm.cloneUserName },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
-                                _vm.repository = $event.target.value
+                                _vm.cloneUserName = $event.target.value
                               }
                             }
                           })
                         ])
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group row" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "col-sm-2",
-                          staticStyle: { "font-weight": "normal" }
-                        },
-                        [_vm._v("User name: ")]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-md-6" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.user_name,
-                              expression: "user_name"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { type: "text" },
-                          domProps: { value: _vm.user_name },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.user_name = $event.target.value
-                            }
-                          }
-                        })
                       ])
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group row" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "col-sm-2",
-                          staticStyle: { "font-weight": "normal" }
-                        },
-                        [_vm._v("Password: ")]
-                      ),
+                      _c("div", { staticClass: "col-md-12" }, [
+                        _c("div", { staticClass: "col-md-3" }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-md-6 text-danger" }, [
+                          _vm._v(
+                            _vm._s(_vm.errorClonePassword) +
+                              _vm._s(_vm.clonePasswordConfirm)
+                          )
+                        ])
+                      ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "col-md-6" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.password,
-                              expression: "password"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { type: "password" },
-                          domProps: { value: _vm.password },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
+                      _c("div", { staticClass: "col-md-12" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass: "col-md-3",
+                            staticStyle: { "font-weight": "normal" }
+                          },
+                          [_vm._v("Password: ")]
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-md-6" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.clonePassword,
+                                expression: "clonePassword"
                               }
-                              _vm.password = $event.target.value
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              type: "password",
+                              placeholder:
+                                "（任意）クローンするリモートリポジトリのパスワード"
+                            },
+                            domProps: { value: _vm.clonePassword },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.clonePassword = $event.target.value
+                              }
                             }
-                          }
-                        })
+                          })
+                        ])
                       ])
                     ])
                   ])
@@ -61599,26 +62285,38 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _vm._m(0),
-            _vm._v(" "),
             _vm._m(1),
             _vm._v(" "),
-            _c("p", [
+            _vm._m(2),
+            _vm._v(" "),
+            _c("p"),
+            _c("div", { class: _vm.classSetupStartEnable }, [
               _c(
                 "button",
                 {
-                  staticClass: "px2-btn px2-btn--primary",
+                  staticClass: "px2-btn px2-btn--primary col-md-12",
+                  staticStyle: { "margin-bottom": "16px" },
                   on: { click: _vm.setup }
                 },
                 [_vm._v("プロジェクトをセットアップする")]
               )
-            ])
+            ]),
+            _vm._v(" "),
+            _c("div", { class: _vm.classSetupStartDisable }, [
+              _c(
+                "button",
+                {
+                  staticClass: "px2-btn px2-btn--primary col-md-12",
+                  staticStyle: { "margin-bottom": "16px" },
+                  attrs: { disabled: "disabled" }
+                },
+                [_vm._v("プロジェクトをセットアップする")]
+              )
+            ]),
+            _vm._v(" "),
+            _c("p")
           ]
         )
-      ]),
-      _vm._v(" "),
-      _c("address", { staticClass: "center" }, [
-        _vm._v("(C)Pickles 2 Project.")
       ])
     ]),
     _vm._v(" "),
@@ -61806,6 +62504,28 @@ var render = function() {
                       [_vm._v("次へ")]
                     )
                   ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "dialog-buttons center",
+                    class: [_vm.isSetupRestartButton ? "show" : "hidden"]
+                  },
+                  [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "px2-btn px2-btn--danger",
+                        on: {
+                          click: function($event) {
+                            return _vm.setup(1)
+                          }
+                        }
+                      },
+                      [_vm._v("再セットアップ")]
+                    )
+                  ]
                 )
               ]
             ),
@@ -61828,14 +62548,14 @@ var render = function() {
                       staticStyle: { width: "100%" }
                     },
                     [
-                      _vm._m(2),
+                      _vm._m(3),
                       _vm._v(" "),
                       _c("tbody", [
                         _c("tr", [
                           _c("th", [_vm._v("Composer package name")]),
                           _vm._v(" "),
                           _c("td", [
-                            _vm._m(3),
+                            _vm._m(4),
                             _vm._v(" "),
                             _c("p", [
                               _vm._v(
@@ -61851,25 +62571,32 @@ var render = function() {
                             _vm._v(" "),
                             _c("p", [_vm._v("vendorName")]),
                             _vm._v(" "),
+                            _c("p", { staticClass: "text-danger" }, [
+                              _vm._v(_vm._s(_vm.errorVendorName))
+                            ]),
+                            _vm._v(" "),
                             _c("p", {}, [
                               _c("input", {
                                 directives: [
                                   {
                                     name: "model",
                                     rawName: "v-model",
-                                    value: _vm.vendor_name,
-                                    expression: "vendor_name"
+                                    value: _vm.vendorName,
+                                    expression: "vendorName"
                                   }
                                 ],
                                 staticClass: "form-control",
-                                attrs: { type: "text" },
-                                domProps: { value: _vm.vendor_name },
+                                attrs: {
+                                  type: "text",
+                                  placeholder: "pickles2"
+                                },
+                                domProps: { value: _vm.vendorName },
                                 on: {
                                   input: function($event) {
                                     if ($event.target.composing) {
                                       return
                                     }
-                                    _vm.vendor_name = $event.target.value
+                                    _vm.vendorName = $event.target.value
                                   }
                                 }
                               })
@@ -61877,25 +62604,32 @@ var render = function() {
                             _vm._v(" "),
                             _c("p", [_vm._v("projectName")]),
                             _vm._v(" "),
+                            _c("p", { staticClass: "text-danger" }, [
+                              _vm._v(_vm._s(_vm.errorProjectName))
+                            ]),
+                            _vm._v(" "),
                             _c("p", {}, [
                               _c("input", {
                                 directives: [
                                   {
                                     name: "model",
                                     rawName: "v-model",
-                                    value: _vm.project_name,
-                                    expression: "project_name"
+                                    value: _vm.projectName,
+                                    expression: "projectName"
                                   }
                                 ],
                                 staticClass: "form-control",
-                                attrs: { type: "text" },
-                                domProps: { value: _vm.project_name },
+                                attrs: {
+                                  type: "text",
+                                  placeholder: "preset-get-start-pickles2"
+                                },
+                                domProps: { value: _vm.projectName },
                                 on: {
                                   input: function($event) {
                                     if ($event.target.composing) {
                                       return
                                     }
-                                    _vm.project_name = $event.target.value
+                                    _vm.projectName = $event.target.value
                                   }
                                 }
                               })
@@ -61907,152 +62641,535 @@ var render = function() {
                           _c("th", [_vm._v("Gitリポジトリ")]),
                           _vm._v(" "),
                           _c("td", [
-                            _c("p", [
-                              _vm._v(
-                                "このオプションを有効にすると、自動的に gitローカルリポジトリが作成され、最初のコミットが作成されます。"
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("p", [
-                              _vm._v(
-                                "バージョン管理をしない場合、または Git以外のツールを使ってバージョン管理する場合は、このオプションをオフにしてください。"
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("p", [
-                              _vm._v("通常は、オンにされることをお勧めします。")
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "options_git_init" }),
-                            _vm._v(" "),
-                            _c("p", [
-                              _c("label", [
-                                _c("input", {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.isCheckedInit,
-                                      expression: "isCheckedInit"
-                                    }
-                                  ],
-                                  attrs: { type: "checkbox" },
-                                  domProps: {
-                                    checked: Array.isArray(_vm.isCheckedInit)
-                                      ? _vm._i(_vm.isCheckedInit, null) > -1
-                                      : _vm.isCheckedInit
-                                  },
-                                  on: {
-                                    change: function($event) {
-                                      var $$a = _vm.isCheckedInit,
-                                        $$el = $event.target,
-                                        $$c = $$el.checked ? true : false
-                                      if (Array.isArray($$a)) {
-                                        var $$v = null,
-                                          $$i = _vm._i($$a, $$v)
-                                        if ($$el.checked) {
-                                          $$i < 0 &&
-                                            (_vm.isCheckedInit = $$a.concat([
-                                              $$v
-                                            ]))
+                            _c("div", { class: _vm.classOptionPickles2 }, [
+                              _c("p", [
+                                _vm._v(
+                                  "このオプションを有効にすると、自動的に gitローカルリポジトリが作成され、最初のコミットが作成されます。"
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("p", [
+                                _vm._v(
+                                  "バージョン管理をしない場合、または Git以外のツールを使ってバージョン管理する場合は、このオプションをオフにしてください。"
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("p", [
+                                _vm._v(
+                                  "通常は、オンにされることをお勧めします。"
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "options_git_init" }),
+                              _vm._v(" "),
+                              _c("p", [
+                                _c("label", [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.isCheckedInit,
+                                        expression: "isCheckedInit"
+                                      }
+                                    ],
+                                    attrs: { type: "checkbox" },
+                                    domProps: {
+                                      checked: Array.isArray(_vm.isCheckedInit)
+                                        ? _vm._i(_vm.isCheckedInit, null) > -1
+                                        : _vm.isCheckedInit
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        var $$a = _vm.isCheckedInit,
+                                          $$el = $event.target,
+                                          $$c = $$el.checked ? true : false
+                                        if (Array.isArray($$a)) {
+                                          var $$v = null,
+                                            $$i = _vm._i($$a, $$v)
+                                          if ($$el.checked) {
+                                            $$i < 0 &&
+                                              (_vm.isCheckedInit = $$a.concat([
+                                                $$v
+                                              ]))
+                                          } else {
+                                            $$i > -1 &&
+                                              (_vm.isCheckedInit = $$a
+                                                .slice(0, $$i)
+                                                .concat($$a.slice($$i + 1)))
+                                          }
                                         } else {
-                                          $$i > -1 &&
-                                            (_vm.isCheckedInit = $$a
-                                              .slice(0, $$i)
-                                              .concat($$a.slice($$i + 1)))
+                                          _vm.isCheckedInit = $$c
                                         }
-                                      } else {
-                                        _vm.isCheckedInit = $$c
                                       }
                                     }
-                                  }
-                                }),
-                                _vm._v(" Gitリポジトリを初期化する")
+                                  }),
+                                  _vm._v(" Gitリポジトリを初期化する")
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { class: _vm.classCheckedInit }, [
+                                _c("p", [
+                                  _vm._v(
+                                    "コミットするGitリポジトリの情報を入力してください。"
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _vm._m(5),
+                                _vm._v(" "),
+                                _c("p", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(_vm.errorRepository) +
+                                      _vm._s(_vm.repositoryConfirm)
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("p", {}, [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.repository,
+                                        expression: "repository"
+                                      }
+                                    ],
+                                    staticClass: "form-control",
+                                    attrs: {
+                                      type: "text",
+                                      placeholder:
+                                        "https://github.com/pickles2/preset-get-start-pickles2.git"
+                                    },
+                                    domProps: { value: _vm.repository },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.repository = $event.target.value
+                                      }
+                                    }
+                                  })
+                                ]),
+                                _vm._v(" "),
+                                _vm._m(6),
+                                _vm._v(" "),
+                                _c("p", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(_vm.errorUserName) +
+                                      _vm._s(_vm.userNameConfirm)
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("p", {}, [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.userName,
+                                        expression: "userName"
+                                      }
+                                    ],
+                                    staticClass: "form-control",
+                                    attrs: {
+                                      type: "text",
+                                      placeholder:
+                                        "リモートリポジトリのユーザー名"
+                                    },
+                                    domProps: { value: _vm.userName },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.userName = $event.target.value
+                                      }
+                                    }
+                                  })
+                                ]),
+                                _vm._v(" "),
+                                _vm._m(7),
+                                _vm._v(" "),
+                                _c("p", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(_vm.errorPassword) +
+                                      _vm._s(_vm.passwordConfirm)
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("p", {}, [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.password,
+                                        expression: "password"
+                                      }
+                                    ],
+                                    staticClass: "form-control",
+                                    attrs: {
+                                      type: "password",
+                                      placeholder:
+                                        "リモートリポジトリのパスワード"
+                                    },
+                                    domProps: { value: _vm.password },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.password = $event.target.value
+                                      }
+                                    }
+                                  })
+                                ])
                               ])
                             ]),
                             _vm._v(" "),
-                            _c("p", [
-                              _vm._v(
-                                "コミットの名義情報を入力してください。この値は git のグローバル設定領域に登録されます。"
+                            _c("div", { class: _vm.classOptionGit }, [
+                              _c("div", { staticClass: "options_git_init" }),
+                              _vm._v(" "),
+                              _c("p", [
+                                _c("label", [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.isCheckedRepository,
+                                        expression: "isCheckedRepository"
+                                      }
+                                    ],
+                                    attrs: { type: "radio", value: "original" },
+                                    domProps: {
+                                      checked: _vm._q(
+                                        _vm.isCheckedRepository,
+                                        "original"
+                                      )
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        _vm.isCheckedRepository = "original"
+                                      }
+                                    }
+                                  }),
+                                  _vm._v(" クローン元のGitリポジトリに参加する")
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("p", [
+                                _c("label", [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.isCheckedRepository,
+                                        expression: "isCheckedRepository"
+                                      }
+                                    ],
+                                    attrs: { type: "radio", value: "new" },
+                                    domProps: {
+                                      checked: _vm._q(
+                                        _vm.isCheckedRepository,
+                                        "new"
+                                      )
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        _vm.isCheckedRepository = "new"
+                                      }
+                                    }
+                                  }),
+                                  _vm._v(
+                                    " 初期化して別のGitリポジトリを作成する"
+                                  )
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("p", [
+                                _c("label", [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.isCheckedRepository,
+                                        expression: "isCheckedRepository"
+                                      }
+                                    ],
+                                    attrs: { type: "radio", value: "none" },
+                                    domProps: {
+                                      checked: _vm._q(
+                                        _vm.isCheckedRepository,
+                                        "none"
+                                      )
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        _vm.isCheckedRepository = "none"
+                                      }
+                                    }
+                                  }),
+                                  _vm._v(" Gitリポジトリを作成しない")
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { class: _vm.classCheckedOriginalRepository },
+                                [
+                                  _c("p", [
+                                    _vm._v(
+                                      "クローン元のGitリポジトリの情報を入力してください。"
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._m(8),
+                                  _vm._v(" "),
+                                  _c("p", { staticClass: "text-danger" }, [
+                                    _vm._v(
+                                      _vm._s(_vm.errorRepository) +
+                                        _vm._s(_vm.repositoryConfirm)
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("p", {}, [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.cloneRepository,
+                                          expression: "cloneRepository"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: {
+                                        type: "text",
+                                        placeholder:
+                                          "https://github.com/pickles2/preset-get-start-pickles2.git"
+                                      },
+                                      domProps: { value: _vm.cloneRepository },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.cloneRepository =
+                                            $event.target.value
+                                        }
+                                      }
+                                    })
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._m(9),
+                                  _vm._v(" "),
+                                  _c("p", { staticClass: "text-danger" }, [
+                                    _vm._v(
+                                      _vm._s(_vm.errorUserName) +
+                                        _vm._s(_vm.userNameConfirm)
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("p", {}, [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.cloneUserName,
+                                          expression: "cloneUserName"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: {
+                                        type: "text",
+                                        placeholder:
+                                          "リモートリポジトリのユーザー名"
+                                      },
+                                      domProps: { value: _vm.cloneUserName },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.cloneUserName =
+                                            $event.target.value
+                                        }
+                                      }
+                                    })
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._m(10),
+                                  _vm._v(" "),
+                                  _c("p", { staticClass: "text-danger" }, [
+                                    _vm._v(
+                                      _vm._s(_vm.errorPassword) +
+                                        _vm._s(_vm.passwordConfirm)
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("p", {}, [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.clonePassword,
+                                          expression: "clonePassword"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: {
+                                        type: "password",
+                                        placeholder:
+                                          "リモートリポジトリのパスワード"
+                                      },
+                                      domProps: { value: _vm.clonePassword },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.clonePassword =
+                                            $event.target.value
+                                        }
+                                      }
+                                    })
+                                  ])
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { class: _vm.classCheckedNewRepository },
+                                [
+                                  _c("p", [
+                                    _vm._v(
+                                      "新規作成するGitリポジトリの情報を入力してください。"
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._m(11),
+                                  _vm._v(" "),
+                                  _c("p", { staticClass: "text-danger" }, [
+                                    _vm._v(
+                                      _vm._s(_vm.errorRepository) +
+                                        _vm._s(_vm.repositoryConfirm)
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("p", {}, [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.cloneNewRepository,
+                                          expression: "cloneNewRepository"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: {
+                                        type: "text",
+                                        placeholder:
+                                          "https://github.com/pickles2/preset-get-start-pickles2.git"
+                                      },
+                                      domProps: {
+                                        value: _vm.cloneNewRepository
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.cloneNewRepository =
+                                            $event.target.value
+                                        }
+                                      }
+                                    })
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._m(12),
+                                  _vm._v(" "),
+                                  _c("p", { staticClass: "text-danger" }, [
+                                    _vm._v(
+                                      _vm._s(_vm.errorUserName) +
+                                        _vm._s(_vm.userNameConfirm)
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("p", {}, [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.cloneNewUserName,
+                                          expression: "cloneNewUserName"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: {
+                                        type: "text",
+                                        placeholder:
+                                          "リモートリポジトリのユーザー名"
+                                      },
+                                      domProps: { value: _vm.cloneNewUserName },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.cloneNewUserName =
+                                            $event.target.value
+                                        }
+                                      }
+                                    })
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._m(13),
+                                  _vm._v(" "),
+                                  _c("p", { staticClass: "text-danger" }, [
+                                    _vm._v(
+                                      _vm._s(_vm.errorPassword) +
+                                        _vm._s(_vm.passwordConfirm)
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("p", {}, [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.cloneNewPassword,
+                                          expression: "cloneNewPassword"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: {
+                                        type: "password",
+                                        placeholder:
+                                          "リモートリポジトリのパスワード"
+                                      },
+                                      domProps: { value: _vm.cloneNewPassword },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.cloneNewPassword =
+                                            $event.target.value
+                                        }
+                                      }
+                                    })
+                                  ])
+                                ]
                               )
-                            ]),
-                            _vm._v(" "),
-                            _c("p", [_vm._v("repository")]),
-                            _vm._v(" "),
-                            _c("p", {}, [
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.repository,
-                                    expression: "repository"
-                                  }
-                                ],
-                                staticClass: "form-control",
-                                attrs: { type: "text" },
-                                domProps: { value: _vm.repository },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.repository = $event.target.value
-                                  }
-                                }
-                              })
-                            ]),
-                            _vm._v(" "),
-                            _c("p", [_vm._v("UserName")]),
-                            _vm._v(" "),
-                            _c("p", {}, [
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.user_name,
-                                    expression: "user_name"
-                                  }
-                                ],
-                                staticClass: "form-control",
-                                attrs: { type: "text" },
-                                domProps: { value: _vm.user_name },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.user_name = $event.target.value
-                                  }
-                                }
-                              })
-                            ]),
-                            _vm._v(" "),
-                            _c("p", [_vm._v("password")]),
-                            _vm._v(" "),
-                            _c("p", {}, [
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.password,
-                                    expression: "password"
-                                  }
-                                ],
-                                staticClass: "form-control",
-                                attrs: { type: "password" },
-                                domProps: { value: _vm.password },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.password = $event.target.value
-                                  }
-                                }
-                              })
                             ])
                           ])
                         ])
@@ -62061,16 +63178,108 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "dialog-buttons center" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "px2-btn--primary px2-btn",
-                      on: { click: _vm.option }
-                    },
-                    [_vm._v("OK")]
-                  )
-                ])
+                _c(
+                  "div",
+                  {
+                    staticClass: "dialog-buttons center",
+                    class: _vm.classSetupEnable
+                  },
+                  [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "px2-btn--primary px2-btn",
+                        on: { click: _vm.option }
+                      },
+                      [_vm._v("OK")]
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "dialog-buttons center",
+                    class: _vm.classSetupDisable
+                  },
+                  [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "px2-btn",
+                        attrs: { disabled: "disabled" }
+                      },
+                      [_vm._v("OK")]
+                    )
+                  ]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "dialog_box",
+                class: _vm.classProgress,
+                staticStyle: { width: "80%", margin: "3em auto" }
+              },
+              [
+                _c("h1", [_vm._v("Pickles 2 プロジェクトのセットアップ")]),
+                _vm._v(" "),
+                _c("div", [_vm._v(_vm._s(_vm.info))]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "cont_scene",
+                    attrs: { id: "cont_before_publish-progress" }
+                  },
+                  [
+                    _c("div", { staticClass: "cont_canvas" }, [
+                      _c("div", { staticClass: "unit cont_progress" }, [
+                        _c("div", { staticClass: "center" }, [
+                          _c("p", [_vm._v("セットアップを完了しています。")]),
+                          _vm._v(" "),
+                          _c("p", [
+                            _vm._v("そのまましばらくお待ちください...")
+                          ]),
+                          _vm._v(" "),
+                          _c("div", [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "cont_progress-phase",
+                                staticStyle: { "font-weight": "bold" }
+                              },
+                              [_vm._v("In progress...")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "cont_progress-currentTask" },
+                              [_vm._v(_vm._s(_vm.fraction))]
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "cont_progress-bar" }, [
+                            _c("div", { staticClass: "progress" }, [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "progress-bar progress-bar-striped active",
+                                  style: { width: _vm.rate + "%" },
+                                  attrs: { role: "progressbar" }
+                                },
+                                [_vm._v(_vm._s(_vm.rate) + "%")]
+                              )
+                            ])
+                          ])
+                        ])
+                      ])
+                    ])
+                  ]
+                )
               ]
             )
           ]
@@ -62080,6 +63289,19 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "label",
+      { staticClass: "col-md-3", staticStyle: { "font-weight": "normal" } },
+      [
+        _vm._v("Repository URL: "),
+        _c("span", { staticClass: "must" }, [_vm._v("Required")])
+      ]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -62132,6 +63354,87 @@ var staticRenderFns = [
       ),
       _c("code", [_vm._v("composer.json")]),
       _vm._v(" を編集することで変更できます。")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("Repository "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("UserName "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("Password "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("Original Repository "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("Original UserName "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("Original Password "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("New Repository "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("New UserName "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("New Password "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
     ])
   }
 ]

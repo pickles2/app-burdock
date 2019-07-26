@@ -57,8 +57,8 @@
                                     {{ 'ようこそ '.Auth::user()->name.' さん' }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="dropdown-user">
-                                    <a class="dropdown-item" href="{{ url('profile') }}">
-                                        {{ __('Profile') }}
+                                    <a class="dropdown-item" href="{{ url('mypage') }}">
+                                        {{ __('Mypage') }}
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
