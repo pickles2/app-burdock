@@ -1,5 +1,5 @@
 @php
-    $title = __('User') . ': ' . $user->name;
+    $title = __('Mypage') . ': ' . $user->name;
 @endphp
 @extends('layouts.px2_project')
 @section('content')
@@ -9,12 +9,12 @@
     {{-- 編集・削除ボタン --}}
     @can('edit', $user)
         <div>
-            <a href="{{ url('profile/edit') }}" class="btn btn-primary">
+            <a href="{{ url('mypage/edit') }}" class="btn btn-primary">
                 {{ __('Edit') }}
             </a>
             {{-- 削除ボタンは後で正式なものに置き換えます --}}
             @component('components.btn-user-del')
-                @slot('controller', 'profile')
+                @slot('controller', 'mypage')
                 @slot('id', $user->id)
                 @slot('name', $user->project_name)
             @endcomponent
@@ -66,6 +66,7 @@
                                 @component('components.btn-del')
                                     @slot('controller', 'projects')
                                     @slot('id', $project->id)
+									@slot('code', $project->project_code)
                                     @slot('name', $project->project_name)
                                     @slot('branch', get_git_remote_default_branch_name())
                                 @endcomponent

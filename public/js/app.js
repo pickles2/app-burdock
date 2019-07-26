@@ -61379,7 +61379,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	// view側から変数をプロパティとして渡す
@@ -61684,6 +61683,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					this.isSetupDuring = false;
 					this.isSetupDuringButton = true;
 					this.isSetupBefore = true;
+					this.isCloneRepositoryEnable = false;
+					this.isCloneUserNameEnable = false;
+					this.isClonePasswordEnable = false;
 					this.setup_status = 2;
 				} else if (value === 3) {
 					this.info = '';
@@ -62292,7 +62294,8 @@ var render = function() {
               _c(
                 "button",
                 {
-                  staticClass: "px2-btn px2-btn--primary",
+                  staticClass: "px2-btn px2-btn--primary col-md-12",
+                  staticStyle: { "margin-bottom": "16px" },
                   on: { click: _vm.setup }
                 },
                 [_vm._v("プロジェクトをセットアップする")]
@@ -62303,7 +62306,8 @@ var render = function() {
               _c(
                 "button",
                 {
-                  staticClass: "px2-btn px2-btn--primary",
+                  staticClass: "px2-btn px2-btn--primary col-md-12",
+                  staticStyle: { "margin-bottom": "16px" },
                   attrs: { disabled: "disabled" }
                 },
                 [_vm._v("プロジェクトをセットアップする")]
@@ -62313,10 +62317,6 @@ var render = function() {
             _c("p")
           ]
         )
-      ]),
-      _vm._v(" "),
-      _c("address", { staticClass: "center" }, [
-        _vm._v("(C)Pickles 2 Project.")
       ])
     ]),
     _vm._v(" "),
