@@ -67,15 +67,14 @@
 					</p>
 					<p>
 						<div v-bind:class="classSetupStartEnable">
-							<button class="px2-btn px2-btn--primary" v-on:click="setup">プロジェクトをセットアップする</button>
+							<button class="px2-btn px2-btn--primary col-md-12" v-on:click="setup" style="margin-bottom: 16px;">プロジェクトをセットアップする</button>
 						</div>
 						<div v-bind:class="classSetupStartDisable">
-							<button class="px2-btn px2-btn--primary" disabled="disabled">プロジェクトをセットアップする</button>
+							<button class="px2-btn px2-btn--primary col-md-12" disabled="disabled" style="margin-bottom: 16px;">プロジェクトをセットアップする</button>
 						</div>
 					</p>
 				</div>
 			</div>
-			<address class="center">(C)Pickles 2 Project.</address>
 		</div>
 		<div class="contents" tabindex="-1" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 10000;" v-bind:class="classModal">
 			<div style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; overflow: hidden; background: rgb(0, 0, 0); opacity: 0.5;"></div>
@@ -584,6 +583,9 @@ export default {
 					this.isSetupDuring = false;
 					this.isSetupDuringButton = true;
 					this.isSetupBefore = true;
+					this.isCloneRepositoryEnable = false;
+					this.isCloneUserNameEnable = false;
+					this.isClonePasswordEnable = false;
 					this.setup_status = 2;
 				} else if (value === 3) {
 					this.info = '';

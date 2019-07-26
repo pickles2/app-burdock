@@ -10,6 +10,20 @@
 		<div id="app">
 			<setup-component project-code="{{ $project->project_code}}" branch-name="{{ $branch_name }}" exists-setup-log="{{ $exists_setup_log }}" log-checked-option="{{ $log_checked_option }}" log-checked-init="{{ $log_checked_init }}" log-repository="{{ $log_repository }}" log-user-name="{{ $log_user_name }}" log-password="{{ $log_password }}" log-setup-status="{{ $log_setup_status }}" log-checked-repository="{{ $log_checked_repository }}" log-vendor-name="{{ $log_vendor_name }}" log-project-name="{{ $log_project_name }}"></setup-component>
 		</div>
+		<div class="contents">
+			<p>
+				<div>
+					@component('components.btn-del-project')
+						@slot('controller', 'projects')
+						@slot('id', $project->id)
+						@slot('code', $project->project_code)
+						@slot('name', $project->project_name)
+						@slot('branch', get_git_remote_default_branch_name())
+					@endcomponent
+				</div>
+			</p>
+			<address class="center">(C)Pickles 2 Project.</address>
+		</div>
 	@else
 		<div class="contents">
 			<div class="cont_info"></div>

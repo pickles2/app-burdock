@@ -155,16 +155,21 @@ class ProjectController extends Controller
 		$project_code = $project->project_code;
 		$project_path = get_project_workingtree_dir($project_code, $branch_name);
 
-		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-		chdir($project_path);
-		$data_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
-		$current = json_decode($data_json);
-		chdir($path_current_dir); // 元いたディレクトリへ戻る
+		// DBからプロジェクトを削除
+		$result = $project->delete();
+		// プロジェクトフォルダが存在していれば削除
+		if(\File::exists(env('BD_DATA_DIR').'/projects/'.$project_code) && $result === true) {
+			\File::deleteDirectory(env('BD_DATA_DIR').'/projects/'.$project_code);
+			if(\File::exists(env('BD_DATA_DIR').'/projects/'.$project_code) === false) {
+				$result = true;
+			} else {
+				$result = false;
+			}
+		} else {
+			$result = true;
+		}
 
-		$project->delete();
-		\File::deleteDirectory(env('BD_DATA_DIR').'/projects/'.$project_code);
-
-		if(\File::exists(env('BD_DATA_DIR').'/projects/'.$project_code) === false) {
+		if(\File::exists(env('BD_DATA_DIR').'/projects/'.$project_code) === false && $result === true) {
 			$message = 'Deleted a Project.';
 		} else {
 			$message = 'プロジェクトを削除できませんでした。';

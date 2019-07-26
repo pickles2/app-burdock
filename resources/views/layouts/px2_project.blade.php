@@ -42,7 +42,7 @@
 						@guest
 							<span><a class="app_name" href="{{ url('/') }}">{{ config('app.name') }}</a></span>
 						@else
-							@if(! Request::is('*profile*') && ! Request::is('/') && ! Request::is('setup/*'))
+							@if(! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
 								<span>{{ 'Project_'.$project->project_name }}</span>
 							@else
 								<span><a class="app_name" href="{{ url('/') }}">{{ config('app.name') }}</a></span>
@@ -67,7 +67,7 @@
 									</ul>
 								</li>
 							@else
-								@if(! Request::is('*profile*') && ! Request::is('/') && ! Request::is('setup/*'))
+								@if(! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
 									<li><a href="{{ url('projects/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="home">ホーム</a></li>
 									<li><a href="{{ url('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="sitemaps">サイトマップ</a></li>
 									<li><a href="{{ url('themes/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="themes">テーマ</a></li>
@@ -80,7 +80,7 @@
 								<li>
 									<a class="nav-link dropdown-toggle" href="#" id="dropdown-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ 'ようこそ '.Auth::user()->name.' さん' }}</a>
 									<ul>
-										<li><a class="dropdown-item" href="{{ url('profile') }}">{{ __('Profile') }}</a></li>
+										<li><a class="dropdown-item" href="{{ url('mypage') }}">{{ __('Mypage') }}</a></li>
 										<li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
 											<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
 												@csrf
@@ -109,7 +109,7 @@
 						<li><a href="{{ url('/') }}">ダッシュボード</a></li>
 						@guest
 						@else
-							@if(! Request::is('*profile*') && ! Request::is('/') && ! Request::is('setup/*'))
+							@if(! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
 								<li><a href="{{ url('composer/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="composer">Composer</a></li>
 								<li><a href="{{ url('git/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="git">Git</a></li>
 								<li><a href="{{ url('staging/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="staging">ステージング管理</a></li>
@@ -153,7 +153,7 @@
 		<script>
 		window.addEventListener('load', function(){
 			var current = '';
-			@if(! Request::is('*profile*') && ! Request::is('/') && ! Request::is('setup/*'))
+			@if(! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
 				@if (Request::is('projects/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'home'; @endif
 				@if (Request::is('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'sitemaps'; @endif
 				@if (Request::is('themes/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'themes'; @endif
