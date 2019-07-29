@@ -66,7 +66,7 @@ class SetupController extends Controller
 		fclose($new_csv);
 
 		if($checked_option === 'pickles2') {
-			$cmd = $path_composer.' create-project pickles2/preset-get-start-pickles2 ./';
+			$cmd = 'php '.$path_composer.' create-project pickles2/preset-get-start-pickles2 ./';
 			chdir($project_path);
 		} else {
 			$git_url_plus_auth = $repository;
@@ -196,7 +196,7 @@ class SetupController extends Controller
 
 			// ここから composr install
 			if($checked_option !== 'pickles2') {
-				shell_exec($path_composer.' install');
+				shell_exec('php '.$path_composer.' install');
 			}
 
 			$info = true;
