@@ -33,6 +33,13 @@ class PublishController extends Controller
 		$alert_log_file = $project_path.'/px-files/_sys/ram/publish/alert_log.csv';
 		$applock_file = $project_path.'/px-files/_sys/ram/publish/applock.txt';
 
+		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
+		chdir($project_path);
+		$bd_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all');
+		$bd_object = json_decode($bd_json);
+		$publish_patterns = $bd_object->config->plugins->px2dt->publish_patterns;
+		chdir($path_current_dir); // 元いたディレクトリへ戻る
+
 		if(\File::exists($publish_log_file)) {
 			$exists_publish_log = true;
 			$publish_log = $fs->read_csv($publish_log_file);
@@ -67,7 +74,7 @@ class PublishController extends Controller
 			$diff_seconds = 0;
 		}
 
-		return view('publish.index', ['project' => $project, 'branch_name' => $branch_name, 'page_param' => $page_param, 'exists_publish_log' => $exists_publish_log, 'exists_alert_log' => $exists_alert_log, 'exists_applock' => $exists_applock, 'publish_files' => $publish_files, 'alert_files' => $alert_files, 'diff_seconds' => $diff_seconds] );
+		return view('publish.index', ['project' => $project, 'branch_name' => $branch_name, 'page_param' => $page_param, 'exists_publish_log' => $exists_publish_log, 'exists_alert_log' => $exists_alert_log, 'exists_applock' => $exists_applock, 'publish_files' => $publish_files, 'alert_files' => $alert_files, 'diff_seconds' => $diff_seconds, 'publish_patterns' => $publish_patterns] );
 	}
 
 	//
