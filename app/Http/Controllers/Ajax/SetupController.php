@@ -205,7 +205,12 @@ class SetupController extends Controller
 		}
 
 		// 作成するログファイルを$csvに代入
-		$setup_status += 1;
+		if($info === true) {
+			$setup_status += 1;
+		} else {
+			$setup_status -= 1;
+		}
+
 		$csv = array(
 			array('log_checked_option','log_checked_init','log_repository','log_user_name','log_password','log_setup_status','log_checked_repository','log_vendor_name','log_project_name'),
 			array($checked_option,$checked_init,$repository,$user_name,$password,$setup_status,$checked_repository,$vendor_name,$project_name)
