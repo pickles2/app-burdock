@@ -1,108 +1,74 @@
 @php
     $title = $project->project_name;
 @endphp
-@extends('layouts.my')
+@extends('layouts.px2_project')
 @section('content')
 <div class="container">
-    <h1 id="project-title">{{ $title }}</h1>
+    <h1 id="project-title" style="margin-bottom: 50px;">Project "{{ $title }}"</h1>
+    <div class="contents">
+        <div class="cont_info"></div>
+        <div class="cont_maintask_ui">
 
-    {{-- 編集・削除ボタン --}}
-    @can('edit', $project)
-        <div class="edit">
-            <a href="{{ url('projects/'.$project->project_name.'/'.$branch_name.'/edit') }}" class="btn btn-primary">
-                {{ __('Edit') }}
-            </a>
-            @component('components.btn-del')
-                @slot('controller', 'projects')
-                @slot('id', $project->id)
-                @slot('name', $project->project_name)
-                @slot('branch', get_git_remote_default_branch_name())
-            @endcomponent
-        </div>
-    @endcan
-
-    {{-- 記事内容 --}}
-    <dl class="row">
-        <dt class="col-md-2">{{ __('Author') }}:</dt>
-        <dd class="col-md-10">
-                {{ $project->user->name }}
-        </dd>
-        <dt class="col-md-2">{{ __('Created') }}:</dt>
-        <dd class="col-md-10">
-            <time itemprop="dateCreated" datetime="{{ $project->created_at }}">
-                {{ $project->created_at }}
-            </time>
-        </dd>
-        <dt class="col-md-2">{{ __('Updated') }}:</dt>
-        <dd class="col-md-10">
-            <time itemprop="dateModified" datetime="{{ $project->updated_at }}">
-                {{ $project->updated_at }}
-            </time>
-        </dd>
-    </dl>
-    <hr>
-    <div class="card ml-4 float-left" style="width: 20rem;">
-    <img class="card-img-top" src="http://placehold.jp/318x180.png" alt="Card image cap">
-        <div class="card-body">
-            <h4 class="card-title">{{ __('Edit Sitemap')}}</h4>
-            <p class="card-text">サイトマップは、サイト全体のページ構成を定義する概念です。CSVまたはMicrosoft Excelのファイル形式で編集できます。</p>
-            <form method="POST" action="{{ url('/upload'.'/'.$project->project_name.'/'.$branch_name) }}" enctype="multipart/form-data">
-                @csrf
-                @method('POST')
-                <div class="form-group custom-file">
-                    <input type="file" class="form-control custom-file-input @if ($errors->has('file')) is-invalid @endif" name="file" value="{{ old('file') }}" id="customFile" lang="ja">
-                        @if ($errors->has('file'))
-                            <span class="invalid-feedback" role="alert">
-                                {{ $errors->first('file') }}
-                            </span>
-                        @endif
-                    <label class="custom-file-label" for="customFile">ファイル選択...</label>
+            <h2>基本的な手順</h2>
+            <div class="row" style="margin-bottom: 100px;">
+                <div class="col-sm-3">
+                    <a href="{{ url('/sitemaps'.'/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}" class="px2-btn cont_mainmenu">{{ __('Edit Sitemap')}}</a>
                 </div>
-                <button type="submit" name="submit" class="btn btn-primary btn-lg btn-block mt-2">{{ __('Upload')}}</button>
-            </form>
-
-            <form method="POST" action="{{ url('/download'.'/'.$project->project_name.'/'.$branch_name) }}" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" name="file">
-                <button type="submit" name="submit" class="btn btn-primary btn-lg btn-block mt-2">{{ __('Download')}}</button>
-            </form>
+                <div class="col-sm-3">
+                    <a href="{{ url('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/index.html?page_path='.urlencode('/index.html'))}}" class="px2-btn cont_mainmenu">{{ __('Edit Themes')}}</a>
+                </div>
+                <div class="col-sm-3">
+                    <a href="{{ url('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/index.html?page_path='.urlencode('/index.html'))}}" class="px2-btn cont_mainmenu">{{ __('Edit Contents')}}</a>
+                </div>
+                <div class="col-sm-3">
+                    <a href="{{ url('/publish'.'/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}" class="px2-btn cont_mainmenu" onclick="uploadSitemap(event);">{{ __('To Publish')}}</a>
+                </div>
+            </div><!-- / .row -->
         </div>
-    </div>
+        <div class="alert alert-info">Hint! : <span class="cont_hint">Burdock は Pickles2をベースにしたWebアプリケーションです。</span></div>
+        <div class="row">
+            <div class="col-sm-12">
 
-    <div class="card ml-4 float-left" style="width: 20rem;">
-    <img class="card-img-top" src="http://placehold.jp/318x180.png" alt="Card image cap">
-        <div class="card-body">
-            <h4 class="card-title">{{ __('Edit Contents')}}</h4>
-            <p class="card-text">コンテンツは、ページレイアウト全体のうちサイトアイデンティティやナビゲーション部分を含まない領域を担当します。</p>
-            <a href="{{ url('pages/')}}" class="btn btn-primary btn-lg btn-block">{{ __('Edit')}}</a>
-        </div>
-    </div>
+                <h2>Project Information</h2>
+                <div class="px2-responsive">
+                    <table class="px2-table" style="width:100%; table-layout: fixed;">
+                        <colgroup><col width="30%"><col width="70%"></colgroup>
+                        <tbody>
+                            <tr>
+                                <th>Project Name</th>
+                                <td class="tpl_name selectable">{{ $bd_object->packages->package_list->projects[0]->name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Path</th>
+                                <td class="tpl_path selectable">{{ $bd_object->realpath_docroot }}</td>
+                            </tr>
+                            <tr>
+                                <th>Home Directory</th>
+                                <td class="tpl_home_dir selectable">{{ $bd_object->packages->package_list->projects[0]->path_homedir }}</td>
+                            </tr>
+                            <tr>
+                                <th>Entry Script</th>
+                                <td class="tpl_entry_script selectable">{{ $bd_object->packages->package_list->projects[0]->path }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-    <div class="card ml-4 float-left" style="width: 20rem;">
-    <img class="card-img-top" src="http://placehold.jp/318x180.png" alt="Card image cap">
-        <div class="card-body">
-            <h4 class="card-title">{{ __('To Publish')}}</h4>
-            <p class="card-text">パブリッシュは、コンテンツを静的なHTMLに書き出します。 動的なHTMLと比べてサーバーへの負荷が軽くなります。</p>
-            <form method="POST" action="{{ url('/publish'.'/'.$project->project_name.'/'.$branch_name) }}" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" name="file">
-                <button type="submit" name="submit" class="btn btn-primary btn-lg btn-block mt-2">{{ __('Run')}}</button>
-            </form>
-        </div>
+            </div>
+        </div><!-- /.row -->
+		<p>
+			<div>
+				@component('components.btn-del-project')
+					@slot('controller', 'projects')
+					@slot('id', $project->id)
+					@slot('code', $project->project_code)
+					@slot('name', $project->project_name)
+					@slot('branch', get_git_remote_default_branch_name())
+				@endcomponent
+			</div>
+		</p>
+        <hr>
+        <address class="center">(C)Pickles 2 Project.</address>
     </div>
-    <div class="clearfix"></div>
-    <hr>
-    <dl class="row">
-        <dt class="col-md-2">{{ __('Project Name') }}:</dt>
-        <dd class="col-md-10">{{ $bd_object->config->name }}</dd>
-        <dt class="col-md-2">{{ __('Project Path') }}:</dt>
-        <dd class="col-md-10">{{ $bd_object->realpath_docroot }}</dd>
-        <dt class="col-md-2">{{ __('Home Directory') }}:</dt>
-        <dd class="col-md-10">{{ $bd_object->packages->package_list->projects[0]->path_homedir }}</dd>
-        <dt class="col-md-2">{{ __('Entry Script') }}:</dt>
-        <dd class="col-md-10">{{ $bd_object->packages->package_list->projects[0]->path }}</dd>
-        <dt class="col-md-2">{{ __('Git URL') }}:</dt>
-        <dd class="col-md-10">{{ $project->git_url }}</dd>
-    </dl>
 </div>
 @endsection

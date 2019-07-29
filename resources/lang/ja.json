@@ -52,7 +52,7 @@
 
     "Users": "ユーザー一覧",
     "User": "ユーザー",
-    "Profile": "プロフィール",
+    "Mypage": "マイページ",
     "Name": "ユーザー名",
     "E-Mail Address": "メールアドレス",
     "Password": "パスワード",
@@ -113,5 +113,6 @@
     "To Publish": "パブリッシュする",
     "Run": "実行",
     "Updated a Sitemap.": "サイトマップを更新しました。",
+    "Could not update Sitemap.": "サイトマップを更新できませんでした。",
     "Publish is complete.": "パブリッシュが完了しました。"
 }

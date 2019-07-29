@@ -113,7 +113,7 @@ class UserController extends Controller
         ]);
         $user->name = $request->name;
         $user->save();
-        return redirect('profile')->with('my_status', __('Updated a user.'));
+        return redirect('mypage')->with('my_status', __('Updated a user.'));
     }
 
     /**

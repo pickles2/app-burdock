@@ -22,11 +22,7 @@ class AppServiceProvider extends ServiceProvider
         // グローバル変数
         // 管理者のID番号を1とする
         // 参照: https://stackoverflow.com/questions/28356193/
-        config(['admin_id' => 1]);
-        // 本番環境(Heroku)でhttpsを強制する
-        if (\App::environment('production')) {
-            \URL::forceScheme('https');
-        }
+        // config(['admin_id' => 1]);
     }
 
     /**

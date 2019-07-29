@@ -1,7 +1,7 @@
 @php
     $title = __('Verify Your Email Address');
 @endphp
-@extends('layouts.my')
+@extends('layouts.px2_project')
 
 @section('content')
 <div class="container">

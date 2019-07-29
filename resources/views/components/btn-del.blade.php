@@ -28,7 +28,7 @@
                     {{ __('Cancel') }}
                 </button>
                 {{-- 削除用のアクションを実行させるフォーム --}}
-                <form action="{{ url($controller . '/' . $name . '/' . $branch) }}" method="post">
+                <form action="{{ url($controller . '/' . $code . '/' . $branch) }}" method="post">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">

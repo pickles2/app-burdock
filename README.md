@@ -35,7 +35,6 @@ APP_NAME=Burdock
 APP_ENV=local
 APP_KEY=base64:NOwK3+2AQLj41zWorz0d1JXe7cKSGRTKMtJs9tSm4/g=
 APP_DEBUG=true
-APP_URL=http://localhost
 ```
 
 アプリケーションキーは次のコマンドで再生成してください。
@@ -43,6 +42,16 @@ APP_URL=http://localhost
 ```
 $ php artisan key:generate
 Application key set successfully.
+```
+
+#### アプリサーバーとプレビューサーバーのURLを設定
+
+アプリサーバーとプレビューサーバーは異なるURLを設定してください。
+
+```
+APP_URL=https://app.com
+PREV_URL=prev.app.com
+BD_PLUM_STAGING_DOMAIN=staging.app.com
 ```
 
 #### データベース接続設定
@@ -107,6 +116,41 @@ $ php artisan serve
 
 正常に起動したら、 `http://127.0.0.1:8000` でアクセスできます。
 ブラウザではじめの画面が表示されたら完了です。
+
+
+## Redis で WebSocket 環境をセットアップする
+
+WebSocket環境を利用すると、サーバーとの間で非同期に対話する機能を追加できます。 特にパブリッシュなどの時間がかかる処理の利便性が向上します。
+
+このセットアップはオプションです。
+
+Redis と Laravel Echo Server がインストールされている必要があります。
+
+```
+$ brew install redis
+$ npm install -g laravel-echo-server
+```
+
+Laravel Echo Server をセットアップします。
+次のコマンドで質問に答えていくと、 `laravel-echo-server.json` が作成されます。
+
+```
+$ laravel-echo-server init
+```
+
+`.env` ファイルを開き、 `BROADCAST_DRIVER` を `redis` に設定します。
+
+```
+BROADCAST_DRIVER=redis
+```
+
+
+次のコマンドで Redis と Laravel Echo Server を起動します。
+
+```
+$ redis-server
+$ laravel-echo-server start
+```
 
 
 ## 更新履歴 - Change log

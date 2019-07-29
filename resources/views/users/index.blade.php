@@ -1,7 +1,7 @@
 @php
     $title = __('Users');
 @endphp
-@extends('layouts.my')
+@extends('layouts.preview')
 @section('content')
 <div class="container">
     <h1>{{ $title }}</h1>

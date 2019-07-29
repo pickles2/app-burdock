@@ -1,7 +1,7 @@
 @php
     $title = __('User') . ': ' . $user->name;
 @endphp
-@extends('layouts.my')
+@extends('layouts.preview')
 @section('content')
 <div class="container">
     <h1>{{ $title }}</h1>
@@ -51,7 +51,7 @@
                 @foreach ($user->projects as $project)
                     <tr>
                         <td>
-                            <a href="{{ url('projects/' . $project->project_name . '/' . get_git_remote_default_branch_name()) }}">
+                            <a href="{{ url('projects/'.urlencode($project->project_code).'/'.urlencode(get_git_remote_default_branch_name())) }}">
                                 {{ $project->project_name }}
                             </a>
                         </td>
@@ -60,7 +60,7 @@
                         <td>{{ $project->updated_at }}</td>
                         @can('edit', $user)
                             <td nowrap>
-                                <a href="{{ url('projects/' . $project->project_name . '/' . get_git_remote_default_branch_name() . '/edit') }}" class="btn btn-primary">
+                                <a href="{{ url('projects/'.urlencode($project->project_code).'/'.urlencode(get_git_remote_default_branch_name()) . '/edit') }}" class="btn btn-primary">
                                     {{ __('Edit') }}
                                 </a>
                                 @component('components.btn-del')

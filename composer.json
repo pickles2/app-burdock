@@ -10,7 +10,14 @@
         "fideloper/proxy": "^4.0",
         "fzaninotto/faker": "^1.8",
         "laravel/framework": "5.7.*",
-        "laravel/tinker": "^1.0"
+        "laravel/tinker": "^1.0",
+        "pickles2/lib-indigo": "^0.1.4",
+        "pickles2/lib-plum": "^0.1.2",
+        "pickles2/lib-px2-contents-editor": "^2.0",
+        "predis/predis": "^1.1",
+        "pickles2/px2style": "^2.0",
+        "tomk79/remote-finder": "^0.0.3",
+		"tomk79/filesystem": "^1.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
@@ -23,7 +30,9 @@
         "files": [
             "app/helpers/locale_url.php",
             "app/helpers/get_project_workingtree_dir.php",
-            "app/helpers/get_git_remote_default_branch_name.php"
+            "app/helpers/get_git_remote_default_branch_name.php",
+            "app/helpers/git.php",
+            "app/helpers/composer.php"
         ],
         "classmap": [
             "database/seeds",

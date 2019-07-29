@@ -1,7 +1,7 @@
 @php
     $title = __('Internal Server Error');
 @endphp
-@extends('layouts.my')
+@extends('layouts.preview')
 @section('content')
 <div class="container">
     <h1>{{ $title }}</h1>

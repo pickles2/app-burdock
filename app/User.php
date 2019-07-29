@@ -5,13 +5,20 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Notifications\CustomPasswordReset;
 use Illuminate\Auth\MustVerifyEmail;
+use App\Notifications\CustomPasswordReset;
 use App\Notifications\CustomVerifyEmail;
+use Ramsey\Uuid\Uuid;
 
 class User extends Authenticatable implements MustVerifyEmailContract
 {
     use MustVerifyEmail, Notifiable;
+
+    /** プライマリーキーの型 */
+    protected $keyType = 'string';
+
+    /** プライマリーキーは自動連番か？ */
+    public $incrementing = false;
 
     /**
      * The attributes that are mass assignable.
@@ -30,6 +37,18 @@ class User extends Authenticatable implements MustVerifyEmailContract
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Constructor
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        // newした時に自動的にuuidを設定する。
+        // DBにすでに存在するレコードをロードする場合は、あとから上書きされる。
+        $this->attributes['id'] = Uuid::uuid4()->toString();
+    }
 
     /**
      * リレーション (1対多の関係)
