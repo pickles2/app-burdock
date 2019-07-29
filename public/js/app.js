@@ -61447,7 +61447,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					this.clonePassword = this.logPassword;
 				}
 			} else if (this.logCheckedOption === 'git') {
-				if (this.logCheckedRepository === 'original') {
+				if (this.logCheckedRepository === 'original' || this.logCheckedRepository === '') {
 					this.cloneRepository = this.logRepository;
 					this.cloneUserName = this.logUserName;
 					this.clonePassword = this.logPassword;
