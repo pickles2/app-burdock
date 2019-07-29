@@ -60503,6 +60503,56 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	// view側から変数をプロパティとして渡す
@@ -60518,7 +60568,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	// alert_log.cscの行数（先頭行を除く）
 	"alertFiles",
 	// publish_log.csvの最終行と1行目の時間の差分
-	"diffSeconds", "sessionMyStatus"],
+	"diffSeconds",
+	//
+	"sessionMyStatus",
+	//
+	"publishPatterns"],
 	// メソッドで使う&テンプレート内で使う変数を定義
 	data: function data() {
 		return {
@@ -60527,13 +60581,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			// PublishEventからの返り値（プログレスバーの％）
 			parse: 0,
 			// PublishEventからの返り値（パブリシュファイル件数）
-			queue_count: '',
+			queueCount: '',
 			// PublishEventからの返り値（パブリッシュファイル情報）
-			publish_file: '',
-			// パブリッシュの状態（1:未パブリッシュ/2:パブリッシュ中/3:パブリッシュ後/999:パブリッシュ中のリロード）
-			publish_status: '',
+			publishFile: '',
+			// パブリッシュの状態（0:未パブリッシュ/1:パブリッシュオプション/2:パブリッシュ中/3:パブリッシュ後/999:パブリッシュ中のリロード）
+			publishStatus: '',
+			//
+			isPublishPatterns: JSON.parse(this.publishPatterns),
+			//
+			isPublishOption: '',
+			//
+			pathsRegion: '/',
+			//
+			pathsIgnore: '',
+			//
+			keepCache: false,
 			// publishFilesをバインディング
-			total_files: this.publishFiles,
+			totalFiles: this.publishFiles,
 			// alertFilesをバインディング
 			alert: this.alertFiles,
 			// diffSecondsをバインディング
@@ -60543,7 +60607,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			// アップロックを削除するためのリンクパス
 			deleteApplock: '/publish/' + this.projectCode + '/' + this.branchName + '/deleteApplock',
 			// existsAlertLogをバインディング
-			exists_alert_log: this.existsAlertLog,
+			isExistsAlertLog: this.existsAlertLog,
+			//
 			process: []
 		};
 	},
@@ -60551,11 +60616,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	// レンダリング前にpublish_log.csvの有無によって処理分け
 	created: function created() {
 		if (this.existsPublishLog === '') {
-			this.publish_status = 1;
+			this.publishStatus = 0;
 		} else if (this.existsPublishLog === '1' && this.existsApplock === '1') {
-			this.publish_status = 999;
+			this.publishStatus = 999;
 		} else {
-			this.publish_status = 3;
+			this.publishStatus = 3;
 		}
 		// フラッシュメッセージが出ていれば2000ミリ秒後に削除
 		if (this.sessionMyStatus !== '') {
@@ -60570,20 +60635,70 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 	// (読み込み時に)実行するメソッド
 	methods: {
-		publish: function publish(reset) {
-			var _this = this;
-
-			this.publish_status = 999;
+		publish_option: function publish_option(reset) {
 			if (reset === 1) {
 				this.parse = 0;
-				this.queue_count = '';
-				this.publish_file = '';
+				this.queueCount = '';
+				this.publishFile = '';
 				this.alert = '';
 				this.time = '';
+				this.isPublishOption = '';
+				this.pathsRegion = '/';
+				this.pathsIgnore = '';
+				this.keepCache = false;
 			}
-			var data = 'publish';
-			// AjaxでAjax\PublishController@publishAjaxにpost処理
-			axios.post('/publish/' + this.projectCode + '/' + this.branchName + '/publishAjax', data).then(function (res) {
+			this.publishStatus = 1;
+		},
+		publish: function publish() {
+			var _this = this;
+
+			this.publishStatus = 999;
+			//
+			if (this.classPathsRegion) {
+				if (Array.isArray(this.pathsRegion) === false) {
+					var text = this.classPathsRegion.replace(/\r\n|\r/g, "\n");
+					var lines = text.split('\n');
+					var outArray = new Array();
+					for (var i = 0; i < lines.length; i++) {
+						// 空行は無視する
+						if (lines[i] == '') {
+							continue;
+						}
+						outArray.push(lines[i]);
+					}
+					this.pathsRegion = outArray;
+				}
+			}
+			//
+			if (this.classPathsIgnore) {
+				if (Array.isArray(this.pathsIgnore) === false) {
+					var text = this.classPathsIgnore.replace(/\r\n|\r/g, "\n");
+					var lines = text.split('\n');
+					var outArray = new Array();
+					for (var i = 0; i < lines.length; i++) {
+						// 空行は無視する
+						if (lines[i] == '') {
+							continue;
+						}
+						outArray.push(lines[i]);
+					}
+					this.pathsIgnore = outArray;
+				}
+			}
+			//
+			if (this.classKeepCache) {
+				if (this.keepCache !== this.classKeepCache) {
+					this.keepCache = this.classKeepCache;
+				}
+			}
+			//
+			var data = {
+				'publish_option': this.isPublishOption,
+				'paths_region': this.pathsRegion,
+				'paths_ignore': this.pathsIgnore,
+				'keep_cache': this.keepCache
+				// AjaxでAjax\PublishController@publishAjaxにpost処理
+			};axios.post('/publish/' + this.projectCode + '/' + this.branchName + '/publishAjax', data).then(function (res) {
 				_this.info = res.data.info;
 			});
 		},
@@ -60596,30 +60711,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			// Ajax\PublishController@publishAjaxの返り値
 			window.Echo.channel('publish-event').listen('PublishEvent', function (e) {
 				_this2.process = e.process.pid;
-				_this2.publish_status = 2;
+				_this2.publishStatus = 2;
 				// 標準出力が数値または数値+改行コードだった場合parseに代入
 				if (e.judge === 1) {
 					_this2.parse = e.parse;
 				}
 				// パブリッシュファイル件数を計算して出力
 				if (e.queue_count !== '') {
-					_this2.queue_count = e.queue_count;
+					_this2.queueCount = e.queue_count;
 				}
 				// パブリッシュしているファイル情報を配列で出力
 				if (e.publish_file !== '') {
-					_this2.publish_file = e.publish_file;
+					_this2.publishFile = e.publish_file;
 				}
 				if (e.end_publish === 1) {
 					// Ajax\PublishController@readCsvAjaxにpost処理
 					axios.post('/publish/' + _this2.projectCode + '/' + _this2.branchName + '/readCsvAjax').then(function (res) {
-						_this2.total_files = res.data.publish_files;
+						_this2.totalFiles = res.data.publish_files;
 						// アラート件数を取得
 						_this2.alert = res.data.alert_files;
 						// パブリッシュにかかった時間を取得
 						_this2.time = res.data.diff_seconds;
 						// alert_log.csvの有無
-						_this2.exists_alert_log = res.data.exists_alert_log;
-						_this2.publish_status = 3;
+						_this2.isExistsAlertLog = res.data.exists_alert_log;
+						_this2.publishStatus = 3;
 					});
 				}
 			});
@@ -60640,14 +60755,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			};axios.post('/publish/' + this.projectCode + '/' + this.branchName + '/publishCancelAjax', data).then(function (res) {
 				// Ajax\PublishController@readCsvAjaxにpost処理
 				axios.post('/publish/' + _this3.projectCode + '/' + _this3.branchName + '/readCsvAjax').then(function (res) {
-					_this3.total_files = res.data.publish_files;
+					_this3.totalFiles = res.data.publish_files;
 					// アラート件数を取得
 					_this3.alert = res.data.alert_files;
 					// パブリッシュにかかった時間を取得
 					_this3.time = res.data.diff_seconds;
 					// alert_log.csvの有無
-					_this3.exists_alert_log = res.data.exists_alert_log;
-					_this3.publish_status = 3;
+					_this3.isExistsAlertLog = res.data.exists_alert_log;
+					_this3.publishStatus = 3;
 				});
 			});
 		},
@@ -60660,37 +60775,114 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		// 未パブリッシュ時のパブリッシュボタンの表示・非表示
 		classPublishButton: function classPublishButton() {
 			return {
-				show: this.publish_status === 1,
-				hidden: this.publish_status !== 1
+				show: this.publishStatus === 0,
+				hidden: this.publishStatus !== 0
+			};
+		},
+		//
+		classModal: function classModal() {
+			return {
+				show: this.publishStatus === 1,
+				hidden: this.publishStatus !== 1
 			};
 		},
 		// パブリッシュ中のプログレスバーの表示・非表示
 		classPublishProgress: function classPublishProgress() {
 			return {
-				show: this.publish_status === 2,
-				hidden: this.publish_status !== 2
+				show: this.publishStatus === 2,
+				hidden: this.publishStatus !== 2
 			};
 		},
 		// パブリッシュ後のログ情報の表示・非表示
 		classPublishLog: function classPublishLog() {
 			return {
-				show: this.publish_status === 3,
-				hidden: this.publish_status !== 3
+				show: this.publishStatus === 3,
+				hidden: this.publishStatus !== 3
 			};
 		},
 		// アラート情報の表示・非表示
 		classAlertLog: function classAlertLog() {
 			return {
-				show: this.exists_alert_log === '1' || this.exists_alert_log === true,
-				hidden: this.exists_alert_log === '' || this.exists_alert_log === false
+				show: this.isExistsAlertLog === '1' || this.isExistsAlertLog === true,
+				hidden: this.isExistsAlertLog === '' || this.isExistsAlertLog === false
 			};
 		},
 		// パブリッシュ中のWAIT画面の表示・非表示
 		classPublishWait: function classPublishWait() {
 			return {
-				show: this.publish_status === 999,
-				hidden: this.publish_status !== 999
+				show: this.publishStatus === 999,
+				hidden: this.publishStatus !== 999
 			};
+		},
+		//
+		classPathsRegion: {
+			get: function get() {
+				var result = '';
+				if (this.isPublishOption === '') {
+					result = '/';
+				} else {
+					result = this.isPublishPatterns[this.isPublishOption].paths_region[0];
+				}
+				return result;
+			},
+
+			set: function set(value) {
+				var text = value.replace(/\r\n|\r/g, "\n");
+				var lines = text.split('\n');
+				var outArray = new Array();
+				for (var i = 0; i < lines.length; i++) {
+					// 空行は無視する
+					if (lines[i] == '') {
+						continue;
+					}
+					outArray.push(lines[i]);
+				}
+				this.pathsRegion = outArray;
+			}
+		},
+
+		//
+		classPathsIgnore: {
+			get: function get() {
+				var result = '';
+				if (this.isPublishOption === '') {
+					result = '';
+				} else {
+					result = this.isPublishPatterns[this.isPublishOption].paths_ignore[0];
+				}
+				return result;
+			},
+
+			set: function set(value) {
+				var text = value.replace(/\r\n|\r/g, "\n");
+				var lines = text.split('\n');
+				var outArray = new Array();
+				for (var i = 0; i < lines.length; i++) {
+					// 空行は無視する
+					if (lines[i] == '') {
+						continue;
+					}
+					outArray.push(lines[i]);
+				}
+				this.pathsIgnore = outArray;
+			}
+		},
+
+		//
+		classKeepCache: {
+			get: function get() {
+				var result = '';
+				if (this.isPublishOption === '') {
+					result = false;
+				} else {
+					result = this.isPublishPatterns[this.isPublishOption].keep_cache;
+				}
+				return result;
+			},
+
+			set: function set(value) {
+				this.keepCache = value;
+			}
 		}
 	}
 });
@@ -60703,10 +60895,8 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "contents", staticStyle: { height: "70vh" } },
-    [
+  return _c("div", [
+    _c("div", { staticClass: "contents", staticStyle: { height: "70vh" } }, [
       _c(
         "div",
         {
@@ -60725,7 +60915,7 @@ var render = function() {
                 "button",
                 {
                   staticClass: "px2-btn px2-btn--primary",
-                  on: { click: _vm.publish }
+                  on: { click: _vm.publish_option }
                 },
                 [_vm._v("パブリッシュする")]
               )
@@ -60762,11 +60952,11 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "cont_progress-row" }, [
-                    _vm._v(_vm._s(_vm.publish_file))
+                    _vm._v(_vm._s(_vm.publishFile))
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "cont_progress-currentTask" }, [
-                    _vm._v(_vm._s(_vm.queue_count))
+                    _vm._v(_vm._s(_vm.queueCount))
                   ])
                 ]),
                 _vm._v(" "),
@@ -60828,7 +61018,7 @@ var render = function() {
               _c("div", { staticClass: "cont_results-messageBox" }, [
                 _c("div", { staticClass: "cont_results-total_file_count" }, [
                   _vm._v("total: "),
-                  _c("strong", [_vm._v(_vm._s(_vm.total_files))]),
+                  _c("strong", [_vm._v(_vm._s(_vm.totalFiles))]),
                   _vm._v(" files.")
                 ]),
                 _vm._v(" "),
@@ -60892,7 +61082,7 @@ var render = function() {
                         staticClass: "px2-btn px2-btn--block",
                         on: {
                           click: function($event) {
-                            return _vm.publish(1)
+                            return _vm.publish_option(1)
                           }
                         }
                       },
@@ -60976,8 +61166,385 @@ var render = function() {
           )
         ]
       )
-    ]
-  )
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "contents",
+        class: _vm.classModal,
+        staticStyle: {
+          position: "fixed",
+          left: "0px",
+          top: "0px",
+          width: "100%",
+          height: "100%",
+          "z-index": "10000"
+        },
+        attrs: { tabindex: "-1" }
+      },
+      [
+        _c("div", {
+          staticStyle: {
+            position: "fixed",
+            left: "0px",
+            top: "0px",
+            width: "100%",
+            height: "100%",
+            overflow: "hidden",
+            background: "rgb(0, 0, 0)",
+            opacity: "0.5"
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticStyle: {
+              position: "absolute",
+              left: "0px",
+              top: "0px",
+              "padding-top": "4em",
+              overflow: "auto",
+              width: "100%",
+              height: "100%"
+            }
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "dialog_box",
+                staticStyle: { width: "80%", margin: "3em auto" }
+              },
+              [
+                _c("h1", [_vm._v("パブリッシュ")]),
+                _vm._v(" "),
+                _c("div", [
+                  _c("div", [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "cont_form_pattern",
+                        staticStyle: { margin: "1em auto" }
+                      },
+                      [
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.isPublishOption,
+                                expression: "isPublishOption"
+                              }
+                            ],
+                            attrs: { name: "cont_form_pattern" },
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.isPublishOption = $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              }
+                            }
+                          },
+                          [
+                            _c("option", { attrs: { value: "" } }, [
+                              _vm._v("select pattern...")
+                            ]),
+                            _vm._v(" "),
+                            _vm._l(_vm.isPublishPatterns, function(item, key) {
+                              return _c(
+                                "option",
+                                { domProps: { value: key } },
+                                [_vm._v(_vm._s(item.label))]
+                              )
+                            })
+                          ],
+                          2
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm.isPublishOption === ""
+                      ? _c("div", { staticClass: "form-group" }, [
+                          _c("label", { attrs: { for: "path_region" } }, [
+                            _vm._v("パブリッシュ対象範囲")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "textarea",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.classPathsRegion,
+                                  expression: "classPathsRegion"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { placeholder: "/", rows: "5" },
+                              domProps: { value: _vm.classPathsRegion },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.classPathsRegion = $event.target.value
+                                }
+                              }
+                            },
+                            [_vm._v(_vm._s(_vm.classPathsRegion))]
+                          ),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "help-block" }, [
+                            _vm._v(
+                              "パブリッシュ対象のディレクトリパスを指定してください。スラッシュから始まるパスで指定します。1行1ディレクトリで複数件指定できます。"
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("label", { attrs: { for: "paths_ignore" } }, [
+                            _vm._v("パブリッシュ対象外範囲")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "textarea",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.classPathsIgnore,
+                                  expression: "classPathsIgnore"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                placeholder: "/path/ignore/1/\n/path/ignore/2/",
+                                rows: "5"
+                              },
+                              domProps: { value: _vm.classPathsIgnore },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.classPathsIgnore = $event.target.value
+                                }
+                              }
+                            },
+                            [_vm._v(_vm._s(_vm.classPathsIgnore))]
+                          ),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "help-block" }, [
+                            _vm._v(
+                              "パブリッシュ対象外にするディレクトリパスを指定してください。スラッシュから始まるパスで指定します。1行1ディレクトリで複数件指定できます。"
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("label", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.classKeepCache,
+                                  expression: "classKeepCache"
+                                }
+                              ],
+                              attrs: { type: "checkbox" },
+                              domProps: {
+                                value: _vm.classKeepCache,
+                                checked: Array.isArray(_vm.classKeepCache)
+                                  ? _vm._i(
+                                      _vm.classKeepCache,
+                                      _vm.classKeepCache
+                                    ) > -1
+                                  : _vm.classKeepCache
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$a = _vm.classKeepCache,
+                                    $$el = $event.target,
+                                    $$c = $$el.checked ? true : false
+                                  if (Array.isArray($$a)) {
+                                    var $$v = _vm.classKeepCache,
+                                      $$i = _vm._i($$a, $$v)
+                                    if ($$el.checked) {
+                                      $$i < 0 &&
+                                        (_vm.classKeepCache = $$a.concat([$$v]))
+                                    } else {
+                                      $$i > -1 &&
+                                        (_vm.classKeepCache = $$a
+                                          .slice(0, $$i)
+                                          .concat($$a.slice($$i + 1)))
+                                    }
+                                  } else {
+                                    _vm.classKeepCache = $$c
+                                  }
+                                }
+                              }
+                            }),
+                            _vm._v(" キャッシュを消去しない")
+                          ])
+                        ])
+                      : _c("div", { staticClass: "form-group" }, [
+                          _c("label", { attrs: { for: "path_region" } }, [
+                            _vm._v("パブリッシュ対象範囲")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "textarea",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.classPathsRegion,
+                                  expression: "classPathsRegion"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { placeholder: "/", rows: "5" },
+                              domProps: { value: _vm.classPathsRegion },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.classPathsRegion = $event.target.value
+                                }
+                              }
+                            },
+                            [_vm._v(_vm._s(_vm.classPathsRegion))]
+                          ),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "help-block" }, [
+                            _vm._v(
+                              "パブリッシュ対象のディレクトリパスを指定してください。スラッシュから始まるパスで指定します。1行1ディレクトリで複数件指定できます。"
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("label", { attrs: { for: "paths_ignore" } }, [
+                            _vm._v("パブリッシュ対象外範囲")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "textarea",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.classPathsIgnore,
+                                  expression: "classPathsIgnore"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                placeholder: "/path/ignore/1/\n/path/ignore/2/",
+                                rows: "5"
+                              },
+                              domProps: { value: _vm.classPathsIgnore },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.classPathsIgnore = $event.target.value
+                                }
+                              }
+                            },
+                            [_vm._v(_vm._s(_vm.classPathsIgnore))]
+                          ),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "help-block" }, [
+                            _vm._v(
+                              "パブリッシュ対象外にするディレクトリパスを指定してください。スラッシュから始まるパスで指定します。1行1ディレクトリで複数件指定できます。"
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("label", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.classKeepCache,
+                                  expression: "classKeepCache"
+                                }
+                              ],
+                              attrs: { type: "checkbox" },
+                              domProps: {
+                                value: _vm.classKeepCache,
+                                checked: Array.isArray(_vm.classKeepCache)
+                                  ? _vm._i(
+                                      _vm.classKeepCache,
+                                      _vm.classKeepCache
+                                    ) > -1
+                                  : _vm.classKeepCache
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$a = _vm.classKeepCache,
+                                    $$el = $event.target,
+                                    $$c = $$el.checked ? true : false
+                                  if (Array.isArray($$a)) {
+                                    var $$v = _vm.classKeepCache,
+                                      $$i = _vm._i($$a, $$v)
+                                    if ($$el.checked) {
+                                      $$i < 0 &&
+                                        (_vm.classKeepCache = $$a.concat([$$v]))
+                                    } else {
+                                      $$i > -1 &&
+                                        (_vm.classKeepCache = $$a
+                                          .slice(0, $$i)
+                                          .concat($$a.slice($$i + 1)))
+                                    }
+                                  } else {
+                                    _vm.classKeepCache = $$c
+                                  }
+                                }
+                              }
+                            }),
+                            _vm._v(" キャッシュを消去しない")
+                          ])
+                        ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "dialog-buttons center" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "px2-btn px2-btn--primary",
+                      attrs: { type: "submit" },
+                      on: { click: _vm.publish }
+                    },
+                    [_vm._v("パブリッシュを実行する")]
+                  ),
+                  _vm._v(" "),
+                  _c("button", { staticClass: "px2-btn" }, [
+                    _vm._v("キャンセル")
+                  ])
+                ])
+              ]
+            )
+          ]
+        )
+      ]
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
