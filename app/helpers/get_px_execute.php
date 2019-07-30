@@ -12,8 +12,9 @@ function get_px_execute($project_code, $branch_name, $option)
 			if(\File::exists(get_px_execute_path($project_code, $branch_name))) {
 				$bd_json = shell_exec('php '.get_px_execute_path($project_code, $branch_name).$option);
 				$bd_object = json_decode($bd_json);
+			} else {
+				$bd_object = false;
 			}
-
 		} else {
 			$bd_object = false;
 		}
