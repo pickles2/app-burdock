@@ -62047,7 +62047,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			// Ajax\SetupController@setupAjaxの返り値
 			window.Echo.channel('setup-event').listen('SetupEvent', function (e) {
 				//
-				_this.setup_status = 2;
 				_this.isCheckedOption === e.checked_option;
 				_this.i++;
 				_this.isSetupBefore = false;
@@ -62250,9 +62249,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					this.isSetupDuring = false;
 					this.isSetupDuringButton = true;
 					this.isSetupBefore = true;
-					this.isCloneRepositoryEnable = false;
-					this.isCloneUserNameEnable = false;
-					this.isClonePasswordEnable = false;
 					this.setup_status = 2;
 				} else if (value === 3) {
 					this.info = '';
