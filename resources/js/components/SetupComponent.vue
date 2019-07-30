@@ -379,7 +379,6 @@ export default {
 			// Ajax\SetupController@setupAjaxの返り値
 			window.Echo.channel('setup-event').listen('SetupEvent', (e) => {
 				//
-				this.setup_status = 2;
 				this.isCheckedOption === e.checked_option;
 				this.i++;
 				this.isSetupBefore = false;
@@ -583,9 +582,6 @@ export default {
 					this.isSetupDuring = false;
 					this.isSetupDuringButton = true;
 					this.isSetupBefore = true;
-					this.isCloneRepositoryEnable = false;
-					this.isCloneUserNameEnable = false;
-					this.isClonePasswordEnable = false;
 					this.setup_status = 2;
 				} else if (value === 3) {
 					this.info = '';
