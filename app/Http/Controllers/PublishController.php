@@ -29,9 +29,9 @@ class PublishController extends Controller
 		$fs = new \tomk79\filesystem;
 		$project_name = $project->project_code;
 		$project_path = get_project_workingtree_dir($project_name, $branch_name);
-		$publish_log_file = $project_path.'/px-files/_sys/ram/publish/publish_log.csv';
-		$alert_log_file = $project_path.'/px-files/_sys/ram/publish/alert_log.csv';
-		$applock_file = $project_path.'/px-files/_sys/ram/publish/applock.txt';
+		$publish_log_file = $project_path.'/'.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/publish_log.csv';
+		$alert_log_file = $project_path.'/'.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/alert_log.csv';
+		$applock_file = $project_path.'/'.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/applock.txt';
 
 		$option = ' /?PX=px2dthelper.get.all';
 		$bd_object = get_px_execute($project->project_code, $branch_name, $option);
@@ -89,7 +89,7 @@ class PublishController extends Controller
 		//
 		$project_code = $project->project_code;
 		$project_path = get_project_workingtree_dir($project_code, $branch_name);
-		$applock_file = $project_path.'/px-files/_sys/ram/publish/applock.txt';
+		$applock_file = $project_path.'/'.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/applock.txt';
 		\File::delete($applock_file);
 
 		if(\File::exists($applock_file)) {
