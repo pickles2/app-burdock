@@ -82,14 +82,10 @@ class ProjectController extends Controller
 	 */
 	public function show(Project $project, $branch_name)
 	{
-		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
-		// px_execute.phpがあるか確認して処理分け
-		if(\File::exists($project_path.'/.px_execute.php')) {
-			$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-			chdir($project_path);
-			$bd_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all');
-			$bd_object = json_decode($bd_json);
-			chdir($path_current_dir); // 元いたディレクトリへ戻る
+		//
+		$option = ' /?PX=px2dthelper.get.all';
+		$bd_object = get_px_execute($project->project_code, $branch_name, $option);
+		if($bd_object) {
 			return view('projects.show', ['project' => $project, 'branch_name' => $branch_name], compact('bd_object'));
 		} else {
 			return redirect('setup/'.$project->project_code.'/'.$branch_name);

@@ -24,16 +24,10 @@ class SitemapController extends Controller
 	public function index(Request $request, Project $project, $branch_name)
 	{
 		//
-		$page_param = $request->page_path;
 		$page_id = $request->page_id;
-
-		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
-
-		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-		chdir($project_path);
-		$data_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
-		$current = json_decode($data_json);
-		chdir($path_current_dir); // 元いたディレクトリへ戻る
+		$page_param = $request->page_path;
+		$option = ' /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id;
+		$current = get_px_execute($project_project_code, $branch_name, $option);
 
 		$sitemap_files = \File::files($current->realpath_homedir.'sitemaps/');
 		foreach($sitemap_files as $file) {
@@ -43,30 +37,16 @@ class SitemapController extends Controller
 				$destroy_files[] = $file;
 			}
 		}
-		return view(
-			'sitemaps.index',
-			[
-				'project' => $project,
-				'branch_name' => $branch_name,
-				'page_param' => $page_param,
-			],
-			compact('current', 'get_files')
-		);
+		return view('sitemaps.index',['project' => $project, 'branch_name' => $branch_name, 'page_param' => $page_param], compact('current', 'get_files'));
 	}
 
 	public function upload(StoreSitemap $request, Project $project, $branch_name)
 	{
 		//
-		$page_param = $request->page_path;
 		$page_id = $request->page_id;
-
-		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
-
-		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-		chdir($project_path);
-		$data_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
-		$current = json_decode($data_json);
-		chdir($path_current_dir); // 元いたディレクトリへ戻る
+		$page_param = $request->page_path;
+		$option = ' /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id;
+		$current = get_px_execute($project->project_code, $branch_name, $option);
 
 		$upload_file = $request->file;
 		$old_file = $upload_file;
@@ -77,6 +57,7 @@ class SitemapController extends Controller
 		if (!copy($old_file, $new_file)) {
 			$message = 'Could not update Sitemap.';
 		} else {
+			$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
 			$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
 			chdir($project_path);
 			shell_exec('git remote set-url origin https://'.urlencode(\Crypt::decryptString($project->git_username)).':'.urlencode(\Crypt::decryptString($project->git_password)).str_replace('https://', '@', $project->git_url));
@@ -86,7 +67,6 @@ class SitemapController extends Controller
 			if($check === null) {
 				$result = false;
 			} else {
-				shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
 				shell_exec('git add -A');
 				shell_exec('git commit -m "Edit Sitemap"');
 				shell_exec('git push origin master:master');
@@ -96,25 +76,16 @@ class SitemapController extends Controller
 			$message = 'Updated a Sitemap.';
 		}
 
-		return redirect(
-			'sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name)
-		)
-		->with('my_status', __($message));
+		return redirect('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name))->with('my_status', __($message));
 	}
 
 	public function download(Request $request, Project $project, $branch_name)
 	{
 		//
-		$page_param = $request->page_path;
 		$page_id = $request->page_id;
-
-		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
-
-		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-		chdir($project_path);
-		$data_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
-		$current = json_decode($data_json);
-		chdir($path_current_dir); // 元いたディレクトリへ戻る
+		$page_param = $request->page_path;
+		$option = ' /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id;
+		$current = get_px_execute($project->project_code, $branch_name, $option);
 
 		if($request->file === 'csv') {
 			// CSVファイルのダウンロード
@@ -122,12 +93,14 @@ class SitemapController extends Controller
 			$csv_file_name = str_replace('xlsx', 'csv', $file_name);
 			$pathToFile = $current->realpath_homedir.'sitemaps/'.$csv_file_name;
 			$name = $csv_file_name;
+
 			return response()->download($pathToFile, $name);
 		} elseif($request->file === 'xlsx') {
 			// XLSXファイルのダウンロード
 			$xlsx_file_name = $request->file_name;
 			$pathToFile = $current->realpath_homedir.'sitemaps/'.$xlsx_file_name;
 			$name = $xlsx_file_name;
+
 			return response()->download($pathToFile, $name);
 		}
 	}
@@ -135,16 +108,10 @@ class SitemapController extends Controller
 	public function destroy(Request $request, Project $project, $branch_name)
 	{
 		//
-		$page_param = $request->page_path;
 		$page_id = $request->page_id;
-
-		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
-
-		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-		chdir($project_path);
-		$data_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id);
-		$current = json_decode($data_json);
-		chdir($path_current_dir); // 元いたディレクトリへ戻る
+		$page_param = $request->page_path;
+		$option = ' /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id;
+		$current = get_px_execute($project->project_code, $branch_name, $option)
 
 		$xlsx_file_name = $request->file_name;
 		$csv_file_name = str_replace('xlsx', 'csv', $xlsx_file_name);
@@ -159,9 +126,6 @@ class SitemapController extends Controller
 			$message = 'サイトマップを削除できませんでした。';
 		}
 
-		return redirect(
-			'sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name)
-		)
-		->with('my_status', __($message));
+		return redirect('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name))->with('my_status', __($message));
 	}
 }

@@ -33,12 +33,9 @@ class PublishController extends Controller
 		$alert_log_file = $project_path.'/px-files/_sys/ram/publish/alert_log.csv';
 		$applock_file = $project_path.'/px-files/_sys/ram/publish/applock.txt';
 
-		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-		chdir($project_path);
-		$bd_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all');
-		$bd_object = json_decode($bd_json);
+		$option = ' /?PX=px2dthelper.get.all';
+		$bd_object = get_px_execute($project->project_code, $branch_name, $option);
 		$publish_patterns = $bd_object->config->plugins->px2dt->publish_patterns;
-		chdir($path_current_dir); // 元いたディレクトリへ戻る
 
 		if(\File::exists($publish_log_file)) {
 			$exists_publish_log = true;
@@ -81,13 +78,8 @@ class PublishController extends Controller
 	public function publish(Request $request, Project $project, $branch_name)
 	{
 		//
-		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
-		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-
-		chdir($project_path);
-		shell_exec('php .px_execute.php /?PX=publish.run');
-
-		chdir($path_current_dir); // 元いたディレクトリへ戻る
+		$option = ' /?PX=publish.run';
+		get_px_execute($project->project_code, $branch_name, $option);
 
 		return redirect('publish/' . $project->project_code . '/' . $branch_name)->with('my_status', __('Publish is complete.'));
 	}

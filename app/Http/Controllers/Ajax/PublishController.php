@@ -92,15 +92,13 @@ class PublishController extends Controller
 		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
 
 		chdir($project_path);
-		$bd_json = shell_exec('php .px_execute.php /?PX=px2dthelper.get.all');
-		$bd_object = json_decode($bd_json);
-		// proc_openでパブリッシュしてみる
+		// proc_openでパブリッシュ
 		$desc = array(
 		    1 => array('pipe', 'w'),
 		    2 => array('pipe', 'w'),
 		);
 		$cmd = '';
-		$cmd .= 'php .px_execute.php ';
+		$cmd .= 'php '.get_px_execute_path($project_code, $branch_name).' ';
 		$cmd .= '"';
 		$cmd .= '/?PX=publish.run';
 		if(is_array($paths_region)) {
