@@ -131,7 +131,7 @@
 							});
 						};
 						</script>
-						<iframe id="ifrm" data-original-title="" title="" src="{{ url('https://'.$branch_name.'.'.$project->project_code.'.'.env('PREV_URL').'/'.$page_param) }}"></iframe>
+						<iframe id="ifrm" data-original-title="" title="" src="{{ url('https://'.$branch_name.'.'.$project->project_code.'.'.env('PREV_URL').$page_param) }}"></iframe>
 					</div>
 				</div>
 			</div>

@@ -167,9 +167,9 @@ class SetupController extends Controller
 		// px_execute.phpの存在確認
 		if(\File::exists($project_path.'/'.get_px_execute_path($project_code, $branch_name))) {
 			// ここから configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
-			if(\File::exists($project_path.'/px-files/config.php')) {
+			if(\File::exists($project_path.'/'.get_path_homedir($project->project_code, $branch_name).'config.php')) {
 				$files = null;
-				$file = file($project_path.'/px-files/config.php');
+				$file = file($project_path.'/'.get_path_homedir($project->project_code, $branch_name).'config.php');
 				for($i = 0; $i < count($file); $i++) {
 					if(strpos($file[$i], "'master_format'=>'xlsx'") !== false) {
 						$files .= str_replace('xlsx', 'timestamp', $file[$i]);
@@ -177,7 +177,7 @@ class SetupController extends Controller
 						$files .= $file[$i];
 					}
 				}
-				file_put_contents($project_path.'/px-files/config.php', $files);
+				file_put_contents($project_path.'/'.get_path_homedir($project->project_code, $branch_name).'config.php', $files);
 			}
 
 			// ここから .htaccessの一部をweb版用に修正
