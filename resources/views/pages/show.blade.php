@@ -5,7 +5,7 @@
 
 @section('stylesheet')
 <?php
-foreach($px2ce_client_resources['css'] as $value) {
+foreach($px2ce_client_resources->css as $value) {
 	echo '<link href="'.'/assets/px2ce_resources/'.$value.'" rel="stylesheet">';
 }
 ?>
@@ -13,7 +13,7 @@ foreach($px2ce_client_resources['css'] as $value) {
 
 @section('javascript')
 <?php
-foreach($px2ce_client_resources['js'] as $value) {
+foreach($px2ce_client_resources->js as $value) {
 	echo '<script src="'.'/assets/px2ce_resources/'.$value.'"></script>';
 }
 ?>

@@ -32,7 +32,9 @@
             "app/helpers/get_project_workingtree_dir.php",
             "app/helpers/get_git_remote_default_branch_name.php",
             "app/helpers/git.php",
-            "app/helpers/composer.php"
+            "app/helpers/composer.php",
+			"app/helpers/get_px_execute.php",
+			"app/helpers/get_px_execute_path.php"
         ],
         "classmap": [
             "database/seeds",

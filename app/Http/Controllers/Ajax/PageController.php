@@ -60,22 +60,14 @@ class PageController extends Controller
 	public function searchAjax(Request $request, Project $project, $branch_name)
 	{
 		//
-		$page_path = $request->path_path;
-        $project_code = $project->project_code;
-        $project_path = get_project_workingtree_dir($project_code, $branch_name);
 		$str = $request->str;
+		$option = ' /?PX=px2dthelper.search_sitemap\&keyword='.urlencode($str);
+		$info = get_px_execute($project->project_code, $branch_name, $option);
 
-        $path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-        chdir($project_path);
-        $result = shell_exec('php .px_execute.php /?PX=px2dthelper.search_sitemap\&keyword='.urlencode($str));
-        chdir($path_current_dir); // 元いたディレクトリへ戻る
-
-        $info = json_decode($result);
-
-        $data = array(
+		$data = array(
 			"info" => $info,
-        );
-        return $data;
+		);
 
+		return $data;
 	}
 }

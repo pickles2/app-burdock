@@ -164,8 +164,8 @@ class SetupController extends Controller
 		fclose($pipes[2]);
 		proc_close($proc);
 
-		// .px_execute.phpの存在確認
-		if(\File::exists($project_path.'/.px_execute.php')) {
+		// px_execute.phpの存在確認
+		if(\File::exists($project_path.'/'.get_px_execute_path($project_code, $branch_name))) {
 			// ここから configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
 			if(\File::exists($project_path.'/px-files/config.php')) {
 				$files = null;
