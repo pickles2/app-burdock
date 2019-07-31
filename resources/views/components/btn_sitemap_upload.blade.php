@@ -61,7 +61,7 @@
                     							}
                 							</script>
         								</div>
-        								<button id="submitStatus" type="submit" class="px2-btn px2-btn--primary" disabled="disabled" onclick="uploadSitemap(event);">送信</button>
+        								<button id="submitStatus" type="submit" class="px2-btn px2-btn--primary" disabled="disabled">送信</button>
         								<button type="reset" class="px2-btn px2-btn--danger" onclick="cancelButton(event);">キャンセル</button>
                                         <script>
                                             // キャンセルボタンを押した際に送信ボタンをdisabledにする

@@ -43,11 +43,8 @@ class SitemapController extends Controller
 	public function upload(StoreSitemap $request, Project $project, $branch_name)
 	{
 		//
-		$page_id = $request->page_id;
-		$page_param = $request->page_path;
-		$option = ' /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id;
+		$option = ' /?PX=px2dthelper.get.all';
 		$current = get_px_execute($project->project_code, $branch_name, $option);
-
 		$upload_file = $request->file;
 		$old_file = $upload_file;
 		$mimetype = $upload_file->clientExtension();
@@ -57,22 +54,6 @@ class SitemapController extends Controller
 		if (!copy($old_file, $new_file)) {
 			$message = 'Could not update Sitemap.';
 		} else {
-			$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
-			$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-			chdir($project_path);
-			shell_exec('git remote set-url origin https://'.urlencode(\Crypt::decryptString($project->git_username)).':'.urlencode(\Crypt::decryptString($project->git_password)).str_replace('https://', '@', $project->git_url));
-			shell_exec('git fetch');
-			$check = shell_exec('git diff origin/master');
-
-			if($check === null) {
-				$result = false;
-			} else {
-				shell_exec('git add -A');
-				shell_exec('git commit -m "Edit Sitemap"');
-				shell_exec('git push origin master:master');
-			}
-			chdir($path_current_dir); // 元いたディレクトリへ戻る
-
 			$message = 'Updated a Sitemap.';
 		}
 
