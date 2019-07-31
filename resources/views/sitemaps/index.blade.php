@@ -18,9 +18,6 @@
 			<button class="btn px2-btn">コミットログ</button> --}}
 			@component('components.btn_sitemap_help')
                 @slot('controller', 'sitemap')
-				@slot('project_code', $project->project_code)
-				@slot('branch_name', $branch_name)
-				@slot('errors', $errors)
             @endcomponent
 		</div>
 		<div class="cont_filelist_sitemap" style="height: 630px;">

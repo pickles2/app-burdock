@@ -71,7 +71,7 @@
 								</tbody>
 							</table>
 							<p class="center">
-								<button type="submit" name="submit" class="px2-btn px2-btn--primary px2-btn--block" onclick="uploadSitemap(event);">新規プロジェクト作成</button>
+								<button type="submit" name="submit" class="px2-btn px2-btn--primary px2-btn--block">新規プロジェクト作成</button>
 							</p>
 						</form>
 					</div>
