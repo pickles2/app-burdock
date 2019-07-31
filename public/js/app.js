@@ -60596,6 +60596,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			pathsIgnore: '',
 			//
 			keepCache: false,
+			//
+			isPublishRestart: false,
 			// publishFilesをバインディング
 			totalFiles: this.publishFiles,
 			// alertFilesをバインディング
@@ -60637,6 +60639,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	methods: {
 		publish_option: function publish_option(reset) {
 			if (reset === 1) {
+				this.isPublishRestart = true;
+			}
+			this.publishStatus = 1;
+		},
+		publish: function publish() {
+			var _this = this;
+
+			if (this.isPublishRestart) {
 				this.parse = 0;
 				this.queueCount = '';
 				this.publishFile = '';
@@ -60647,11 +60657,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				this.pathsIgnore = '';
 				this.keepCache = false;
 			}
-			this.publishStatus = 1;
-		},
-		publish: function publish() {
-			var _this = this;
-
 			this.publishStatus = 999;
 			//
 			if (this.classPathsRegion) {
@@ -60765,6 +60770,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					_this3.publishStatus = 3;
 				});
 			});
+		},
+		cancel: function cancel() {
+			if (this.existsPublishLog === '') {
+				this.publishStatus = 0;
+			} else if (this.existsPublishLog === '1') {
+				this.publishStatus = 3;
+			}
 		},
 		prepare: function prepare() {
 			alert('準備中の機能です。');
@@ -61534,9 +61546,11 @@ var render = function() {
                     [_vm._v("パブリッシュを実行する")]
                   ),
                   _vm._v(" "),
-                  _c("button", { staticClass: "px2-btn" }, [
-                    _vm._v("キャンセル")
-                  ])
+                  _c(
+                    "button",
+                    { staticClass: "px2-btn", on: { click: _vm.cancel } },
+                    [_vm._v("キャンセル")]
+                  )
                 ])
               ]
             )

@@ -129,7 +129,7 @@
 					</div>
 					<div class="dialog-buttons center">
 						<button type="submit" class="px2-btn px2-btn--primary" v-on:click="publish">パブリッシュを実行する</button>
-						<button class="px2-btn">キャンセル</button>
+						<button class="px2-btn" v-on:click="cancel">キャンセル</button>
 					</div>
 				</div>
 			</div>
@@ -183,6 +183,8 @@ export default {
 			pathsIgnore: '',
 			//
 			keepCache: false,
+			//
+			isPublishRestart: false,
 			// publishFilesをバインディング
 			totalFiles: this.publishFiles,
 			// alertFilesをバインディング
@@ -223,6 +225,13 @@ export default {
     methods: {
 		publish_option(reset) {
 			if(reset === 1) {
+				this.isPublishRestart = true;
+			}
+			this.publishStatus = 1;
+		},
+
+		publish() {
+			if(this.isPublishRestart) {
 				this.parse = 0;
 				this.queueCount = '';
 				this.publishFile = '';
@@ -233,10 +242,6 @@ export default {
 				this.pathsIgnore = '';
 				this.keepCache = false;
 			}
-			this.publishStatus = 1;
-		},
-
-		publish() {
 			this.publishStatus = 999;
 			//
 			if(this.classPathsRegion) {
@@ -349,6 +354,14 @@ export default {
 					this.publishStatus = 3;
 				})
 			})
+		},
+
+		cancel() {
+			if(this.existsPublishLog === '') {
+				this.publishStatus = 0;
+			} else if(this.existsPublishLog === '1') {
+				this.publishStatus = 3;
+			}
 		},
 
 		prepare() {
