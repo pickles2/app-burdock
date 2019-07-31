@@ -27,7 +27,7 @@ class SitemapController extends Controller
 		$page_id = $request->page_id;
 		$page_param = $request->page_path;
 		$option = ' /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id;
-		$current = get_px_execute($project_project_code, $branch_name, $option);
+		$current = get_px_execute($project->project_code, $branch_name, $option);
 
 		$sitemap_files = \File::files($current->realpath_homedir.'sitemaps/');
 		foreach($sitemap_files as $file) {
@@ -111,7 +111,7 @@ class SitemapController extends Controller
 		$page_id = $request->page_id;
 		$page_param = $request->page_path;
 		$option = ' /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id;
-		$current = get_px_execute($project->project_code, $branch_name, $option)
+		$current = get_px_execute($project->project_code, $branch_name, $option);
 
 		$xlsx_file_name = $request->file_name;
 		$csv_file_name = str_replace('xlsx', 'csv', $xlsx_file_name);
