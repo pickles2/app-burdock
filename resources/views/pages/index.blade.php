@@ -37,7 +37,7 @@
 						<div class="cont_page_info-btn">
 							<div class="btn-group">
 								<a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'?page_path='.$page_param) }}" class="btn px2-btn px2-btn--primary px2-btn--lg btn--edit" style="padding-left: 5em; padding-right: 5em; font: inherit;" target="_blank">{{ __('Edit')}}</a>
-								<a href="{{ url('https://'.$branch_name.'.'.$project->project_code.'.'.env('PREV_URL').'/'.$page_param) }}" class="btn px2-btn px2-btn--lg btn--preview" target="_blank" style="font: inherit;">ブラウザでプレビュー</a>
+								<a href="{{ url('https://'.$branch_name.'.'.$project->project_code.'.'.env('PREV_URL').$page_param) }}" class="btn px2-btn px2-btn--lg btn--preview" target="_blank" style="font: inherit;">ブラウザでプレビュー</a>
 								<!-- <button type="button" class="btn px2-btn px2-btn--lg btn--resources">リソース</button> -->
 								<button type="button" class="btn px2-btn px2-btn--lg dropdown-toggle" data-toggle="dropdown">
 									<span class="caret"></span>
