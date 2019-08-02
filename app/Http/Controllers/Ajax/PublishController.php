@@ -259,4 +259,26 @@ class PublishController extends Controller
         );
         return $data;
 	}
+
+	public function publishSingleAjax(Request $request, Project $project, $branch_name)
+	{
+		$path_region = $request->path_region;
+		$option = '';
+		$option .= ' "';
+		$option .= '/?PX=publish.run';
+		$option .= '&path_region='.$path_region;
+		$option .= '"';
+		$bd_object = get_px_execute($project->project_code, $branch_name, $option);
+
+		if($bd_object !== false) {
+			$info = 'をパブリッシュしました。';
+		} else {
+			$info = 'をパブリッシュできませんでした。';
+		}
+
+		$data = array(
+			"info" => $info
+		);
+		return $data;
+	}
 }

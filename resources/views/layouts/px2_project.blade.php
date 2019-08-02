@@ -128,12 +128,12 @@
 
 		{{-- フラッシュ・メッセージ --}}
 		@if (session('my_status'))
-			<div id="session-my-status" class="container mt-2">
-				<div class="alert alert-success">
-					{{ session('my_status') }}
-				</div>
-			</div>
+			@component('components.flash_message')
+			@endcomponent
 		@endif
+		{{-- Ajax用のフラッシュ・メッセージ --}}
+		@component('components.ajax_flash_message')
+		@endcomponent
 		<div>
 			@yield('content')
 		</div>
