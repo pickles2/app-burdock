@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Project;
 use Carbon\Carbon;
+use \Zipper;
 
 class PublishController extends Controller
 {
@@ -29,9 +30,9 @@ class PublishController extends Controller
 		$fs = new \tomk79\filesystem;
 		$project_name = $project->project_code;
 		$project_path = get_project_workingtree_dir($project_name, $branch_name);
-		$publish_log_file = $project_path.'/'.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/publish_log.csv';
-		$alert_log_file = $project_path.'/'.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/alert_log.csv';
-		$applock_file = $project_path.'/'.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/applock.txt';
+		$publish_log_file = $project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/publish_log.csv';
+		$alert_log_file = $project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/alert_log.csv';
+		$applock_file = $project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/applock.txt';
 
 		$option = ' /?PX=px2dthelper.get.all';
 		$bd_object = get_px_execute($project->project_code, $branch_name, $option);
@@ -89,7 +90,7 @@ class PublishController extends Controller
 		//
 		$project_code = $project->project_code;
 		$project_path = get_project_workingtree_dir($project_code, $branch_name);
-		$applock_file = $project_path.'/'.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/applock.txt';
+		$applock_file = $project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/applock.txt';
 		\File::delete($applock_file);
 
 		if(\File::exists($applock_file)) {
@@ -99,5 +100,35 @@ class PublishController extends Controller
 		}
 
 		return redirect('publish/' . $project->project_code . '/' . $branch_name)->with('my_status', __($message));
+	}
+
+	public function publishFileDownload(Request $request, Project $project, $branch_name)
+	{
+		//
+		$option = ' /?PX=px2dthelper.get.all';
+		$current = get_px_execute($project->project_code, $branch_name, $option);
+		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
+		if(\File::exists($project_path.get_path_homedir($project->project_code, $branch_name).'dist/publish.zip')) {
+			\File::delete($project_path.get_path_homedir($project->project_code, $branch_name).'dist/publish.zip');
+		}
+		$files  = glob($project_path.'px-files/dist');
+		Zipper::make($project_path.get_path_homedir($project->project_code, $branch_name).'dist/publish_files.zip')->add($files)->close();
+
+		return response()->download($project_path.get_path_homedir($project->project_code, $branch_name).'dist/publish_files.zip');
+	}
+
+	public function publishReportDownload(Request $request, Project $project, $branch_name)
+	{
+		//
+		$option = ' /?PX=px2dthelper.get.all';
+		$current = get_px_execute($project->project_code, $branch_name, $option);
+		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
+		if(\File::exists($project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/publish_reports.zip')) {
+			\File::delete($project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/publish_reports.zip');
+		}
+		$files = glob($project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish');
+		Zipper::make($project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/publish_reports.zip')->add($files)->close();
+
+		return response()->download($project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/publish_reports.zip');
 	}
 }

@@ -50,9 +50,9 @@
 							<div class="cont_results-total_file_count">total: <strong>{{ totalFiles }}</strong> files.</div>
 							<div class="cont_results-errorMessage" v-bind:class="classAlertLog">{{ alert }}件のエラーが検出されています。</div>
 							<div class="cont_results-spentTime">time: <span>{{ time }} sec</span></div>
-							<p><button class="px2-btn px2-btn--primary px2-btn--lg" v-on:click="prepare">パブリッシュされたファイルを確認する</button></p>
+							<p><a class="px2-btn px2-btn--primary" v-bind:href="publishFileDownload">パブリッシュされたファイルをダウンロードする</a></p>
 							<ul class="horizontal">
-								<li class="horizontal-li"><a href="#" class="px2-link px2-link--burette" v-on:click="prepare">パブリッシュレポート</a></li>
+								<li class="horizontal-li"><a class="px2-link px2-link--burette" v-bind:href="publishReportDownload">パブリッシュレポート</a></li>
 							</ul>
 						</div>
 					</div>
@@ -197,6 +197,10 @@ export default {
 			deleteApplock: '/publish/'+this.projectCode+'/'+this.branchName+'/deleteApplock',
 			// existsAlertLogをバインディング
 			isExistsAlertLog: this.existsAlertLog,
+			// パブリッシュしたファイルをダウンロードするためのリンクパス
+			publishFileDownload: '/publish/'+this.projectCode+'/'+this.branchName+'/publishFileDownload',
+			// パブリッシュしたレポートをダウンロードするためのリンクパス
+			publishReportDownload: '/publish/'+this.projectCode+'/'+this.branchName+'/publishReportDownload',
 			//
 			process: []
 		}

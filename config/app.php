@@ -160,6 +160,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+		// ディレクトリをZIPでダウンロードするためのライブラリ
+		Chumper\Zipper\ZipperServiceProvider::class,
     ],
 
     /*
@@ -209,6 +211,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+		// ディレクトリをZIPでダウンロードするためのライブラリ
+		'Zipper' => Chumper\Zipper\Zipper::class,
     ],
 
 ];

@@ -60610,6 +60610,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			deleteApplock: '/publish/' + this.projectCode + '/' + this.branchName + '/deleteApplock',
 			// existsAlertLogをバインディング
 			isExistsAlertLog: this.existsAlertLog,
+			// パブリッシュしたファイルをダウンロードするためのリンクパス
+			publishFileDownload: '/publish/' + this.projectCode + '/' + this.branchName + '/publishFileDownload',
+			// パブリッシュしたレポートをダウンロードするためのリンクパス
+			publishReportDownload: '/publish/' + this.projectCode + '/' + this.branchName + '/publishReportDownload',
 			//
 			process: []
 		};
@@ -61050,12 +61054,12 @@ var render = function() {
                 _vm._v(" "),
                 _c("p", [
                   _c(
-                    "button",
+                    "a",
                     {
-                      staticClass: "px2-btn px2-btn--primary px2-btn--lg",
-                      on: { click: _vm.prepare }
+                      staticClass: "px2-btn px2-btn--primary",
+                      attrs: { href: _vm.publishFileDownload }
                     },
-                    [_vm._v("パブリッシュされたファイルを確認する")]
+                    [_vm._v("パブリッシュされたファイルをダウンロードする")]
                   )
                 ]),
                 _vm._v(" "),
@@ -61065,8 +61069,7 @@ var render = function() {
                       "a",
                       {
                         staticClass: "px2-link px2-link--burette",
-                        attrs: { href: "#" },
-                        on: { click: _vm.prepare }
+                        attrs: { href: _vm.publishReportDownload }
                       },
                       [_vm._v("パブリッシュレポート")]
                     )
