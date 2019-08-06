@@ -84,6 +84,8 @@ Route::post('publish/{project}/{branch_name}/publishAjax', 'Ajax\PublishControll
 Route::post('publish/{project}/{branch_name}/readCsvAjax', 'Ajax\PublishController@readCsvAjax');
 Route::post('publish/{project}/{branch_name}/publishCancelAjax', 'Ajax\PublishController@publishCancelAjax');
 Route::post('publish/{project}/{branch_name}/publishSingleAjax', 'Ajax\PublishController@publishSingleAjax');
+Route::get('publish/{project}/{branch_name}/publishFileDownload', 'PublishController@publishFileDownload');
+Route::get('publish/{project}/{branch_name}/publishReportDownload', 'PublishController@publishReportDownload');
 
 // --------------------------------------
 // Git
