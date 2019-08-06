@@ -62417,7 +62417,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		// ベンダー名のバリデーション
 		errorVendorName: function errorVendorName() {
 			var result = '';
-			if (/^[A-Za-z0-9]*$/.test(this.vendorName) === false) {
+			if (/^[A-Za-z0-9\-\_]*$/.test(this.vendorName) === false) {
 				result = 'ベンダー名は半角英数字で入力してください。';
 				this.isVendorNameEnable = false;
 			} else {
@@ -62429,7 +62429,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		// プロジェクト名のバリデーション
 		errorProjectName: function errorProjectName() {
 			var result = '';
-			if (/^[A-Za-z0-9]*$/.test(this.projectName) === false) {
+			if (/^[A-Za-z0-9\-\_]*$/.test(this.projectName) === false) {
 				result = 'プロジェクト名は半角英数字で入力してください。';
 				this.isProjectNameEnable = false;
 			} else {
@@ -63137,11 +63137,7 @@ var render = function() {
                           _c("td", [
                             _vm._m(4),
                             _vm._v(" "),
-                            _c("p", [
-                              _vm._v(
-                                "vendorNameおよびprojectNameは半角英数字で入力してください。 詳しくは composer のドキュメントを参照してください。"
-                              )
-                            ]),
+                            _vm._m(5),
                             _vm._v(" "),
                             _c("p", [
                               _vm._v(
@@ -63295,7 +63291,7 @@ var render = function() {
                                   )
                                 ]),
                                 _vm._v(" "),
-                                _vm._m(5),
+                                _vm._m(6),
                                 _vm._v(" "),
                                 _c("p", { staticClass: "text-danger" }, [
                                   _vm._v(
@@ -63332,7 +63328,7 @@ var render = function() {
                                   })
                                 ]),
                                 _vm._v(" "),
-                                _vm._m(6),
+                                _vm._m(7),
                                 _vm._v(" "),
                                 _c("p", { staticClass: "text-danger" }, [
                                   _vm._v(
@@ -63369,7 +63365,7 @@ var render = function() {
                                   })
                                 ]),
                                 _vm._v(" "),
-                                _vm._m(7),
+                                _vm._m(8),
                                 _vm._v(" "),
                                 _c("p", { staticClass: "text-danger" }, [
                                   _vm._v(
@@ -63507,7 +63503,7 @@ var render = function() {
                                     )
                                   ]),
                                   _vm._v(" "),
-                                  _vm._m(8),
+                                  _vm._m(9),
                                   _vm._v(" "),
                                   _c("p", { staticClass: "text-danger" }, [
                                     _vm._v(
@@ -63545,7 +63541,7 @@ var render = function() {
                                     })
                                   ]),
                                   _vm._v(" "),
-                                  _vm._m(9),
+                                  _vm._m(10),
                                   _vm._v(" "),
                                   _c("p", { staticClass: "text-danger" }, [
                                     _vm._v(
@@ -63583,7 +63579,7 @@ var render = function() {
                                     })
                                   ]),
                                   _vm._v(" "),
-                                  _vm._m(10),
+                                  _vm._m(11),
                                   _vm._v(" "),
                                   _c("p", { staticClass: "text-danger" }, [
                                     _vm._v(
@@ -63633,7 +63629,7 @@ var render = function() {
                                     )
                                   ]),
                                   _vm._v(" "),
-                                  _vm._m(11),
+                                  _vm._m(12),
                                   _vm._v(" "),
                                   _c("p", { staticClass: "text-danger" }, [
                                     _vm._v(
@@ -63673,7 +63669,7 @@ var render = function() {
                                     })
                                   ]),
                                   _vm._v(" "),
-                                  _vm._m(12),
+                                  _vm._m(13),
                                   _vm._v(" "),
                                   _c("p", { staticClass: "text-danger" }, [
                                     _vm._v(
@@ -63711,7 +63707,7 @@ var render = function() {
                                     })
                                   ]),
                                   _vm._v(" "),
-                                  _vm._m(13),
+                                  _vm._m(14),
                                   _vm._v(" "),
                                   _c("p", { staticClass: "text-danger" }, [
                                     _vm._v(
@@ -63934,6 +63930,20 @@ var staticRenderFns = [
       ),
       _c("code", [_vm._v("composer.json")]),
       _vm._v(" を編集することで変更できます。")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("vendorNameおよびprojectNameは半角英数字と "),
+      _c("code", [_vm._v("-")]),
+      _vm._v("(ハイフン)、 "),
+      _c("code", [_vm._v("_")]),
+      _vm._v(
+        "(アンダースコア) が使えます。 詳しくは composer のドキュメントを参照してください。"
+      )
     ])
   },
   function() {

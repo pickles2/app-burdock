@@ -132,7 +132,7 @@
 									<th>Composer package name</th>
 									<td>
 										<p><code>composer.json</code> の name に設定するパッケージ名を入力してください。 空欄にすると name プロパティを削除します。 この値は、あとで <code>composer.json</code> を編集することで変更できます。</p>
-										<p>vendorNameおよびprojectNameは半角英数字で入力してください。 詳しくは composer のドキュメントを参照してください。</p>
+										<p>vendorNameおよびprojectNameは半角英数字と <code>-</code>(ハイフン)、 <code>_</code>(アンダースコア) が使えます。 詳しくは composer のドキュメントを参照してください。</p>
 										<p>この値は、再利用可能なテンプレートとして公開する場合は必要になります。 そうでない場合(一般的なウェブ制作プロジェクト)では、空欄のままでよいでしょう。</p>
 										<p>vendorName</p>
 										<p class="text-danger">{{ errorVendorName }}</p>
@@ -733,7 +733,7 @@ export default {
 		// ベンダー名のバリデーション
 		errorVendorName: function () {
 			var result = '';
-			if(/^[A-Za-z0-9]*$/.test(this.vendorName) === false) {
+			if(/^[A-Za-z0-9\-\_]*$/.test(this.vendorName) === false) {
 				result = 'ベンダー名は半角英数字で入力してください。';
 				this.isVendorNameEnable = false;
 			} else {
@@ -745,7 +745,7 @@ export default {
 		// プロジェクト名のバリデーション
 		errorProjectName: function () {
 			var result = '';
-			if(/^[A-Za-z0-9]*$/.test(this.projectName) === false) {
+			if(/^[A-Za-z0-9\-\_]*$/.test(this.projectName) === false) {
 				result = 'プロジェクト名は半角英数字で入力してください。';
 				this.isProjectNameEnable = false;
 			} else {
