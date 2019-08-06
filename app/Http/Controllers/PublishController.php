@@ -108,13 +108,15 @@ class PublishController extends Controller
 		$option = ' /?PX=px2dthelper.get.all';
 		$current = get_px_execute($project->project_code, $branch_name, $option);
 		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
-		if(\File::exists($project_path.get_path_homedir($project->project_code, $branch_name).'dist/publish.zip')) {
-			\File::delete($project_path.get_path_homedir($project->project_code, $branch_name).'dist/publish.zip');
+		$publish_dir_path = $project_path.$current->config->path_publish_dir;
+		// dd($project_path.$current->config->path_publish_dir.'publish.zip');
+		if(\File::exists($publish_dir_path.'publish.zip')) {
+			\File::delete($publish_dir_path.'publish.zip');
 		}
-		$files  = glob($project_path.'px-files/dist');
-		Zipper::make($project_path.get_path_homedir($project->project_code, $branch_name).'dist/publish_files.zip')->add($files)->close();
+		$files  = glob($publish_dir_path);
+		Zipper::make($publish_dir_path.'publish.zip')->add($files)->close();
 
-		return response()->download($project_path.get_path_homedir($project->project_code, $branch_name).'dist/publish_files.zip');
+		return response()->download($publish_dir_path.'publish.zip');
 	}
 
 	public function publishReportDownload(Request $request, Project $project, $branch_name)
@@ -123,12 +125,13 @@ class PublishController extends Controller
 		$option = ' /?PX=px2dthelper.get.all';
 		$current = get_px_execute($project->project_code, $branch_name, $option);
 		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
-		if(\File::exists($project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/publish_reports.zip')) {
-			\File::delete($project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/publish_reports.zip');
+		$publish_reports_path = $project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/';
+		if(\File::exists($publish_reports_path.'publish_reports.zip')) {
+			\File::delete($publish_reports_path.'publish_reports.zip');
 		}
-		$files = glob($project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish');
-		Zipper::make($project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/publish_reports.zip')->add($files)->close();
+		$files = glob($publish_reports_path);
+		Zipper::make($publish_reports_path.'publish_reports.zip')->add($files)->close();
 
-		return response()->download($project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/publish_reports.zip');
+		return response()->download($publish_reports_path.'publish_reports.zip');
 	}
 }
