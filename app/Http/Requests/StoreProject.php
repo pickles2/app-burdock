@@ -26,9 +26,26 @@ class StoreProject extends FormRequest
      */
     public function rules(Project $project)
     {
-		// ob_start();var_dump($project);error_log(ob_get_clean(),3,__DIR__.'/__dump.txt');
+		//
+		if ($this->project_id) { // 編集画面の時
+			$unique = 'unique:projects,project_code,'.$this->project_id.',id';
+		} else { // 新規登録画面の時
+			$unique = 'unique:projects,project_code';
+		}
+
+		$alpha_dash_custom = function($attribute, $value, $fail) {
+			// 入力の取得
+			$input_data = $this->all();
+
+			// 条件に合致したらエラーにする
+			if(!preg_match('/^[A-Za-z\d_-]+$/', $value)) {
+				$fail('使用できない文字が含まれています。');
+			}
+		};
+
         return [
-            'project_code' => ['required',Rule::unique('projects')->ignore($project->project_code)],
+			'project_name' => 'required',
+            'project_code' => [$unique, $alpha_dash_custom, 'required'],
             'git_url' => 'max:400',
             'git_username' => '',
             'git_password' => '',

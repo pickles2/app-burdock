@@ -8,9 +8,12 @@
     <form action="{{ url('projects/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}" method="post">
         @csrf
         @method('PUT')
+		<div class="form-group">
+			<input type="hidden" name="project_id" value="{{ $project->id }}">
+		</div>
         <div class="form-group">
             <label for="project_name">{{ __('Project Name') }}</label>
-            <input id="project_name" type="text" class="form-control @if ($errors->has('project_name')) is-invalid @endif" name="project_name" value="{{ old('project_name', $project->project_name) }}" required autofocus>
+            <input id="project_name" type="text" class="form-control @if ($errors->has('project_name')) is-invalid @endif" name="project_name" value="{{ old('project_name', $project->project_name) }}">
                 @if ($errors->has('project_name'))
                     <span class="invalid-feedback" role="alert">
                         {{ $errors->first('project_name') }}
@@ -19,7 +22,7 @@
         </div>
         <div class="form-group">
             <label for="project_code">{{ __('Project Code') }}</label>
-            <input id="project_code" type="text" class="form-control @if ($errors->has('project_code')) is-invalid @endif" name="project_code" value="{{ old('project_code', $project->project_code) }}" required autofocus>
+            <input id="project_code" type="text" class="form-control @if ($errors->has('project_code')) is-invalid @endif" name="project_code" value="{{ old('project_code', $project->project_code) }}">
                 @if ($errors->has('project_code'))
                     <span class="invalid-feedback" role="alert">
                         {{ $errors->first('project_code') }}

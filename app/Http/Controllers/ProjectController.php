@@ -90,6 +90,9 @@ class ProjectController extends Controller
 		$bd_object = get_px_execute($project->project_code, $branch_name, $option);
 		if($bd_object) {
 			return view('projects.show', ['project' => $project, 'branch_name' => $branch_name], compact('bd_object'));
+		} elseif(session('my_status')) {
+			$message = session('my_status');
+			return redirect('setup/'.$project->project_code.'/'.$branch_name)->with('my_status', __($message));
 		} else {
 			return redirect('setup/'.$project->project_code.'/'.$branch_name);
 		}

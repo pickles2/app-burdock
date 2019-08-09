@@ -47,7 +47,7 @@
 											<div class="overflow:hidden;">
 												<input type="text" name="project_name" class="form-control @if($errors->has('project_name'))is-invalid @endif" value="{{ old('project_name') }}" placeholder="Your Project Name">
 												@if ($errors->has('project_name'))
-													<span class="invalid-feedback" role="alert">
+													<span class="invalid-feedback text-danger" role="alert">
 														{{ $errors->first('project_name') }}
 													</span>
 												@endif
@@ -61,7 +61,7 @@
 											<div class="overflow:hidden;">
 												<input type="text" name="project_code" class="form-control @if($errors->has('project_code'))is-invalid @endif" value="{{ old('project_code') }}" placeholder="Your Project Name">
 												@if ($errors->has('project_code'))
-													<span class="invalid-feedback" role="alert">
+													<span class="invalid-feedback text-danger" role="alert">
 														{{ $errors->first('project_code') }}
 													</span>
 												@endif
