@@ -1,7 +1,7 @@
 @php
     $title = __('Projects');
 @endphp
-@extends('layouts.px2')
+@extends('layouts.px2_top')
 @section('content')
 <div class="container">
     <h1>{{ $title }}</h1>

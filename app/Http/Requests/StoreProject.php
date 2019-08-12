@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Project;
+use Illuminate\Validation\Rule;
 
 class StoreProject extends FormRequest
 {
@@ -22,13 +24,31 @@ class StoreProject extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(Project $project)
     {
+		//
+		if ($this->project_id) { // 編集画面の時
+			$unique = 'unique:projects,project_code,'.$this->project_id.',id';
+		} else { // 新規登録画面の時
+			$unique = 'unique:projects,project_code';
+		}
+
+		$alpha_dash_custom = function($attribute, $value, $fail) {
+			// 入力の取得
+			$input_data = $this->all();
+
+			// 条件に合致したらエラーにする
+			if(!preg_match('/^[A-Za-z\d_-]+$/', $value)) {
+				$fail('使用できない文字が含まれています。');
+			}
+		};
+
         return [
-            'project_code' => 'required|unique:projects,project_code|max:191',
-            'git_url' => 'required|unique:projects,git_url|url|max:400',
-            'git_username' => 'required',
-            'git_password' => 'required',
+			'project_name' => 'required',
+            'project_code' => [$unique, $alpha_dash_custom, 'required'],
+            'git_url' => 'max:400',
+            'git_username' => '',
+            'git_password' => '',
         ];
     }
 }

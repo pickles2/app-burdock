@@ -14,9 +14,11 @@
 				@slot('branch_name', $branch_name)
 				@slot('errors', $errors)
             @endcomponent
-			<button class="btn px2-btn">サイトマップをコミットする</button>
-			<button class="btn px2-btn">コミットログ</button>
-			<button class="btn px2-btn">ヘルプ</button>
+			{{-- <button class="btn px2-btn">サイトマップをコミットする</button>
+			<button class="btn px2-btn">コミットログ</button> --}}
+			@component('components.btn_sitemap_help')
+                @slot('controller', 'sitemap')
+            @endcomponent
 		</div>
 		<div class="cont_filelist_sitemap" style="height: 630px;">
 			@if(isset($get_files))

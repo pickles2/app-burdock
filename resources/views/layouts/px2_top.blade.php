@@ -66,8 +66,8 @@
                                     {{ 'ようこそ '.Auth::user()->name.' さん' }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="dropdown-user">
-                                    <a class="dropdown-item" href="{{ url('profile') }}">
-                                        {{ __('Profile') }}
+                                    <a class="dropdown-item" href="{{ url('mypage') }}">
+                                        {{ __('Mypage') }}
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
@@ -100,7 +100,7 @@
                     </ul>
                 </div>
 				{{-- <div class="theme-header__shoulder-menu" style="width: 50px; height: 30px;">
-					<button style="height: 33px;">≡</button>
+					<button><span class="px2-header__hamburger"></span></button>
 					<ul style="display: none; top: 30px; height: 892px;">
                         <li><a href="">ダッシュボード</a></li>
                         <li><a href="">フォルダを開く</a></li>
@@ -130,11 +130,8 @@
 		</header>
 		{{-- フラッシュ・メッセージ --}}
         @if (session('my_status'))
-            <div class="container mt-2">
-                <div class="alert alert-success">
-                    {{ session('my_status') }}
-                </div>
-            </div>
+			@component('components.flash_message')
+			@endcomponent
         @endif
         <div>
             @yield('content')

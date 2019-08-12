@@ -36,10 +36,10 @@ Route::get('oauth/callback/wasabi', 'OauthCallbackController@wasabi_callback');
 
 // --------------------------------------
 // プロフィール
-Route::get('profile', 'ProfileController@show');
-Route::get('profile/edit', 'ProfileController@edit');
-Route::put('profile', 'ProfileController@update');
-Route::delete('profile', 'ProfileController@destroy');
+Route::get('mypage', 'MypageController@show');
+Route::get('mypage/edit', 'MypageController@edit');
+Route::put('mypage', 'MypageController@update');
+Route::delete('mypage', 'MypageController@destroy');
 
 // --------------------------------------
 // プロジェクト Home
@@ -52,6 +52,12 @@ Route::put('projects/{project}/{branch_name}', 'ProjectController@update');
 Route::delete('projects/{project}/{branch_name}', 'ProjectController@destroy');
 
 // Route::resource('projects', 'ProjectController');
+
+// --------------------------------------
+// セットアップ
+Route::get('setup/{project}/{branch_name}', 'SetupController@index');
+Route::post('setup/{project}/{branch_name}/setupAjax', 'Ajax\SetupController@setupAjax');
+Route::post('setup/{project}/{branch_name}/setupOptionAjax', 'Ajax\SetupController@setupOptionAjax');
 
 // --------------------------------------
 // サイトマップ
@@ -82,6 +88,9 @@ Route::get('publish/{project}/{branch_name}/deleteApplock', 'PublishController@d
 Route::post('publish/{project}/{branch_name}/publishAjax', 'Ajax\PublishController@publishAjax');
 Route::post('publish/{project}/{branch_name}/readCsvAjax', 'Ajax\PublishController@readCsvAjax');
 Route::post('publish/{project}/{branch_name}/publishCancelAjax', 'Ajax\PublishController@publishCancelAjax');
+Route::post('publish/{project}/{branch_name}/publishSingleAjax', 'Ajax\PublishController@publishSingleAjax');
+Route::get('publish/{project}/{branch_name}/publishFileDownload', 'PublishController@publishFileDownload');
+Route::get('publish/{project}/{branch_name}/publishReportDownload', 'PublishController@publishReportDownload');
 
 // --------------------------------------
 // Git

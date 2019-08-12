@@ -4,7 +4,6 @@
 @extends('layouts.px2_project')
 @section('content')
 <div class="container">
-	<div id="flash_alert" class="alert alert-success" style="display: none;"></div>
 	<h1 data-original-title="" title="">コンテンツ</h1>
 </div>
 <div class="contents" data-original-title="" title="">
@@ -37,14 +36,14 @@
 						<div class="cont_page_info-btn">
 							<div class="btn-group">
 								<a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'?page_path='.$page_param) }}" class="btn px2-btn px2-btn--primary px2-btn--lg btn--edit" style="padding-left: 5em; padding-right: 5em; font: inherit;" target="_blank">{{ __('Edit')}}</a>
-								<a href="{{ url('https://'.$branch_name.'.'.$project->project_code.'.'.env('PREV_URL').'/'.$page_param) }}" class="btn px2-btn px2-btn--lg btn--preview" target="_blank" style="font: inherit;">ブラウザでプレビュー</a>
+								<a href="{{ url('https://'.$branch_name.'.'.$project->project_code.'.'.env('PREV_URL').$page_param) }}" class="btn px2-btn px2-btn--lg btn--preview" target="_blank" style="font: inherit;">ブラウザでプレビュー</a>
 								<!-- <button type="button" class="btn px2-btn px2-btn--lg btn--resources">リソース</button> -->
 								<button type="button" class="btn px2-btn px2-btn--lg dropdown-toggle" data-toggle="dropdown">
 									<span class="caret"></span>
 									<span class="sr-only">Toggle Dropdown</span>
 								</button>
 								<ul class="dropdown-menu cont_page-dropdown-menu">
-									<li style="max-width: 476px; overflow: hidden;">
+									{{-- <li style="max-width: 476px; overflow: hidden;">
 										<a data-content="/index.html" href="javascript:;">フォルダを開く</a>
 									</li>
 									<li style="max-width: 476px; overflow: hidden;">
@@ -75,11 +74,34 @@
 									</li>
 									<li style="max-width: 476px; overflow: hidden;">
 										<a data-path="/index.html" data-proc_type="html" href="javascript:;">編集方法を変更</a>
-									</li>
+									</li> --}}
 									<li style="max-width: 476px; overflow: hidden;">
-										<a data-path="/index.html" data-proc_type="html" href="javascript:;">このページを単体でパブリッシュ</a>
+										<a data-param="{{ $page_param }}" onClick="publishSingle(this)">このページを単体でパブリッシュ</a>
 									</li>
-									<li style="max-width: 476px; overflow: hidden;">
+									<script>
+									function publishSingle(e) {
+										// 受信したイベントデータをajaxでコントローラーに送信
+										var path_region = e.dataset.param;
+										$.ajax({
+											url: "/publish/{{ $project->project_code }}/{{ $branch_name }}/publishSingleAjax",
+											type: 'post',
+											data : {
+												"path_region" : path_region,
+												_token : '{{ csrf_token() }}'
+											},
+										}).done(function(data){
+											// ajaxで取得してきたデータをアラートで表示
+											var flashAlert = document.getElementById("flash_alert");
+											var flashAlertInner = document.getElementById("flash_alert_inner");
+											flashAlertInner.innerHTML = '「{{ $current->page_info->title }}」'+data.info;
+											flashAlert.style.display = "block";
+											setTimeout(function() {
+												$('#flash_alert').fadeOut(500);
+											}, 2000);
+										});
+									};
+									</script>
+									{{-- <li style="max-width: 476px; overflow: hidden;">
 										<a data-path="/index.html" href="javascript:;">コンテンツをコミット</a>
 									</li>
 									<li style="max-width: 476px; overflow: hidden;">
@@ -87,7 +109,7 @@
 									</li>
 									<li style="max-width: 476px; overflow: hidden;">
 										<a data-path="/index.html" href="javascript:;">ページをリロード</a>
-									</li>
+									</li> --}}
 								</ul>
 							</div>
 							<!-- /btn-group -->
@@ -131,7 +153,7 @@
 							});
 						};
 						</script>
-						<iframe id="ifrm" data-original-title="" title="" src="{{ url('https://'.$branch_name.'.'.$project->project_code.'.'.env('PREV_URL').'/'.$page_param) }}"></iframe>
+						<iframe id="ifrm" data-original-title="" title="" src="{{ url('https://'.$branch_name.'.'.$project->project_code.'.'.env('PREV_URL').$page_param) }}"></iframe>
 					</div>
 				</div>
 			</div>

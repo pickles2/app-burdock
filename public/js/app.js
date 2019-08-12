@@ -19930,11 +19930,11 @@ window.Vue = __webpack_require__(88);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', __webpack_require__(92));
+Vue.component('cont-search-component', __webpack_require__(92));
 // 追加
-Vue.component('cont-search-component', __webpack_require__(95));
+Vue.component('publish-component', __webpack_require__(95));
 // 追加
-Vue.component('publish-component', __webpack_require__(98));
+Vue.component('setup-component', __webpack_require__(98));
 
 var app = new Vue({
   el: '#app'
@@ -59958,125 +59958,6 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/js/components/ExampleComponent.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-299e239e", Component.options)
-  } else {
-    hotAPI.reload("data-v-299e239e", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 93 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    mounted: function mounted() {
-        console.log('Component mounted.');
-    }
-});
-
-/***/ }),
-/* 94 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "card card-default" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("Example Component")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v(
-                "\n                    I'm an example component.\n                "
-              )
-            ])
-          ])
-        ])
-      ])
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-299e239e", module.exports)
-  }
-}
-
-/***/ }),
-/* 95 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__(15)
-/* script */
-var __vue_script__ = __webpack_require__(96)
-/* template */
-var __vue_template__ = __webpack_require__(97)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
 Component.options.__file = "resources/js/components/ContSearchComponent.vue"
 
 /* hot reload */
@@ -60099,7 +59980,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 96 */
+/* 93 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -60189,7 +60070,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 97 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -60481,15 +60362,15 @@ if (false) {
 }
 
 /***/ }),
-/* 98 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(15)
 /* script */
-var __vue_script__ = __webpack_require__(99)
+var __vue_script__ = __webpack_require__(96)
 /* template */
-var __vue_template__ = __webpack_require__(100)
+var __vue_template__ = __webpack_require__(97)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -60528,11 +60409,61 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 99 */
+/* 96 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -60637,7 +60568,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	// alert_log.cscの行数（先頭行を除く）
 	"alertFiles",
 	// publish_log.csvの最終行と1行目の時間の差分
-	"diffSeconds", "sessionMyStatus"],
+	"diffSeconds",
+	//
+	"sessionMyStatus",
+	//
+	"publishPatterns"],
 	// メソッドで使う&テンプレート内で使う変数を定義
 	data: function data() {
 		return {
@@ -60646,13 +60581,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			// PublishEventからの返り値（プログレスバーの％）
 			parse: 0,
 			// PublishEventからの返り値（パブリシュファイル件数）
-			queue_count: '',
+			queueCount: '',
 			// PublishEventからの返り値（パブリッシュファイル情報）
-			publish_file: '',
-			// パブリッシュの状態（1:未パブリッシュ/2:パブリッシュ中/3:パブリッシュ後/999:パブリッシュ中のリロード）
-			publish_status: '',
+			publishFile: '',
+			// パブリッシュの状態（0:未パブリッシュ/1:パブリッシュオプション/2:パブリッシュ中/3:パブリッシュ後/999:パブリッシュ中のリロード）
+			publishStatus: '',
+			//
+			isPublishPatterns: JSON.parse(this.publishPatterns),
+			//
+			isPublishOption: '',
+			//
+			pathsRegion: '/',
+			//
+			pathsIgnore: '',
+			//
+			keepCache: false,
+			//
+			isPublishRestart: false,
 			// publishFilesをバインディング
-			total_files: this.publishFiles,
+			totalFiles: this.publishFiles,
 			// alertFilesをバインディング
 			alert: this.alertFiles,
 			// diffSecondsをバインディング
@@ -60662,7 +60609,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			// アップロックを削除するためのリンクパス
 			deleteApplock: '/publish/' + this.projectCode + '/' + this.branchName + '/deleteApplock',
 			// existsAlertLogをバインディング
-			exists_alert_log: this.existsAlertLog,
+			isExistsAlertLog: this.existsAlertLog,
+			// パブリッシュしたファイルをダウンロードするためのリンクパス
+			publishFileDownload: '/publish/' + this.projectCode + '/' + this.branchName + '/publishFileDownload',
+			// パブリッシュしたレポートをダウンロードするためのリンクパス
+			publishReportDownload: '/publish/' + this.projectCode + '/' + this.branchName + '/publishReportDownload',
+			//
 			process: []
 		};
 	},
@@ -60670,11 +60622,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	// レンダリング前にpublish_log.csvの有無によって処理分け
 	created: function created() {
 		if (this.existsPublishLog === '') {
-			this.publish_status = 1;
+			this.publishStatus = 0;
 		} else if (this.existsPublishLog === '1' && this.existsApplock === '1') {
-			this.publish_status = 999;
+			this.publishStatus = 999;
 		} else {
-			this.publish_status = 3;
+			this.publishStatus = 3;
 		}
 		// フラッシュメッセージが出ていれば2000ミリ秒後に削除
 		if (this.sessionMyStatus !== '') {
@@ -60689,20 +60641,73 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 	// (読み込み時に)実行するメソッド
 	methods: {
-		publish: function publish(reset) {
+		publish_option: function publish_option(reset) {
+			if (reset === 1) {
+				this.isPublishRestart = true;
+			}
+			this.publishStatus = 1;
+		},
+		publish: function publish() {
 			var _this = this;
 
-			this.publish_status = 999;
-			if (reset === 1) {
+			if (this.isPublishRestart) {
 				this.parse = 0;
-				this.queue_count = '';
-				this.publish_file = '';
+				this.queueCount = '';
+				this.publishFile = '';
 				this.alert = '';
 				this.time = '';
+				this.isPublishOption = '';
+				this.pathsRegion = '/';
+				this.pathsIgnore = '';
+				this.keepCache = false;
 			}
-			var data = 'publish';
-			// AjaxでAjax\PublishController@publishAjaxにpost処理
-			axios.post('/publish/' + this.projectCode + '/' + this.branchName + '/publishAjax', data).then(function (res) {
+			this.publishStatus = 999;
+			//
+			if (this.classPathsRegion) {
+				if (Array.isArray(this.pathsRegion) === false) {
+					var text = this.classPathsRegion.replace(/\r\n|\r/g, "\n");
+					var lines = text.split('\n');
+					var outArray = new Array();
+					for (var i = 0; i < lines.length; i++) {
+						// 空行は無視する
+						if (lines[i] == '') {
+							continue;
+						}
+						outArray.push(lines[i]);
+					}
+					this.pathsRegion = outArray;
+				}
+			}
+			//
+			if (this.classPathsIgnore) {
+				if (Array.isArray(this.pathsIgnore) === false) {
+					var text = this.classPathsIgnore.replace(/\r\n|\r/g, "\n");
+					var lines = text.split('\n');
+					var outArray = new Array();
+					for (var i = 0; i < lines.length; i++) {
+						// 空行は無視する
+						if (lines[i] == '') {
+							continue;
+						}
+						outArray.push(lines[i]);
+					}
+					this.pathsIgnore = outArray;
+				}
+			}
+			//
+			if (this.classKeepCache) {
+				if (this.keepCache !== this.classKeepCache) {
+					this.keepCache = this.classKeepCache;
+				}
+			}
+			//
+			var data = {
+				'publish_option': this.isPublishOption,
+				'paths_region': this.pathsRegion,
+				'paths_ignore': this.pathsIgnore,
+				'keep_cache': this.keepCache
+				// AjaxでAjax\PublishController@publishAjaxにpost処理
+			};axios.post('/publish/' + this.projectCode + '/' + this.branchName + '/publishAjax', data).then(function (res) {
 				_this.info = res.data.info;
 			});
 		},
@@ -60715,30 +60720,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			// Ajax\PublishController@publishAjaxの返り値
 			window.Echo.channel('publish-event').listen('PublishEvent', function (e) {
 				_this2.process = e.process.pid;
-				_this2.publish_status = 2;
+				_this2.publishStatus = 2;
 				// 標準出力が数値または数値+改行コードだった場合parseに代入
 				if (e.judge === 1) {
 					_this2.parse = e.parse;
 				}
 				// パブリッシュファイル件数を計算して出力
 				if (e.queue_count !== '') {
-					_this2.queue_count = e.queue_count;
+					_this2.queueCount = e.queue_count;
 				}
 				// パブリッシュしているファイル情報を配列で出力
 				if (e.publish_file !== '') {
-					_this2.publish_file = e.publish_file;
+					_this2.publishFile = e.publish_file;
 				}
 				if (e.end_publish === 1) {
 					// Ajax\PublishController@readCsvAjaxにpost処理
 					axios.post('/publish/' + _this2.projectCode + '/' + _this2.branchName + '/readCsvAjax').then(function (res) {
-						_this2.total_files = res.data.publish_files;
+						_this2.totalFiles = res.data.publish_files;
 						// アラート件数を取得
 						_this2.alert = res.data.alert_files;
 						// パブリッシュにかかった時間を取得
 						_this2.time = res.data.diff_seconds;
 						// alert_log.csvの有無
-						_this2.exists_alert_log = res.data.exists_alert_log;
-						_this2.publish_status = 3;
+						_this2.isExistsAlertLog = res.data.exists_alert_log;
+						_this2.publishStatus = 3;
 					});
 				}
 			});
@@ -60759,16 +60764,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			};axios.post('/publish/' + this.projectCode + '/' + this.branchName + '/publishCancelAjax', data).then(function (res) {
 				// Ajax\PublishController@readCsvAjaxにpost処理
 				axios.post('/publish/' + _this3.projectCode + '/' + _this3.branchName + '/readCsvAjax').then(function (res) {
-					_this3.total_files = res.data.publish_files;
+					_this3.totalFiles = res.data.publish_files;
 					// アラート件数を取得
 					_this3.alert = res.data.alert_files;
 					// パブリッシュにかかった時間を取得
 					_this3.time = res.data.diff_seconds;
 					// alert_log.csvの有無
-					_this3.exists_alert_log = res.data.exists_alert_log;
-					_this3.publish_status = 3;
+					_this3.isExistsAlertLog = res.data.exists_alert_log;
+					_this3.publishStatus = 3;
 				});
 			});
+		},
+		cancel: function cancel() {
+			if (this.existsPublishLog === '') {
+				this.publishStatus = 0;
+			} else if (this.existsPublishLog === '1') {
+				this.publishStatus = 3;
+			}
 		},
 		prepare: function prepare() {
 			alert('準備中の機能です。');
@@ -60779,53 +60791,128 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		// 未パブリッシュ時のパブリッシュボタンの表示・非表示
 		classPublishButton: function classPublishButton() {
 			return {
-				show: this.publish_status === 1,
-				hidden: this.publish_status !== 1
+				show: this.publishStatus === 0,
+				hidden: this.publishStatus !== 0
+			};
+		},
+		//
+		classModal: function classModal() {
+			return {
+				show: this.publishStatus === 1,
+				hidden: this.publishStatus !== 1
 			};
 		},
 		// パブリッシュ中のプログレスバーの表示・非表示
 		classPublishProgress: function classPublishProgress() {
 			return {
-				show: this.publish_status === 2,
-				hidden: this.publish_status !== 2
+				show: this.publishStatus === 2,
+				hidden: this.publishStatus !== 2
 			};
 		},
 		// パブリッシュ後のログ情報の表示・非表示
 		classPublishLog: function classPublishLog() {
 			return {
-				show: this.publish_status === 3,
-				hidden: this.publish_status !== 3
+				show: this.publishStatus === 3,
+				hidden: this.publishStatus !== 3
 			};
 		},
 		// アラート情報の表示・非表示
 		classAlertLog: function classAlertLog() {
 			return {
-				show: this.exists_alert_log === '1' || this.exists_alert_log === true,
-				hidden: this.exists_alert_log === '' || this.exists_alert_log === false
+				show: this.isExistsAlertLog === '1' || this.isExistsAlertLog === true,
+				hidden: this.isExistsAlertLog === '' || this.isExistsAlertLog === false
 			};
 		},
 		// パブリッシュ中のWAIT画面の表示・非表示
 		classPublishWait: function classPublishWait() {
 			return {
-				show: this.publish_status === 999,
-				hidden: this.publish_status !== 999
+				show: this.publishStatus === 999,
+				hidden: this.publishStatus !== 999
 			};
+		},
+		//
+		classPathsRegion: {
+			get: function get() {
+				var result = '';
+				if (this.isPublishOption === '') {
+					result = '/';
+				} else {
+					result = this.isPublishPatterns[this.isPublishOption].paths_region[0];
+				}
+				return result;
+			},
+
+			set: function set(value) {
+				var text = value.replace(/\r\n|\r/g, "\n");
+				var lines = text.split('\n');
+				var outArray = new Array();
+				for (var i = 0; i < lines.length; i++) {
+					// 空行は無視する
+					if (lines[i] == '') {
+						continue;
+					}
+					outArray.push(lines[i]);
+				}
+				this.pathsRegion = outArray;
+			}
+		},
+
+		//
+		classPathsIgnore: {
+			get: function get() {
+				var result = '';
+				if (this.isPublishOption === '') {
+					result = '';
+				} else {
+					result = this.isPublishPatterns[this.isPublishOption].paths_ignore[0];
+				}
+				return result;
+			},
+
+			set: function set(value) {
+				var text = value.replace(/\r\n|\r/g, "\n");
+				var lines = text.split('\n');
+				var outArray = new Array();
+				for (var i = 0; i < lines.length; i++) {
+					// 空行は無視する
+					if (lines[i] == '') {
+						continue;
+					}
+					outArray.push(lines[i]);
+				}
+				this.pathsIgnore = outArray;
+			}
+		},
+
+		//
+		classKeepCache: {
+			get: function get() {
+				var result = '';
+				if (this.isPublishOption === '') {
+					result = false;
+				} else {
+					result = this.isPublishPatterns[this.isPublishOption].keep_cache;
+				}
+				return result;
+			},
+
+			set: function set(value) {
+				this.keepCache = value;
+			}
 		}
 	}
 });
 
 /***/ }),
-/* 100 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "contents", staticStyle: { height: "70vh" } },
-    [
+  return _c("div", [
+    _c("div", { staticClass: "contents", staticStyle: { height: "70vh" } }, [
       _c(
         "div",
         {
@@ -60844,7 +60931,7 @@ var render = function() {
                 "button",
                 {
                   staticClass: "px2-btn px2-btn--primary",
-                  on: { click: _vm.publish }
+                  on: { click: _vm.publish_option }
                 },
                 [_vm._v("パブリッシュする")]
               )
@@ -60881,11 +60968,11 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "cont_progress-row" }, [
-                    _vm._v(_vm._s(_vm.publish_file))
+                    _vm._v(_vm._s(_vm.publishFile))
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "cont_progress-currentTask" }, [
-                    _vm._v(_vm._s(_vm.queue_count))
+                    _vm._v(_vm._s(_vm.queueCount))
                   ])
                 ]),
                 _vm._v(" "),
@@ -60947,7 +61034,7 @@ var render = function() {
               _c("div", { staticClass: "cont_results-messageBox" }, [
                 _c("div", { staticClass: "cont_results-total_file_count" }, [
                   _vm._v("total: "),
-                  _c("strong", [_vm._v(_vm._s(_vm.total_files))]),
+                  _c("strong", [_vm._v(_vm._s(_vm.totalFiles))]),
                   _vm._v(" files.")
                 ]),
                 _vm._v(" "),
@@ -60967,12 +61054,12 @@ var render = function() {
                 _vm._v(" "),
                 _c("p", [
                   _c(
-                    "button",
+                    "a",
                     {
-                      staticClass: "px2-btn px2-btn--primary px2-btn--lg",
-                      on: { click: _vm.prepare }
+                      staticClass: "px2-btn px2-btn--primary",
+                      attrs: { href: _vm.publishFileDownload }
                     },
-                    [_vm._v("パブリッシュされたファイルを確認する")]
+                    [_vm._v("パブリッシュされたファイルをダウンロードする")]
                   )
                 ]),
                 _vm._v(" "),
@@ -60982,8 +61069,7 @@ var render = function() {
                       "a",
                       {
                         staticClass: "px2-link px2-link--burette",
-                        attrs: { href: "#" },
-                        on: { click: _vm.prepare }
+                        attrs: { href: _vm.publishReportDownload }
                       },
                       [_vm._v("パブリッシュレポート")]
                     )
@@ -61011,7 +61097,7 @@ var render = function() {
                         staticClass: "px2-btn px2-btn--block",
                         on: {
                           click: function($event) {
-                            return _vm.publish(1)
+                            return _vm.publish_option(1)
                           }
                         }
                       },
@@ -61095,8 +61181,387 @@ var render = function() {
           )
         ]
       )
-    ]
-  )
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "contents",
+        class: _vm.classModal,
+        staticStyle: {
+          position: "fixed",
+          left: "0px",
+          top: "0px",
+          width: "100%",
+          height: "100%",
+          "z-index": "10000"
+        },
+        attrs: { tabindex: "-1" }
+      },
+      [
+        _c("div", {
+          staticStyle: {
+            position: "fixed",
+            left: "0px",
+            top: "0px",
+            width: "100%",
+            height: "100%",
+            overflow: "hidden",
+            background: "rgb(0, 0, 0)",
+            opacity: "0.5"
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticStyle: {
+              position: "absolute",
+              left: "0px",
+              top: "0px",
+              "padding-top": "4em",
+              overflow: "auto",
+              width: "100%",
+              height: "100%"
+            }
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "dialog_box",
+                staticStyle: { width: "80%", margin: "3em auto" }
+              },
+              [
+                _c("h1", [_vm._v("パブリッシュ")]),
+                _vm._v(" "),
+                _c("div", [
+                  _c("div", [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "cont_form_pattern",
+                        staticStyle: { margin: "1em auto" }
+                      },
+                      [
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.isPublishOption,
+                                expression: "isPublishOption"
+                              }
+                            ],
+                            attrs: { name: "cont_form_pattern" },
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.isPublishOption = $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              }
+                            }
+                          },
+                          [
+                            _c("option", { attrs: { value: "" } }, [
+                              _vm._v("select pattern...")
+                            ]),
+                            _vm._v(" "),
+                            _vm._l(_vm.isPublishPatterns, function(item, key) {
+                              return _c(
+                                "option",
+                                { domProps: { value: key } },
+                                [_vm._v(_vm._s(item.label))]
+                              )
+                            })
+                          ],
+                          2
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm.isPublishOption === ""
+                      ? _c("div", { staticClass: "form-group" }, [
+                          _c("label", { attrs: { for: "path_region" } }, [
+                            _vm._v("パブリッシュ対象範囲")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "textarea",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.classPathsRegion,
+                                  expression: "classPathsRegion"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { placeholder: "/", rows: "5" },
+                              domProps: { value: _vm.classPathsRegion },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.classPathsRegion = $event.target.value
+                                }
+                              }
+                            },
+                            [_vm._v(_vm._s(_vm.classPathsRegion))]
+                          ),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "help-block" }, [
+                            _vm._v(
+                              "パブリッシュ対象のディレクトリパスを指定してください。スラッシュから始まるパスで指定します。1行1ディレクトリで複数件指定できます。"
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("label", { attrs: { for: "paths_ignore" } }, [
+                            _vm._v("パブリッシュ対象外範囲")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "textarea",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.classPathsIgnore,
+                                  expression: "classPathsIgnore"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                placeholder: "/path/ignore/1/\n/path/ignore/2/",
+                                rows: "5"
+                              },
+                              domProps: { value: _vm.classPathsIgnore },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.classPathsIgnore = $event.target.value
+                                }
+                              }
+                            },
+                            [_vm._v(_vm._s(_vm.classPathsIgnore))]
+                          ),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "help-block" }, [
+                            _vm._v(
+                              "パブリッシュ対象外にするディレクトリパスを指定してください。スラッシュから始まるパスで指定します。1行1ディレクトリで複数件指定できます。"
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("label", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.classKeepCache,
+                                  expression: "classKeepCache"
+                                }
+                              ],
+                              attrs: { type: "checkbox" },
+                              domProps: {
+                                value: _vm.classKeepCache,
+                                checked: Array.isArray(_vm.classKeepCache)
+                                  ? _vm._i(
+                                      _vm.classKeepCache,
+                                      _vm.classKeepCache
+                                    ) > -1
+                                  : _vm.classKeepCache
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$a = _vm.classKeepCache,
+                                    $$el = $event.target,
+                                    $$c = $$el.checked ? true : false
+                                  if (Array.isArray($$a)) {
+                                    var $$v = _vm.classKeepCache,
+                                      $$i = _vm._i($$a, $$v)
+                                    if ($$el.checked) {
+                                      $$i < 0 &&
+                                        (_vm.classKeepCache = $$a.concat([$$v]))
+                                    } else {
+                                      $$i > -1 &&
+                                        (_vm.classKeepCache = $$a
+                                          .slice(0, $$i)
+                                          .concat($$a.slice($$i + 1)))
+                                    }
+                                  } else {
+                                    _vm.classKeepCache = $$c
+                                  }
+                                }
+                              }
+                            }),
+                            _vm._v(" キャッシュを消去しない")
+                          ])
+                        ])
+                      : _c("div", { staticClass: "form-group" }, [
+                          _c("label", { attrs: { for: "path_region" } }, [
+                            _vm._v("パブリッシュ対象範囲")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "textarea",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.classPathsRegion,
+                                  expression: "classPathsRegion"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { placeholder: "/", rows: "5" },
+                              domProps: { value: _vm.classPathsRegion },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.classPathsRegion = $event.target.value
+                                }
+                              }
+                            },
+                            [_vm._v(_vm._s(_vm.classPathsRegion))]
+                          ),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "help-block" }, [
+                            _vm._v(
+                              "パブリッシュ対象のディレクトリパスを指定してください。スラッシュから始まるパスで指定します。1行1ディレクトリで複数件指定できます。"
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("label", { attrs: { for: "paths_ignore" } }, [
+                            _vm._v("パブリッシュ対象外範囲")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "textarea",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.classPathsIgnore,
+                                  expression: "classPathsIgnore"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                placeholder: "/path/ignore/1/\n/path/ignore/2/",
+                                rows: "5"
+                              },
+                              domProps: { value: _vm.classPathsIgnore },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.classPathsIgnore = $event.target.value
+                                }
+                              }
+                            },
+                            [_vm._v(_vm._s(_vm.classPathsIgnore))]
+                          ),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "help-block" }, [
+                            _vm._v(
+                              "パブリッシュ対象外にするディレクトリパスを指定してください。スラッシュから始まるパスで指定します。1行1ディレクトリで複数件指定できます。"
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("label", [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.classKeepCache,
+                                  expression: "classKeepCache"
+                                }
+                              ],
+                              attrs: { type: "checkbox" },
+                              domProps: {
+                                value: _vm.classKeepCache,
+                                checked: Array.isArray(_vm.classKeepCache)
+                                  ? _vm._i(
+                                      _vm.classKeepCache,
+                                      _vm.classKeepCache
+                                    ) > -1
+                                  : _vm.classKeepCache
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$a = _vm.classKeepCache,
+                                    $$el = $event.target,
+                                    $$c = $$el.checked ? true : false
+                                  if (Array.isArray($$a)) {
+                                    var $$v = _vm.classKeepCache,
+                                      $$i = _vm._i($$a, $$v)
+                                    if ($$el.checked) {
+                                      $$i < 0 &&
+                                        (_vm.classKeepCache = $$a.concat([$$v]))
+                                    } else {
+                                      $$i > -1 &&
+                                        (_vm.classKeepCache = $$a
+                                          .slice(0, $$i)
+                                          .concat($$a.slice($$i + 1)))
+                                    }
+                                  } else {
+                                    _vm.classKeepCache = $$c
+                                  }
+                                }
+                              }
+                            }),
+                            _vm._v(" キャッシュを消去しない")
+                          ])
+                        ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "dialog-buttons center" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "px2-btn px2-btn--primary",
+                      attrs: { type: "submit" },
+                      on: { click: _vm.publish }
+                    },
+                    [_vm._v("パブリッシュを実行する")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    { staticClass: "px2-btn", on: { click: _vm.cancel } },
+                    [_vm._v("キャンセル")]
+                  )
+                ])
+              ]
+            )
+          ]
+        )
+      ]
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
@@ -61175,6 +61640,2400 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-18176c19", module.exports)
+  }
+}
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(15)
+/* script */
+var __vue_script__ = __webpack_require__(99)
+/* template */
+var __vue_template__ = __webpack_require__(100)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/SetupComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-16292baa", Component.options)
+  } else {
+    hotAPI.reload("data-v-16292baa", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 99 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	// view側から変数をプロパティとして渡す
+	props: ["projectCode", "branchName", "existsSetupLog", "logCheckedOption", "logCheckedInit", "logCloneRepository", "logCloneUserName", "logClonePassword", "logSetupStatus", "logCheckedRepository", "logVendorName", "logProjectName", "logRepository", "logUserName", "logPassword"],
+	// メソッドで使う&テンプレート内で使う変数を定義
+	data: function data() {
+		return {
+			info: '',
+			setup_status: 1,
+			message: '',
+			stderr: '',
+			isSetupBefore: true,
+			cloneRepository: '',
+			cloneRepositoryConfirm: '',
+			isCloneRepositoryEnable: false,
+			cloneNewRepository: '',
+			cloneUserName: '',
+			cloneUserNameConfirm: '',
+			isCloneUserNameEnable: false,
+			cloneNewUserName: '',
+			clonePassword: '',
+			clonePasswordConfirm: '',
+			isClonePasswordEnable: false,
+			cloneNewPassword: '',
+			isSetupDuring: false,
+			isSetupDuringButton: true,
+			isSetupAfter: false,
+			isSetupAfterButton: false,
+			isSetupRestartButton: false,
+			isSetupDisableButton: true,
+			isSetupEnableButton: false,
+			isCheckedOption: 'pickles2',
+			isCheckedInit: true,
+			isCheckedRepository: 'original',
+			repository: '',
+			repositoryConfirm: '',
+			isRepositoryEnable: false,
+			userName: '',
+			userNameConfirm: '',
+			isUserNameEnable: false,
+			password: '',
+			passwordConfirm: '',
+			isPasswordEnable: false,
+			vendorName: '',
+			isVendorNameEnable: true,
+			projectName: '',
+			isProjectNameEnable: true,
+			i: 0,
+			fraction: '',
+			rate: 0,
+			restart: ''
+		};
+	},
+
+	// レンダリング前にsetupStatusの状態によって処理分け
+	created: function created() {
+		//
+		if (this.existsSetupLog === '') {
+			this.setup_status = 1;
+		} else if (this.existsSetupLog === '1') {
+			this.isCheckedOption = this.logCheckedOption;
+			if (this.logCheckedOption === 'pickles2') {
+				if (this.logCheckedInit === '1') {
+					this.cloneRepository = this.logRepository;
+					this.cloneUserName = this.logUserName;
+					this.clonePassword = this.logPassword;
+				}
+			} else if (this.logCheckedOption === 'git') {
+				if (this.logCheckedRepository === 'original' || this.logCheckedRepository === '') {
+					this.cloneRepository = this.logRepository;
+					this.cloneUserName = this.logUserName;
+					this.clonePassword = this.logPassword;
+				} else if (this.logCheckedRepository === 'new') {
+					this.cloneNewRepository = this.logRepository;
+					this.cloneNewUserName = this.logUserName;
+					this.cloneNewPassword = this.logPassword;
+				}
+			}
+			if (this.logCheckedRepository === '') {
+				this.isCheckedRepository = 'original';
+			} else {
+				this.isCheckedRepository = this.logCheckedRepository;
+			}
+			this.setupStatus = Number(this.logSetupStatus);
+			this.vendorName = this.logVendorName;
+			this.projectName = this.logProjectName;
+		}
+	},
+	mounted: function mounted() {
+		this.connectChannel();
+	},
+
+	// (読み込み時に)実行するメソッド
+	methods: {
+		// 購読するチャンネルの設定
+		connectChannel: function connectChannel() {
+			var _this = this;
+
+			// Ajax\SetupController@setupAjaxの返り値
+			window.Echo.channel('setup-event').listen('SetupEvent', function (e) {
+				//
+				_this.isCheckedOption === e.checked_option;
+				_this.i++;
+				_this.isSetupBefore = false;
+				_this.isSetupDuring = true;
+				if (e.stderr) {
+					_this.message = _this.message + e.stderr;
+					if (/Generating autoload files/.test(e.stderr)) {
+						_this.stderr = e.stderr;
+					}
+				}
+				if (e.std_array[0] === 'Receiving' && e.std_array[1] === 'objects:') {
+					if (/Receiving objects: 100%/.test(e.stderr)) {
+						_this.stderr = e.stderr;
+						_this.fraction = e.denominator + ' / ' + e.denominator;
+						_this.rate = 100;
+					} else if (e.rate !== '') {
+						_this.fraction = e.numerator + ' / ' + e.denominator;
+						_this.rate = e.rate;
+					}
+				}
+				if (/remote: Not Found/.test(e.stderr)) {
+					// リモートリポジトリが存在しない場合
+					_this.errorCloneRepository = 1;
+					_this.setupStatus = 1;
+				} else if (/rejected/.test(e.stderr)) {
+					// リモートリポジトリから拒否された場合
+					_this.errorCloneRepository = 2;
+					_this.setupStatus = 1;
+				} else if (/unable to access/.test(e.stderr)) {
+					// リモートリポジトリにアクセスできない場合
+					_this.errorCloneRepository = 3;
+					_this.setupStatus = 1;
+				} else if (/could not read Username/.test(e.stderr)) {
+					// ユーザー名が見つからないと言われた場合
+					_this.errorCloneUserName = 1;
+					_this.errorClonePassword = 1;
+					_this.setupStatus = 1;
+				} else if (/Authentication failed/.test(e.stderr)) {
+					// 認証に失敗した場合
+					_this.errorCloneUserName = 2;
+					_this.errorClonePassword = 2;
+					_this.setupStatus = 1;
+				} else if (/early EOF/.test(e.stderr)) {
+					// 早期EOFエラーが発生した場合
+					_this.errorCloneRepository = 4;
+					_this.setupStatus = 1;
+				}
+			});
+
+			window.Echo.channel('setup-option-event').listen('SetupOptionEvent', function (e) {
+				//
+				_this.i++;
+
+				if (e.std_array[0] === 'Writing' && e.std_array[1] === 'objects:') {
+					if (/Writing objects: 100%/.test(e.stderr)) {
+						_this.fraction = e.denominator + ' / ' + e.denominator;
+						_this.rate = 100;
+					} else if (e.rate !== '') {
+						_this.fraction = e.numerator + ' / ' + e.denominator;
+						_this.rate = e.rate;
+					}
+				}
+
+				if (/remote: Repository not found/.test(e.stderr)) {
+					// リモートリポジトリが存在しない場合
+					_this.errorRepository = 1;
+					_this.setupStatus = 3;
+				} else if (/rejected/.test(e.stderr)) {
+					// リモートリポジトリから拒否された場合
+					_this.errorRepository = 2;
+					_this.setupStatus = 3;
+				} else if (/unable to access/.test(e.stderr)) {
+					// リモートリポジトリにアクセスできない場合
+					_this.errorRepository = 3;
+					_this.setupStatus = 3;
+				} else if (/Invalid username or password/.test(e.stderr)) {
+					// ユーザー名またはパスワードが違う場合
+					_this.errorUserName = 1;
+					_this.errorPassword = 1;
+					_this.setupStatus = 3;
+				} else if (/new branch/.test(e.stderr)) {
+					// location.href = '/projects/'+this.projectCode+'/'+this.branchName;
+				} else if (/could not read Username/.test(e.stderr)) {
+					// ユーザー名が見つからないと言われた場合
+					_this.errorUserName = 1;
+					_this.errorPassword = 1;
+					_this.setupStatus = 3;
+				}
+			});
+		},
+		setup: function setup(reset) {
+			var _this2 = this;
+
+			// 引数が0の場合は新規で1の場合は再セットアップ
+			if (reset === 1) {
+				this.restart = 1;
+			} else {
+				this.restart = 0;
+			}
+			this.setupStatus = 2;
+			var data = {
+				'checked_option': this.isCheckedOption,
+				'checked_init': this.isCheckedInit,
+				'clone_repository': this.cloneRepository,
+				'clone_user_name': this.cloneUserName,
+				'clone_password': this.clonePassword,
+				'setup_status': this.setup_status,
+				'restart': this.restart
+			};
+			this.info = 'Pickles 2 プロジェクトをセットアップしています。この処理はしばらく時間がかかります。';
+
+			// AjaxでAjax\SetupController@setupAjaxにpost処理
+			axios.post('/setup/' + this.projectCode + '/' + this.branchName + '/setupAjax', data).then(function (res) {
+				//
+				if (/Generating autoload files/.test(_this2.stderr) && res.data.info === true) {
+					_this2.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
+					_this2.isSetupDuringButton = false;
+					_this2.isSetupAfterButton = true;
+					// this.next();
+				} else if (/Receiving objects: 100%/.test(_this2.stderr) && res.data.info === true) {
+					_this2.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
+					_this2.isSetupDuringButton = false;
+					_this2.isSetupAfterButton = true;
+					// this.next();
+				} else {
+					_this2.info = 'Pickles 2 プロジェクトのセットアップができませんでした。もう一度やり直してください。';
+					_this2.isSetupDuringButton = false;
+					_this2.isSetupRestartButton = true;
+				}
+			});
+		},
+		next: function next(reset) {
+			this.setupStatus = 3;
+		},
+		option: function option(reset) {
+			var _this3 = this;
+
+			this.message = '';
+			this.repositoryConfirm = '';
+			this.userNameConfirm = '';
+			this.passwordConfirm = '';
+			this.setupStatus = 4;
+			var data = {
+				'checked_option': this.isCheckedOption,
+				'checked_init': this.isCheckedInit,
+				'setup_status': this.setup_status,
+				'checked_repository': this.isCheckedRepository,
+				'vendor_name': this.vendorName,
+				'project_name': this.projectName,
+				'repository': this.repository,
+				'clone_repository': this.cloneRepository,
+				'clone_new_repository': this.cloneNewRepository,
+				'user_name': this.userName,
+				'clone_user_name': this.cloneUserName,
+				'clone_new_user_name': this.cloneNewUserName,
+				'password': this.password,
+				'clone_password': this.clonePassword,
+				'clone_new_password': this.cloneNewPassword
+
+				// AjaxでAjax\SetupController@setupOptionAjaxにpost処理
+			};axios.post('/setup/' + this.projectCode + '/' + this.branchName + '/setupOptionAjax', data).then(function (res) {
+				if (_this3.rate === 100 && res.data.info === true) {
+					location.href = '/projects/' + _this3.projectCode + '/' + _this3.branchName;
+				} else if (res.data.checked_option === 'pickles2' && res.data.checked_init === false && res.data.info === true) {
+					_this3.rate = 100;
+					_this3.fraction = '100 / 100';
+					location.href = '/projects/' + _this3.projectCode + '/' + _this3.branchName;
+				} else if (res.data.checked_option === 'git' && res.data.checked_repository === 'none' && res.data.info === true) {
+					_this3.rate = 100;
+					_this3.fraction = '100 / 100';
+					location.href = '/projects/' + _this3.projectCode + '/' + _this3.branchName;
+				}
+			});
+		},
+		prepare: function prepare() {
+			alert('準備中の機能です。');
+		}
+	},
+
+	computed: {
+		// setup_status
+		setupStatus: {
+			get: function get() {
+				//
+			},
+
+			set: function set(value) {
+				if (value === 1) {
+					this.message = '';
+					this.isSetupRestartButton = false;
+					this.isSetupDuring = false;
+					this.isSetupDuringButton = true;
+					this.isSetupBefore = true;
+					this.setup_status = 1;
+				} else if (value === 2) {
+					this.rate = 0;
+					this.fraction = '';
+					this.message = '';
+					this.isSetupRestartButton = false;
+					this.isSetupDuring = false;
+					this.isSetupDuringButton = true;
+					this.isSetupBefore = true;
+					this.setup_status = 2;
+				} else if (value === 3) {
+					this.info = '';
+					this.rate = 0;
+					this.fraction = '';
+					this.message = '';
+					this.setup_status = 3;
+				} else if (value === 4) {
+					this.setup_status = 4;
+				}
+			}
+		},
+		//
+		classModal: function classModal() {
+			return {
+				show: this.setup_status === 2 || this.setup_status === 3 || this.setup_status === 4,
+				hidden: this.setup_status === 1 || this.setup_status === 5
+			};
+		},
+		//
+		classSetup: function classSetup() {
+			return {
+				show: this.setup_status === 2,
+				hidden: this.setup_status !== 2
+			};
+		},
+		//
+		classOption: function classOption() {
+			return {
+				show: this.setup_status === 3,
+				hidden: this.setup_status !== 3
+			};
+		},
+		//
+		classOptionPickles2: function classOptionPickles2() {
+			return {
+				show: this.isCheckedOption === 'pickles2',
+				hidden: this.isCheckedOption !== 'pickles2'
+			};
+		},
+		//
+		classOptionGit: function classOptionGit() {
+			return {
+				show: this.isCheckedOption === 'git',
+				hidden: this.isCheckedOption !== 'git'
+			};
+		},
+		//
+		classProgress: function classProgress() {
+			return {
+				show: this.setup_status === 4,
+				hidden: this.setup_status !== 4
+			};
+		},
+		//
+		classCheckedOption: function classCheckedOption() {
+			return {
+				show: this.isCheckedOption === 'git',
+				hidden: this.isCheckedOption !== 'git'
+			};
+		},
+		// Gitリポジトリを初期化するのチェックで処理分け
+		classCheckedInit: function classCheckedInit() {
+			return {
+				show: this.isCheckedInit === true,
+				hidden: this.isCheckedInit !== true
+			};
+		},
+		//
+		classCheckedOriginalRepository: function classCheckedOriginalRepository() {
+			return {
+				show: this.isCheckedRepository === 'original',
+				hidden: this.isCheckedRepository !== 'original'
+			};
+		},
+		//
+		classCheckedNewRepository: function classCheckedNewRepository() {
+			return {
+				show: this.isCheckedRepository === 'new',
+				hidden: this.isCheckedRepository !== 'new'
+			};
+		},
+		// クローン用リポジトリのバリデーション
+		errorCloneRepository: {
+			get: function get() {
+				var result = '';
+				if (this.isCheckedOption === 'git') {
+					if (this.cloneRepository === '') {
+						result = 'リポジトリが未入力です。';
+						this.isCloneRepositoryEnable = false;
+					} else if (/^https(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/.test(this.cloneRepository) === false) {
+						result = 'リポジトリはhttps形式で入力してください。';
+						this.isCloneRepositoryEnable = false;
+					} else {
+						result = '';
+						this.isCloneRepositoryEnable = true;
+					}
+				} else {
+					result = '';
+					this.isCloneRepositoryEnable = true;
+				}
+				return result;
+			},
+
+			set: function set(value) {
+				if (value === 1) {
+					this.cloneRepositoryConfirm = 'リモートリポジトリが存在しません。別のリポジトリを指定してください。';
+				} else if (value === 2) {
+					this.cloneRepositoryConfirm = 'リモートリポジトリに拒否されました。別のリポジトリを指定してください。';
+				} else if (value === 3) {
+					this.cloneRepositoryConfirm = 'リモートリポジトリにアクセスできません。ネットワークを確認してください。';
+				} else if (value === 4) {
+					this.cloneRepositoryConfirm = '早期EOFエラーが発生しました。ネットワークを確認してください。';
+				}
+			}
+		},
+		// クローン用ユーザー名のバリデーション
+		errorCloneUserName: {
+			get: function get() {
+				var result = '';
+				this.isCloneUserNameEnable = true;
+				return result;
+			},
+
+			set: function set(value) {
+				if (value === 1) {
+					this.cloneUserNameConfirm = 'ユーザー名が必要なリポジトリです。ユーザー名を入力してください。';
+				} else if (value === 2) {
+					this.cloneUserNameConfirm = 'ユーザー名またはパスワードに誤りがあります。';
+				}
+			}
+		},
+		// クローン用パスワードのバリデーション
+		errorClonePassword: {
+			get: function get() {
+				var result = '';
+				this.isClonePasswordEnable = true;
+				return result;
+			},
+
+			set: function set(value) {
+				if (value === 1) {
+					this.clonePasswordConfirm = 'パスワードが必要なリポジトリです。パスワードを入力してください。';
+				} else if (value === 2) {
+					this.clonePasswordConfirm = 'ユーザー名またはパスワードに誤りがあります。';
+				}
+			}
+		},
+		// ベンダー名のバリデーション
+		errorVendorName: function errorVendorName() {
+			var result = '';
+			if (/^[A-Za-z0-9\-\_]*$/.test(this.vendorName) === false) {
+				result = 'ベンダー名は半角英数字で入力してください。';
+				this.isVendorNameEnable = false;
+			} else {
+				result = '';
+				this.isVendorNameEnable = true;
+			}
+			return result;
+		},
+		// プロジェクト名のバリデーション
+		errorProjectName: function errorProjectName() {
+			var result = '';
+			if (/^[A-Za-z0-9\-\_]*$/.test(this.projectName) === false) {
+				result = 'プロジェクト名は半角英数字で入力してください。';
+				this.isProjectNameEnable = false;
+			} else {
+				result = '';
+				this.isProjectNameEnable = true;
+			}
+			return result;
+		},
+		// リポジトリのバリデーション
+		errorRepository: {
+			get: function get() {
+				var result = '';
+				if (this.isCheckedOption === 'pickles2') {
+					if (this.isCheckedInit === true) {
+						if (this.repository === '') {
+							result = 'リポジトリが未入力です。';
+							this.isRepositoryEnable = false;
+						} else if (/^https(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/.test(this.repository) === false) {
+							result = 'リポジトリはhttps形式で入力してください。';
+							this.isRepositoryEnable = false;
+						} else {
+							result = '';
+							this.isRepositoryEnable = true;
+						}
+					} else {
+						result = '';
+						this.isRepositoryEnable = true;
+					}
+				} else if (this.isCheckedOption === 'git') {
+					if (this.isCheckedRepository === 'original') {
+						if (this.cloneRepository === '') {
+							result = 'リポジトリが未入力です。';
+							this.isRepositoryEnable = false;
+						} else if (/^https(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/.test(this.cloneRepository) === false) {
+							result = 'リポジトリはhttps形式で入力してください。';
+							this.isRepositoryEnable = false;
+						} else {
+							result = '';
+							this.isRepositoryEnable = true;
+						}
+					} else if (this.isCheckedRepository === 'new') {
+						if (this.cloneNewRepository === '') {
+							result = 'リポジトリが未入力です。';
+							this.isRepositoryEnable = false;
+						} else if (/^https(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/.test(this.cloneNewRepository) === false) {
+							result = 'リポジトリはhttps形式で入力してください。';
+							this.isRepositoryEnable = false;
+						} else {
+							result = '';
+							this.isRepositoryEnable = true;
+						}
+					} else {
+						result = '';
+						this.isRepositoryEnable = true;
+					}
+				}
+				return result;
+			},
+
+			set: function set(value) {
+				if (value === 1) {
+					this.repositoryConfirm = 'リモートリポジトリが存在しません。別のリポジトリを指定してください。';
+					this.isRepositoryEnable = false;
+				} else if (value === 2) {
+					this.repositoryConfirm = 'リモートリポジトリに拒否されました。別のリポジトリを指定してください。';
+					this.isRepositoryEnable = false;
+				} else {
+					this.repositoryConfirm = 'リモートリポジトリにアクセスできません。ネットワークを確認してください。';
+					this.isRepositoryEnable = true;
+				}
+			}
+		},
+
+		// ユーザー名のバリデーション
+		errorUserName: {
+			get: function get() {
+				var result = '';
+				if (this.isCheckedOption === 'pickles2') {
+					if (this.isCheckedInit === true) {
+						if (this.userName === '') {
+							result = 'ユーザー名が未入力です。';
+							this.isUserNameEnable = false;
+						} else {
+							result = '';
+							this.isUserNameEnable = true;
+						}
+					} else {
+						result = '';
+						this.isUserNameEnable = true;
+					}
+				} else if (this.isCheckedOption === 'git') {
+					if (this.isCheckedRepository === 'original') {
+						if (this.cloneUserName === '') {
+							result = 'ユーザー名が未入力です。';
+							this.isUserNameEnable = false;
+						} else {
+							result = '';
+							this.isUserNameEnable = true;
+						}
+					} else if (this.isCheckedRepository === 'new') {
+						if (this.cloneNewUserName === '') {
+							result = 'ユーザー名が未入力です。';
+							this.isUserNameEnable = false;
+						} else {
+							result = '';
+							this.isUserNameEnable = true;
+						}
+					} else {
+						result = '';
+						this.isUserNameEnable = true;
+					}
+				}
+				return result;
+			},
+
+			set: function set(value) {
+				if (value === 1) {
+					this.userNameConfirm = 'ユーザー名またはパスワードに誤りがあります。';
+					this.isUserNameEnable = false;
+				}
+			}
+		},
+		// パスワードのバリデーション
+		errorPassword: {
+			get: function get() {
+				var result = '';
+				if (this.isCheckedOption === 'pickles2') {
+					if (this.isCheckedInit === true) {
+						if (this.password === '') {
+							result = 'パスワードが未入力です。';
+							this.isPasswordEnable = false;
+						} else {
+							result = '';
+							this.isPasswordEnable = true;
+						}
+					} else {
+						result = '';
+						this.isPasswordEnable = true;
+					}
+				} else if (this.isCheckedOption === 'git') {
+					if (this.isCheckedRepository === 'original') {
+						if (this.clonePassword === '') {
+							result = 'パスワードが未入力です。';
+							this.isPasswordEnable = false;
+						} else {
+							result = '';
+							this.isPasswordEnable = true;
+						}
+					} else if (this.isCheckedRepository === 'new') {
+						if (this.cloneNewPassword === '') {
+							result = 'パスワードが未入力です。';
+							this.isPasswordEnable = false;
+						} else {
+							result = '';
+							this.isPasswordEnable = true;
+						}
+					} else {
+						result = '';
+						this.isPasswordEnable = true;
+					}
+				}
+				return result;
+			},
+
+			set: function set(value) {
+				if (value === 1) {
+					this.passwordConfirm = 'ユーザー名またはパスワードに誤りがあります。';
+					this.isPasswordEnable = false;
+				}
+			}
+		},
+		// プロジェクトをセットアップするボタンのON/OFF
+		classSetupStartEnable: function classSetupStartEnable() {
+			return {
+				show: this.isCloneRepositoryEnable === true && this.isCloneUserNameEnable === true && this.isClonePasswordEnable === true,
+				hidden: this.isCloneRepositoryEnable === false || this.isCloneUserNameEnable === false || this.isClonePasswordEnable === false
+			};
+		},
+		// OK DisabledボタンのON/OFF
+		classSetupStartDisable: function classSetupStartDisable() {
+			return {
+				hidden: this.isCloneRepositoryEnable === true && this.isCloneUserNameEnable === true && this.isClonePasswordEnable === true,
+				show: this.isCloneRepositoryEnable === false || this.isCloneUserNameEnable === false || this.isClonePasswordEnable === false
+			};
+		},
+		// OKボタンのON/OFF
+		classSetupEnable: function classSetupEnable() {
+			return {
+				show: this.isVendorNameEnable === true && this.isProjectNameEnable === true && this.isRepositoryEnable === true && this.isUserNameEnable === true && this.isPasswordEnable === true,
+				hidden: this.isVendorNameEnable === false || this.isProjectNameEnable === false || this.isRepositoryEnable === false || this.isUserNameEnable === false || this.isPasswordEnable === false
+			};
+		},
+		// OK DisabledボタンのON/OFF
+		classSetupDisable: function classSetupDisable() {
+			return {
+				hidden: this.isVendorNameEnable === true && this.isProjectNameEnable === true && this.isRepositoryEnable === true && this.isUserNameEnable === true && this.isPasswordEnable === true,
+				show: this.isVendorNameEnable === false || this.isProjectNameEnable === false || this.isRepositoryEnable === false || this.isUserNameEnable === false || this.isPasswordEnable === false
+			};
+		}
+	}
+});
+
+/***/ }),
+/* 100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "contents" }, [
+      _c("div", { staticClass: "cont_info" }),
+      _vm._v(" "),
+      _c("div", { staticClass: "cont_maintask_ui" }, [
+        _c(
+          "div",
+          { staticClass: "center", staticStyle: { "margin-top": "70px" } },
+          [
+            _c("h2", [_vm._v("プロジェクトに Pickles 2 をセットアップします")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "cont_setup_options left" }, [
+              _c("h3", [_vm._v("セットアップオプション")]),
+              _vm._v(" "),
+              _c("ul", [
+                _c("li", [
+                  _c("label", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.isCheckedOption,
+                          expression: "isCheckedOption"
+                        }
+                      ],
+                      attrs: { type: "radio", value: "pickles2" },
+                      domProps: {
+                        checked: _vm._q(_vm.isCheckedOption, "pickles2")
+                      },
+                      on: {
+                        change: function($event) {
+                          _vm.isCheckedOption = "pickles2"
+                        }
+                      }
+                    }),
+                    _vm._v(
+                      " Packagist から Pickles 2 プロジェクトテンプレート をセットアップ"
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("label", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.isCheckedOption,
+                          expression: "isCheckedOption"
+                        }
+                      ],
+                      attrs: { type: "radio", value: "git" },
+                      domProps: { checked: _vm._q(_vm.isCheckedOption, "git") },
+                      on: {
+                        change: function($event) {
+                          _vm.isCheckedOption = "git"
+                        }
+                      }
+                    }),
+                    _vm._v(" Gitリポジトリ から クローン")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { class: _vm.classCheckedOption }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "form-group row",
+                        staticStyle: { "margin-top": "20px" }
+                      },
+                      [
+                        _c("div", { staticClass: "col-md-12" }, [
+                          _c("div", { staticClass: "col-md-3" }),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "col-md-6 text-danger" }, [
+                            _vm._v(
+                              _vm._s(_vm.errorCloneRepository) +
+                                _vm._s(_vm.cloneRepositoryConfirm)
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-md-12" }, [
+                          _vm._m(0),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "col-md-6" }, [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.cloneRepository,
+                                  expression: "cloneRepository"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "text",
+                                placeholder:
+                                  "https://github.com/pickles2/preset-get-start-pickles2.git"
+                              },
+                              domProps: { value: _vm.cloneRepository },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.cloneRepository = $event.target.value
+                                }
+                              }
+                            })
+                          ])
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group row" }, [
+                      _c("div", { staticClass: "col-md-12" }, [
+                        _c("div", { staticClass: "col-md-3" }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-md-6 text-danger" }, [
+                          _vm._v(
+                            _vm._s(_vm.errorCloneUserName) +
+                              _vm._s(_vm.cloneUserNameConfirm)
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-12" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass: "col-md-3",
+                            staticStyle: { "font-weight": "normal" }
+                          },
+                          [_vm._v("User name: ")]
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-md-6" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.cloneUserName,
+                                expression: "cloneUserName"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              type: "text",
+                              placeholder:
+                                "（任意）クローンするリモートリポジトリのユーザー名"
+                            },
+                            domProps: { value: _vm.cloneUserName },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.cloneUserName = $event.target.value
+                              }
+                            }
+                          })
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group row" }, [
+                      _c("div", { staticClass: "col-md-12" }, [
+                        _c("div", { staticClass: "col-md-3" }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-md-6 text-danger" }, [
+                          _vm._v(
+                            _vm._s(_vm.errorClonePassword) +
+                              _vm._s(_vm.clonePasswordConfirm)
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-12" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass: "col-md-3",
+                            staticStyle: { "font-weight": "normal" }
+                          },
+                          [_vm._v("Password: ")]
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-md-6" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.clonePassword,
+                                expression: "clonePassword"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              type: "password",
+                              placeholder:
+                                "（任意）クローンするリモートリポジトリのパスワード"
+                            },
+                            domProps: { value: _vm.clonePassword },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.clonePassword = $event.target.value
+                              }
+                            }
+                          })
+                        ])
+                      ])
+                    ])
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _vm._m(1),
+            _vm._v(" "),
+            _vm._m(2),
+            _vm._v(" "),
+            _c("p"),
+            _c("div", { class: _vm.classSetupStartEnable }, [
+              _c(
+                "button",
+                {
+                  staticClass: "px2-btn px2-btn--primary col-md-12",
+                  staticStyle: { "margin-bottom": "16px" },
+                  on: { click: _vm.setup }
+                },
+                [_vm._v("プロジェクトをセットアップする")]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { class: _vm.classSetupStartDisable }, [
+              _c(
+                "button",
+                {
+                  staticClass: "px2-btn px2-btn--primary col-md-12",
+                  staticStyle: { "margin-bottom": "16px" },
+                  attrs: { disabled: "disabled" }
+                },
+                [_vm._v("プロジェクトをセットアップする")]
+              )
+            ]),
+            _vm._v(" "),
+            _c("p")
+          ]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "contents",
+        class: _vm.classModal,
+        staticStyle: {
+          position: "fixed",
+          left: "0px",
+          top: "0px",
+          width: "100%",
+          height: "100%",
+          "z-index": "10000"
+        },
+        attrs: { tabindex: "-1" }
+      },
+      [
+        _c("div", {
+          staticStyle: {
+            position: "fixed",
+            left: "0px",
+            top: "0px",
+            width: "100%",
+            height: "100%",
+            overflow: "hidden",
+            background: "rgb(0, 0, 0)",
+            opacity: "0.5"
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticStyle: {
+              position: "absolute",
+              left: "0px",
+              top: "0px",
+              "padding-top": "4em",
+              overflow: "auto",
+              width: "100%",
+              height: "100%"
+            }
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "dialog_box",
+                class: _vm.classSetup,
+                staticStyle: { width: "80%", margin: "3em auto" }
+              },
+              [
+                _c("h1", [_vm._v("Pickles 2 プロジェクトのセットアップ")]),
+                _vm._v(" "),
+                _c("div", [_vm._v(_vm._s(_vm.info))]),
+                _vm._v(" "),
+                _vm.isCheckedOption === "pickles2"
+                  ? _c("div", [
+                      _c(
+                        "pre",
+                        {
+                          class: [_vm.isSetupBefore ? "show" : "hidden"],
+                          staticStyle: { height: "12em", overflow: "auto" }
+                        },
+                        [
+                          _vm._v("\t\t\t\t\t\t"),
+                          _c(
+                            "div",
+                            {
+                              staticClass: "selectable",
+                              staticStyle: { "font-weight": "lighter" }
+                            },
+                            [_vm._v("実行中...")]
+                          ),
+                          _vm._v("\n\t\t\t\t\t")
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "pre",
+                        {
+                          class: [_vm.isSetupDuring ? "show" : "hidden"],
+                          staticStyle: { height: "12em", overflow: "auto" }
+                        },
+                        [
+                          _vm._v("\t\t\t\t\t\t"),
+                          _c(
+                            "div",
+                            {
+                              staticClass: "selectable",
+                              staticStyle: { "font-weight": "lighter" }
+                            },
+                            [_vm._v(_vm._s(_vm.message))]
+                          ),
+                          _vm._v("\n\t\t\t\t\t")
+                        ]
+                      )
+                    ])
+                  : _c(
+                      "div",
+                      {
+                        staticClass: "cont_scene",
+                        attrs: { id: "cont_before_publish-progress" }
+                      },
+                      [
+                        _c("div", { staticClass: "cont_canvas" }, [
+                          _c("div", { staticClass: "unit cont_progress" }, [
+                            _c("div", { staticClass: "center" }, [
+                              _c("p", [_vm._v("クローンしています。")]),
+                              _vm._v(" "),
+                              _c("p", [
+                                _vm._v("そのまましばらくお待ちください...")
+                              ]),
+                              _vm._v(" "),
+                              _c("div", [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "cont_progress-phase",
+                                    staticStyle: { "font-weight": "bold" }
+                                  },
+                                  [_vm._v("Cloning into...")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  { staticClass: "cont_progress-currentTask" },
+                                  [_vm._v(_vm._s(_vm.fraction))]
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "cont_progress-bar" }, [
+                                _c("div", { staticClass: "progress" }, [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "progress-bar progress-bar-striped active",
+                                      style: { width: _vm.rate + "%" },
+                                      attrs: { role: "progressbar" }
+                                    },
+                                    [_vm._v(_vm._s(_vm.rate) + "%")]
+                                  )
+                                ])
+                              ])
+                            ])
+                          ])
+                        ])
+                      ]
+                    ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "dialog-buttons center",
+                    class: [_vm.isSetupDuringButton ? "show" : "hidden"]
+                  },
+                  [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "px2-btn",
+                        attrs: { disabled: "disabled" }
+                      },
+                      [_vm._v("セットアップしています...")]
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "dialog-buttons center",
+                    class: [_vm.isSetupAfterButton ? "show" : "hidden"]
+                  },
+                  [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "px2-btn px2-btn--primary",
+                        on: { click: _vm.next }
+                      },
+                      [_vm._v("次へ")]
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "dialog-buttons center",
+                    class: [_vm.isSetupRestartButton ? "show" : "hidden"]
+                  },
+                  [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "px2-btn px2-btn--danger",
+                        on: {
+                          click: function($event) {
+                            return _vm.setup(1)
+                          }
+                        }
+                      },
+                      [_vm._v("再セットアップ")]
+                    )
+                  ]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "dialog_box",
+                class: _vm.classOption,
+                staticStyle: { width: "80%", margin: "3em auto" }
+              },
+              [
+                _c("h1", [_vm._v("Pickles 2 プロジェクトのセットアップ")]),
+                _vm._v(" "),
+                _c("div", { staticStyle: { "margin-bottom": "1em" } }, [
+                  _c(
+                    "table",
+                    {
+                      staticClass: "form_elements",
+                      staticStyle: { width: "100%" }
+                    },
+                    [
+                      _vm._m(3),
+                      _vm._v(" "),
+                      _c("tbody", [
+                        _c("tr", [
+                          _c("th", [_vm._v("Composer package name")]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._m(4),
+                            _vm._v(" "),
+                            _vm._m(5),
+                            _vm._v(" "),
+                            _c("p", [
+                              _vm._v(
+                                "この値は、再利用可能なテンプレートとして公開する場合は必要になります。 そうでない場合(一般的なウェブ制作プロジェクト)では、空欄のままでよいでしょう。"
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("p", [_vm._v("vendorName")]),
+                            _vm._v(" "),
+                            _c("p", { staticClass: "text-danger" }, [
+                              _vm._v(_vm._s(_vm.errorVendorName))
+                            ]),
+                            _vm._v(" "),
+                            _c("p", {}, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.vendorName,
+                                    expression: "vendorName"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "text",
+                                  placeholder: "pickles2"
+                                },
+                                domProps: { value: _vm.vendorName },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.vendorName = $event.target.value
+                                  }
+                                }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _c("p", [_vm._v("projectName")]),
+                            _vm._v(" "),
+                            _c("p", { staticClass: "text-danger" }, [
+                              _vm._v(_vm._s(_vm.errorProjectName))
+                            ]),
+                            _vm._v(" "),
+                            _c("p", {}, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.projectName,
+                                    expression: "projectName"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "text",
+                                  placeholder: "preset-get-start-pickles2"
+                                },
+                                domProps: { value: _vm.projectName },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.projectName = $event.target.value
+                                  }
+                                }
+                              })
+                            ])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("tr", [
+                          _c("th", [_vm._v("Gitリポジトリ")]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("div", { class: _vm.classOptionPickles2 }, [
+                              _c("p", [
+                                _vm._v(
+                                  "このオプションを有効にすると、自動的に gitローカルリポジトリが作成され、最初のコミットが作成されます。"
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("p", [
+                                _vm._v(
+                                  "バージョン管理をしない場合、または Git以外のツールを使ってバージョン管理する場合は、このオプションをオフにしてください。"
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("p", [
+                                _vm._v(
+                                  "通常は、オンにされることをお勧めします。"
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "options_git_init" }),
+                              _vm._v(" "),
+                              _c("p", [
+                                _c("label", [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.isCheckedInit,
+                                        expression: "isCheckedInit"
+                                      }
+                                    ],
+                                    attrs: { type: "checkbox" },
+                                    domProps: {
+                                      checked: Array.isArray(_vm.isCheckedInit)
+                                        ? _vm._i(_vm.isCheckedInit, null) > -1
+                                        : _vm.isCheckedInit
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        var $$a = _vm.isCheckedInit,
+                                          $$el = $event.target,
+                                          $$c = $$el.checked ? true : false
+                                        if (Array.isArray($$a)) {
+                                          var $$v = null,
+                                            $$i = _vm._i($$a, $$v)
+                                          if ($$el.checked) {
+                                            $$i < 0 &&
+                                              (_vm.isCheckedInit = $$a.concat([
+                                                $$v
+                                              ]))
+                                          } else {
+                                            $$i > -1 &&
+                                              (_vm.isCheckedInit = $$a
+                                                .slice(0, $$i)
+                                                .concat($$a.slice($$i + 1)))
+                                          }
+                                        } else {
+                                          _vm.isCheckedInit = $$c
+                                        }
+                                      }
+                                    }
+                                  }),
+                                  _vm._v(" Gitリポジトリを初期化する")
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { class: _vm.classCheckedInit }, [
+                                _c("p", [
+                                  _vm._v(
+                                    "コミットするGitリポジトリの情報を入力してください。"
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _vm._m(6),
+                                _vm._v(" "),
+                                _c("p", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(_vm.errorRepository) +
+                                      _vm._s(_vm.repositoryConfirm)
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("p", {}, [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.repository,
+                                        expression: "repository"
+                                      }
+                                    ],
+                                    staticClass: "form-control",
+                                    attrs: {
+                                      type: "text",
+                                      placeholder:
+                                        "https://github.com/pickles2/preset-get-start-pickles2.git"
+                                    },
+                                    domProps: { value: _vm.repository },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.repository = $event.target.value
+                                      }
+                                    }
+                                  })
+                                ]),
+                                _vm._v(" "),
+                                _vm._m(7),
+                                _vm._v(" "),
+                                _c("p", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(_vm.errorUserName) +
+                                      _vm._s(_vm.userNameConfirm)
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("p", {}, [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.userName,
+                                        expression: "userName"
+                                      }
+                                    ],
+                                    staticClass: "form-control",
+                                    attrs: {
+                                      type: "text",
+                                      placeholder:
+                                        "リモートリポジトリのユーザー名"
+                                    },
+                                    domProps: { value: _vm.userName },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.userName = $event.target.value
+                                      }
+                                    }
+                                  })
+                                ]),
+                                _vm._v(" "),
+                                _vm._m(8),
+                                _vm._v(" "),
+                                _c("p", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(_vm.errorPassword) +
+                                      _vm._s(_vm.passwordConfirm)
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("p", {}, [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.password,
+                                        expression: "password"
+                                      }
+                                    ],
+                                    staticClass: "form-control",
+                                    attrs: {
+                                      type: "password",
+                                      placeholder:
+                                        "リモートリポジトリのパスワード"
+                                    },
+                                    domProps: { value: _vm.password },
+                                    on: {
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.password = $event.target.value
+                                      }
+                                    }
+                                  })
+                                ])
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { class: _vm.classOptionGit }, [
+                              _c("div", { staticClass: "options_git_init" }),
+                              _vm._v(" "),
+                              _c("p", [
+                                _c("label", [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.isCheckedRepository,
+                                        expression: "isCheckedRepository"
+                                      }
+                                    ],
+                                    attrs: { type: "radio", value: "original" },
+                                    domProps: {
+                                      checked: _vm._q(
+                                        _vm.isCheckedRepository,
+                                        "original"
+                                      )
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        _vm.isCheckedRepository = "original"
+                                      }
+                                    }
+                                  }),
+                                  _vm._v(" クローン元のGitリポジトリに参加する")
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("p", [
+                                _c("label", [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.isCheckedRepository,
+                                        expression: "isCheckedRepository"
+                                      }
+                                    ],
+                                    attrs: { type: "radio", value: "new" },
+                                    domProps: {
+                                      checked: _vm._q(
+                                        _vm.isCheckedRepository,
+                                        "new"
+                                      )
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        _vm.isCheckedRepository = "new"
+                                      }
+                                    }
+                                  }),
+                                  _vm._v(
+                                    " 初期化して別のGitリポジトリを作成する"
+                                  )
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("p", [
+                                _c("label", [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.isCheckedRepository,
+                                        expression: "isCheckedRepository"
+                                      }
+                                    ],
+                                    attrs: { type: "radio", value: "none" },
+                                    domProps: {
+                                      checked: _vm._q(
+                                        _vm.isCheckedRepository,
+                                        "none"
+                                      )
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        _vm.isCheckedRepository = "none"
+                                      }
+                                    }
+                                  }),
+                                  _vm._v(" Gitリポジトリを作成しない")
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { class: _vm.classCheckedOriginalRepository },
+                                [
+                                  _c("p", [
+                                    _vm._v(
+                                      "クローン元のGitリポジトリの情報を入力してください。"
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._m(9),
+                                  _vm._v(" "),
+                                  _c("p", { staticClass: "text-danger" }, [
+                                    _vm._v(
+                                      _vm._s(_vm.errorRepository) +
+                                        _vm._s(_vm.repositoryConfirm)
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("p", {}, [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.cloneRepository,
+                                          expression: "cloneRepository"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: {
+                                        type: "text",
+                                        placeholder:
+                                          "https://github.com/pickles2/preset-get-start-pickles2.git"
+                                      },
+                                      domProps: { value: _vm.cloneRepository },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.cloneRepository =
+                                            $event.target.value
+                                        }
+                                      }
+                                    })
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._m(10),
+                                  _vm._v(" "),
+                                  _c("p", { staticClass: "text-danger" }, [
+                                    _vm._v(
+                                      _vm._s(_vm.errorUserName) +
+                                        _vm._s(_vm.userNameConfirm)
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("p", {}, [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.cloneUserName,
+                                          expression: "cloneUserName"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: {
+                                        type: "text",
+                                        placeholder:
+                                          "リモートリポジトリのユーザー名"
+                                      },
+                                      domProps: { value: _vm.cloneUserName },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.cloneUserName =
+                                            $event.target.value
+                                        }
+                                      }
+                                    })
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._m(11),
+                                  _vm._v(" "),
+                                  _c("p", { staticClass: "text-danger" }, [
+                                    _vm._v(
+                                      _vm._s(_vm.errorPassword) +
+                                        _vm._s(_vm.passwordConfirm)
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("p", {}, [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.clonePassword,
+                                          expression: "clonePassword"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: {
+                                        type: "password",
+                                        placeholder:
+                                          "リモートリポジトリのパスワード"
+                                      },
+                                      domProps: { value: _vm.clonePassword },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.clonePassword =
+                                            $event.target.value
+                                        }
+                                      }
+                                    })
+                                  ])
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { class: _vm.classCheckedNewRepository },
+                                [
+                                  _c("p", [
+                                    _vm._v(
+                                      "新規作成するGitリポジトリの情報を入力してください。"
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._m(12),
+                                  _vm._v(" "),
+                                  _c("p", { staticClass: "text-danger" }, [
+                                    _vm._v(
+                                      _vm._s(_vm.errorRepository) +
+                                        _vm._s(_vm.repositoryConfirm)
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("p", {}, [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.cloneNewRepository,
+                                          expression: "cloneNewRepository"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: {
+                                        type: "text",
+                                        placeholder:
+                                          "https://github.com/pickles2/preset-get-start-pickles2.git"
+                                      },
+                                      domProps: {
+                                        value: _vm.cloneNewRepository
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.cloneNewRepository =
+                                            $event.target.value
+                                        }
+                                      }
+                                    })
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._m(13),
+                                  _vm._v(" "),
+                                  _c("p", { staticClass: "text-danger" }, [
+                                    _vm._v(
+                                      _vm._s(_vm.errorUserName) +
+                                        _vm._s(_vm.userNameConfirm)
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("p", {}, [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.cloneNewUserName,
+                                          expression: "cloneNewUserName"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: {
+                                        type: "text",
+                                        placeholder:
+                                          "リモートリポジトリのユーザー名"
+                                      },
+                                      domProps: { value: _vm.cloneNewUserName },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.cloneNewUserName =
+                                            $event.target.value
+                                        }
+                                      }
+                                    })
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._m(14),
+                                  _vm._v(" "),
+                                  _c("p", { staticClass: "text-danger" }, [
+                                    _vm._v(
+                                      _vm._s(_vm.errorPassword) +
+                                        _vm._s(_vm.passwordConfirm)
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("p", {}, [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.cloneNewPassword,
+                                          expression: "cloneNewPassword"
+                                        }
+                                      ],
+                                      staticClass: "form-control",
+                                      attrs: {
+                                        type: "password",
+                                        placeholder:
+                                          "リモートリポジトリのパスワード"
+                                      },
+                                      domProps: { value: _vm.cloneNewPassword },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.cloneNewPassword =
+                                            $event.target.value
+                                        }
+                                      }
+                                    })
+                                  ])
+                                ]
+                              )
+                            ])
+                          ])
+                        ])
+                      ])
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "dialog-buttons center",
+                    class: _vm.classSetupEnable
+                  },
+                  [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "px2-btn--primary px2-btn",
+                        on: { click: _vm.option }
+                      },
+                      [_vm._v("OK")]
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "dialog-buttons center",
+                    class: _vm.classSetupDisable
+                  },
+                  [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "px2-btn",
+                        attrs: { disabled: "disabled" }
+                      },
+                      [_vm._v("OK")]
+                    )
+                  ]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "dialog_box",
+                class: _vm.classProgress,
+                staticStyle: { width: "80%", margin: "3em auto" }
+              },
+              [
+                _c("h1", [_vm._v("Pickles 2 プロジェクトのセットアップ")]),
+                _vm._v(" "),
+                _c("div", [_vm._v(_vm._s(_vm.info))]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "cont_scene",
+                    attrs: { id: "cont_before_publish-progress" }
+                  },
+                  [
+                    _c("div", { staticClass: "cont_canvas" }, [
+                      _c("div", { staticClass: "unit cont_progress" }, [
+                        _c("div", { staticClass: "center" }, [
+                          _c("p", [_vm._v("セットアップを完了しています。")]),
+                          _vm._v(" "),
+                          _c("p", [
+                            _vm._v("そのまましばらくお待ちください...")
+                          ]),
+                          _vm._v(" "),
+                          _c("div", [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "cont_progress-phase",
+                                staticStyle: { "font-weight": "bold" }
+                              },
+                              [_vm._v("In progress...")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "cont_progress-currentTask" },
+                              [_vm._v(_vm._s(_vm.fraction))]
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "cont_progress-bar" }, [
+                            _c("div", { staticClass: "progress" }, [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "progress-bar progress-bar-striped active",
+                                  style: { width: _vm.rate + "%" },
+                                  attrs: { role: "progressbar" }
+                                },
+                                [_vm._v(_vm._s(_vm.rate) + "%")]
+                              )
+                            ])
+                          ])
+                        ])
+                      ])
+                    ])
+                  ]
+                )
+              ]
+            )
+          ]
+        )
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "label",
+      { staticClass: "col-md-3", staticStyle: { "font-weight": "normal" } },
+      [
+        _vm._v("Repository URL: "),
+        _c("span", { staticClass: "must" }, [_vm._v("Required")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "cont_setup_description" }, [
+      _c("p", [
+        _c("img", {
+          attrs: {
+            src: "/common/images/install_image_clip.png",
+            alt: "Composer ☓ Packagist ☓ Pickles 2"
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("p", [
+        _vm._v(
+          "\n\t\t\t\t\t\tPickles 2 の プロジェクトテンプレート を Packagest から自動的に取得し、セットアップを完了します。"
+        ),
+        _c("br")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("\n\t\t\t\t\t次のボタンを押して、セットアップを続けてください。"),
+      _c("br")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("colgroup", [
+      _c("col", { attrs: { width: "30%" } }),
+      _vm._v(" "),
+      _c("col", { attrs: { width: "70%" } })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _c("code", [_vm._v("composer.json")]),
+      _vm._v(
+        " の name に設定するパッケージ名を入力してください。 空欄にすると name プロパティを削除します。 この値は、あとで "
+      ),
+      _c("code", [_vm._v("composer.json")]),
+      _vm._v(" を編集することで変更できます。")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("vendorNameおよびprojectNameは半角英数字と "),
+      _c("code", [_vm._v("-")]),
+      _vm._v("(ハイフン)、 "),
+      _c("code", [_vm._v("_")]),
+      _vm._v(
+        "(アンダースコア) が使えます。 詳しくは composer のドキュメントを参照してください。"
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("Repository "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("UserName "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("Password "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("Original Repository "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("Original UserName "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("Original Password "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("New Repository "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("New UserName "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("New Password "),
+      _c("span", { staticClass: "must" }, [_vm._v("Required")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-16292baa", module.exports)
   }
 }
 

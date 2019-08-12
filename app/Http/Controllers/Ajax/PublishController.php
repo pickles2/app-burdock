@@ -28,9 +28,9 @@ class PublishController extends Controller
 		$fs = new \tomk79\filesystem;
 		$project_name = $project->project_code;
 		$project_path = get_project_workingtree_dir($project_name, $branch_name);
-		$publish_log_file = $project_path.'/px-files/_sys/ram/publish/publish_log.csv';
-		$alert_log_file = $project_path.'/px-files/_sys/ram/publish/alert_log.csv';
-		$applock_file = $project_path.'/px-files/_sys/ram/publish/applock.txt';
+		$publish_log_file = $project_path.'/'.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/publish_log.csv';
+		$alert_log_file = $project_path.'/'.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/alert_log.csv';
+		$applock_file = $project_path.'/'.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/applock.txt';
 
 		if(\File::exists($publish_log_file)) {
 			$exists_publish_log = true;
@@ -82,17 +82,44 @@ class PublishController extends Controller
     public function publishAjax(Request $request, Project $project, $branch_name)
     {
 		//
+		$publish_option = $request->publish_option;
+		$paths_region = $request->paths_region;
+		$paths_ignore = $request->paths_ignore;
+		$keep_cache = $request->keep_cache;
+
 		$project_code = $project->project_code;
 		$project_path = get_project_workingtree_dir($project_code, $branch_name);
 		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
 
 		chdir($project_path);
-		// proc_openでパブリッシュしてみる
+		// proc_openでパブリッシュ
 		$desc = array(
 		    1 => array('pipe', 'w'),
 		    2 => array('pipe', 'w'),
 		);
-		$proc = proc_open('php .px_execute.php /?PX=publish.run', $desc, $pipes);
+		$cmd = '';
+		$cmd .= 'php '.get_px_execute_path($project_code, $branch_name).' ';
+		$cmd .= '"';
+		$cmd .= '/?PX=publish.run';
+		if(is_array($paths_region)) {
+			$cmd .= '&path_region='.$paths_region[0];
+			if(count($paths_region) > 1) {
+				for($i = 1; $i < count($paths_region); $i++) {
+					$cmd .= '&paths_region[]='.$paths_region[$i];
+				}
+			}
+		}
+		if(is_array($paths_ignore)) {
+			foreach($paths_ignore as $ignore) {
+				$cmd .= '&paths_ignore[]='.$ignore;
+			}
+		}
+		if($keep_cache !== false) {
+			$cmd .= '&keep_cache='.$keep_cache;
+		}
+		$cmd .= '"';
+
+		$proc = proc_open($cmd, $desc, $pipes);
 		stream_set_blocking($pipes[1], 0);
 		stream_set_blocking($pipes[2], 0);
 		// 標準出力が------------かどうかを判定する変数
@@ -102,7 +129,7 @@ class PublishController extends Controller
 			$read = array($pipes[1], $pipes[2]);
 			$write = null;
 			$except = null;
-			$timeout = 1;
+			$timeout = 60000;
 		    $ret = stream_select($read, $write, $except, $timeout);
 		    if ($ret === false) {
 		        echo "error\n";
@@ -196,6 +223,11 @@ class PublishController extends Controller
 
         $data = array(
 			"info" => $info,
+			"publish_option" => $publish_option,
+			"paths_region" => $paths_region,
+			"paths_ignore" => $paths_ignore,
+			"keep_cache" => $keep_cache,
+			"cmd" => $cmd
         );
         return $data;
     }
@@ -213,7 +245,7 @@ class PublishController extends Controller
 		chdir($path_current_dir); // 元いたディレクトリへ戻る
 
 		// applock.txtを削除
-		$applock_file = $project_path.'/px-files/_sys/ram/publish/applock.txt';
+		$applock_file = $project_path.'/'.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/applock.txt';
 		\File::delete($applock_file);
 
 		// 削除の結果をテキストで返す
@@ -226,5 +258,27 @@ class PublishController extends Controller
 			"message" => $message,
         );
         return $data;
+	}
+
+	public function publishSingleAjax(Request $request, Project $project, $branch_name)
+	{
+		$path_region = $request->path_region;
+		$option = '';
+		$option .= ' "';
+		$option .= '/?PX=publish.run';
+		$option .= '&path_region='.$path_region;
+		$option .= '"';
+		$bd_object = get_px_execute($project->project_code, $branch_name, $option);
+
+		if($bd_object !== false) {
+			$info = 'をパブリッシュしました。';
+		} else {
+			$info = 'をパブリッシュできませんでした。';
+		}
+
+		$data = array(
+			"info" => $info
+		);
+		return $data;
 	}
 }
