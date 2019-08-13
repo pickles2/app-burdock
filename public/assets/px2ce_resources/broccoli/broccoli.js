@@ -421,7 +421,7 @@
 											htmls[idx] = (function(src){
 												for(var resKey in resDb){
 													try {
-														src = src.replace('{broccoli-html-editor-resource-baser64:{'+resKey+'}}', resDb[resKey].base64);
+														src = src.split('{broccoli-html-editor-resource-baser64:{'+resKey+'}}').join(resDb[resKey].base64);
 													} catch (e) {
 													}
 												}
@@ -1576,7 +1576,7 @@ module.exports = function(broccoli){
 					newData.fields[fieldName] = '';
 					if( modTpl.fields[fieldName].default !== undefined ){
 						// デフォルト値の設定がある場合、セット
-						newData.fields[fieldName] = modTpl.fields[fieldName].default;
+						newData.fields[fieldName] = JSON.parse(JSON.stringify(modTpl.fields[fieldName].default));
 					}
 					newData.fields[fieldName] = broccoli.getFieldDefinition(modTpl.fields[fieldName].type).normalizeData( newData.fields[fieldName] );
 				}else if( modTpl.fields[fieldName].fieldType == 'module' ){
@@ -2533,6 +2533,9 @@ module.exports = function(broccoli, targetElm, callback){
 	 * モジュールのボタンを生成する
 	 */
 	function generateModuleButton( mod, depth ){
+		var timerTouchStart;
+		var isTouchStartHold = false;
+
 		depth = depth || 0;
 		var $button = $('<a class="broccoli--module-palette--draggablebutton">');
 		if(depth){
@@ -2598,6 +2601,19 @@ module.exports = function(broccoli, targetElm, callback){
 						)
 					;
 				});
+			})
+			.on('touchstart', function(e){
+				// タッチデバイス向けの処理
+				clearTimeout(timerTouchStart);
+				if( isTouchStartHold ){
+					$(this).dblclick();
+					return;
+				}
+				isTouchStartHold = true;
+				timerTouchStart = setTimeout(function(){
+					isTouchStartHold = false;
+				}, 250);
+				return;
 			})
 			// .tooltip({'placement':'left'})
 		;
@@ -2907,7 +2923,9 @@ module.exports = function(broccoli){
 	var tplFrame = ''
 				+ '<div class="broccoli--edit-window">'
 				+ '	<form action="javascript:;">'
+				+ '		<div class="broccoli--edit-window-logical-path">---</div>'
 				+ '		<h2 class="broccoli--edit-window-module-name">---</h2>'
+				+ '		<div class="broccoli--edit-window-message-field"></div>'
 				+ '		<div class="broccoli--edit-window-fields">'
 				+ '		</div>'
 				+ '		<div><a href="javascript:;" class="broccoli--edit-window-builtin-fields-switch"><span class="glyphicon glyphicon-menu-right"></span> <%= lb.get(\'ui_label.show_advanced_setting\') %></a></div>'
@@ -2924,7 +2942,6 @@ module.exports = function(broccoli){
 				+ '				<textarea class="form-control" id="broccoli--edit-window-builtin-dec-field" placeholder=""></textarea>'
 				+ '			</div>'
 				+ '		</div>'
-				+ '		<div class="broccoli--edit-window-message-field"></div>'
 				+ '		<div class="broccoli--edit-window-form-buttons">'
 				+ '			<div class="container-fluid">'
 				+ '				<div class="row">'
@@ -2987,10 +3004,11 @@ module.exports = function(broccoli){
 
 	function formErrorMessage(msgs){
 		var $elm = $editWindow.find('.broccoli--edit-window-message-field');
+		$editWindow.find('[data-broccoli-edit-window-field-name]').removeClass('has-error');
 		$editWindow.find('.broccoli--edit-window-field-error-message').hide().html('');
 		$elm.hide().html('');
 		for( var idx in msgs ){
-			var $err = $('<div class="broccoli__error-message">');
+			var $err = $('<div class="broccoli__inline-error-message">');
 			var $errUl = $('<ul>');
 			var errCount = 0;
 			for( var idx2 in msgs[idx] ){
@@ -2999,13 +3017,15 @@ module.exports = function(broccoli){
 					.text( msgs[idx][idx2] )
 				);
 			}
-			$('[data-broccoli-edit-window-field-name='+idx+'] .broccoli--edit-window-field-error-message').show().append( $err.append($errUl) );
+			$editWindow.find('[data-broccoli-edit-window-field-name='+idx+']').addClass('has-error');
+			$editWindow.find('[data-broccoli-edit-window-field-name='+idx+'] .broccoli--edit-window-field-error-message').show().append( $err.append($errUl) );
 		}
 		if(errCount){
-			var $err = $('<div class="broccoli__error-message">');
+			var $err = $('<div class="broccoli__error-message-box">');
 			$elm.show().append(
 				$err.text( '入力エラーがあります。確認してください。' )
 			);
+			$('.broccoli--lightbox').scrollTop(0);
 		}
 		return;
 	}
@@ -3032,6 +3052,10 @@ module.exports = function(broccoli){
 		$editWindow.html('').append( broccoli.bindEjs(tplFrame, {'lb':broccoli.lb}) );
 		$editWindow.find('.broccoli--edit-window-module-name').text(mod.info.name||mod.id);
 		$editWindow.find('.broccoli--edit-window-fields').append($fields);
+
+		$editWindow.find('.broccoli--edit-window-logical-path').html('').append(
+			drawLogicalPath(instancePath, data)
+		);
 
 		$editWindow.find('.broccoli--edit-window-builtin-fields').hide();
 		$editWindow.find('.broccoli--edit-window-builtin-fields-switch').click(function(){
@@ -3432,6 +3456,73 @@ module.exports = function(broccoli){
 	}
 
 	/**
+	 * パンくずを表示する
+	 */
+	function drawLogicalPath(instancePath, data){
+		// パンくずを表示
+		var instPath = instancePath.split('/');
+		var timer;
+
+		// console.log(instPath);
+
+		var $ul = $('<ul>');
+		var instPathMemo = [];
+		for( var idx in instPath ){
+			instPathMemo.push(instPath[idx]);
+			if( instPathMemo.length <= 1 ){ continue; }
+			var contData = broccoli.contentsSourceData.get(instPathMemo.join('/'));
+			if( !contData ){
+				// appender を選択した場合に、
+				// 存在しない instance が末尾に含まれた状態で送られてくる。
+				// その場合、contData は undefined になる。
+				// 処理できないので、スキップする。
+				continue;
+			}
+			var mod = broccoli.contentsSourceData.getModule(contData.modId, contData.subModName);
+			var label = mod && mod.info.name||mod.id;
+			if(instPathMemo.length==2){
+				// bowl自体だったら
+				label = instPathMemo[instPathMemo.length-1];
+			}
+			var isLastOne = false;
+			if( idx >= instPath.length-1 ){ isLastOne = true; }
+			$ul.append( $('<li>')
+				.append( $('<'+(isLastOne?'span':'a href="javascript:;"')+'>')
+					.attr({
+						'data-broccoli-instance-path': instPathMemo.join('/')
+					})
+					.bind('click', function(e){
+						if( this.tagName.toLowerCase() != 'a' ){
+							return;
+						}
+						clearTimeout(timer);
+						var instancePathTo = $(this).attr('data-broccoli-instance-path');
+
+						_this.lock();//フォームをロック
+						validateInstance(instancePath, mod, data, function(res){
+							if( !res ){
+								// エラーがあるため次へ進めない
+								_this.unlock();
+								return;
+							}
+							saveInstance(instancePath, mod, data, function(res){
+								// コンテンツデータを保存
+								broccoli.progressMessage('コンテンツを保存しています');
+								broccoli.saveContents(function(){
+									broccoli.editInstance( instancePathTo );
+								});
+							});
+						});
+					} )
+					.text(label)
+				)
+			);
+		}
+		return $ul;
+
+	}
+
+	/**
 	 * インスタンスの編集内容を検証する
 	 */
 	function validateInstance( instancePath, mod, data, callback ){
@@ -3714,7 +3805,9 @@ module.exports = function(broccoli){
 	 */
 	this.duplicateData = function( data, callback, resources ){
 		callback = callback||function(){};
-		data = JSON.parse( JSON.stringify( data ) );
+		try{
+			data = JSON.parse( JSON.stringify( data ) );
+		}catch(e){}
 		new Promise(function(rlv){rlv();}).then(function(){ return new Promise(function(rlv, rjt){
 			callback(data);
 		}); });
@@ -3926,10 +4019,6 @@ module.exports = function(broccoli){
 				// bowl自体だったら
 				label = instPathMemo[instPathMemo.length-1];
 			}
-			if( mod.subModName ){
-				// サブモジュールだったら
-				label = '@'+mod.subModName;
-			}
 			$ul.append( $('<li>')
 				.append( $('<a href="javascript:;">')
 					.attr({
@@ -3964,10 +4053,6 @@ module.exports = function(broccoli){
 					var contData = broccoli.contentsSourceData.get(children[child]);
 					var mod = broccoli.contentsSourceData.getModule(contData.modId, contData.subModName);
 					var label = mod && mod.info.name||mod.id;
-					if( mod.subModName ){
-						// サブモジュールだったら
-						label = '@'+mod.subModName;
-					}
 					$ulChildren.append( $('<li>')
 						.append( $('<a href="javascript:;">')
 							.attr({
@@ -4128,7 +4213,7 @@ module.exports = function(broccoli){
 							html = (function(src){
 								for(var resKey in resDb){
 									try {
-										src = src.replace('{broccoli-html-editor-resource-baser64:{'+resKey+'}}', resDb[resKey].base64);
+										src = src.split('{broccoli-html-editor-resource-baser64:{'+resKey+'}}').join(resDb[resKey].base64);
 									} catch (e) {
 									}
 								}
@@ -4766,6 +4851,8 @@ module.exports = function(broccoli){
 	 * パネルにイベントハンドラをセットする
 	 */
 	this.setPanelEventHandlers = function($panel){
+		var timerTouchStart;
+		var isTouchStartHold = false;
 		var timerFocus;
 		$panel
 			.attr({
@@ -4828,6 +4915,21 @@ module.exports = function(broccoli){
 				_this.onDblClick(e, this, function(){
 					// console.log('dblclick event done.');
 				});
+				return;
+			})
+			.on('touchstart', function(e){
+				// タッチデバイス向けの処理
+				clearTimeout(timerTouchStart);
+				if( isTouchStartHold ){
+					_this.onDblClick(e, this, function(){
+						// console.log('dblclick event done.');
+					});
+					return;
+				}
+				isTouchStartHold = true;
+				timerTouchStart = setTimeout(function(){
+					isTouchStartHold = false;
+				}, 250);
 				return;
 			})
 			.on('dragleave', function(e){
@@ -5552,6 +5654,9 @@ module.exports = function(broccoli){
 				;
 				callback( $.html() );
 				return;
+			}else if( rtn.resType == 'none' ){
+				callback( 'No Image' );
+				return;
 			}else{
 				_resMgr.getResourceDb( function(resDb){
 					var res, imagePath;
@@ -5588,6 +5693,7 @@ module.exports = function(broccoli){
 	this.mkEditor = function( mod, data, elm, callback ){
 		var rtn = $('<div>');
 		var $uiImageResource = $('<div>');
+		var $uiNoImage = $('<div>');
 		var $uiWebResource = $('<div>');
 		var _this = this;
 		if( typeof(data) !== typeof({}) ){ data = {}; }
@@ -5608,9 +5714,12 @@ module.exports = function(broccoli){
 		function selectResourceType(){
 			var val = rtn.find('[name='+mod.name+'-resourceType]:checked').val();
 			$uiWebResource.hide();
+			$uiNoImage.hide();
 			$uiImageResource.hide();
 			if(val == 'web'){
 				$uiWebResource.show();
+			}else if(val == 'none'){
+				$uiNoImage.show();
 			}else{
 				$uiImageResource.show();
 			}
@@ -5694,6 +5803,20 @@ module.exports = function(broccoli){
 							})
 						)
 						.append( $( '<span>' ).text('ウェブリソース') )
+					)
+				)
+				.append( $( '<li>' )
+					.css(tmpListStyle)
+					.append( $( '<label>' )
+						.append( $( '<input type="radio">' )
+							.change(selectResourceType)
+							.attr({
+								"name":mod.name+'-resourceType',
+								"value":"none",
+								"checked": (data.resType=='none')
+							})
+						)
+						.append( $( '<span>' ).text('なし') )
 					)
 				)
 			);
@@ -5914,7 +6037,7 @@ module.exports = function(broccoli){
 					)
 			);
 
-			rtn.append($uiImageResource).append($uiWebResource);
+			rtn.append($uiImageResource).append($uiWebResource).append($uiNoImage);
 			rtn.append( $('<input>')
 				.attr({
 					'type': 'hidden',
@@ -6148,7 +6271,12 @@ module.exports = function(broccoli){
 	 */
 	this.mkEditor = function( mod, data, elm, callback ){
 		var _this = this;
-		if(typeof(data) !== typeof({})){ data = {'src':''+data,'editor':'markdown'}; }
+		if( typeof(data) !== typeof({}) ){
+			data = {
+				'src':'' + ( typeof(data) === typeof('') ? data : '' ),
+				'editor':'markdown'
+			};
+		}
 		var rows = 12;
 		if( mod.rows ){
 			rows = mod.rows;
@@ -6315,8 +6443,11 @@ module.exports = function(broccoli){
 		var _this = this;
 		var fixedLang = mod.lang || null;
 
-		if(typeof(data) !== typeof({})){
-			data = {'src':''+data,'lang':(fixedLang ? fixedLang : 'javascript')};
+		if( typeof(data) !== typeof({}) ){
+			data = {
+				'src': ''+(typeof(data) === typeof('') ? data : ''),
+				'lang': (fixedLang ? fixedLang : 'javascript')
+			};
 		}
 		if( fixedLang ){
 			data.lang = fixedLang;
@@ -13147,6 +13278,8 @@ var utils = require('./utils');
 
 var scopeOptionWarned = false;
 var _VERSION_STRING = require('../package.json').version;
+var _DEFAULT_OPEN_DELIMITER = '<';
+var _DEFAULT_CLOSE_DELIMITER = '>';
 var _DEFAULT_DELIMITER = '%';
 var _DEFAULT_LOCALS_NAME = 'locals';
 var _NAME = 'ejs';
@@ -13232,9 +13365,10 @@ function getIncludePath(path, options) {
   var includePath;
   var filePath;
   var views = options.views;
+  var match = /^[A-Za-z]+:\\|^\//.exec(path);
 
   // Abs path
-  if (path.charAt(0) == '/') {
+  if (match && match.length) {
     includePath = exports.resolveInclude(path.replace(/^\/*/,''), options.root || '/', true);
   }
   // Relative paths
@@ -13584,6 +13718,12 @@ exports.renderFile = function () {
  * @public
  */
 
+/**
+ * EJS template class
+ * @public
+ */
+exports.Template = Template;
+
 exports.clearCache = function () {
   exports.cache.reset();
 };
@@ -13598,10 +13738,12 @@ function Template(text, opts) {
   this.source = '';
   this.dependencies = [];
   options.client = opts.client || false;
-  options.escapeFunction = opts.escape || utils.escapeXML;
+  options.escapeFunction = opts.escape || opts.escapeFunction || utils.escapeXML;
   options.compileDebug = opts.compileDebug !== false;
   options.debug = !!opts.debug;
   options.filename = opts.filename;
+  options.openDelimiter = opts.openDelimiter || exports.openDelimiter || _DEFAULT_OPEN_DELIMITER;
+  options.closeDelimiter = opts.closeDelimiter || exports.closeDelimiter || _DEFAULT_CLOSE_DELIMITER;
   options.delimiter = opts.delimiter || exports.delimiter || _DEFAULT_DELIMITER;
   options.strict = opts.strict || false;
   options.context = opts.context;
@@ -13637,7 +13779,11 @@ Template.prototype = {
   createRegex: function () {
     var str = _REGEX_STRING;
     var delim = utils.escapeRegExpChars(this.opts.delimiter);
-    str = str.replace(/%/g, delim);
+    var open = utils.escapeRegExpChars(this.opts.openDelimiter);
+    var close = utils.escapeRegExpChars(this.opts.closeDelimiter);
+    str = str.replace(/%/g, delim)
+      .replace(/</g, open)
+      .replace(/>/g, close);
     return new RegExp(str);
   },
 
@@ -13648,7 +13794,7 @@ Template.prototype = {
     var prepended = '';
     var appended = '';
     var escapeFn = opts.escapeFunction;
-    var asyncCtor;
+    var ctor;
 
     if (!this.source) {
       this.generateSource();
@@ -13698,7 +13844,7 @@ Template.prototype = {
         // Have to use generated function for this, since in envs without support,
         // it breaks in parsing
         try {
-          asyncCtor = (new Function('return (async function(){}).constructor;'))();
+          ctor = (new Function('return (async function(){}).constructor;'))();
         }
         catch(e) {
           if (e instanceof SyntaxError) {
@@ -13710,9 +13856,9 @@ Template.prototype = {
         }
       }
       else {
-        asyncCtor = Function;
+        ctor = Function;
       }
-      fn = new asyncCtor(opts.localsName + ', escapeFn, include, rethrow', src);
+      fn = new ctor(opts.localsName + ', escapeFn, include, rethrow', src);
     }
     catch(e) {
       // istanbul ignore else
@@ -13758,9 +13904,9 @@ Template.prototype = {
 
     if (opts.rmWhitespace) {
       // Have to use two separate replace here as `^` and `$` operators don't
-      // work well with `\r`.
+      // work well with `\r` and empty lines don't work well with the `m` flag.
       this.templateText =
-        this.templateText.replace(/\r/g, '').replace(/^\s+|\s+$/gm, '');
+        this.templateText.replace(/[\r\n]+/g, '\n').replace(/^\s+|\s+$/gm, '');
     }
 
     // Slurp spaces and tabs before <%_ and after _%>
@@ -13770,6 +13916,8 @@ Template.prototype = {
     var self = this;
     var matches = this.parseTemplateText();
     var d = this.opts.delimiter;
+    var o = this.opts.openDelimiter;
+    var c = this.opts.closeDelimiter;
 
     if (matches && matches.length) {
       matches.forEach(function (line, index) {
@@ -13781,12 +13929,12 @@ Template.prototype = {
         var includeSrc;
         // If this is an opening tag, check for closing tags
         // FIXME: May end up with some false positives here
-        // Better to store modes as k/v with '<' + delimiter as key
+        // Better to store modes as k/v with openDelimiter + delimiter as key
         // Then this can simply check against the map
-        if ( line.indexOf('<' + d) === 0        // If it is a tag
-          && line.indexOf('<' + d + d) !== 0) { // and is not escaped
+        if ( line.indexOf(o + d) === 0        // If it is a tag
+          && line.indexOf(o + d + d) !== 0) { // and is not escaped
           closing = matches[index + 2];
-          if (!(closing == d + '>' || closing == '-' + d + '>' || closing == '_' + d + '>')) {
+          if (!(closing == d + c || closing == '-' + d + c || closing == '_' + d + c)) {
             throw new Error('Could not find matching close tag for "' + line + '".');
           }
         }
@@ -13794,7 +13942,7 @@ Template.prototype = {
         if ((include = line.match(/^\s*include\s+(\S+)/))) {
           opening = matches[index - 1];
           // Must be in EVAL or RAW mode
-          if (opening && (opening == '<' + d || opening == '<' + d + '-' || opening == '<' + d + '_')) {
+          if (opening && (opening == o + d || opening == o + d + '-' || opening == o + d + '_')) {
             includeOpts = utils.shallowCopy({}, self.opts);
             includeObj = includeSource(include[1], includeOpts);
             if (self.opts.compileDebug) {
@@ -13862,11 +14010,6 @@ Template.prototype = {
       line = line.replace(/^(?:\r\n|\r|\n)/, '');
       this.truncate = false;
     }
-    else if (this.opts.rmWhitespace) {
-      // rmWhitespace has already removed trailing spaces, just need
-      // to remove linebreaks
-      line = line.replace(/^\n/, '');
-    }
     if (!line) {
       return line;
     }
@@ -13887,35 +14030,37 @@ Template.prototype = {
   scanLine: function (line) {
     var self = this;
     var d = this.opts.delimiter;
+    var o = this.opts.openDelimiter;
+    var c = this.opts.closeDelimiter;
     var newLineCount = 0;
 
     newLineCount = (line.split('\n').length - 1);
 
     switch (line) {
-    case '<' + d:
-    case '<' + d + '_':
+    case o + d:
+    case o + d + '_':
       this.mode = Template.modes.EVAL;
       break;
-    case '<' + d + '=':
+    case o + d + '=':
       this.mode = Template.modes.ESCAPED;
       break;
-    case '<' + d + '-':
+    case o + d + '-':
       this.mode = Template.modes.RAW;
       break;
-    case '<' + d + '#':
+    case o + d + '#':
       this.mode = Template.modes.COMMENT;
       break;
-    case '<' + d + d:
+    case o + d + d:
       this.mode = Template.modes.LITERAL;
-      this.source += '    ; __append("' + line.replace('<' + d + d, '<' + d) + '")' + '\n';
+      this.source += '    ; __append("' + line.replace(o + d + d, o + d) + '")' + '\n';
       break;
-    case d + d + '>':
+    case d + d + c:
       this.mode = Template.modes.LITERAL;
-      this.source += '    ; __append("' + line.replace(d + d + '>', d + '>') + '")' + '\n';
+      this.source += '    ; __append("' + line.replace(d + d + c, d + c) + '")' + '\n';
       break;
-    case d + '>':
-    case '-' + d + '>':
-    case '_' + d + '>':
+    case d + c:
+    case '-' + d + c:
+    case '_' + d + c:
       if (this.mode == Template.modes.LITERAL) {
         this._addOutput(line);
       }
@@ -14196,6 +14341,9 @@ exports.cache = {
   get: function (key) {
     return this._data[key];
   },
+  remove: function (key) {
+    delete this._data[key];
+  },
   reset: function () {
     this._data = {};
   }
@@ -14203,30 +14351,31 @@ exports.cache = {
 
 },{}],69:[function(require,module,exports){
 module.exports={
-  "_from": "ejs@^2.6.1",
-  "_id": "ejs@2.6.1",
+  "_from": "ejs@2.6.2",
+  "_id": "ejs@2.6.2",
   "_inBundle": false,
-  "_integrity": "sha512-0xy4A/twfrRCnkhfk8ErDi5DqdAsAqeGxht4xkCUrsvhhbQNs7E+4jV0CN7+NKIY0aHE72+XvqtBIXzD31ZbXQ==",
+  "_integrity": "sha512-PcW2a0tyTuPHz3tWyYqtK6r1fZ3gp+3Sop8Ph+ZYN81Ob5rwmbHEzaqs10N3BEsaGTkh/ooniXK+WwszGlc2+Q==",
   "_location": "/ejs",
   "_phantomChildren": {},
   "_requested": {
-    "type": "range",
+    "type": "version",
     "registry": true,
-    "raw": "ejs@^2.6.1",
+    "raw": "ejs@2.6.2",
     "name": "ejs",
     "escapedName": "ejs",
-    "rawSpec": "^2.6.1",
+    "rawSpec": "2.6.2",
     "saveSpec": null,
-    "fetchSpec": "^2.6.1"
+    "fetchSpec": "2.6.2"
   },
   "_requiredBy": [
+    "#USER",
     "/",
     "/langbank"
   ],
-  "_resolved": "https://registry.npmjs.org/ejs/-/ejs-2.6.1.tgz",
-  "_shasum": "498ec0d495655abc6f23cd61868d926464071aa0",
-  "_spec": "ejs@^2.6.1",
-  "_where": "/mydoc_TomK/Dropbox/localhosts/broccoliHtmlEditorProjects/broccoli-html-editor/broccoli-html-editor",
+  "_resolved": "https://registry.npmjs.org/ejs/-/ejs-2.6.2.tgz",
+  "_shasum": "3a32c63d1cd16d11266cd4703b14fec4e74ab4f6",
+  "_spec": "ejs@2.6.2",
+  "_where": "/mydoc_TomK/projs/broccoli-html-editor/broccoli-html-editor/broccoli-html-editor",
   "author": {
     "name": "Matthew Eernisse",
     "email": "mde@fleegix.org",
@@ -14280,7 +14429,7 @@ module.exports={
     "lint": "eslint \"**/*.js\" Jakefile",
     "test": "jake test"
   },
-  "version": "2.6.1"
+  "version": "2.6.2"
 }
 
 },{}],70:[function(require,module,exports){
@@ -58797,8 +58946,20 @@ token.value=token.match[1];output.push(token)},parse:function(token,stack,contex
 
 var required = require('requires-port')
   , qs = require('querystringify')
+  , slashes = /^[A-Za-z][A-Za-z0-9+-.]*:\/\//
   , protocolre = /^([a-z][a-z0-9.+-]*:)?(\/\/)?([\S\s]*)/i
-  , slashes = /^[A-Za-z][A-Za-z0-9+-.]*:\/\//;
+  , whitespace = '[\\x09\\x0A\\x0B\\x0C\\x0D\\x20\\xA0\\u1680\\u180E\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200A\\u202F\\u205F\\u3000\\u2028\\u2029\\uFEFF]'
+  , left = new RegExp('^'+ whitespace +'+');
+
+/**
+ * Trim a given string.
+ *
+ * @param {String} str String to trim.
+ * @public
+ */
+function trimLeft(str) {
+  return (str ? str : '').toString().replace(left, '');
+}
 
 /**
  * These are the parse rules for the URL parser, it informs the parser
@@ -58897,6 +59058,7 @@ function lolcation(loc) {
  * @private
  */
 function extractProtocol(address) {
+  address = trimLeft(address);
   var match = protocolre.exec(address);
 
   return {
@@ -58915,6 +59077,8 @@ function extractProtocol(address) {
  * @private
  */
 function resolve(relative, base) {
+  if (relative === '') return base;
+
   var path = (base || '/').split('/').slice(0, -1).concat(relative.split('/'))
     , i = path.length
     , last = path[i - 1]
@@ -58955,6 +59119,8 @@ function resolve(relative, base) {
  * @private
  */
 function Url(address, location, parser) {
+  address = trimLeft(address);
+
   if (!(this instanceof Url)) {
     return new Url(address, location, parser);
   }
@@ -59222,6 +59388,7 @@ Url.prototype = { set: set, toString: toString };
 //
 Url.extractProtocol = extractProtocol;
 Url.location = lolcation;
+Url.trimLeft = trimLeft;
 Url.qs = qs;
 
 module.exports = Url;
