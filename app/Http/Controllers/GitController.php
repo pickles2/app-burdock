@@ -26,6 +26,8 @@ class GitController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(Request $request, Project $project, $branch_name){
+		$user = Auth::user();
+
 		if( !strlen($branch_name) ){
 			$branch_name = \get_git_remote_default_branch_name($project->git_url);
 		}
@@ -37,6 +39,7 @@ class GitController extends Controller
 			[
 				'project' => $project,
 				'branch_name' => $branch_name,
+				'user' => $user,
 			]
 		);
 	}

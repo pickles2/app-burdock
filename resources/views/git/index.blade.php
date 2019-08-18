@@ -64,7 +64,12 @@ window.contApp = new (function(){
 				}
 			});
 
-		}, {} );
+		}, {
+			committer: {
+				name: "{{ $user->name }}",
+				email: "{{ $user->email }}"
+			}
+		} );
 		gitUi79.init(function(){
 			console.log('gitUi79: Standby.');
 		});
