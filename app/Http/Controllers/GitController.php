@@ -55,43 +55,14 @@ class GitController extends Controller
 	}
 
 	/**
-	 * git-pull
+	 * git command
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function gitPull(Request $request, Project $project, $branch_name){
+	public function gitCommand(Request $request, Project $project, $branch_name){
 		$git = new \pickles2\burdock\git($project->id, $branch_name);
 		$rtn = array();
-		array_push($rtn, $git->git('pull origin'));
-		header('Content-type: application/json');
-		return json_encode($rtn);
-	}
-
-	/**
-	 * git-commit
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function gitCommit(Request $request, Project $project, $branch_name){
-		$git = new \pickles2\burdock\git($project->id, $branch_name);
-		$rtn = array();
-		array_push($rtn, $git->git('add ./'));
-		$cmd_commit = 'commit -m "test commit"';
-		$cmd_commit = 'commit -m '.escapeshellarg($request->commit_message);
-		array_push($rtn, $git->git($cmd_commit));
-		header('Content-type: application/json');
-		return json_encode($rtn);
-	}
-
-	/**
-	 * git-push
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function gitPush(Request $request, Project $project, $branch_name){
-		$git = new \pickles2\burdock\git($project->id, $branch_name);
-		$rtn = array();
-		array_push($rtn, $git->git('push origin'));
+		array_push( $rtn, $git->git( $request->command_ary ) );
 		header('Content-type: application/json');
 		return json_encode($rtn);
 	}
