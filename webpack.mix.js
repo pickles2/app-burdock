@@ -11,11 +11,19 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
+mix
+	// Project Common Scripts
+	.js('resources/js/app.js', 'public/js')
 	.sass('resources/sass/app.scss', 'public/css')
+
+	// Project Local Resources
+	.sass('resources/cont/publish/style.scss', 'public/cont/publish/style.css')
+
+	// Static Frontend Libraries
 	.copyDirectory('vendor/pickles2/px2style/dist', 'public/common/px2style/dist')
 	.copyDirectory('vendor/pickles2/lib-plum/res', 'public/common/lib-plum/res')
 	.copyDirectory('vendor/pickles2/lib-indigo/res', 'public/common/lib-indigo/res')
 	.copyDirectory('vendor/tomk79/remote-finder/dist', 'public/common/remote-finder/dist')
-	.sass('resources/cont/publish/style.scss', 'public/cont/publish/style.css')
+	.copyDirectory('submodules/gitui79.js/dist', 'public/common/gitui79/dist')
+	.copyDirectory('submodules/node-git-parser/dist', 'public/common/gitparse79/dist')
 ;
