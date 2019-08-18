@@ -21,11 +21,30 @@ class git{
 		$this->branch_name = $branch_name;
 	}
 
+	/**
+	 * Gitコマンドを実行する
+	 */
 	public function git( $git_sub_command ){
-		$cmd = $git_sub_command;
-		if( is_array($git_sub_command) ){
-			$cmd = implode(' ', $git_sub_command);
+		if( !is_array($git_sub_command) ){
+			return array(
+				'stdout' => '',
+				'stderr' => 'Internal Error: Invalid arguments are given.',
+				'return' => 1,
+			);
 		}
+
+		if( !$this->is_valid_command($git_sub_command) ){
+			return array(
+				'stdout' => '',
+				'stderr' => 'Internal Error: Command not permitted.',
+				'return' => 1,
+			);
+		}
+
+		foreach($git_sub_command as $idx=>$git_sub_command_row){
+			$git_sub_command[$idx] = escapeshellarg($git_sub_command_row);
+		}
+		$cmd = implode(' ', $git_sub_command);
 
 		$realpath_pj_git_root = \get_project_workingtree_dir($this->project->project_code, $this->branch_name);
 
@@ -38,6 +57,7 @@ class git{
 			1 => array('pipe','w'),
 			2 => array('pipe','w'),
 		), $pipes);
+
 		$io = array();
 		foreach($pipes as $idx=>$pipe){
 			$io[$idx] = stream_get_contents($pipe);
@@ -55,4 +75,42 @@ class git{
 		);
 	}
 
+	/**
+	 * Gitコマンドに不正がないか確認する
+	 */
+	private function is_valid_command( $git_sub_command ){
+
+		if( !is_array($git_sub_command) ){
+			// 配列で受け取る
+			return false;
+		}
+
+		// 許可されたコマンド
+		switch( $git_sub_command[0] ){
+			case 'config':
+			case 'status':
+			case 'branch':
+			case 'log':
+			case 'show':
+			case 'remote':
+			case 'checkout':
+			case 'add':
+			case 'commit':
+			case 'push':
+			case 'pull':
+				break;
+			default:
+				return false;
+				break;
+		}
+
+		// 不正なオプション
+		foreach( $git_sub_command as $git_sub_command_row ){
+			if( preg_match( '/^\-\-output(?:\=.*)?$/', $git_sub_command_row ) ){
+				return false;
+			}
+		}
+
+		return true;
+	}
 }
