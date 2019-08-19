@@ -90,6 +90,7 @@ Route::get('publish/{project}/{branch_name}/publishReportDownload', 'PublishCont
 // --------------------------------------
 // Git
 Route::get('git/{project}/{branch_name}', 'GitController@index');
+Route::post('git/{project}/{branch_name}/git', 'GitController@gitCommand');
 Route::get('git/{project}/{branch_name}/git-status', 'GitController@gitStatus');
 Route::post('git/{project}/{branch_name}/git-pull', 'GitController@gitPull');
 Route::post('git/{project}/{branch_name}/git-commit', 'GitController@gitCommit');
