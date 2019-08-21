@@ -95,6 +95,7 @@ Route::get('publish/{project}/{branch_name}/publishReportDownload', 'PublishCont
 // --------------------------------------
 // Git
 Route::get('git/{project}/{branch_name}', 'GitController@index');
+Route::post('git/{project}/{branch_name}/git', 'GitController@gitCommand');
 Route::get('git/{project}/{branch_name}/git-status', 'GitController@gitStatus');
 Route::post('git/{project}/{branch_name}/git-pull', 'GitController@gitPull');
 Route::post('git/{project}/{branch_name}/git-commit', 'GitController@gitCommit');
@@ -119,5 +120,7 @@ Route::match(['get', 'post'], 'delivery/{project}/{branch_name}/indigoAjaxAPI', 
 // ファイルとフォルダ (remote-finder)
 Route::get('files-and-folders/{project}/{branch_name}', 'FilesAndFoldersController@index');
 Route::post('files-and-folders/{project}/{branch_name}/gpi', 'FilesAndFoldersController@remoteFinderGPI');
+Route::get('files-and-folders/{project}/{branch_name}/common-file-editor', 'FilesAndFoldersController@commonFileEditor');
+Route::post('files-and-folders/{project}/{branch_name}/common-file-editor/gpi', 'FilesAndFoldersController@commonFileEditorGPI');
 
 // --------------------------------------

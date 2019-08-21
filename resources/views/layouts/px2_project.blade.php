@@ -13,9 +13,17 @@
 	<meta name="description" content="">
 	<!-- jQuery -->
 	<script src="/common/scripts/jquery-2.2.4.min.js" type="text/javascript"></script>
+
+    @if (isset($bootstrap) && $bootstrap == 4)
+	<!-- Bootstrap4 -->
+    <link rel="stylesheet" href="/common/bootstrap4/css/bootstrap.css">
+	<script src="/common/bootstrap4/js/bootstrap.min.js"></script>
+    @else
 	<!-- Bootstrap -->
-	<link rel="stylesheet" href="/common/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/common/bootstrap/css/bootstrap.css">
 	<script src="/common/bootstrap/js/bootstrap.min.js"></script>
+    @endif
+
 	<!-- normalize & FESS -->
 	<link rel="stylesheet" href="/common/styles/contents.css" type="text/css">
 	<link rel="stylesheet" href="/common/styles/fess.css" type="text/css">
