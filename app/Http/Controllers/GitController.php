@@ -37,6 +37,7 @@ class GitController extends Controller
 		return view(
 			'git.index',
 			[
+				'bootstrap' => 4,
 				'project' => $project,
 				'branch_name' => $branch_name,
 				'user' => $user,

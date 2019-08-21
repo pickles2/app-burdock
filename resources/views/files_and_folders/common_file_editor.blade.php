@@ -60,6 +60,9 @@
 							callback(data);
 						}
 					});
+				},
+				"onemptytab": function(){
+					window.close();
 				}
 			}
 		);

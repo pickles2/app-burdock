@@ -27,7 +27,14 @@ class FilesAndFoldersController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(Request $request, Project $project, $branch_name){
-		return view('files_and_folders.index', ['project' => $project, 'branch_name' => $branch_name]);
+		return view(
+			'files_and_folders.index',
+			[
+				'bootstrap' => 4,
+				'project' => $project,
+				'branch_name' => $branch_name
+			]
+		);
 	}
 
 
@@ -67,6 +74,7 @@ class FilesAndFoldersController extends Controller
 		return view(
 			'files_and_folders.common_file_editor',
 			[
+				'bootstrap' => 4,
 				'project' => $project,
 				'branch_name' => $branch_name,
 				'filename' => $filename
