@@ -191,29 +191,21 @@
 
 								new Promise(function(rlv){rlv();})
 									.then(function(){ return new Promise(function(rlv, rjt){
-										_pj.execPx2(
-											current_dir+filename+'?PX=px2dthelper.get.all',
-											{
-												complete: function(resources){
-													try{
-														resources = JSON.parse(resources);
-													}catch(e){
-														console.error('Failed to parse JSON "client_resources".', e);
-													}
-													// console.log(resources);
-													pageInfoAll = resources;
-													rlv();
-												}
-											}
-										);
+										fs('px_command', current_dir+filename, {px_command: 'px2dthelper.get.all'}, function(result){
+											pageInfoAll = result.result;
+											rlv();
+										});
 										return;
 									}); })
 									.then(function(){ return new Promise(function(rlv, rjt){
 										if( filename.match(/\.html?$/i) && $body.find('[name=is_guieditor]:checked').val() ){
 											// GUI編集モードが有効
 											var realpath_data_dir = pageInfoAll.realpath_data_dir;
-											px.fsEx.mkdirpSync( realpath_data_dir );
-											px.fs.writeFileSync( realpath_data_dir+'data.json', '{}' );
+											fs('mkdir', realpath_data_dir, {}, function(result){
+												fs('write', realpath_data_dir+'data.json', {bin: '{}'}, function(result){
+													rlv();
+												});
+											});
 										}
 										rlv();
 										return;
@@ -237,8 +229,10 @@
 					var pageInfoAll;
 					new Promise(function(rlv){rlv();})
 						.then(function(){ return new Promise(function(rlv, rjt){
-							is_file = px.utils79.is_file( _pj.get('path')+copyFrom );
-							rlv();
+							fs('is_file', copyFrom, {}, function(result){
+								is_file = result.result;
+								rlv();
+							});
 							return;
 						}); })
 						.then(function(){ return new Promise(function(rlv, rjt){
@@ -246,21 +240,10 @@
 								rlv();
 								return;
 							}
-							_pj.execPx2(
-								copyFrom+'?PX=px2dthelper.get.all',
-								{
-									complete: function(resources){
-										try{
-											resources = JSON.parse(resources);
-										}catch(e){
-											console.error('Failed to parse JSON "client_resources".', e);
-										}
-										console.log(resources);
-										pageInfoAll = resources;
-										rlv();
-									}
-								}
-							);
+							fs('px_command', copyFrom, {px_command: 'px2dthelper.get.all'}, function(result){
+								pageInfoAll = result.result;
+								rlv();
+							});
 							return;
 						}); })
 						.then(function(){ return new Promise(function(rlv, rjt){
@@ -293,26 +276,20 @@
 											.then(function(){ return new Promise(function(rlv, rjt){
 												if( is_file && $body.find('[name=is_copy_files_too]:checked').val() ){
 													// リソースも一緒に複製する
-													_pj.execPx2(
-														copyTo+'?PX=px2dthelper.get.all',
-														{
-															complete: function(resources){
-																try{
-																	resources = JSON.parse(resources);
-																}catch(e){
-																	console.error('Failed to parse JSON "client_resources".', e);
-																}
-																// console.log(resources);
-
-																var realpath_files_from = pageInfoAll.realpath_files;
-																var realpath_files_to = resources.realpath_files;
-																if(px.utils79.is_dir(realpath_files_from)){
-																	px.fsEx.copySync( realpath_files_from, realpath_files_to );
-																}
-																rlv();
+													fs('px_command', copyTo, {px_command: 'px2dthelper.get.all'}, function(result){
+														resources = result.result;
+														var realpath_files_from = pageInfoAll.realpath_files;
+														var realpath_files_to = resources.realpath_files;
+														fs('is_dir', realpath_files_from, {}, function(result){
+															if(result.result){
+																fs('copy', realpath_files_from, {to: realpath_files_to}, function(result){
+																	rlv();
+																});
+																return;
 															}
-														}
-													);
+															rlv();
+														});
+													});
 													return;
 												}
 												rlv();
@@ -340,8 +317,10 @@
 					var pageInfoAll;
 					new Promise(function(rlv){rlv();})
 						.then(function(){ return new Promise(function(rlv, rjt){
-							is_file = px.utils79.is_file( _pj.get('path')+renameFrom );
-							rlv();
+							fs('is_file', renameFrom, {}, function(result){
+								is_file = result.result;
+								rlv();
+							});
 							return;
 						}); })
 						.then(function(){ return new Promise(function(rlv, rjt){
@@ -349,21 +328,10 @@
 								rlv();
 								return;
 							}
-							_pj.execPx2(
-								renameFrom+'?PX=px2dthelper.get.all',
-								{
-									complete: function(resources){
-										try{
-											resources = JSON.parse(resources);
-										}catch(e){
-											console.error('Failed to parse JSON "client_resources".', e);
-										}
-										console.log(resources);
-										pageInfoAll = resources;
-										rlv();
-									}
-								}
-							);
+							fs('px_command', renameFrom, {px_command: 'px2dthelper.get.all'}, function(result){
+								pageInfoAll = result.result;
+								rlv();
+							});
 							return;
 						}); })
 						.then(function(){ return new Promise(function(rlv, rjt){
@@ -396,26 +364,21 @@
 											.then(function(){ return new Promise(function(rlv, rjt){
 												if( is_file && $body.find('[name=is_rename_files_too]:checked').val() ){
 													// リソースも一緒に移動する
-													_pj.execPx2(
-														renameTo+'?PX=px2dthelper.get.all',
-														{
-															complete: function(resources){
-																try{
-																	resources = JSON.parse(resources);
-																}catch(e){
-																	console.error('Failed to parse JSON "client_resources".', e);
-																}
-																// console.log(resources);
-
-																var realpath_files_from = pageInfoAll.realpath_files;
-																var realpath_files_to = resources.realpath_files;
-																if(px.utils79.is_dir(realpath_files_from)){
-																	px.fsEx.renameSync( realpath_files_from, realpath_files_to );
-																}
-																rlv();
+													fs('px_command', renameTo, {px_command: 'px2dthelper.get.all'}, function(result){
+														resources = result.result;
+														var realpath_files_from = pageInfoAll.realpath_files;
+														var realpath_files_to = resources.realpath_files;
+														fs('is_dir', realpath_files_from, {}, function(result){
+															if(result.result){
+																fs('rename', realpath_files_from, {to: realpath_files_to}, function(result){
+																	rlv();
+																});
+																return;
 															}
-														}
-													);
+															rlv();
+														});
+														return;
+													});
 													return;
 												}
 												rlv();
@@ -444,8 +407,10 @@
 					var pageInfoAll;
 					new Promise(function(rlv){rlv();})
 						.then(function(){ return new Promise(function(rlv, rjt){
-							is_file = px.utils79.is_file( _pj.get('path')+target_item );
-							rlv();
+							fs('is_file', target_item, {}, function(result){
+								is_file = result.result;
+								rlv();
+							});
 							return;
 						}); })
 						.then(function(){ return new Promise(function(rlv, rjt){
@@ -453,21 +418,10 @@
 								rlv();
 								return;
 							}
-							_pj.execPx2(
-								target_item+'?PX=px2dthelper.get.all',
-								{
-									complete: function(resources){
-										try{
-											resources = JSON.parse(resources);
-										}catch(e){
-											console.error('Failed to parse JSON "client_resources".', e);
-										}
-										console.log(resources);
-										pageInfoAll = resources;
-										rlv();
-									}
-								}
-							);
+							fs('px_command', target_item, {px_command: 'px2dthelper.get.all'}, function(result){
+								pageInfoAll = result.result;
+								rlv();
+							});
 							return;
 						}); })
 						.then(function(){ return new Promise(function(rlv, rjt){
@@ -497,9 +451,16 @@
 												if( is_file && $body.find('[name=is_remove_files_too]:checked').val() ){
 													// リソースも一緒に削除する
 													var realpath_files = pageInfoAll.realpath_files;
-													if(px.utils79.is_dir(realpath_files)){
-														px.fsEx.removeSync( realpath_files );
-													}
+													fs('is_dir', realpath_files, {}, function(result){
+														if(result.result){
+															fs('remove', realpath_files, {}, function(result){
+																rlv();
+															});
+															return;
+														}
+														rlv();
+													});
+													return;
 												}
 												rlv();
 												return;
@@ -526,6 +487,28 @@
 		remoteFinder.init('/', {}, function(){
 			console.log('ready.');
 		});
+
+		function fs(method, filename, options, callback){
+			callback = callback || function(){};
+			$.ajax({
+				type : 'post',
+				url : "/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/common-file-editor/gpi",
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				contentType: 'application/json',
+				dataType: 'json',
+				data: JSON.stringify({
+					'method': method,
+					'filename': filename,
+					'to': options.to,
+					'px_command': options.px_command
+				}),
+				success: function(data){
+					callback(data);
+				}
+			});
+		}
 
 	});
 </script>
