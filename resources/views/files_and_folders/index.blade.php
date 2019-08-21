@@ -42,7 +42,7 @@
 					});
 				},
 				"open": function(fileinfo, callback){
-					alert('ファイル ' + fileinfo.path + ' を開きました。');
+					window.open('/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/common-file-editor?filename='+encodeURIComponent(fileinfo.path));
 					callback(true);
 				},
 				"mkdir": function(current_dir, callback){
@@ -67,18 +67,6 @@
 						return;
 					}
 					callback();
-					return;
-				},
-				"mkdir": function(current_dir, callback){
-					var foldername = prompt('Folder name:');
-					if( !foldername ){ return; }
-					callback( foldername );
-					return;
-				},
-				"mkdir": function(current_dir, callback){
-					var foldername = prompt('Folder name:');
-					if( !foldername ){ return; }
-					callback( foldername );
 					return;
 				}
 			}
