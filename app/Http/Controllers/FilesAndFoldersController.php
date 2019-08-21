@@ -101,8 +101,12 @@ class FilesAndFoldersController extends Controller
 			$rtn['result'] = \File::put( $realpath_filename, $bin );
 
 		}elseif( $request->method == 'copy' ){
-			$realpath_copyto = $realpath_basedir.'/'.$request->to;
-			$rtn['result'] = \File::copy( $realpath_filename, $realpath_copyto );
+			$realpath_copyto = $realpath_basedir.$fs->get_realpath('/'.$request->to);
+			$rtn['result'] = $fs->copy_r( $realpath_filename, $realpath_copyto );
+
+		}elseif( $request->method == 'rename' ){
+			$realpath_copyto = $realpath_basedir.$fs->get_realpath('/'.$request->to);
+			$rtn['result'] = $fs->rename_f( $realpath_filename, $realpath_copyto );
 
 		}elseif( $request->method == 'is_file' ){
 			$rtn['result'] = is_file( $realpath_filename );

@@ -278,11 +278,11 @@
 													// リソースも一緒に複製する
 													fs('px_command', copyTo, {px_command: 'px2dthelper.get.all'}, function(result){
 														resources = result.result;
-														var realpath_files_from = pageInfoAll.realpath_files;
-														var realpath_files_to = resources.realpath_files;
-														fs('is_dir', realpath_files_from, {}, function(result){
+														var path_files_from = pageInfoAll.path_files;
+														var path_files_to = resources.path_files;
+														fs('is_dir', path_files_from, {}, function(result){
 															if(result.result){
-																fs('copy', realpath_files_from, {to: realpath_files_to}, function(result){
+																fs('copy', path_files_from, {to: path_files_to}, function(result){
 																	rlv();
 																});
 																return;
@@ -366,11 +366,11 @@
 													// リソースも一緒に移動する
 													fs('px_command', renameTo, {px_command: 'px2dthelper.get.all'}, function(result){
 														resources = result.result;
-														var realpath_files_from = pageInfoAll.realpath_files;
-														var realpath_files_to = resources.realpath_files;
-														fs('is_dir', realpath_files_from, {}, function(result){
+														var path_files_from = pageInfoAll.path_files;
+														var path_files_to = resources.path_files;
+														fs('is_dir', path_files_from, {}, function(result){
 															if(result.result){
-																fs('rename', realpath_files_from, {to: realpath_files_to}, function(result){
+																fs('rename', path_files_from, {to: path_files_to}, function(result){
 																	rlv();
 																});
 																return;
@@ -390,7 +390,6 @@
 												return;
 											}); })
 										;
-
 									}
 								},
 								'width': 460
@@ -450,10 +449,10 @@
 											.then(function(){ return new Promise(function(rlv, rjt){
 												if( is_file && $body.find('[name=is_remove_files_too]:checked').val() ){
 													// リソースも一緒に削除する
-													var realpath_files = pageInfoAll.realpath_files;
-													fs('is_dir', realpath_files, {}, function(result){
+													var path_files = pageInfoAll.path_files;
+													fs('is_dir', path_files, {}, function(result){
 														if(result.result){
-															fs('remove', realpath_files, {}, function(result){
+															fs('remove', path_files, {}, function(result){
 																rlv();
 															});
 															return;
@@ -502,7 +501,8 @@
 					'method': method,
 					'filename': filename,
 					'to': options.to,
-					'px_command': options.px_command
+					'px_command': options.px_command,
+					'bin': options.bin
 				}),
 				success: function(data){
 					callback(data);
