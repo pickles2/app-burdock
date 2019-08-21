@@ -200,12 +200,10 @@
 									.then(function(){ return new Promise(function(rlv, rjt){
 										if( filename.match(/\.html?$/i) && $body.find('[name=is_guieditor]:checked').val() ){
 											// GUI編集モードが有効
-											var realpath_data_dir = pageInfoAll.realpath_data_dir;
-											fs('mkdir', realpath_data_dir, {}, function(result){
-												fs('write', realpath_data_dir+'data.json', {bin: '{}'}, function(result){
-													rlv();
-												});
+											fs('initialize_data_dir', current_dir+filename, {}, function(result){
+												rlv();
 											});
+											return;
 										}
 										rlv();
 										return;

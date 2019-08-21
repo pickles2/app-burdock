@@ -84,6 +84,9 @@ class FilesAndFoldersController extends Controller
 		$realpath_basedir = get_project_workingtree_dir($project->project_code, $branch_name);
 		$rtn = array();
 		$filename = $fs->get_realpath('/'.$request->filename);
+		if( !strlen($filename) ){
+			return json_encode(false);
+		}
 		$realpath_filename = $realpath_basedir.$filename;
 
 
@@ -123,6 +126,17 @@ class FilesAndFoldersController extends Controller
 		}elseif( $request->method == 'px_command' ){
 			$command = (strlen($filename)?$filename:'/').'?PX='.urlencode($request->px_command);
 			$rtn['result'] = get_px_execute($project->project_code, $branch_name, $command);
+
+		}elseif( $request->method == 'initialize_data_dir' ){
+			$command = (strlen($filename)?$filename:'/').'?PX=px2dthelper.get.all';
+			$json = get_px_execute($project->project_code, $branch_name, $command);
+
+			$rtn['result'] = false;
+			if( $fs->mkdir_r( $json->realpath_data_dir ) ){
+				if( $fs->save_file( $json->realpath_data_dir.'data.json', '{}' ) ){
+					$rtn['result'] = true;
+				}
+			}
 
 		}
 
