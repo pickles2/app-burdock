@@ -26,4 +26,5 @@ mix
 	.copyDirectory('vendor/tomk79/remote-finder/dist', 'public/common/remote-finder/dist')
 	.copyDirectory('submodules/gitui79.js/dist', 'public/common/gitui79/dist')
 	.copyDirectory('submodules/node-git-parser/dist', 'public/common/gitparse79/dist')
+	.copyDirectory('submodules/common-file-editor/dist', 'public/common/common-file-editor/dist')
 ;
