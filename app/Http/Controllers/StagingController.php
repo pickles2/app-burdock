@@ -28,7 +28,11 @@ class StagingController extends Controller
 	 */
 	public function index(Request $request, Project $project, $branch_name){
 
+		$fs = new \tomk79\filesystem();
+
 		$realpath_pj_git_root = env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/stagings/master/';
+		$fs->mkdir_r($realpath_pj_git_root);
+		$fs->mkdir_r(env('BD_DATA_DIR').'/stagings/');
 
 		$preview_server = array();
 		for( $i = 1; $i <= 10; $i ++ ){
