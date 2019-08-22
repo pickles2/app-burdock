@@ -28,14 +28,18 @@ class StagingController extends Controller
 	 */
 	public function index(Request $request, Project $project, $branch_name){
 
+		$fs = new \tomk79\filesystem();
+
 		$realpath_pj_git_root = env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/stagings/master/';
+		$fs->mkdir_r($realpath_pj_git_root);
+		$fs->mkdir_r(env('BD_DATA_DIR').'/stagings/');
 
 		$preview_server = array();
 		for( $i = 1; $i <= 10; $i ++ ){
 			array_push($preview_server, array(
 				'name' => 'stg'.$i.'',
-				'path' => env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/stagings/previews/stg'.$i.'/',
-				'url' => 'http'.($_SERVER["HTTPS"] ? 's' : '').'://stg'.$i.'.'.urlencode($project->project_code).'.'.env('BD_PLUM_STAGING_DOMAIN').'/',
+				'path' => env('BD_DATA_DIR').'/stagings/'.urlencode($project->project_code).'---stg'.$i.'/',
+				'url' => 'http'.($_SERVER["HTTPS"] ? 's' : '').'://'.urlencode($project->project_code).'---stg'.$i.'.'.env('BD_PLUM_STAGING_DOMAIN').'/',
 			));
 		}
 
