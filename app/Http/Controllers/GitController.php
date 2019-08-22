@@ -57,6 +57,9 @@ class GitController extends Controller
 		if( count($git_command_array) == 1 && $git_command_array[0] == 'branch' ){
 			// `git branch` のフェイク
 			array_push( $rtn, $this->gitFake_branch($git, $git_command_array) );
+		}elseif( count($git_command_array) == 3 && $git_command_array[0] == 'checkout' && $git_command_array[1] == '-b' ){
+			// `git checkout -b branchname` のフェイク
+			array_push( $rtn, $this->gitFake_checkout_b($git, $git_command_array) );
 		}else{
 			array_push( $rtn, $git->git( $git_command_array ) );
 		}
@@ -82,6 +85,30 @@ class GitController extends Controller
 
 		$cmd_result = array(
 			'stdout' => trim($stdout),
+			'stderr' => '',
+			'return' => 0,
+		);
+		return $cmd_result;
+	}
+
+	/**
+	 * `git checkout -b branchname` のフェイク処理
+	 */
+	private function gitFake_checkout_b($git, $git_command_array){
+		$fs = new \tomk79\filesystem();
+		$new_branch_name = $git_command_array[2];
+
+		$realpath_pj_git_root = $fs->get_realpath( \get_project_workingtree_dir($git->get_project_code(), $git->get_branch_name()) );
+		$realpath_pj_git_new_branch_root = $fs->get_realpath( \get_project_workingtree_dir($git->get_project_code(), $new_branch_name) );
+
+		$fs->copy_r($realpath_pj_git_root, $realpath_pj_git_new_branch_root);
+
+		$newGit = new \pickles2\burdock\git($git->get_project_id(), $new_branch_name);
+		$result = $newGit->git(['checkout', '-b', $new_branch_name]);
+		$result = $newGit->git(['branch', '--delete', $git->get_branch_name()]);
+
+		$cmd_result = array(
+			'stdout' => 'Switched to a new branch \''.$new_branch_name.'\''."\n",
 			'stderr' => '',
 			'return' => 0,
 		);
