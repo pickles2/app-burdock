@@ -60,9 +60,13 @@ class GitController extends Controller
 		}elseif( count($git_command_array) == 3 && $git_command_array[0] == 'checkout' && $git_command_array[1] == '-b' ){
 			// `git checkout -b branchname` のフェイク
 			array_push( $rtn, $this->gitFake_checkout_b($git, $git_command_array) );
+		}elseif( count($git_command_array) == 3 && $git_command_array[0] == 'branch' && $git_command_array[1] == '--delete' ){
+			// `git branch --delete branchname` のフェイク
+			array_push( $rtn, $this->gitFake_branch_delete($git, $git_command_array) );
 		}else{
 			array_push( $rtn, $git->git( $git_command_array ) );
 		}
+		// array_push( $rtn, $git->git( $git_command_array ) );
 		header('Content-type: application/json');
 		return json_encode($rtn);
 	}
@@ -101,14 +105,37 @@ class GitController extends Controller
 		$realpath_pj_git_root = $fs->get_realpath( \get_project_workingtree_dir($git->get_project_code(), $git->get_branch_name()) );
 		$realpath_pj_git_new_branch_root = $fs->get_realpath( \get_project_workingtree_dir($git->get_project_code(), $new_branch_name) );
 
+		// ひとまず複製
 		$fs->copy_r($realpath_pj_git_root, $realpath_pj_git_new_branch_root);
 
 		$newGit = new \pickles2\burdock\git($git->get_project_id(), $new_branch_name);
+		$result = $newGit->git(['checkout', 'HEAD', '--', './']);
 		$result = $newGit->git(['checkout', '-b', $new_branch_name]);
 		$result = $newGit->git(['branch', '--delete', $git->get_branch_name()]);
 
 		$cmd_result = array(
 			'stdout' => 'Switched to a new branch \''.$new_branch_name.'\''."\n",
+			'stderr' => '',
+			'return' => 0,
+		);
+		return $cmd_result;
+	}
+
+	/**
+	 * `git branch --delete branchname` のフェイク処理
+	 */
+	private function gitFake_branch_delete($git, $git_command_array){
+		$fs = new \tomk79\filesystem();
+		$target_branch_name = $git_command_array[2];
+
+		$realpath_pj_git_root = $fs->get_realpath( \get_project_workingtree_dir($git->get_project_code(), $git->get_branch_name()) );
+		$realpath_pj_git_target_branch_root = $fs->get_realpath( \get_project_workingtree_dir($git->get_project_code(), $target_branch_name) );
+
+		// ディレクトリごと削除
+		$fs->rm($realpath_pj_git_target_branch_root);
+
+		$cmd_result = array(
+			'stdout' => 'Deleted branch '.$target_branch_name.' (was 0000000).'."\n",
 			'stderr' => '',
 			'return' => 0,
 		);
