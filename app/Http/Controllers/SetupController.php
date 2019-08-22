@@ -29,8 +29,9 @@ class SetupController extends Controller
 		//
 		$fs = new \tomk79\filesystem;
 		$project_name = $project->project_code;
-		$project_path = get_project_workingtree_dir($project_name, $branch_name);
-		$setup_log_file = dirname($project_path).'/setup_log.csv';
+		$project_data_path = get_project_dir($project_name);
+		$project_working_tree_path = get_project_workingtree_dir($project_name, $branch_name);
+		$setup_log_file = $project_data_path.'/setup_log.csv';
 
 		if(\File::exists($setup_log_file)) {
 			$exists_setup_log = true;

@@ -36,16 +36,18 @@ class SetupController extends Controller
 		$project_name = '';
 
 		$project_code = $project->project_code;
-		$project_path = get_project_workingtree_dir($project_code, $branch_name);
+		$project_data_path = get_project_dir($project_code);
+		$project_workingtree_path = get_project_workingtree_dir($project_code, $branch_name);
 		$path_composer = realpath(__DIR__.'/../../../common/composer/composer.phar');
-		$setup_log_file = dirname($project_path).'/setup_log.csv';
+		$setup_log_file = $project_data_path.'/setup_log.csv';
 		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
 
 		// 再セットアップ時はディレクトリ内を削除してから処理に入る
 		if($request->restart === 1) {
-			\File::deleteDirectory($project_path);
+			\File::deleteDirectory($project_workingtree_path);
 		}
-		\File::makeDirectory($project_path, 0777, true, true);
+		\File::makeDirectory($project_data_path, 0777, true, true);
+		\File::makeDirectory($project_workingtree_path, 0777, true, true);
 
 		// 作成するログファイルを$csvに代入
 		$csv = array(
@@ -67,7 +69,7 @@ class SetupController extends Controller
 
 		if($checked_option === 'pickles2') {
 			$cmd = 'php '.$path_composer.' create-project pickles2/preset-get-start-pickles2 ./';
-			chdir($project_path);
+			chdir($project_workingtree_path);
 		} else {
 			$git_url_plus_auth = $repository;
 			$cmd = '';
@@ -88,8 +90,8 @@ class SetupController extends Controller
 					$git_url_plus_auth .= '?'.$parsed_git_url['query'];
 				}
 			}
-			chdir($project_path);
-			if(\File::cleanDirectory($project_path)) {
+			chdir($project_workingtree_path);
+			if(\File::cleanDirectory($project_workingtree_path)) {
 				// shell_exec('rm .DS_Store');
 				// clone するときは認証情報が必要なので、
 				// 認証情報付きのURLで実行する
@@ -165,11 +167,11 @@ class SetupController extends Controller
 		proc_close($proc);
 
 		// px_execute.phpの存在確認
-		if(\File::exists($project_path.'/'.get_px_execute_path($project_code, $branch_name))) {
+		if(\File::exists($project_workingtree_path.'/'.get_px_execute_path($project_code, $branch_name))) {
 			// ここから configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
-			if(\File::exists($project_path.'/'.get_path_homedir($project->project_code, $branch_name).'config.php')) {
+			if(\File::exists($project_workingtree_path.'/'.get_path_homedir($project->project_code, $branch_name).'config.php')) {
 				$files = null;
-				$file = file($project_path.'/'.get_path_homedir($project->project_code, $branch_name).'config.php');
+				$file = file($project_workingtree_path.'/'.get_path_homedir($project->project_code, $branch_name).'config.php');
 				for($i = 0; $i < count($file); $i++) {
 					if(strpos($file[$i], "'master_format'=>'xlsx'") !== false) {
 						$files .= str_replace('xlsx', 'timestamp', $file[$i]);
@@ -177,13 +179,13 @@ class SetupController extends Controller
 						$files .= $file[$i];
 					}
 				}
-				file_put_contents($project_path.'/'.get_path_homedir($project->project_code, $branch_name).'config.php', $files);
+				file_put_contents($project_workingtree_path.'/'.get_path_homedir($project->project_code, $branch_name).'config.php', $files);
 			}
 
 			// ここから .htaccessの一部をweb版用に修正
-			if(\File::exists($project_path.'/.htaccess')) {
+			if(\File::exists($project_workingtree_path.'/.htaccess')) {
 				$files = null;
-				$file = file($project_path.'/.htaccess');
+				$file = file($project_workingtree_path.'/.htaccess');
 				for($i = 0; $i < count($file); $i++) {
 					if(strpos($file[$i], "\.px_execute\.php/") !== false) {
 						$files .= str_replace('\.px_execute\.php/', '/\.px_execute\.php/', $file[$i]);
@@ -191,7 +193,7 @@ class SetupController extends Controller
 						$files .= $file[$i];
 					}
 				}
-				file_put_contents($project_path.'/.htaccess', $files);
+				file_put_contents($project_workingtree_path.'/.htaccess', $files);
 			}
 
 			// ここから composr install
@@ -276,11 +278,12 @@ class SetupController extends Controller
 		}
 		$git_url_plus_auth = $repository;
 		$project_code = $project->project_code;
-		$project_path = get_project_workingtree_dir($project_code, $branch_name);
-		$setup_log_file = dirname($project_path).'/setup_log.csv';
+		$project_data_path = get_project_dir($project_code);
+		$project_workingtree_path = get_project_workingtree_dir($project_code, $branch_name);
+		$setup_log_file = $project_data_path.'/setup_log.csv';
 		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
 
-		chdir($project_path);
+		chdir($project_workingtree_path);
 
 		// 作成するログファイルを$csvに代入
 		$csv = array(
@@ -301,10 +304,10 @@ class SetupController extends Controller
 		fclose($new_csv);
 
 		// ここから composer.jsonのnameを変更して上書き保存
-		if(\File::exists($project_path.'/composer.json')) {
+		if(\File::exists($project_workingtree_path.'/composer.json')) {
 			$name_property = $vendor_name.'/'.$project_name;
 			$files = null;
-			$file = file($project_path.'/composer.json');
+			$file = file($project_workingtree_path.'/composer.json');
 			for($i = 0; $i < count($file); $i++) {
 				if(strpos($file[$i], '"name": "pickles2/preset-get-start-pickles2"') !== false) {
 					$files .= str_replace('pickles2/preset-get-start-pickles2', $name_property, $file[$i]);
@@ -312,14 +315,14 @@ class SetupController extends Controller
 					$files .= $file[$i];
 				}
 			}
-			file_put_contents($project_path.'/composer.json', $files);
+			file_put_contents($project_workingtree_path.'/composer.json', $files);
 		}
 
 		// Git操作
 		if($checked_option === 'pickles2' && $checked_init === true || $checked_option === 'git' && $checked_repository === 'new') {
 			// .gitフォルダがあったら削除する
-			if(\File::exists($project_path.'/.git')) {
-				\File::deleteDirectory($project_path.'/.git');
+			if(\File::exists($project_workingtree_path.'/.git')) {
+				\File::deleteDirectory($project_workingtree_path.'/.git');
 			}
 			// ユーザー名とパスワードを含むGitURLを生成
 			if( strlen($user_name) ){
@@ -368,8 +371,8 @@ class SetupController extends Controller
 			shell_exec('git remote set-url origin '.escapeshellarg($git_url_plus_auth));
 		} elseif($checked_option === 'git' && $checked_repository === 'none') {
 			// .gitフォルダがあったら削除する
-			if(\File::exists($project_path.'/.git')) {
-				\File::deleteDirectory($project_path.'/.git');
+			if(\File::exists($project_workingtree_path.'/.git')) {
+				\File::deleteDirectory($project_workingtree_path.'/.git');
 			}
 		}
 		// git push時のブロードキャスト

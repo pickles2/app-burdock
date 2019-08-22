@@ -22,6 +22,27 @@ class git{
 	}
 
 	/**
+	 * プロジェクトIDを取得する
+	 */
+	public function get_project_id(){
+		return $this->project_id;
+	}
+
+	/**
+	 * プロジェクトCodeを取得する
+	 */
+	public function get_project_code(){
+		return $this->project->project_code;
+	}
+
+	/**
+	 * ブランチ名を取得する
+	 */
+	public function get_branch_name(){
+		return $this->branch_name;
+	}
+
+	/**
 	 * Gitコマンドを実行する
 	 */
 	public function git( $git_sub_command ){
@@ -96,6 +117,7 @@ class git{
 			case 'checkout':
 			case 'add':
 			case 'commit':
+			case 'merge':
 			case 'push':
 			case 'pull':
 				break;
