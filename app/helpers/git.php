@@ -117,6 +117,7 @@ class git{
 			case 'checkout':
 			case 'add':
 			case 'commit':
+			case 'merge':
 			case 'push':
 			case 'pull':
 				break;

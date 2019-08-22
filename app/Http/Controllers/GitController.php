@@ -60,6 +60,9 @@ class GitController extends Controller
 		}elseif( count($git_command_array) == 3 && $git_command_array[0] == 'checkout' && $git_command_array[1] == '-b' ){
 			// `git checkout -b branchname` のフェイク
 			array_push( $rtn, $this->gitFake_checkout_b($git, $git_command_array) );
+		}elseif( count($git_command_array) == 2 && $git_command_array[0] == 'merge' ){
+			// `git merge branchname` のフェイク
+			array_push( $rtn, $this->gitFake_merge($git, $git_command_array) );
 		}elseif( count($git_command_array) == 3 && $git_command_array[0] == 'branch' && $git_command_array[1] == '--delete' ){
 			// `git branch --delete branchname` のフェイク
 			array_push( $rtn, $this->gitFake_branch_delete($git, $git_command_array) );
@@ -118,6 +121,24 @@ class GitController extends Controller
 			'stderr' => '',
 			'return' => 0,
 		);
+		return $cmd_result;
+	}
+
+	/**
+	 * `git merge branchname` のフェイク処理
+	 */
+	private function gitFake_merge($git, $git_command_array){
+		$fs = new \tomk79\filesystem();
+		$target_branch_name = $git_command_array[1];
+
+		$realpath_pj_git_root = $fs->get_realpath( \get_project_workingtree_dir($git->get_project_code(), $git->get_branch_name()) );
+		$realpath_pj_git_target_branch_root = $fs->get_realpath( \get_project_workingtree_dir($git->get_project_code(), $target_branch_name) );
+
+		$result = $git->git(['pull', $realpath_pj_git_target_branch_root, $target_branch_name.":".$target_branch_name]);
+		// $result = $git->git(['branch']);
+		$cmd_result = $git->git(['merge', $target_branch_name]);
+		$result = $git->git(['branch', '--delete', $target_branch_name]);
+
 		return $cmd_result;
 	}
 
