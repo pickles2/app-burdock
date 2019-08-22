@@ -125,10 +125,27 @@ class ProjectController extends Controller
 		$this->authorize('edit', $project);
 
 		$bd_data_dir = env('BD_DATA_DIR');
-		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
 
-		chdir($bd_data_dir . '/projects/');
-		rename($project->project_code, $request->project_code);
+		rename(
+			$bd_data_dir.'/projects/'.urlencode($project->project_code),
+			$bd_data_dir.'/projects/'.urlencode($request->project_code)
+		);
+
+		$fs = new \tomk79\filesystem();
+		foreach( array('repositories', 'stagings') as $root_dir_name ){
+			foreach( $fs->ls( $bd_data_dir.'/'.$root_dir_name.'/' ) as $basename ){
+				if(preg_match('/^(.*?)\-\-\-(.*)$/', $basename, $matched)){
+					$tmp_project_code = $matched[1];
+					$tmp_branch_name = $matched[2];
+					if( $tmp_project_code == $project->project_code ){
+						rename(
+							$bd_data_dir.'/'.$root_dir_name.'/'.$basename,
+							$bd_data_dir.'/'.$root_dir_name.'/'.$request->project_code.'---'.$tmp_branch_name
+						);
+					}
+				}
+			}
+		}
 
 		$project->project_code = $request->project_code;
 		$project->project_name = $request->project_name;
@@ -136,8 +153,6 @@ class ProjectController extends Controller
 		$project->git_username = \Crypt::encryptString($request->git_username);
 		$project->git_password = \Crypt::encryptString($request->git_password);
 		$project->save();
-
-		chdir($path_current_dir); // 元いたディレクトリへ戻る
 
 		return redirect('projects/' . $project->project_code . '/' . $branch_name)->with('my_status', __('Updated a Project.'));
 	}
@@ -159,6 +174,7 @@ class ProjectController extends Controller
 
 		// DBからプロジェクトを削除
 		$result = $project->delete();
+
 		// プロジェクトフォルダが存在していれば削除
 		if(\File::exists(env('BD_DATA_DIR').'/projects/'.$project_code) && $result === true) {
 			\File::deleteDirectory(env('BD_DATA_DIR').'/projects/'.$project_code);
@@ -175,6 +191,19 @@ class ProjectController extends Controller
 			$message = 'Deleted a Project.';
 		} else {
 			$message = 'プロジェクトを削除できませんでした。';
+		}
+
+		$fs = new \tomk79\filesystem();
+		foreach( array('repositories', 'stagings') as $root_dir_name ){
+			foreach( $fs->ls( $bd_data_dir.'/'.$root_dir_name.'/' ) as $basename ){
+				if(preg_match('/^(.*?)\-\-\-(.*)$/', $basename, $matched)){
+					$tmp_project_code = $matched[1];
+					$tmp_branch_name = $matched[2];
+					if( $tmp_project_code == $project->project_code ){
+						\File::deleteDirectory(env('BD_DATA_DIR').'/'.$root_dir_name.'/'.$basename);
+					}
+				}
+			}
 		}
 
 		return redirect('/')->with('my_status', __($message));

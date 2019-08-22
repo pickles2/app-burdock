@@ -34,8 +34,8 @@ class StagingController extends Controller
 		for( $i = 1; $i <= 10; $i ++ ){
 			array_push($preview_server, array(
 				'name' => 'stg'.$i.'',
-				'path' => env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/stagings/previews/stg'.$i.'/',
-				'url' => 'http'.($_SERVER["HTTPS"] ? 's' : '').'://stg'.$i.'.'.urlencode($project->project_code).'.'.env('BD_PLUM_STAGING_DOMAIN').'/',
+				'path' => env('BD_DATA_DIR').'/stagings/'.urlencode($project->project_code).'---stg'.$i.'/',
+				'url' => 'http'.($_SERVER["HTTPS"] ? 's' : '').'://'.urlencode($project->project_code).'---stg'.$i.'.'.env('BD_PLUM_STAGING_DOMAIN').'/',
 			));
 		}
 
