@@ -421,7 +421,7 @@
 											htmls[idx] = (function(src){
 												for(var resKey in resDb){
 													try {
-														src = src.split('{broccoli-html-editor-resource-baser64:{'+resKey+'}}').join(resDb[resKey].base64);
+														src = src.replace('{broccoli-html-editor-resource-baser64:{'+resKey+'}}', resDb[resKey].base64);
 													} catch (e) {
 													}
 												}
@@ -2533,9 +2533,6 @@ module.exports = function(broccoli, targetElm, callback){
 	 * モジュールのボタンを生成する
 	 */
 	function generateModuleButton( mod, depth ){
-		var timerTouchStart;
-		var isTouchStartHold = false;
-
 		depth = depth || 0;
 		var $button = $('<a class="broccoli--module-palette--draggablebutton">');
 		if(depth){
@@ -2601,19 +2598,6 @@ module.exports = function(broccoli, targetElm, callback){
 						)
 					;
 				});
-			})
-			.on('touchstart', function(e){
-				// タッチデバイス向けの処理
-				clearTimeout(timerTouchStart);
-				if( isTouchStartHold ){
-					$(this).dblclick();
-					return;
-				}
-				isTouchStartHold = true;
-				timerTouchStart = setTimeout(function(){
-					isTouchStartHold = false;
-				}, 250);
-				return;
 			})
 			// .tooltip({'placement':'left'})
 		;
@@ -4213,7 +4197,7 @@ module.exports = function(broccoli){
 							html = (function(src){
 								for(var resKey in resDb){
 									try {
-										src = src.split('{broccoli-html-editor-resource-baser64:{'+resKey+'}}').join(resDb[resKey].base64);
+										src = src.replace('{broccoli-html-editor-resource-baser64:{'+resKey+'}}', resDb[resKey].base64);
 									} catch (e) {
 									}
 								}
@@ -4851,8 +4835,6 @@ module.exports = function(broccoli){
 	 * パネルにイベントハンドラをセットする
 	 */
 	this.setPanelEventHandlers = function($panel){
-		var timerTouchStart;
-		var isTouchStartHold = false;
 		var timerFocus;
 		$panel
 			.attr({
@@ -4915,21 +4897,6 @@ module.exports = function(broccoli){
 				_this.onDblClick(e, this, function(){
 					// console.log('dblclick event done.');
 				});
-				return;
-			})
-			.on('touchstart', function(e){
-				// タッチデバイス向けの処理
-				clearTimeout(timerTouchStart);
-				if( isTouchStartHold ){
-					_this.onDblClick(e, this, function(){
-						// console.log('dblclick event done.');
-					});
-					return;
-				}
-				isTouchStartHold = true;
-				timerTouchStart = setTimeout(function(){
-					isTouchStartHold = false;
-				}, 250);
 				return;
 			})
 			.on('dragleave', function(e){
@@ -5654,9 +5621,6 @@ module.exports = function(broccoli){
 				;
 				callback( $.html() );
 				return;
-			}else if( rtn.resType == 'none' ){
-				callback( 'No Image' );
-				return;
 			}else{
 				_resMgr.getResourceDb( function(resDb){
 					var res, imagePath;
@@ -5693,7 +5657,6 @@ module.exports = function(broccoli){
 	this.mkEditor = function( mod, data, elm, callback ){
 		var rtn = $('<div>');
 		var $uiImageResource = $('<div>');
-		var $uiNoImage = $('<div>');
 		var $uiWebResource = $('<div>');
 		var _this = this;
 		if( typeof(data) !== typeof({}) ){ data = {}; }
@@ -5714,12 +5677,9 @@ module.exports = function(broccoli){
 		function selectResourceType(){
 			var val = rtn.find('[name='+mod.name+'-resourceType]:checked').val();
 			$uiWebResource.hide();
-			$uiNoImage.hide();
 			$uiImageResource.hide();
 			if(val == 'web'){
 				$uiWebResource.show();
-			}else if(val == 'none'){
-				$uiNoImage.show();
 			}else{
 				$uiImageResource.show();
 			}
@@ -5803,20 +5763,6 @@ module.exports = function(broccoli){
 							})
 						)
 						.append( $( '<span>' ).text('ウェブリソース') )
-					)
-				)
-				.append( $( '<li>' )
-					.css(tmpListStyle)
-					.append( $( '<label>' )
-						.append( $( '<input type="radio">' )
-							.change(selectResourceType)
-							.attr({
-								"name":mod.name+'-resourceType',
-								"value":"none",
-								"checked": (data.resType=='none')
-							})
-						)
-						.append( $( '<span>' ).text('なし') )
 					)
 				)
 			);
@@ -6037,7 +5983,7 @@ module.exports = function(broccoli){
 					)
 			);
 
-			rtn.append($uiImageResource).append($uiWebResource).append($uiNoImage);
+			rtn.append($uiImageResource).append($uiWebResource);
 			rtn.append( $('<input>')
 				.attr({
 					'type': 'hidden',
