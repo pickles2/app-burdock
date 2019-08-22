@@ -86,7 +86,13 @@ class GitController extends Controller
 		$stdout = '';
 		foreach( $filelist as $filename ){
 			if( is_dir( $realpath_pj_git_root.'../'.$filename ) ){
-				$stdout .= ( $git->get_branch_name() == $filename ? '*' : ' ' ).' '.$filename."\n";
+				if(preg_match('/^(.*?)\-\-\-(.*)$/', $filename, $matched)){
+					$tmp_project_code = $matched[1];
+					$tmp_branch_name = $matched[2];
+					if($tmp_project_code == $git->get_project_code()){
+						$stdout .= ( $git->get_branch_name() == $tmp_branch_name ? '*' : ' ' ).' '.$tmp_branch_name."\n";
+					}
+				}
 			}
 		}
 

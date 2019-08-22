@@ -126,14 +126,20 @@ class ProjectController extends Controller
 
 		$bd_data_dir = env('BD_DATA_DIR');
 
-		rename(
-			$bd_data_dir.'/projects/'.urlencode($project->project_code),
-			$bd_data_dir.'/projects/'.urlencode($request->project_code)
-		);
+		if( is_dir($bd_data_dir.'/projects/'.urlencode($project->project_code)) ){
+			rename(
+				$bd_data_dir.'/projects/'.urlencode($project->project_code),
+				$bd_data_dir.'/projects/'.urlencode($request->project_code)
+			);
+		}
 
 		$fs = new \tomk79\filesystem();
 		foreach( array('repositories', 'stagings') as $root_dir_name ){
-			foreach( $fs->ls( $bd_data_dir.'/'.$root_dir_name.'/' ) as $basename ){
+			$ls = $fs->ls( $bd_data_dir.'/'.$root_dir_name.'/' );
+			if( !is_array($ls) ){
+				continue;
+			}
+			foreach( $ls as $basename ){
 				if(preg_match('/^(.*?)\-\-\-(.*)$/', $basename, $matched)){
 					$tmp_project_code = $matched[1];
 					$tmp_branch_name = $matched[2];
@@ -166,6 +172,8 @@ class ProjectController extends Controller
 	public function destroy(Request $request, Project $project, $branch_name)
 	{
 		//
+		$bd_data_dir = env('BD_DATA_DIR');
+
 		$page_param = $request->page_path;
 		$page_id = $request->page_id;
 
@@ -195,7 +203,11 @@ class ProjectController extends Controller
 
 		$fs = new \tomk79\filesystem();
 		foreach( array('repositories', 'stagings') as $root_dir_name ){
-			foreach( $fs->ls( $bd_data_dir.'/'.$root_dir_name.'/' ) as $basename ){
+			$ls = $fs->ls( $bd_data_dir.'/'.$root_dir_name.'/' );
+			if( !is_array($ls) ){
+				continue;
+			}
+			foreach( $ls as $basename ){
 				if(preg_match('/^(.*?)\-\-\-(.*)$/', $basename, $matched)){
 					$tmp_project_code = $matched[1];
 					$tmp_branch_name = $matched[2];
