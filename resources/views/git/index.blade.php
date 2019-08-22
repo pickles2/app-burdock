@@ -35,6 +35,12 @@ window.contApp = new (function(){
 			var result = [];
 			var apiUrl = "/git/{{ $project->project_code }}/{{ $branch_name }}/git";
 
+			if( cmdAry.length == 2 && cmdAry[0] == 'checkout' ){
+				// `git checkout branchname` のフェイク
+				window.location.href = "/git/{{ $project->project_code }}/"+cmdAry[1];
+				return;
+			}
+
 			$.ajax({
 				type : method,
 				url : apiUrl,
@@ -55,6 +61,12 @@ window.contApp = new (function(){
 				},
 				complete: function(){
 					// console.log('complete', result);
+					if( cmdAry.length == 3 && cmdAry[0] == 'checkout' && cmdAry[1] == '-b' ){
+						// `git checkout -b branchname` のフェイク
+						window.location.href = "/git/{{ $project->project_code }}/"+cmdAry[2];
+						return;
+					}
+
 					try{
 						callback(result[0].return, result[0].stdout+result[0].stderr);
 					}catch(e){
