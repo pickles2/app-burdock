@@ -56,7 +56,7 @@ window.contApp = new (function(){
 				complete: function(){
 					// console.log('complete', result);
 					try{
-						callback(result[0].return, result[0].stdout);
+						callback(result[0].return, result[0].stdout+result[0].stderr);
 					}catch(e){
 						console.error(e);
 						alert('Failed');
