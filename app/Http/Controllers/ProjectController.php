@@ -109,7 +109,13 @@ class ProjectController extends Controller
 		//
 		// update, destroyでも同様に
 		$this->authorize('edit', $project);
-		return view('projects.edit', ['project' => $project, 'branch_name' => $branch_name]);
+		return view(
+			'projects.edit',
+			[
+				'project' => $project,
+				'branch_name' => $branch_name
+			]
+		);
 	}
 
 	/**
@@ -157,7 +163,10 @@ class ProjectController extends Controller
 		$project->project_name = $request->project_name;
 		$project->git_url = $request->git_url;
 		$project->git_username = \Crypt::encryptString($request->git_username);
-		$project->git_password = \Crypt::encryptString($request->git_password);
+		if( property_exists($request, 'git_password') && strlen($request->git_password) ){
+			// 入力があった場合だけ上書き
+			$project->git_password = \Crypt::encryptString($request->git_password);
+		}
 		$project->save();
 
 		return redirect('projects/' . $project->project_code . '/' . $branch_name)->with('my_status', __('Updated a Project.'));
