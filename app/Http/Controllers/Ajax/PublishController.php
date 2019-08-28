@@ -263,12 +263,11 @@ class PublishController extends Controller
 	public function publishSingleAjax(Request $request, Project $project, $branch_name)
 	{
 		$path_region = $request->path_region;
-		$option = '';
-		$option .= ' "';
-		$option .= '/?PX=publish.run';
-		$option .= '&path_region='.$path_region;
-		$option .= '"';
-		$bd_object = get_px_execute($project->project_code, $branch_name, $option);
+		$bd_object = get_px_execute(
+			$project->project_code,
+			$branch_name,
+			'/?PX=publish.run&path_region='.urlencode($path_region)
+		);
 
 		if($bd_object !== false) {
 			$info = 'をパブリッシュしました。';
