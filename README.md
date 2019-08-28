@@ -49,9 +49,9 @@ Application key set successfully.
 アプリサーバーとプレビューサーバーは異なるURLを設定してください。
 
 ```
-APP_URL=https://app.com
-PREV_URL=prev.app.com
-BD_PLUM_STAGING_DOMAIN=staging.app.com
+APP_URL=https://example.com
+BD_PREVIEW_DOMAIN=preview.example.com
+BD_PLUM_STAGING_DOMAIN=staging.example.com
 ```
 
 #### データベース接続設定
