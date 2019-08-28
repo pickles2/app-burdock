@@ -72,9 +72,22 @@ class DeliveryController extends Controller
 		$user = Auth::user();
 		$user_id = ($user ? $user->email : null);
 
+		$default_branch_name = get_git_remote_default_branch_name();
+		$realpath_pj_git_root = env('BD_DATA_DIR').'/repositories/'.urlencode($project->project_code).'---'.urlencode($default_branch_name).'/';
+		$realpath_workdir = env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/indigo/workdir/';
+
 		$fs = new \tomk79\filesystem();
-		$fs->mkdir_r(env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/indigo/workdir/');
+		$fs->mkdir_r($realpath_workdir);
 		$fs->mkdir_r(env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/indigo/production/');
+
+		$git_username = null;
+		if( strlen($project->git_username) ){
+			$git_username = \Crypt::decryptString( $project->git_username );
+		}
+		$git_password = null;
+		if( strlen($project->git_password) ){
+			$git_password = \Crypt::decryptString( $project->git_password );
+		}
 
 		$parameter = array(
 
@@ -84,7 +97,7 @@ class DeliveryController extends Controller
 			),
 
 			// indigo作業用ディレクトリ（絶対パス）
-			'realpath_workdir' => env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/indigo/workdir/',
+			'realpath_workdir' => $realpath_workdir,
 
 			// リソースディレクトリ（ドキュメントルートからの相対パス）
 			'relativepath_resourcedir'	=> '/common/lib-indigo/res/',
@@ -134,11 +147,11 @@ class DeliveryController extends Controller
 
 				// ユーザ名
 				// Gitリポジトリのユーザ名を設定。
-				'username' => \Crypt::decryptString( $project->git_username ),
+				'username' => $git_username,
 
 				// パスワード
 				// Gitリポジトリのパスワードを設定。
-				'password' => \Crypt::decryptString( $project->git_password ),
+				'password' => $git_password,
 			)
 
 		);

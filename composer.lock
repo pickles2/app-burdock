@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0b8332433e5afb3e0446f851c546426d",
+    "content-hash": "d607a37a998e7a6e434f3d99c47642d7",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -2179,16 +2179,16 @@
         },
         {
             "name": "pickles2/lib-indigo",
-            "version": "0.1.4",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pickles2/lib-indigo.git",
-                "reference": "2bd02e024576285c38b4940682dbae6388508ab2"
+                "reference": "42ccf9092c5665025a2a264638a0b0d5ca75b566"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pickles2/lib-indigo/zipball/2bd02e024576285c38b4940682dbae6388508ab2",
-                "reference": "2bd02e024576285c38b4940682dbae6388508ab2",
+                "url": "https://api.github.com/repos/pickles2/lib-indigo/zipball/42ccf9092c5665025a2a264638a0b0d5ca75b566",
+                "reference": "42ccf9092c5665025a2a264638a0b0d5ca75b566",
                 "shasum": ""
             },
             "require": {
@@ -2236,20 +2236,20 @@
             "keywords": [
                 "indigo"
             ],
-            "time": "2019-07-01T08:37:59+00:00"
+            "time": "2019-08-28T18:57:58+00:00"
         },
         {
             "name": "pickles2/lib-plum",
-            "version": "0.1.2",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pickles2/lib-plum.git",
-                "reference": "106f9745dc9fb2df354a76682937b1ce4095d372"
+                "reference": "27c3bc5941f874212533aa700b39f6d64f24105c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pickles2/lib-plum/zipball/106f9745dc9fb2df354a76682937b1ce4095d372",
-                "reference": "106f9745dc9fb2df354a76682937b1ce4095d372",
+                "url": "https://api.github.com/repos/pickles2/lib-plum/zipball/27c3bc5941f874212533aa700b39f6d64f24105c",
+                "reference": "27c3bc5941f874212533aa700b39f6d64f24105c",
                 "shasum": ""
             },
             "require": {
@@ -2286,7 +2286,7 @@
             "keywords": [
                 "plum"
             ],
-            "time": "2019-06-12T11:12:39+00:00"
+            "time": "2019-08-28T18:11:49+00:00"
         },
         {
             "name": "pickles2/lib-px2-contents-editor",
@@ -6534,7 +6534,10 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "pickles2/lib-indigo": 20,
+        "pickles2/lib-plum": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

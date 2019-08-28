@@ -28,9 +28,11 @@ class StagingController extends Controller
 	 */
 	public function index(Request $request, Project $project, $branch_name){
 
+		$default_branch_name = get_git_remote_default_branch_name();
+
 		$fs = new \tomk79\filesystem();
 
-		$realpath_pj_git_root = env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/stagings/master/';
+		$realpath_pj_git_root = env('BD_DATA_DIR').'/repositories/'.urlencode($project->project_code).'---'.urlencode($default_branch_name).'/';
 		$fs->mkdir_r($realpath_pj_git_root);
 		$fs->mkdir_r(env('BD_DATA_DIR').'/stagings/');
 
@@ -42,6 +44,16 @@ class StagingController extends Controller
 				'url' => 'http'.($_SERVER["HTTPS"] ? 's' : '').'://'.urlencode($project->project_code).'---stg'.$i.'.'.env('BD_PLUM_STAGING_DOMAIN').'/',
 			));
 		}
+
+		$git_username = null;
+		if( strlen($project->git_username) ){
+			$git_username = \Crypt::decryptString( $project->git_username );
+		}
+		$git_password = null;
+		if( strlen($project->git_password) ){
+			$git_password = \Crypt::decryptString( $project->git_password );
+		}
+
 
 		$plum = new \hk\plum\main(
 			array(
@@ -66,16 +78,16 @@ class StagingController extends Controller
 
 					// ユーザ名
 					// Gitリポジトリのユーザ名を設定。
-					'username' => \Crypt::decryptString( $project->git_username ),
+					'username' => $git_username,
 
 					// パスワード
 					// Gitリポジトリのパスワードを設定。
-					'password' => \Crypt::decryptString( $project->git_password ),
+					'password' => $git_password,
 				)
 			)
 		);
-		$plum_std_out = $plum->run();
 
+		$plum_std_out = $plum->run();
 
 
 		return view(
