@@ -268,6 +268,7 @@ class PublishController extends Controller
 			$branch_name,
 			'/?PX=publish.run&path_region='.urlencode($path_region)
 		);
+		$bd_object = json_decode($bd_object);
 
 		if($bd_object !== false) {
 			$info = 'をパブリッシュしました。';

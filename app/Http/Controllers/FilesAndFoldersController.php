@@ -144,6 +144,7 @@ class FilesAndFoldersController extends Controller
 				$branch_name,
 				( strlen($filename) ? $filename : '/' ).'?PX=px2dthelper.get.all'
 			);
+			$json = json_decode($json);
 
 			$rtn['result'] = false;
 			if( $fs->mkdir_r( $json->realpath_data_dir ) ){

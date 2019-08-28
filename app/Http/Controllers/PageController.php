@@ -29,11 +29,13 @@ class PageController extends Controller
 			$branch_name,
 			'/?PX=px2dthelper.get.all&filter=false&path='.urlencode($page_id)
 		);
+		$current = json_decode($current);
 		$editor_type = get_px_execute(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.check_editor_mode&path='.urlencode($page_param)
 		);
+		$current = json_decode($current);
 
 		return view(
 			'pages.index',
@@ -59,6 +61,7 @@ class PageController extends Controller
 			$branch_name,
 			$page_path.'?PX=px2dthelper.get.all'
 		);
+		$info = json_decode($info);
 
 		$path = $info->page_info->path;
 		$id = $info->page_info->id;
@@ -81,6 +84,7 @@ class PageController extends Controller
 			$branch_name,
 			'/sample_pages/?PX=px2dthelper.px2ce.client_resources&dist='.urlencode($client_resources_dist)
 		);
+		$px2ce_client_resources = json_decode($px2ce_client_resources);
 
 		return view('pages.show', ['project' => $project, 'branch_name' => $branch_name, 'page_param' => $page_param], compact('px2ce_client_resources'));
 	}
@@ -93,6 +97,7 @@ class PageController extends Controller
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
 		);
+		$current = json_decode($current);
 
 		// ミリ秒を含むUnixタイムスタンプを数値（Float）で取得
 		$timestamp = microtime(true);
@@ -107,16 +112,15 @@ class PageController extends Controller
 		file_put_contents($file, $request->data);
 
 		$page_param = $request->page_path;
-		$result = json_encode(
-			get_px_execute(
-				$project->project_code,
-				$branch_name,
-				$page_param.'?PX=px2dthelper.px2ce.gpi&data_filename='.urlencode($tmpFileName)
-			)
+		$result = get_px_execute(
+			$project->project_code,
+			$branch_name,
+			$page_param.'?PX=px2dthelper.px2ce.gpi&data_filename='.urlencode($tmpFileName)
 		);
+		$result = json_decode($result);
 
 		header('Content-type: text/json');
-		echo $result;
+		echo json_encode($result);
 		// 作成した一時ファイルを削除
 		unlink($file);
 

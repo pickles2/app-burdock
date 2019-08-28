@@ -31,6 +31,7 @@ class SitemapController extends Controller
 			$branch_name,
 			'/?PX=px2dthelper.get.all&filter=false&path='.urlencode($page_id)
 		);
+		$current = json_decode($current);
 
 		$sitemap_files = \File::files($current->realpath_homedir.'sitemaps/');
 		$get_files = array();
@@ -66,12 +67,12 @@ class SitemapController extends Controller
 
 	public function upload(StoreSitemap $request, Project $project, $branch_name)
 	{
-		//
 		$current = get_px_execute(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
 		);
+		$current = json_decode($current);
 		$upload_file = $request->file;
 		$old_file = $upload_file;
 		$mimetype = $upload_file->clientExtension();
@@ -97,6 +98,7 @@ class SitemapController extends Controller
 			$branch_name,
 			'/?PX=px2dthelper.get.all&filter=false&path='.urlencode($page_id)
 		);
+		$current = json_decode($current);
 
 		if($request->file === 'csv') {
 			// CSVファイルのダウンロード
@@ -124,8 +126,9 @@ class SitemapController extends Controller
 		$current = get_px_execute(
 			$project->project_code,
 			$branch_name,
-			' /?PX=px2dthelper.get.all\&filter=false\&path='.urlencode($page_id)
+			'/?PX=px2dthelper.get.all&filter=false&path='.urlencode($page_id)
 		);
+		$current = json_decode($current);
 
 		$xlsx_file_name = $request->file_name;
 		$csv_file_name = str_replace('xlsx', 'csv', $xlsx_file_name);

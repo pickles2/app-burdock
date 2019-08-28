@@ -90,6 +90,7 @@ class ProjectController extends Controller
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
 		);
+		$bd_object = json_decode($bd_object);
 		if($bd_object) {
 			return view('projects.show', ['project' => $project, 'branch_name' => $branch_name], compact('bd_object'));
 		} elseif(session('my_status')) {

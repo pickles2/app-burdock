@@ -39,6 +39,7 @@ class PublishController extends Controller
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
 		);
+		$bd_object = json_decode($bd_object);
 		$publish_patterns = $bd_object->config->plugins->px2dt->publish_patterns;
 
 		if(\File::exists($publish_log_file)) {
@@ -100,6 +101,7 @@ class PublishController extends Controller
 			$branch_name,
 			'/?PX=publish.run'
 		);
+		$result = json_decode($result);
 
 		return redirect(
 			'publish/'.urlencode($project->project_code).'/'.urlencode($branch_name)
@@ -135,6 +137,8 @@ class PublishController extends Controller
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
 		);
+		$current = json_decode($current);
+
 		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
 		$publish_dir_path = $project_path.$current->config->path_publish_dir;
 		// dd($project_path.$current->config->path_publish_dir.'publish.zip');
@@ -154,6 +158,8 @@ class PublishController extends Controller
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
 		);
+		$current = json_decode($current);
+
 		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
 		$publish_reports_path = $project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/';
 		if(\File::exists($publish_reports_path.'publish_reports.zip')) {
