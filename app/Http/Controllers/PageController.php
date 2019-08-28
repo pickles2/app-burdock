@@ -30,12 +30,13 @@ class PageController extends Controller
 			'/?PX=px2dthelper.get.all&filter=false&path='.urlencode($page_id)
 		);
 		$current = json_decode($current);
+
 		$editor_type = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.check_editor_mode&path='.urlencode($page_param)
 		);
-		$current = json_decode($current);
+		$editor_type = json_decode($editor_type);
 
 		return view(
 			'pages.index',
@@ -43,7 +44,7 @@ class PageController extends Controller
 				'project' => $project,
 				'branch_name' => $branch_name,
 				'page_id' => $page_id,
-				'page_param' => $page_param
+				'page_param' => $page_param,
 			],
 			compact('current', 'editor_type')
 		);
