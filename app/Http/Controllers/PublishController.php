@@ -34,7 +34,7 @@ class PublishController extends Controller
 		$alert_log_file = $project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/alert_log.csv';
 		$applock_file = $project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/applock.txt';
 
-		$bd_object = get_px_execute(
+		$bd_object = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
@@ -96,7 +96,7 @@ class PublishController extends Controller
 	//
 	public function publish(Request $request, Project $project, $branch_name)
 	{
-		$result = get_px_execute(
+		$result = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=publish.run'
@@ -132,7 +132,7 @@ class PublishController extends Controller
 
 	public function publishFileDownload(Request $request, Project $project, $branch_name)
 	{
-		$current = get_px_execute(
+		$current = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
@@ -153,7 +153,7 @@ class PublishController extends Controller
 
 	public function publishReportDownload(Request $request, Project $project, $branch_name)
 	{
-		$current = get_px_execute(
+		$current = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all'

@@ -85,7 +85,7 @@ class ProjectController extends Controller
 	 */
 	public function show(Project $project, $branch_name)
 	{
-		$bd_object = get_px_execute(
+		$bd_object = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all'

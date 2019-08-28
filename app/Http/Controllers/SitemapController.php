@@ -26,7 +26,7 @@ class SitemapController extends Controller
 		//
 		$page_id = $request->page_id;
 		$page_param = $request->page_path;
-		$current = get_px_execute(
+		$current = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all&filter=false&path='.urlencode($page_id)
@@ -67,7 +67,7 @@ class SitemapController extends Controller
 
 	public function upload(StoreSitemap $request, Project $project, $branch_name)
 	{
-		$current = get_px_execute(
+		$current = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
@@ -93,7 +93,7 @@ class SitemapController extends Controller
 		//
 		$page_id = $request->page_id;
 		$page_param = $request->page_path;
-		$current = get_px_execute(
+		$current = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all&filter=false&path='.urlencode($page_id)
@@ -123,7 +123,7 @@ class SitemapController extends Controller
 		//
 		$page_id = $request->page_id;
 		$page_param = $request->page_path;
-		$current = get_px_execute(
+		$current = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all&filter=false&path='.urlencode($page_id)

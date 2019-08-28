@@ -61,7 +61,7 @@ class PageController extends Controller
 	{
 		//
 		$str = $request->str;
-		$info = get_px_execute(
+		$info = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.search_sitemap&keyword='.urlencode($str)

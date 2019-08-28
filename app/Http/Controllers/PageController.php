@@ -24,13 +24,13 @@ class PageController extends Controller
 		//
 		$page_id = $request->page_id;
 		$page_param = $request->page_path;
-		$current = get_px_execute(
+		$current = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all&filter=false&path='.urlencode($page_id)
 		);
 		$current = json_decode($current);
-		$editor_type = get_px_execute(
+		$editor_type = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.check_editor_mode&path='.urlencode($page_param)
@@ -56,7 +56,7 @@ class PageController extends Controller
 		if( !strlen($page_path) ){
 			$page_path = '/';
 		}
-		$info = get_px_execute(
+		$info = px2query(
 			$project->project_code,
 			$branch_name,
 			$page_path.'?PX=px2dthelper.get.all'
@@ -79,7 +79,7 @@ class PageController extends Controller
 		//
 		$page_param = $request->page_path;
 		$client_resources_dist = realpath(__DIR__.'/../../../public/assets/px2ce_resources');
-		$px2ce_client_resources = get_px_execute(
+		$px2ce_client_resources = px2query(
 			$project->project_code,
 			$branch_name,
 			'/sample_pages/?PX=px2dthelper.px2ce.client_resources&dist='.urlencode($client_resources_dist)
@@ -92,7 +92,7 @@ class PageController extends Controller
 
 	public function gpi(Request $request, Project $project, $branch_name)
 	{
-		$current = get_px_execute(
+		$current = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
@@ -112,7 +112,7 @@ class PageController extends Controller
 		file_put_contents($file, $request->data);
 
 		$page_param = $request->page_path;
-		$result = get_px_execute(
+		$result = px2query(
 			$project->project_code,
 			$branch_name,
 			$page_param.'?PX=px2dthelper.px2ce.gpi&data_filename='.urlencode($tmpFileName)

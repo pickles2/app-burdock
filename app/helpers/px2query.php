@@ -5,7 +5,7 @@
  * 
  * @param string $project_code プロジェクトコード名
  * @param string $branch_name ブランチ名
- * @param string $request_path Pickles 2 に渡されるパス情報。
+ * @param string $query Pickles 2 に渡されるパス情報。
  * PXコマンド等が実行される場合、これを含む。
  * 例: /index.html
  * 例: /hoge/fuga.html?PX=px2dthelper.get.all
@@ -13,7 +13,7 @@
  * @return string Pickles 2 が出力した文字列。
  * 期待される出力がJSONとは限らないので、デコードは呼び出し側の責任とする。
  */
-function get_px_execute($project_code, $branch_name, $request_path){
+function px2query($project_code, $branch_name, $query){
 	$php_command = array();
 
 	// PHPコマンド
@@ -31,7 +31,7 @@ function get_px_execute($project_code, $branch_name, $request_path){
 	array_push($php_command, escapeshellarg($realpath_entry_script));
 
 	// Request Path
-	array_push($php_command, escapeshellarg($request_path));
+	array_push($php_command, escapeshellarg($query));
 
 
 	// --------------------------------------

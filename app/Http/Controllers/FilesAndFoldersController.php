@@ -132,14 +132,14 @@ class FilesAndFoldersController extends Controller
 			$rtn['result'] = $fs->rm( $realpath_filename );
 
 		}elseif( $request->method == 'px_command' ){
-			$rtn['result'] = get_px_execute(
+			$rtn['result'] = px2query(
 				$project->project_code,
 				$branch_name,
 				( strlen($filename) ? $filename : '/' ).'?PX='.urlencode($request->px_command)
 			);
 
 		}elseif( $request->method == 'initialize_data_dir' ){
-			$json = get_px_execute(
+			$json = px2query(
 				$project->project_code,
 				$branch_name,
 				( strlen($filename) ? $filename : '/' ).'?PX=px2dthelper.get.all'

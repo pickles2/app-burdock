@@ -263,7 +263,7 @@ class PublishController extends Controller
 	public function publishSingleAjax(Request $request, Project $project, $branch_name)
 	{
 		$path_region = $request->path_region;
-		$bd_object = get_px_execute(
+		$bd_object = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=publish.run&path_region='.urlencode($path_region)
