@@ -99,11 +99,15 @@ class DeliveryController extends Controller
 			// indigo作業用ディレクトリ（絶対パス）
 			'realpath_workdir' => $realpath_workdir,
 
+			// git local のマスターデータディレクトリの絶対パス
+			// 省略時は、 `realpath_workdir` 内に自動生成されます。
+			'realpath_git_master_dir' => $realpath_pj_git_root,
+
 			// リソースディレクトリ（ドキュメントルートからの相対パス）
 			'relativepath_resourcedir'	=> '/common/lib-indigo/res/',
 
 			// ajax呼出クラス（ドキュメントルートからの相対パス）
-			'realpath_ajax_call' => '/delivery/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/indigoAjaxAPI',
+			'url_ajax_call' => '/delivery/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/indigoAjaxAPI',
 			
 			// 画面表示上のタイムゾーン
 			'time_zone' => 'Asia/Tokyo',

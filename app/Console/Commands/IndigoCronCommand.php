@@ -60,6 +60,13 @@ class IndigoCronCommand extends Command
 			$this->info( $project->project_name );
 			$this->line( '('.$project->id.')' );
 
+			if( !strlen($project->git_url) ){
+				$this->line( 'git_url is not set.' );
+				$this->line( 'Skip' );
+				$this->line( '' );
+				continue;
+			}
+
 			$default_branch_name = \get_git_remote_default_branch_name($project->git_url);
 
 			$parameter = $indigoController->mk_indigo_options($project, $default_branch_name);

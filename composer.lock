@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/barryvdh/laravel-debugbar.git",
-                "reference": "837f2a99705291778a2fd57794f9e403ab48ce2c"
+                "reference": "18208d64897ab732f6c04a19b319fe8f1d57a9c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/barryvdh/laravel-debugbar/zipball/837f2a99705291778a2fd57794f9e403ab48ce2c",
-                "reference": "837f2a99705291778a2fd57794f9e403ab48ce2c",
+                "url": "https://api.github.com/repos/barryvdh/laravel-debugbar/zipball/18208d64897ab732f6c04a19b319fe8f1d57a9c0",
+                "reference": "18208d64897ab732f6c04a19b319fe8f1d57a9c0",
                 "shasum": ""
             },
             "require": {
@@ -72,7 +72,7 @@
                 "profiler",
                 "webprofiler"
             ],
-            "time": "2019-08-27T21:11:39+00:00"
+            "time": "2019-08-29T07:01:03+00:00"
         },
         {
             "name": "broccoli-html-editor/broccoli-field-table",
@@ -618,12 +618,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "9811ca0b1c2b16aed3fd4fc09f702555e6747e81"
+                "reference": "b6f7a6f66fad2d8134ba5b50ddb9a292004fe319"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/9811ca0b1c2b16aed3fd4fc09f702555e6747e81",
-                "reference": "9811ca0b1c2b16aed3fd4fc09f702555e6747e81",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/b6f7a6f66fad2d8134ba5b50ddb9a292004fe319",
+                "reference": "b6f7a6f66fad2d8134ba5b50ddb9a292004fe319",
                 "shasum": ""
             },
             "require": {
@@ -660,7 +660,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2019-08-28T16:43:33+00:00"
+            "time": "2019-08-28T21:10:01+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -2183,12 +2183,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pickles2/lib-indigo.git",
-                "reference": "42ccf9092c5665025a2a264638a0b0d5ca75b566"
+                "reference": "2a335b96afc3ed344b97fb63c73faf7e7b888928"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pickles2/lib-indigo/zipball/42ccf9092c5665025a2a264638a0b0d5ca75b566",
-                "reference": "42ccf9092c5665025a2a264638a0b0d5ca75b566",
+                "url": "https://api.github.com/repos/pickles2/lib-indigo/zipball/2a335b96afc3ed344b97fb63c73faf7e7b888928",
+                "reference": "2a335b96afc3ed344b97fb63c73faf7e7b888928",
                 "shasum": ""
             },
             "require": {
@@ -2236,7 +2236,7 @@
             "keywords": [
                 "indigo"
             ],
-            "time": "2019-08-28T18:57:58+00:00"
+            "time": "2019-08-29T07:37:44+00:00"
         },
         {
             "name": "pickles2/lib-plum",
