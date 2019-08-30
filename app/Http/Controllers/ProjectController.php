@@ -70,7 +70,9 @@ class ProjectController extends Controller
 		$project->user_id = $request->user()->id;
 		$project->save();
 
-		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
+		$project_workingtree_path = get_project_workingtree_dir($project->project_code, $branch_name);
+		\File::makeDirectory($project_workingtree_path, 0777, true, true);
+		$project_path = get_project_dir($project->project_code, $branch_name);
 		\File::makeDirectory($project_path, 0777, true, true);
 
 		$message = 'プロジェクトを作成しました。';
