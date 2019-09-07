@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/barryvdh/laravel-debugbar.git",
-                "reference": "18208d64897ab732f6c04a19b319fe8f1d57a9c0"
+                "reference": "922c27a652d1cadfac4b6fa6c2f9c01867e54d67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/barryvdh/laravel-debugbar/zipball/18208d64897ab732f6c04a19b319fe8f1d57a9c0",
-                "reference": "18208d64897ab732f6c04a19b319fe8f1d57a9c0",
+                "url": "https://api.github.com/repos/barryvdh/laravel-debugbar/zipball/922c27a652d1cadfac4b6fa6c2f9c01867e54d67",
+                "reference": "922c27a652d1cadfac4b6fa6c2f9c01867e54d67",
                 "shasum": ""
             },
             "require": {
@@ -72,7 +72,7 @@
                 "profiler",
                 "webprofiler"
             ],
-            "time": "2019-08-29T07:01:03+00:00"
+            "time": "2019-09-07T11:44:25+00:00"
         },
         {
             "name": "broccoli-html-editor/broccoli-field-table",
@@ -2183,12 +2183,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pickles2/lib-indigo.git",
-                "reference": "2a335b96afc3ed344b97fb63c73faf7e7b888928"
+                "reference": "5358d709d77adf952754374400fd03cd97533602"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pickles2/lib-indigo/zipball/2a335b96afc3ed344b97fb63c73faf7e7b888928",
-                "reference": "2a335b96afc3ed344b97fb63c73faf7e7b888928",
+                "url": "https://api.github.com/repos/pickles2/lib-indigo/zipball/5358d709d77adf952754374400fd03cd97533602",
+                "reference": "5358d709d77adf952754374400fd03cd97533602",
                 "shasum": ""
             },
             "require": {
@@ -2236,7 +2236,7 @@
             "keywords": [
                 "indigo"
             ],
-            "time": "2019-08-29T07:37:44+00:00"
+            "time": "2019-09-07T19:29:20+00:00"
         },
         {
             "name": "pickles2/lib-plum",
@@ -5797,12 +5797,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "f9869c48b03c9c8e25562e51c5c62a0c6edfc167"
+                "reference": "191e0342f030043229a9d3c7be23484273f8bfaf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/f9869c48b03c9c8e25562e51c5c62a0c6edfc167",
-                "reference": "f9869c48b03c9c8e25562e51c5c62a0c6edfc167",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/191e0342f030043229a9d3c7be23484273f8bfaf",
+                "reference": "191e0342f030043229a9d3c7be23484273f8bfaf",
                 "shasum": ""
             },
             "require": {
@@ -5873,7 +5873,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-09-07T09:43:26+00:00"
+            "time": "2019-09-07T14:02:30+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

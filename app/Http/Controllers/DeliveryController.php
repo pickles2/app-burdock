@@ -58,7 +58,7 @@ class DeliveryController extends Controller
 		$parameter = $this->mk_indigo_options( $project, $branch_name );
 
 		// load indigo\main
-		$indigo = new \indigo\ajax($parameter);
+		$indigo = new \indigo\main($parameter);
 		$indigo_std_out = $indigo->ajax_run();
 
 		return $indigo_std_out;
@@ -115,11 +115,20 @@ class DeliveryController extends Controller
 			// ユーザID
 			'user_id' => $user_id,
 
+			// 空間名
+			'space_name' => $project->project_code,
+
+
 			// DB設定
 			'db' => array(
 				// 'mysql' or null (nullの場合はSQLite3を使用)
-				// ※バージョン0.1.0時点ではmysql未対応
-				'db_type' => null,
+				'dbms' => env('DB_CONNECTION'),
+				'prefix' => env('DB_PREFIX'),
+				'database' => env('DB_DATABASE'),
+				'host' => env('DB_HOST'),
+				'port' => env('DB_PORT'),
+				'username' => env('DB_USERNAME'),
+				'password' => env('DB_PASSWORD'),
 			),
 
 			// 予約最大件数
