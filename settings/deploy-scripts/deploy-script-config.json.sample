@@ -1,0 +1,26 @@
+{
+    "tasks": [
+        {
+            "type": "remove",
+            "path": "./remove-target/"
+        },
+        {
+            "type": "copy",
+            "from": "../../bd_data/projects/foo/indigo/production/dist/",
+            "to": "./remove-target/"
+        },
+        {
+            "type": "copy",
+            "from": "../../bd_data/projects/bar/indigo/production/dist/subdir/",
+            "to": "./remove-target/subdir/"
+        },
+        {
+            "type": "php-script",
+            "script": "./deploy.php"
+        },
+        {
+            "type": "php-function",
+            "function": "foo\bar::deployFunction"
+        }
+    ]
+}

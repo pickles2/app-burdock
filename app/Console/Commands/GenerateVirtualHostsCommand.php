@@ -49,9 +49,12 @@ class GenerateVirtualHostsCommand extends Command
 	public function handle()
 	{
 
-		$this->info('================================');
-		$this->info('Start bd:generate_vhosts');
-		$this->info('--------------------------------');
+		$this->info('================================================================');
+		$this->info('  Start '.$this->signature);
+		$this->info('    - Local Time: '.date('Y-m-d H:i:s'));
+		$this->info('    - GMT: '.gmdate('Y-m-d H:i:s'));
+		$this->info('----------------------------------------------------------------');
+		$this->line( '' );
 
 		$projects = Project::all();
 		if( !$projects ){
@@ -103,9 +106,11 @@ class GenerateVirtualHostsCommand extends Command
 		$this->fs->rm( $this->realpath_vhosts_dir.'vhosts.conf.tmp' );
 
 		$this->line(' finished!');
-		$this->line("\n\n");
-		$this->comment('Command successful');
-		$this->line("\n\n");
+		$this->line( '' );
+		$this->line('Local Time: '.date('Y-m-d H:i:s'));
+		$this->line('GMT: '.gmdate('Y-m-d H:i:s'));
+		$this->comment('------------ '.$this->signature.' successful ------------');
+		$this->line( '' );
 
 		return 0; // 終了コード
 	}
