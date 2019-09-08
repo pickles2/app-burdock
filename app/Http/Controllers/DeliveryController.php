@@ -134,16 +134,16 @@ class DeliveryController extends Controller
 			// 予約最大件数
 			'max_reserve_record' => 10,
 
-			// バックアップ世代管理件数　※バージョン0.1.0時点では未対応
+			// バックアップ世代管理件数
 			'max_backup_generation' => 5,
 
-			// 本番環境パス（同期先）※バージョン0.1.0時点では先頭の設定内容のみ有効
+			// 本番環境パス（同期先）
 			'server' => array(
 				array(
 					// 任意の名前
 					'name' => 'www1',
-					// 同期先絶対パス
-					'real_path' => env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/indigo/production/',
+					// 同期先
+					'dist' => env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/indigo/production/',
 				),
 			),
 
