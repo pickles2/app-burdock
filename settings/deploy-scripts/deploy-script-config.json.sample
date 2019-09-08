@@ -2,6 +2,10 @@
     "tasks": [
         {
             "type": "remove",
+            "path": "./remove-target/remove/"
+        },
+        {
+            "type": "empty-dir",
             "path": "./remove-target/"
         },
         {

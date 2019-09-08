@@ -52,6 +52,9 @@ class DeployScriptCommand extends Command
 		$this->fs = new \tomk79\filesystem();
 
 		$result = $this->run_deploy_tasks();
+
+		$this->line( '' );
+		$this->line( '' );
 		if( $result ){
 			$this->line(' finished!');
 		}else{
@@ -78,6 +81,8 @@ class DeployScriptCommand extends Command
 			return true;
 		}
 		$json = json_decode( file_get_contents( $realpath_json ) );
+		// var_dump($json);
+
 		if( !is_object($json) ){
 			return false;
 		}
@@ -89,21 +94,91 @@ class DeployScriptCommand extends Command
 		}
 
 		chdir( dirname($realpath_json) );
-		foreach($json->tasks as $task){
+		foreach($json->tasks as $idx=>$task){
+
+			$this->line('');
+			$this->comment('** Task No.'.$idx.': '.$task->type);
+
 			if( $task->type == 'copy' ){
-				var_dump( realpath($task->from) );
+				$realpath_from = $this->fs->get_realpath($task->from);
+				$realpath_to   = $this->fs->get_realpath($task->to);
+				$this->line( '   From: '.$realpath_from );
+				$this->line( '   To:   '.$realpath_to );
+
+				if( !file_exists($realpath_from) ){
+					$this->error( '   Copy from is NOT exists!' );
+					continue;
+				}
+
+				$this->fs->copy_r(
+					$realpath_from,
+					$realpath_to
+				);
 
 			}elseif( $task->type == 'remove' ){
-				var_dump( $this->fs->get_realpath($task->path) );
+				$realpath_target = $this->fs->get_realpath($task->path);
+				$this->line( '   Remove: '.$realpath_target );
+				if( !file_exists($realpath_target) ){
+					$this->error( '   Target is NOT exists!' );
+					continue;
+				}
+
+				$this->fs->rm( $realpath_target );
+
+			}elseif( $task->type == 'empty-dir' ){
+				$realpath_target = $this->fs->get_realpath($task->path);
+				$this->line( '   Directory: '.$realpath_target );
+				if( !file_exists($realpath_target) ){
+					$this->error( '   Target is NOT exists!' );
+					continue;
+				}
+				if( !is_dir($realpath_target) ){
+					$this->error( '   Target is NOT a directory!' );
+					continue;
+				}
+
+				$list = $this->fs->ls( $realpath_target );
+				foreach( $list as $basename ){
+					$this->fs->rm( $realpath_target.'/'.$basename );
+				}
 
 			}elseif( $task->type == 'php-script' ){
+				$realpath_php_script = $this->fs->get_realpath($task->script);
+				$this->line( '   Script: '.$realpath_php_script );
+				if( !is_file($realpath_php_script) ){
+					$this->error( '   Script file is NOT exists!' );
+					continue;
+				}
+				$this->line( '' );
+				ob_start();
+				$proc = proc_open('php '.escapeshellarg($realpath_php_script), array(
+					0 => array('pipe','r'),
+					1 => array('pipe','w'),
+					2 => array('pipe','w'),
+				), $pipes);
+				$io = array();
+				foreach($pipes as $idx=>$pipe){
+					$io[$idx] = stream_get_contents($pipe);
+					fclose($pipe);
+				}
+				$return_var = proc_close($proc);
+				ob_get_clean();
+
+				$bin = $io[1]; // stdout
+				if( strlen( $io[2] ) ){
+					$this->error($io[2]); // stderr
+				}
+				$this->line( $bin );
 
 			}elseif( $task->type == 'php-function' ){
-
+				$this->line( '   Function: '.$task->function );
+				if( !is_callable($task->function) ){
+					$this->error( '   NOT Callable!' );
+					continue;
+				}
+				call_user_func($task->function);
 			}
 		}
-
-		var_dump($json);
 
 		chdir( $realpath_current_dir );
 		return true;
