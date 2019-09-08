@@ -53,16 +53,18 @@ class IndigoCronCommand extends Command
 		}
 
 
-		$progressbar = $this->output->createProgressBar(count($projects));
-		$progressbar->start();
+		$count = count($projects);
+		$current = 0;
+
 		foreach ($projects as $project) {
 			$this->line( '' );
 			$this->info( $project->project_name );
-			$this->line( '('.$project->id.')' );
+			$this->line( ' ('.$project->id.' - '.$project->project_code.')' );
+			$this->line( ' '.$count.'/'.$count );
 
 			if( !strlen($project->git_url) ){
-				$this->line( 'git_url is not set.' );
-				$this->line( 'Skip' );
+				$this->line( '`git_url` is not set.' );
+				$this->line( ' ----- Skip' );
 				$this->line( '' );
 				continue;
 			}
@@ -76,14 +78,10 @@ class IndigoCronCommand extends Command
 
 			// 実行する
 			$result = $indigo->cron_run();
-			$this->line( 'OK' );
+			$this->line( ' ----- OK' );
 			$this->line( '' );
-
-
-			$progressbar->advance();
 			sleep(1);
 		}
-		$progressbar->finish();
 
 		$this->line(' finished!');
 		$this->line("\n\n");

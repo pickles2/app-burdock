@@ -153,6 +153,18 @@ $ laravel-echo-server start
 ```
 
 
+## artisan コマンド
+
+### indigo:cron
+
+配信予約ツール Indigo の配信処理をキックします。
+
+### bd:generate_vhosts
+
+Apache 用の Virtual Hosts の設定ファイルを出力します。
+
+
+
 ## 更新履歴 - Change log
 
 ### Burdock v0.0.1 (リリース日未定)

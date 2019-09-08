@@ -5,6 +5,7 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\IndigoCronCommand;
+use App\Console\Commands\GenerateVirtualHostsCommand;
 
 class Kernel extends ConsoleKernel
 {
@@ -14,7 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\IndigoCronCommand::class
+        Commands\IndigoCronCommand::class,
+        Commands\GenerateVirtualHostsCommand::class
     ];
 
     /**
@@ -30,6 +32,11 @@ class Kernel extends ConsoleKernel
                 []
             )
             ->everyMinute();
+        $schedule->command(
+                GenerateVirtualHostsCommand::class,
+                []
+            )
+            ->everyTenMinutes();
     }
 
     /**
