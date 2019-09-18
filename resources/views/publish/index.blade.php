@@ -15,7 +15,7 @@
 		</div>
 	@else
 		<div class="contents">
-			<p><a class="px2-btn px2-btn--primary" href="{{ url('/publish/'.$project->project_code.'/'.$branch_name.'/publish_run') }}">フルパブリッシュ</a></p>
+			<p><a class="px2-btn px2-btn--primary" href="{{ url('/publish/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/publish_run') }}">フルパブリッシュ</a></p>
 		</div>
 	@endif
 </div>

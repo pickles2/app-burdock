@@ -87,9 +87,12 @@ class ProjectController extends Controller
 	 */
 	public function show(Project $project, $branch_name)
 	{
-		//
-		$option = ' /?PX=px2dthelper.get.all';
-		$bd_object = get_px_execute($project->project_code, $branch_name, $option);
+		$bd_object = px2query(
+			$project->project_code,
+			$branch_name,
+			'/?PX=px2dthelper.get.all'
+		);
+		$bd_object = json_decode($bd_object);
 		if($bd_object) {
 			return view('projects.show', ['project' => $project, 'branch_name' => $branch_name], compact('bd_object'));
 		} elseif(session('my_status')) {

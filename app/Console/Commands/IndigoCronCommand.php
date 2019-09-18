@@ -22,6 +22,9 @@ class IndigoCronCommand extends Command
 	 */
 	protected $description = '本番配信ツール indigo が、配信予約に従って配信を実行する。';
 
+	/** $fs */
+	private $fs;
+
 	/**
 	 * Create a new command instance.
 	 *
@@ -40,9 +43,12 @@ class IndigoCronCommand extends Command
 	public function handle()
 	{
 
-		$this->info('================================');
-		$this->info('Start indigo:cron');
-		$this->info('--------------------------------');
+		$this->info('================================================================');
+		$this->info('  Start '.$this->signature);
+		$this->info('    - Local Time: '.date('Y-m-d H:i:s'));
+		$this->info('    - GMT: '.gmdate('Y-m-d H:i:s'));
+		$this->info('----------------------------------------------------------------');
+		$this->line( '' );
 
 		$indigoController = new DeliveryController();
 
@@ -52,13 +58,24 @@ class IndigoCronCommand extends Command
 			return 1;
 		}
 
+		$this->fs = new \tomk79\filesystem();
 
-		$progressbar = $this->output->createProgressBar(count($projects));
-		$progressbar->start();
+		$count = count($projects);
+		$current = 0;
+
 		foreach ($projects as $project) {
+			$current ++;
 			$this->line( '' );
-			$this->info( $project->project_name );
-			$this->line( '('.$project->id.')' );
+			$this->info( '[ '.$current.'/'.$count.' ] '.$project->project_name );
+			$this->line( '   - '.$project->id );
+			$this->line( '   - '.$project->project_code );
+
+			if( !strlen($project->git_url) ){
+				$this->line( '`git_url` is not set.' );
+				$this->line( '                     -----> Skip' );
+				$this->line( '' );
+				continue;
+			}
 
 			$default_branch_name = \get_git_remote_default_branch_name($project->git_url);
 
@@ -69,20 +86,19 @@ class IndigoCronCommand extends Command
 
 			// 実行する
 			$result = $indigo->cron_run();
-			$this->line( 'OK' );
+			$this->line( '                     -----> OK' );
 			$this->line( '' );
-
-
-			$progressbar->advance();
 			sleep(1);
 		}
-		$progressbar->finish();
 
 		$this->line(' finished!');
-		$this->line("\n\n");
-		$this->comment('Command successful');
-		$this->line("\n\n");
+		$this->line( '' );
+		$this->line('Local Time: '.date('Y-m-d H:i:s'));
+		$this->line('GMT: '.gmdate('Y-m-d H:i:s'));
+		$this->comment('------------ '.$this->signature.' successful ------------');
+		$this->line( '' );
 
 		return 0; // 終了コード
 	}
+
 }

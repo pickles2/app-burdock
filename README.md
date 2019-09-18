@@ -49,9 +49,9 @@ Application key set successfully.
 アプリサーバーとプレビューサーバーは異なるURLを設定してください。
 
 ```
-APP_URL=https://app.com
-PREV_URL=prev.app.com
-BD_PLUM_STAGING_DOMAIN=staging.app.com
+APP_URL=https://example.com
+BD_PREVIEW_DOMAIN=preview.example.com
+BD_PLUM_STAGING_DOMAIN=staging.example.com
 ```
 
 #### データベース接続設定
@@ -105,7 +105,7 @@ $ php ../artisan migrate --seed;
 $ cd ..;
 ```
 
-### サーバーを起動してみる
+### サーバーを起動して確認する
 
 以上でセットアップは完了です。
 次のコマンドを実行してサーバーを起動し、確認してみることができます。
@@ -116,6 +116,13 @@ $ php artisan serve
 
 正常に起動したら、 `http://127.0.0.1:8000` でアクセスできます。
 ブラウザではじめの画面が表示されたら完了です。
+
+
+## cron コマンド設定
+
+```
+* * * * * apache cd /path/to/burdock && php artisan schedule:run >> /dev/null 2>&1
+```
 
 
 ## Redis で WebSocket 環境をセットアップする
@@ -151,6 +158,22 @@ BROADCAST_DRIVER=redis
 $ redis-server
 $ laravel-echo-server start
 ```
+
+
+## artisan コマンド
+
+### indigo:cron
+
+配信予約ツール Indigo の配信処理をキックします。
+
+### bd:deploy-script
+
+Indigo の配信処理の後処理をキックします。
+
+### bd:generate_vhosts
+
+Apache 用の Virtual Hosts の設定ファイルを出力します。
+
 
 
 ## 更新履歴 - Change log
