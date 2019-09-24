@@ -36,7 +36,7 @@
 						<div class="cont_page_info-btn">
 							<div class="btn-group">
 								<a href="{{ url('/pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'?page_path='.$page_param) }}" class="btn px2-btn px2-btn--primary px2-btn--lg btn--edit" style="padding-left: 5em; padding-right: 5em; font: inherit;" target="_blank">{{ __('Edit')}}</a>
-								<a href="{{ url('https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('PREV_URL').$page_param) }}" class="btn px2-btn px2-btn--lg btn--preview" target="_blank" style="font: inherit;">ブラウザでプレビュー</a>
+								<a href="{{ url('https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN').$page_param) }}" class="btn px2-btn px2-btn--lg btn--preview" target="_blank" style="font: inherit;">ブラウザでプレビュー</a>
 								<!-- <button type="button" class="btn px2-btn px2-btn--lg btn--resources">リソース</button> -->
 								<button type="button" class="btn px2-btn px2-btn--lg dropdown-toggle" data-toggle="dropdown">
 									<span class="caret"></span>
@@ -120,7 +120,7 @@
 					<div class="preview_window_frame--inner" data-original-title="" title="">
 						<script>
 						// .envよりプレビューサーバーのURLを取得
-						var prev_url = '{{ 'https://'.$branch_name.'.'.$project->project_code.'.'.env('PREV_URL') }}';
+						var preview_url = '{{ 'https://'.$branch_name.'.'.$project->project_code.'.'.env('BD_PREVIEW_DOMAIN') }}';
 						// 外部サイトに送るAPP_URLとスクリプトをbase64でエンコード
 						var jsBase64 = '{{ base64_encode("var parent_url = '".env('APP_URL')."';".file_get_contents('../resources/views/pages/js/script.js')) }}';
 
@@ -129,13 +129,13 @@
 							// iframeのwindowオブジェクトを取得
 							var ifrm = document.getElementById('ifrm').contentWindow;
 							// 外部サイトにメッセージを投げる
-							ifrm.postMessage({'scriptUrl':'data:text/javascript;base64,'+encodeURIComponent(jsBase64)}, prev_url);
+							ifrm.postMessage({'scriptUrl':'data:text/javascript;base64,'+encodeURIComponent(jsBase64)}, preview_url);
 						};
 						// メッセージ受信イベント
 						window.addEventListener('message', receiveMessage, false);
 						function receiveMessage(event) {
-							// オリジンがprev_urlではなかった場合終了
-							if (event.origin !== prev_url) {
+							// オリジンがpreview_urlではなかった場合終了
+							if (event.origin !== preview_url) {
 								return;
 							};
 							// 受信したイベントデータをajaxでコントローラーに送信
@@ -153,7 +153,7 @@
 							});
 						};
 						</script>
-						<iframe id="ifrm" data-original-title="" title="" src="{{ url('https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('PREV_URL').$page_param) }}"></iframe>
+						<iframe id="ifrm" data-original-title="" title="" src="{{ url('https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN').$page_param) }}"></iframe>
 					</div>
 				</div>
 			</div>

@@ -70,7 +70,9 @@ class ProjectController extends Controller
 		$project->user_id = $request->user()->id;
 		$project->save();
 
-		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
+		$project_workingtree_path = get_project_workingtree_dir($project->project_code, $branch_name);
+		\File::makeDirectory($project_workingtree_path, 0777, true, true);
+		$project_path = get_project_dir($project->project_code);
 		\File::makeDirectory($project_path, 0777, true, true);
 
 		$message = 'プロジェクトを作成しました。';
@@ -85,9 +87,12 @@ class ProjectController extends Controller
 	 */
 	public function show(Project $project, $branch_name)
 	{
-		//
-		$option = ' /?PX=px2dthelper.get.all';
-		$bd_object = get_px_execute($project->project_code, $branch_name, $option);
+		$bd_object = px2query(
+			$project->project_code,
+			$branch_name,
+			'/?PX=px2dthelper.get.all'
+		);
+		$bd_object = json_decode($bd_object);
 		if($bd_object) {
 			return view('projects.show', ['project' => $project, 'branch_name' => $branch_name], compact('bd_object'));
 		} elseif(session('my_status')) {
@@ -109,7 +114,13 @@ class ProjectController extends Controller
 		//
 		// update, destroyでも同様に
 		$this->authorize('edit', $project);
-		return view('projects.edit', ['project' => $project, 'branch_name' => $branch_name]);
+		return view(
+			'projects.edit',
+			[
+				'project' => $project,
+				'branch_name' => $branch_name
+			]
+		);
 	}
 
 	/**
@@ -157,7 +168,10 @@ class ProjectController extends Controller
 		$project->project_name = $request->project_name;
 		$project->git_url = $request->git_url;
 		$project->git_username = \Crypt::encryptString($request->git_username);
-		$project->git_password = \Crypt::encryptString($request->git_password);
+		if( property_exists($request, 'git_password') && strlen($request->git_password) ){
+			// 入力があった場合だけ上書き
+			$project->git_password = \Crypt::encryptString($request->git_password);
+		}
 		$project->save();
 
 		return redirect('projects/' . $project->project_code . '/' . $branch_name)->with('my_status', __('Updated a Project.'));

@@ -90,8 +90,8 @@ class git{
 		chdir($cd);
 
 		return array(
-			'stdout' => $io[1],
-			'stderr' => $io[2],
+			'stdout' => $this->conceal_confidentials($io[1]),
+			'stderr' => $this->conceal_confidentials($io[2]),
 			'return' => $return_var,
 		);
 	}
@@ -134,5 +134,19 @@ class git{
 		}
 
 		return true;
+	}
+
+	/**
+	 * gitコマンドの結果から、秘匿な情報を隠蔽する
+	 * @param string $str 出力テキスト
+	 * @return string 秘匿情報を隠蔽加工したテキスト
+	 */
+	private function conceal_confidentials($str){
+
+		// gitリモートリポジトリのURLに含まれるパスワードを隠蔽
+		// ただし、アカウント名は残す。
+		$str = preg_replace('/((?:[a-zA-Z\-\_]+))\:\/\/([^\s\/\\\\]*?\:)([^\s\/\\\\]*)\@/si', '$1://$2********@', $str);
+
+		return $str;
 	}
 }

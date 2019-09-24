@@ -9,64 +9,96 @@ use App\Project;
 
 class PageController extends Controller
 {
-    /**
-     * 各アクションの前に実行させるミドルウェア
-     */
-    public function __construct()
-    {
-        // ログイン・登録完了してなくても閲覧だけはできるようにexcept()で指定します。
-        $this->middleware('auth');
-        $this->middleware('verified');
-    }
+	/**
+	 * 各アクションの前に実行させるミドルウェア
+	 */
+	public function __construct()
+	{
+		// ログイン・登録完了してなくても閲覧だけはできるようにexcept()で指定します。
+		$this->middleware('auth');
+		$this->middleware('verified');
+	}
 
-    public function index(Request $request, Project $project, $branch_name)
-    {
+	public function index(Request $request, Project $project, $branch_name)
+	{
 		//
 		$page_id = $request->page_id;
 		$page_param = $request->page_path;
-		$option_id = ' /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id;
-        $current = get_px_execute($project->project_code, $branch_name, $option_id);
-		$option_param = ' /?PX=px2dthelper.check_editor_mode\&path='.$page_param;
-        $editor_type = get_px_execute($project->project_code, $branch_name, $option_param);
+		$current = px2query(
+			$project->project_code,
+			$branch_name,
+			'/?PX=px2dthelper.get.all&filter=false&path='.urlencode($page_id)
+		);
+		$current = json_decode($current);
 
-        return view('pages.index', ['project' => $project, 'branch_name' => $branch_name, 'page_id' => $page_id, 'page_param' => $page_param], compact('current', 'editor_type'));
-    }
+		$editor_type = px2query(
+			$project->project_code,
+			$branch_name,
+			'/?PX=px2dthelper.check_editor_mode&path='.urlencode($page_param)
+		);
+		$editor_type = json_decode($editor_type);
+
+		return view(
+			'pages.index',
+			[
+				'project' => $project,
+				'branch_name' => $branch_name,
+				'page_id' => $page_id,
+				'page_param' => $page_param,
+			],
+			compact('current', 'editor_type')
+		);
+	}
 
 
-    public function ajax(Request $request, Project $project, $branch_name)
-    {
-        $page_path = $request->path_path;
-        $option = ' '.$page_path.'?PX=px2dthelper.get.all';
-        $info = get_px_execute($project->project_code, $branch_name, $option);
+	public function ajax(Request $request, Project $project, $branch_name)
+	{
+		$page_path = $request->path_path;
+		if( !strlen($page_path) ){
+			$page_path = '/';
+		}
+		$info = px2query(
+			$project->project_code,
+			$branch_name,
+			$page_path.'?PX=px2dthelper.get.all'
+		);
+		$info = json_decode($info);
 
-        $path = $info->page_info->path;
-        $id = $info->page_info->id;
+		$path = $info->page_info->path;
+		$id = $info->page_info->id;
 
-        $data = array(
-            "path" => $path,
-            "id" => $id,
-        );
-        return $data;
-    }
+		$data = array(
+			"path" => $path,
+			"id" => $id,
+		);
+		return $data;
+	}
 
 
-    public function show(Request $request, Project $project, $branch_name)
-    {
+	public function show(Request $request, Project $project, $branch_name)
+	{
 		//
 		$page_param = $request->page_path;
 		$client_resources_dist = realpath(__DIR__.'/../../../public/assets/px2ce_resources');
-		$option = ' /sample_pages/?PX=px2dthelper.px2ce.client_resources\&dist='.$client_resources_dist;
-		$px2ce_client_resources = get_px_execute($project->project_code, $branch_name, $option);
+		$px2ce_client_resources = px2query(
+			$project->project_code,
+			$branch_name,
+			'/sample_pages/?PX=px2dthelper.px2ce.client_resources&dist='.urlencode($client_resources_dist)
+		);
+		$px2ce_client_resources = json_decode($px2ce_client_resources);
 
 		return view('pages.show', ['project' => $project, 'branch_name' => $branch_name, 'page_param' => $page_param], compact('px2ce_client_resources'));
-    }
+	}
 
 
-    public function gpi(Request $request, Project $project, $branch_name)
-    {
-		//
-		$option = ' /?PX=px2dthelper.get.all';
-		$current = get_px_execute($project->project_code, $branch_name, $option);
+	public function gpi(Request $request, Project $project, $branch_name)
+	{
+		$current = px2query(
+			$project->project_code,
+			$branch_name,
+			'/?PX=px2dthelper.get.all'
+		);
+		$current = json_decode($current);
 
 		// ミリ秒を含むUnixタイムスタンプを数値（Float）で取得
 		$timestamp = microtime(true);
@@ -81,11 +113,15 @@ class PageController extends Controller
 		file_put_contents($file, $request->data);
 
 		$page_param = $request->page_path;
-		$option = ' '.$page_param.'?PX=px2dthelper.px2ce.gpi\&data_filename='.$tmpFileName;
-		$result = json_encode(get_px_execute($project->project_code, $branch_name, $option));
+		$result = px2query(
+			$project->project_code,
+			$branch_name,
+			$page_param.'?PX=px2dthelper.px2ce.gpi&data_filename='.urlencode($tmpFileName)
+		);
+		$result = json_decode($result);
 
 		header('Content-type: text/json');
-		echo $result;
+		echo json_encode($result);
 		// 作成した一時ファイルを削除
 		unlink($file);
 

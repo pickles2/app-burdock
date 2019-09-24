@@ -26,25 +26,53 @@ class SitemapController extends Controller
 		//
 		$page_id = $request->page_id;
 		$page_param = $request->page_path;
-		$option = ' /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id;
-		$current = get_px_execute($project->project_code, $branch_name, $option);
+		$current = px2query(
+			$project->project_code,
+			$branch_name,
+			'/?PX=px2dthelper.get.all&filter=false&path='.urlencode($page_id)
+		);
+		$current = json_decode($current);
 
 		$sitemap_files = \File::files($current->realpath_homedir.'sitemaps/');
+		$get_files = array();
+		$destroy_files = array();
 		foreach($sitemap_files as $file) {
-			if($file->getExtension() === 'xlsx') {
-				$get_files[] = $file;
-			} else {
-				$destroy_files[] = $file;
+			$filename = preg_replace( '/\..*?$/', '', $file->getFilename() );
+			if( !array_key_exists($filename, $get_files) ){
+				$get_files[$filename] = array();
+				$get_files[$filename]['filename'] = $filename;
+				$get_files[$filename]['basename'] = null;
+				$get_files[$filename]['extensions'] = array();
 			}
+			$ext = strtolower($file->getExtension());
+			if( $ext == 'csv' ){
+				$get_files[$filename]['basename'] = $file->getFilename();
+			}
+			$get_files[$filename]['extensions'][$ext] = array(
+				'ext' => $ext,
+				'basename' => $file->getFilename(),
+			);
 		}
-		return view('sitemaps.index',['project' => $project, 'branch_name' => $branch_name, 'page_param' => $page_param], compact('current', 'get_files'));
+
+		return view(
+			'sitemaps.index',
+			[
+				'project' => $project,
+				'branch_name' => $branch_name,
+				'page_param' => $page_param
+			],
+			compact('current', 'get_files')
+		);
 	}
 
 	public function upload(StoreSitemap $request, Project $project, $branch_name)
 	{
-		//
-		$option = ' /?PX=px2dthelper.get.all';
-		$current = get_px_execute($project->project_code, $branch_name, $option);
+		$current = px2query(
+			$project->project_code,
+			$branch_name,
+			'/?PX=px2dthelper.get.all'
+		);
+		$current = json_decode($current);
 		$upload_file = $request->file;
 		$old_file = $upload_file;
 		$mimetype = $upload_file->clientExtension();
@@ -65,8 +93,12 @@ class SitemapController extends Controller
 		//
 		$page_id = $request->page_id;
 		$page_param = $request->page_path;
-		$option = ' /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id;
-		$current = get_px_execute($project->project_code, $branch_name, $option);
+		$current = px2query(
+			$project->project_code,
+			$branch_name,
+			'/?PX=px2dthelper.get.all&filter=false&path='.urlencode($page_id)
+		);
+		$current = json_decode($current);
 
 		if($request->file === 'csv') {
 			// CSVファイルのダウンロード
@@ -91,8 +123,12 @@ class SitemapController extends Controller
 		//
 		$page_id = $request->page_id;
 		$page_param = $request->page_path;
-		$option = ' /?PX=px2dthelper.get.all\&filter=false\&path='.$page_id;
-		$current = get_px_execute($project->project_code, $branch_name, $option);
+		$current = px2query(
+			$project->project_code,
+			$branch_name,
+			'/?PX=px2dthelper.get.all&filter=false&path='.urlencode($page_id)
+		);
+		$current = json_decode($current);
 
 		$xlsx_file_name = $request->file_name;
 		$csv_file_name = str_replace('xlsx', 'csv', $xlsx_file_name);
