@@ -61979,7 +61979,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			info: '',
 			setup_status: 1,
 			message: '',
-			stderr: '',
+			stdout: '',
 			isSetupBefore: true,
 			cloneRepository: '',
 			cloneRepositoryConfirm: '',
@@ -62070,19 +62070,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			// Ajax\SetupController@setupAjaxの返り値
 			window.Echo.channel('setup-event').listen('SetupEvent', function (e) {
 				//
+				console.log(e);
 				_this.isCheckedOption === e.checked_option;
 				_this.i++;
 				_this.isSetupBefore = false;
 				_this.isSetupDuring = true;
-				if (e.stderr) {
-					_this.message = _this.message + e.stderr;
-					if (/Generating autoload files/.test(e.stderr)) {
-						_this.stderr = e.stderr;
+				if (e.stdout) {
+					_this.message = _this.message + e.stdout;
+					if (/Generating autoload files/.test(e.stdout)) {
+						_this.stdout = e.stdout;
 					}
 				}
 				if (e.std_array[0] === 'Receiving' && e.std_array[1] === 'objects:') {
-					if (/Receiving objects: 100%/.test(e.stderr)) {
-						_this.stderr = e.stderr;
+					if (/Receiving objects: 100%/.test(e.stdout)) {
+						_this.stdout = e.stdout;
 						_this.fraction = e.denominator + ' / ' + e.denominator;
 						_this.rate = 100;
 					} else if (e.rate !== '') {
@@ -62090,29 +62091,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						_this.rate = e.rate;
 					}
 				}
-				if (/remote: Not Found/.test(e.stderr)) {
+				if (/remote: Not Found/.test(e.stdout)) {
 					// リモートリポジトリが存在しない場合
 					_this.errorCloneRepository = 1;
 					_this.setupStatus = 1;
-				} else if (/rejected/.test(e.stderr)) {
+				} else if (/rejected/.test(e.stdout)) {
 					// リモートリポジトリから拒否された場合
 					_this.errorCloneRepository = 2;
 					_this.setupStatus = 1;
-				} else if (/unable to access/.test(e.stderr)) {
+				} else if (/unable to access/.test(e.stdout)) {
 					// リモートリポジトリにアクセスできない場合
 					_this.errorCloneRepository = 3;
 					_this.setupStatus = 1;
-				} else if (/could not read Username/.test(e.stderr)) {
+				} else if (/could not read Username/.test(e.stdout)) {
 					// ユーザー名が見つからないと言われた場合
 					_this.errorCloneUserName = 1;
 					_this.errorClonePassword = 1;
 					_this.setupStatus = 1;
-				} else if (/Authentication failed/.test(e.stderr)) {
+				} else if (/Authentication failed/.test(e.stdout)) {
 					// 認証に失敗した場合
 					_this.errorCloneUserName = 2;
 					_this.errorClonePassword = 2;
 					_this.setupStatus = 1;
-				} else if (/early EOF/.test(e.stderr)) {
+				} else if (/early EOF/.test(e.stdout)) {
 					// 早期EOFエラーが発生した場合
 					_this.errorCloneRepository = 4;
 					_this.setupStatus = 1;
@@ -62124,7 +62125,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				_this.i++;
 
 				if (e.std_array[0] === 'Writing' && e.std_array[1] === 'objects:') {
-					if (/Writing objects: 100%/.test(e.stderr)) {
+					if (/Writing objects: 100%/.test(e.stdout)) {
 						_this.fraction = e.denominator + ' / ' + e.denominator;
 						_this.rate = 100;
 					} else if (e.rate !== '') {
@@ -62133,26 +62134,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					}
 				}
 
-				if (/remote: Repository not found/.test(e.stderr)) {
+				if (/remote: Repository not found/.test(e.stdout)) {
 					// リモートリポジトリが存在しない場合
 					_this.errorRepository = 1;
 					_this.setupStatus = 3;
-				} else if (/rejected/.test(e.stderr)) {
+				} else if (/rejected/.test(e.stdout)) {
 					// リモートリポジトリから拒否された場合
 					_this.errorRepository = 2;
 					_this.setupStatus = 3;
-				} else if (/unable to access/.test(e.stderr)) {
+				} else if (/unable to access/.test(e.stdout)) {
 					// リモートリポジトリにアクセスできない場合
 					_this.errorRepository = 3;
 					_this.setupStatus = 3;
-				} else if (/Invalid username or password/.test(e.stderr)) {
+				} else if (/Invalid username or password/.test(e.stdout)) {
 					// ユーザー名またはパスワードが違う場合
 					_this.errorUserName = 1;
 					_this.errorPassword = 1;
 					_this.setupStatus = 3;
-				} else if (/new branch/.test(e.stderr)) {
+				} else if (/new branch/.test(e.stdout)) {
 					// location.href = '/projects/'+this.projectCode+'/'+this.branchName;
-				} else if (/could not read Username/.test(e.stderr)) {
+				} else if (/could not read Username/.test(e.stdout)) {
 					// ユーザー名が見つからないと言われた場合
 					_this.errorUserName = 1;
 					_this.errorPassword = 1;
@@ -62184,12 +62185,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			// AjaxでAjax\SetupController@setupAjaxにpost処理
 			axios.post('/setup/' + this.projectCode + '/' + this.branchName + '/setupAjax', data).then(function (res) {
 				//
-				if (/Generating autoload files/.test(_this2.stderr) && res.data.info === true) {
+				if (/Generating autoload files/.test(_this2.stdout) && res.data.info === true) {
 					_this2.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
 					_this2.isSetupDuringButton = false;
 					_this2.isSetupAfterButton = true;
 					// this.next();
-				} else if (/Receiving objects: 100%/.test(_this2.stderr) && res.data.info === true) {
+				} else if (/Receiving objects: 100%/.test(_this2.stdout) && res.data.info === true) {
 					_this2.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
 					_this2.isSetupDuringButton = false;
 					_this2.isSetupAfterButton = true;

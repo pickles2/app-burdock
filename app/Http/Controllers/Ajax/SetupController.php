@@ -108,7 +108,7 @@ class SetupController extends Controller
 		stream_set_blocking($pipes[2], 0);
 
 		while (feof($pipes[1]) === false || feof($pipes[2]) === false) {
-			$stdout = $stderr = '';
+			$stdout = $stderr = $std_parse = $std_array = $numerator = $denominator = $rate = '';
 			$read = array($pipes[1], $pipes[2]);
 			$write = null;
 			$except = null;
@@ -123,12 +123,10 @@ class SetupController extends Controller
 		        continue;
 		    } else {
 		        foreach ($read as $sock) {
-		            if ($sock === $pipes[1]) {
-		                $stdout = fgets($sock);
-					} else if ($sock === $pipes[2]) {
-						$stderr = fgets($sock);
+		            if ($sock === $pipes[2]) {
+						$stdout = fgets($sock);
 						// 標準出力をスペース区切りで配列に代入
-						$std_array = explode(' ', $stderr);
+						$std_array = explode(' ', $stdout);
 						if($std_array[0] === 'Receiving' && $std_array[1] === 'objects:') {
 							for($i = 0; $i < count($std_array); $i++) {
 								if(preg_match('/\(.*?\)/', $std_array[$i])) {
@@ -141,19 +139,11 @@ class SetupController extends Controller
 									// 分子/分母の値を小数点切り捨てかつ文字列型に変換して$parseに代入
 									$rate = strval(floor($numerator/$denominator*100));
 									break;
-								} else {
-									$std_parse = '';
-									$numerator = '';
-									$denominator = '';
-									$rate = '';
 								}
 							}
-						} else {
-							$std_parse = '';
-							$numerator = '';
-							$denominator = '';
-							$rate = '';
 						}
+					} else {
+						$stderr = fgets($sock);
 					}
 				}
 			}

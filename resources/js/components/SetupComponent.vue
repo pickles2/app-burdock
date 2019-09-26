@@ -291,7 +291,7 @@ export default {
 			info: '',
 			setup_status: 1,
 			message: '',
-			stderr: '',
+			stdout: '',
 			isSetupBefore: true,
 			cloneRepository: '',
 			cloneRepositoryConfirm: '',
@@ -379,19 +379,20 @@ export default {
 			// Ajax\SetupController@setupAjaxの返り値
 			window.Echo.channel('setup-event').listen('SetupEvent', (e) => {
 				//
+				console.log(e);
 				this.isCheckedOption === e.checked_option;
 				this.i++;
 				this.isSetupBefore = false;
 				this.isSetupDuring = true;
-				if(e.stderr) {
-					this.message = this.message+e.stderr;
-					if(/Generating autoload files/.test(e.stderr)) {
-						this.stderr = e.stderr;
+				if(e.stdout) {
+					this.message = this.message+e.stdout;
+					if(/Generating autoload files/.test(e.stdout)) {
+						this.stdout = e.stdout;
 					}
 				}
 				if(e.std_array[0] === 'Receiving' && e.std_array[1] === 'objects:') {
-					if(/Receiving objects: 100%/.test(e.stderr)) {
-						this.stderr = e.stderr;
+					if(/Receiving objects: 100%/.test(e.stdout)) {
+						this.stdout = e.stdout;
 						this.fraction = e.denominator + ' / ' + e.denominator;
 						this.rate = 100;
 					} else if(e.rate !== '') {
@@ -399,29 +400,29 @@ export default {
 						this.rate = e.rate;
 					}
 				}
-				if(/remote: Not Found/.test(e.stderr)) {
+				if(/remote: Not Found/.test(e.stdout)) {
 					// リモートリポジトリが存在しない場合
 					this.errorCloneRepository = 1;
 					this.setupStatus = 1;
-				} else if(/rejected/.test(e.stderr)) {
+				} else if(/rejected/.test(e.stdout)) {
 					// リモートリポジトリから拒否された場合
 					this.errorCloneRepository = 2;
 					this.setupStatus = 1;
-				} else if(/unable to access/.test(e.stderr)) {
+				} else if(/unable to access/.test(e.stdout)) {
 					// リモートリポジトリにアクセスできない場合
 					this.errorCloneRepository = 3;
 					this.setupStatus = 1;
-				} else if(/could not read Username/.test(e.stderr)) {
+				} else if(/could not read Username/.test(e.stdout)) {
 					// ユーザー名が見つからないと言われた場合
 					this.errorCloneUserName = 1;
 					this.errorClonePassword = 1;
 					this.setupStatus = 1;
-				} else if(/Authentication failed/.test(e.stderr)) {
+				} else if(/Authentication failed/.test(e.stdout)) {
 					// 認証に失敗した場合
 					this.errorCloneUserName = 2;
 					this.errorClonePassword = 2;
 					this.setupStatus = 1;
-				} else if (/early EOF/.test(e.stderr)) {
+				} else if (/early EOF/.test(e.stdout)) {
 					// 早期EOFエラーが発生した場合
 					this.errorCloneRepository = 4;
 					this.setupStatus = 1;
@@ -433,7 +434,7 @@ export default {
 				this.i++;
 
 				if(e.std_array[0] === 'Writing' && e.std_array[1] === 'objects:') {
-					if(/Writing objects: 100%/.test(e.stderr)) {
+					if(/Writing objects: 100%/.test(e.stdout)) {
 						this.fraction = e.denominator + ' / ' + e.denominator;
 						this.rate = 100;
 					} else if(e.rate !== '') {
@@ -442,26 +443,26 @@ export default {
 					}
 				}
 
-				if(/remote: Repository not found/.test(e.stderr)) {
+				if(/remote: Repository not found/.test(e.stdout)) {
 					// リモートリポジトリが存在しない場合
 					this.errorRepository = 1;
 					this.setupStatus = 3;
-				} else if(/rejected/.test(e.stderr)) {
+				} else if(/rejected/.test(e.stdout)) {
 					// リモートリポジトリから拒否された場合
 					this.errorRepository = 2;
 					this.setupStatus = 3;
-				} else if(/unable to access/.test(e.stderr)) {
+				} else if(/unable to access/.test(e.stdout)) {
 					// リモートリポジトリにアクセスできない場合
 					this.errorRepository = 3;
 					this.setupStatus = 3;
-				} else if(/Invalid username or password/.test(e.stderr)) {
+				} else if(/Invalid username or password/.test(e.stdout)) {
 					// ユーザー名またはパスワードが違う場合
 					this.errorUserName = 1;
 					this.errorPassword = 1;
 					this.setupStatus = 3;
-				} else if(/new branch/.test(e.stderr)) {
+				} else if(/new branch/.test(e.stdout)) {
 					// location.href = '/projects/'+this.projectCode+'/'+this.branchName;
-				} else if(/could not read Username/.test(e.stderr)) {
+				} else if(/could not read Username/.test(e.stdout)) {
 					// ユーザー名が見つからないと言われた場合
 					this.errorUserName = 1;
 					this.errorPassword = 1;
@@ -492,12 +493,12 @@ export default {
 			// AjaxでAjax\SetupController@setupAjaxにpost処理
 			axios.post('/setup/'+this.projectCode+'/'+this.branchName+'/setupAjax', data).then(res => {
 				//
-				if(/Generating autoload files/.test(this.stderr) && res.data.info === true) {
+				if(/Generating autoload files/.test(this.stdout) && res.data.info === true) {
 					this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
 					this.isSetupDuringButton = false;
 					this.isSetupAfterButton = true;
 					// this.next();
-				} else if(/Receiving objects: 100%/.test(this.stderr) && res.data.info === true) {
+				} else if(/Receiving objects: 100%/.test(this.stdout) && res.data.info === true) {
 					this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
 					this.isSetupDuringButton = false;
 					this.isSetupAfterButton = true;
