@@ -48,12 +48,12 @@
 				<div class="px2-header__block">
 					<div class="px2-header__id">
 						@guest
-							<span><a class="app_name" href="{{ url('/') }}">{{ config('app.name') }}</a></span>
+							<span></span>
 						@else
 							@if(! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
 								<span>{{ 'Project_'.$project->project_name }}</span>
 							@else
-								<span><a class="app_name" href="{{ url('/') }}">{{ config('app.name') }}</a></span>
+								<span></span>
 							@endif
 						@endguest
 					</div>

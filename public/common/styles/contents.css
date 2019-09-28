@@ -223,3 +223,13 @@ ul.listview {
  */
 .tooltip[role=tooltip] {
   word-wrap: break-word; }
+
+/**
+ * px2style
+ */
+.px2-header p,
+.px2-header li,
+.px2-header dt,
+.px2-header dd{
+  line-height: 1;
+}
