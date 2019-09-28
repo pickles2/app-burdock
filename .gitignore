@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /public/projects
+/public/assets/px2ce_resources
 /storage/*.key
 #/composer.lock
 /vendor

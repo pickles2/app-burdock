@@ -80,6 +80,15 @@ class PageController extends Controller
 		//
 		$page_param = $request->page_path;
 		$client_resources_dist = realpath(__DIR__.'/../../../public/assets/px2ce_resources');
+		$client_resources_dist .= '/'.urlencode($project->project_code);
+		if( !is_dir($client_resources_dist) ){
+			mkdir($client_resources_dist);
+		}
+		$client_resources_dist .= '/'.urlencode($branch_name);
+		if( !is_dir($client_resources_dist) ){
+			mkdir($client_resources_dist);
+		}
+
 		$px2ce_client_resources = px2query(
 			$project->project_code,
 			$branch_name,
@@ -87,7 +96,15 @@ class PageController extends Controller
 		);
 		$px2ce_client_resources = json_decode($px2ce_client_resources);
 
-		return view('pages.show', ['project' => $project, 'branch_name' => $branch_name, 'page_param' => $page_param], compact('px2ce_client_resources'));
+		return view(
+			'pages.show',
+			[
+				'project' => $project,
+				'branch_name' => $branch_name,
+				'page_param' => $page_param,
+			],
+			compact('px2ce_client_resources')
+		);
 	}
 
 
