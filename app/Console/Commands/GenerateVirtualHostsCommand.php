@@ -120,6 +120,11 @@ class GenerateVirtualHostsCommand extends Command
 	 * プロジェクト１件分のタスクを実行する
 	 */
 	private function execute_project_task( $project ){
+		$realpath_template_root_dir = __DIR__.'/../../../settings/generate_vhosts/';
+		$twig_loader = new \Twig\Loader\FilesystemLoader($realpath_template_root_dir);
+		$twig = new \Twig\Environment($twig_loader, [
+		]);
+
 		$default_branch_name = 'master';
 		if( strlen($project->git_url) ){
 			$default_branch_name = \get_git_remote_default_branch_name($project->git_url);
@@ -189,7 +194,7 @@ class GenerateVirtualHostsCommand extends Command
 		// var_dump($path_publish_dir);
 		// var_dump($path_controot);
 
-		$relpath_docroot_dist = $this->fs->normalize_path($this->fs->get_realpath('/'.dirname($path_entry_script).$path_publish_dir.'/'));
+		$relpath_docroot_dist = $this->fs->normalize_path($this->fs->get_realpath('/'.dirname($path_entry_script).'/'.$path_publish_dir.'/'));
 		$relpath_docroot_preview = $this->fs->normalize_path($this->fs->get_realpath('/'.dirname($path_entry_script).'/'));
 		if( strlen($path_controot) ){
 			$path_controot = $this->fs->normalize_path($this->fs->get_realpath('/'.$path_controot.'/'));
@@ -198,6 +203,7 @@ class GenerateVirtualHostsCommand extends Command
 		// var_dump($relpath_docroot_dist);
 		// var_dump($relpath_docroot_preview);
 
+		// --------------------------------------
 		// config header
 		$src_vhosts = '';
 		$src_vhosts .= "\n\n";
@@ -214,18 +220,21 @@ class GenerateVirtualHostsCommand extends Command
 		$this->put_tmp_contents( $src_vhosts );
 
 		$src_vhosts = '';
+		$tpl_vars = [
+			'domain' => $domain,
+			'project_code' => $project->project_code,
+			'document_root' => $this->fs->normalize_path($this->fs->get_realpath( env('BD_DATA_DIR').'/projects/'.$project->project_code.'/indigo/production/'.$relpath_docroot_dist )),
+		];
 		if( !strlen($domain) ){
 			$src_vhosts .= '# NO DOMAIN'."\n";
+		}elseif( is_file( $realpath_template_root_dir.'production.twig' ) ){
+			$template = $twig->load('production.twig');
+			$src_vhosts .= $template->render($tpl_vars);
 		}else{
-			$src_vhosts .= '<VirtualHost '.$domain.':443>'."\n";
-			$src_vhosts .= '	# Production ('.$project->project_code.')'."\n";
-			$src_vhosts .= '	ServerName '.$domain.''."\n";
-			$src_vhosts .= '	VirtualDocumentRoot '.$this->fs->normalize_path($this->fs->get_realpath( env('BD_DATA_DIR').'/projects/'.$project->project_code.'/indigo/production/'.$relpath_docroot_dist ))."\n";
-			$src_vhosts .= '	SSLEngine on'."\n";
-			$src_vhosts .= '	SSLProtocol all -SSLv2 -SSLv3'."\n";
-			$src_vhosts .= '	SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW'."\n";
-			$src_vhosts .= '	SSLCertificateFile "/path/to/localhost.crt"'."\n";
-			$src_vhosts .= '	SSLCertificateKeyFile "/path/to/localhost.key"'."\n";
+			$src_vhosts .= '<VirtualHost '.$tpl_vars['domain'].':80>'."\n";
+			$src_vhosts .= '	# Production ('.$tpl_vars['project_code'].')'."\n";
+			$src_vhosts .= '	ServerName '.$tpl_vars['domain'].''."\n";
+			$src_vhosts .= '	DocumentRoot '.$tpl_vars['document_root']."\n";
 			$src_vhosts .= '</VirtualHost>'."\n";
 		}
 
@@ -239,17 +248,23 @@ class GenerateVirtualHostsCommand extends Command
 
 		foreach($this->list_preview_dirs[$project->project_code] as $branch_name){
 
+			$tpl_vars = [
+				'domain' => $project->project_code.'---'.$branch_name.'.'.env('BD_PREVIEW_DOMAIN'),
+				'project_code' => $project->project_code,
+				'document_root' => $this->fs->normalize_path($this->fs->get_realpath( env('BD_DATA_DIR').'/repositories/'.$project->project_code.'---'.$branch_name.'/'.$relpath_docroot_preview )),
+				'branch_name' => $branch_name,
+			];
 			$src_vhosts = '';
-			$src_vhosts .= '<VirtualHost '.$project->project_code.'---'.$branch_name.'.'.env('BD_PREVIEW_DOMAIN').':443>'."\n";
-			$src_vhosts .= '	# Preview ('.$project->project_code.')'."\n";
-			$src_vhosts .= '	ServerName '.$project->project_code.'---'.$branch_name.'.'.env('BD_PREVIEW_DOMAIN').''."\n";
-			$src_vhosts .= '	VirtualDocumentRoot '.$this->fs->normalize_path($this->fs->get_realpath( env('BD_DATA_DIR').'/repositories/'.$project->project_code.'---'.$branch_name.'/'.$relpath_docroot_preview ))."\n";
-			$src_vhosts .= '	SSLEngine on'."\n";
-			$src_vhosts .= '	SSLProtocol all -SSLv2 -SSLv3'."\n";
-			$src_vhosts .= '	SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW'."\n";
-			$src_vhosts .= '	SSLCertificateFile "/path/to/localhost.crt"'."\n";
-			$src_vhosts .= '	SSLCertificateKeyFile "/path/to/localhost.key"'."\n";
-			$src_vhosts .= '</VirtualHost>'."\n";
+			if( is_file( $realpath_template_root_dir.'preview.twig' ) ){
+				$template = $twig->load('preview.twig');
+				$src_vhosts .= $template->render($tpl_vars);
+			}else{
+				$src_vhosts .= '<VirtualHost '.$tpl_vars['domain'].':80>'."\n";
+				$src_vhosts .= '	# Preview '.$tpl_vars['branch_name'].' ('.$tpl_vars['project_code'].')'."\n";
+				$src_vhosts .= '	ServerName '.$tpl_vars['domain'].''."\n";
+				$src_vhosts .= '	DocumentRoot '.$tpl_vars['document_root']."\n";
+				$src_vhosts .= '</VirtualHost>'."\n";
+			}
 
 			$this->put_tmp_contents( $src_vhosts );
 		}
@@ -262,17 +277,24 @@ class GenerateVirtualHostsCommand extends Command
 
 		for( $i = 0; $i < 10; $i ++ ){
 
+			$tpl_vars = [
+				'domain' => $project->project_code.'---stg'.($i+1).'.'.env('BD_PLUM_STAGING_DOMAIN'),
+				'project_code' => $project->project_code,
+				'document_root' => $this->fs->normalize_path($this->fs->get_realpath( env('BD_DATA_DIR').'/stagings/'.$project->project_code.'---stg'.($i+1).'/'.$relpath_docroot_dist )),
+				'staging_index' => $i+1,
+			];
+
 			$src_vhosts = '';
-			$src_vhosts .= '<VirtualHost '.$project->project_code.'---stg'.($i+1).'.'.env('BD_PLUM_STAGING_DOMAIN').':443>'."\n";
-			$src_vhosts .= '	# Staging '.($i+1).' ('.$project->project_code.')'."\n";
-			$src_vhosts .= '	ServerName '.$project->project_code.'---stg'.($i+1).'.'.env('BD_PLUM_STAGING_DOMAIN').''."\n";
-			$src_vhosts .= '	VirtualDocumentRoot '.$this->fs->normalize_path($this->fs->get_realpath( env('BD_DATA_DIR').'/stagings/'.$project->project_code.'---stg'.($i+1).'/'.$relpath_docroot_dist ))."\n";
-			$src_vhosts .= '	SSLEngine on'."\n";
-			$src_vhosts .= '	SSLProtocol all -SSLv2 -SSLv3'."\n";
-			$src_vhosts .= '	SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW'."\n";
-			$src_vhosts .= '	SSLCertificateFile "/path/to/localhost.crt"'."\n";
-			$src_vhosts .= '	SSLCertificateKeyFile "/path/to/localhost.key"'."\n";
-			$src_vhosts .= '</VirtualHost>'."\n";
+			if( is_file( $realpath_template_root_dir.'staging.twig' ) ){
+				$template = $twig->load('staging.twig');
+				$src_vhosts .= $template->render($tpl_vars);
+			}else{
+				$src_vhosts .= '<VirtualHost '.$tpl_vars['domain'].':80>'."\n";
+				$src_vhosts .= '	# Staging '.$tpl_vars['staging_index'].' ('.$tpl_vars['project_code'].')'."\n";
+				$src_vhosts .= '	ServerName '.$tpl_vars['domain'].''."\n";
+				$src_vhosts .= '	DocumentRoot '.$tpl_vars['document_root']."\n";
+				$src_vhosts .= '</VirtualHost>'."\n";
+			}
 
 			$this->put_tmp_contents( $src_vhosts );
 		}
