@@ -455,24 +455,24 @@
         },
         {
             "name": "fideloper/proxy",
-            "version": "4.2.2",
+            "version": "4.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fideloper/TrustedProxy.git",
-                "reference": "790194d5d3da89a713478875d2e2d05855a90a81"
+                "reference": "ec38ad69ee378a1eec04fb0e417a97cfaf7ed11a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fideloper/TrustedProxy/zipball/790194d5d3da89a713478875d2e2d05855a90a81",
-                "reference": "790194d5d3da89a713478875d2e2d05855a90a81",
+                "url": "https://api.github.com/repos/fideloper/TrustedProxy/zipball/ec38ad69ee378a1eec04fb0e417a97cfaf7ed11a",
+                "reference": "ec38ad69ee378a1eec04fb0e417a97cfaf7ed11a",
                 "shasum": ""
             },
             "require": {
-                "illuminate/contracts": "^5.0|^6.0|^7.0",
+                "illuminate/contracts": "^5.0|^6.0|^7.0|^8.0",
                 "php": ">=5.4.0"
             },
             "require-dev": {
-                "illuminate/http": "^5.0|^6.0|^7.0",
+                "illuminate/http": "^5.0|^6.0|^7.0|^8.0",
                 "mockery/mockery": "^1.0",
                 "phpunit/phpunit": "^6.0"
             },
@@ -505,7 +505,7 @@
                 "proxy",
                 "trusted proxy"
             ],
-            "time": "2019-12-20T13:11:11+00:00"
+            "time": "2020-02-22T01:51:47+00:00"
         },
         {
             "name": "fzaninotto/faker",
@@ -1263,12 +1263,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "d13c43dbd4b791f815215959105a008515d1a2e0"
+                "reference": "3e69ba5f586b4204cc6164e88bd32fec95ec538e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/d13c43dbd4b791f815215959105a008515d1a2e0",
-                "reference": "d13c43dbd4b791f815215959105a008515d1a2e0",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/3e69ba5f586b4204cc6164e88bd32fec95ec538e",
+                "reference": "3e69ba5f586b4204cc6164e88bd32fec95ec538e",
                 "shasum": ""
             },
             "require": {
@@ -1339,7 +1339,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2020-02-05T18:14:17+00:00"
+            "time": "2020-02-23T08:57:58+00:00"
         },
         {
             "name": "maximebf/debugbar",
@@ -1640,12 +1640,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "568236a3051c990c4e54cba710195b9eeefc52e3"
+                "reference": "d86ca0f745b47efcf8d7cc1cfc69c55e78fd0b90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/568236a3051c990c4e54cba710195b9eeefc52e3",
-                "reference": "568236a3051c990c4e54cba710195b9eeefc52e3",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/d86ca0f745b47efcf8d7cc1cfc69c55e78fd0b90",
+                "reference": "d86ca0f745b47efcf8d7cc1cfc69c55e78fd0b90",
                 "shasum": ""
             },
             "require": {
@@ -1684,7 +1684,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2020-02-19T20:29:17+00:00"
+            "time": "2020-02-22T20:09:03+00:00"
         },
         {
             "name": "opis/closure",
@@ -2845,12 +2845,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "ef8d82f96d2c482d6a440034a0910d73b59ee83f"
+                "reference": "a980d87a659648980d89193fd8b7a7ca89d97d21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/ef8d82f96d2c482d6a440034a0910d73b59ee83f",
-                "reference": "ef8d82f96d2c482d6a440034a0910d73b59ee83f",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/a980d87a659648980d89193fd8b7a7ca89d97d21",
+                "reference": "a980d87a659648980d89193fd8b7a7ca89d97d21",
                 "shasum": ""
             },
             "require": {
@@ -2893,7 +2893,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2020-02-04T07:40:16+00:00"
+            "time": "2020-02-23T14:41:43+00:00"
         },
         {
             "name": "symfony/error-handler",
@@ -2901,18 +2901,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/error-handler.git",
-                "reference": "dee037278665f3177f25788d3b189ee8ed5e5a43"
+                "reference": "205384c4a8f43470af646e26250bb34b0dd96e98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/error-handler/zipball/dee037278665f3177f25788d3b189ee8ed5e5a43",
-                "reference": "dee037278665f3177f25788d3b189ee8ed5e5a43",
+                "url": "https://api.github.com/repos/symfony/error-handler/zipball/205384c4a8f43470af646e26250bb34b0dd96e98",
+                "reference": "205384c4a8f43470af646e26250bb34b0dd96e98",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1.3",
                 "psr/log": "~1.0",
-                "symfony/debug": "^4.4",
+                "symfony/debug": "^4.4.5",
                 "symfony/var-dumper": "^4.4|^5.0"
             },
             "require-dev": {
@@ -2949,7 +2949,7 @@
             ],
             "description": "Symfony ErrorHandler Component",
             "homepage": "https://symfony.com",
-            "time": "2020-02-13T18:41:25+00:00"
+            "time": "2020-02-23T14:41:43+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -4218,12 +4218,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "8a4f8816230de7ffca3c707776007a1c9d175e55"
+                "reference": "0da153eb3b843d1117e52c882df6f40aefb954ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/8a4f8816230de7ffca3c707776007a1c9d175e55",
-                "reference": "8a4f8816230de7ffca3c707776007a1c9d175e55",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/0da153eb3b843d1117e52c882df6f40aefb954ab",
+                "reference": "0da153eb3b843d1117e52c882df6f40aefb954ab",
                 "shasum": ""
             },
             "require": {
@@ -4275,7 +4275,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2020-02-21T08:29:15+00:00"
+            "time": "2020-02-23T08:42:25+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -4633,12 +4633,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mockery/mockery.git",
-                "reference": "ff980c3c69e5b4111e3f6bc8637c2a96d1bbcec3"
+                "reference": "053393b70f757f503ac583544394d92bcc92d1c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mockery/mockery/zipball/ff980c3c69e5b4111e3f6bc8637c2a96d1bbcec3",
-                "reference": "ff980c3c69e5b4111e3f6bc8637c2a96d1bbcec3",
+                "url": "https://api.github.com/repos/mockery/mockery/zipball/053393b70f757f503ac583544394d92bcc92d1c2",
+                "reference": "053393b70f757f503ac583544394d92bcc92d1c2",
                 "shasum": ""
             },
             "require": {
@@ -4690,7 +4690,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2020-02-19T09:47:27+00:00"
+            "time": "2020-02-24T09:35:32+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -4968,12 +4968,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "5463f8d32cf0f31f3d8e6230eb80170a2602b55a"
+                "reference": "cd72d394ca794d3466a3b2fc09d5a6c1dc86b47e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/5463f8d32cf0f31f3d8e6230eb80170a2602b55a",
-                "reference": "5463f8d32cf0f31f3d8e6230eb80170a2602b55a",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/cd72d394ca794d3466a3b2fc09d5a6c1dc86b47e",
+                "reference": "cd72d394ca794d3466a3b2fc09d5a6c1dc86b47e",
                 "shasum": ""
             },
             "require": {
@@ -5013,7 +5013,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2020-02-20T20:42:36+00:00"
+            "time": "2020-02-22T12:28:44+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
