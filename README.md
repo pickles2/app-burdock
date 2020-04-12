@@ -1,6 +1,8 @@
 # app-burdock
 PHPサーバー+ブラウザ上で動作する Pickles 2 のGUIツール。
 
+Pickles Framework 2 に特化した CMSライクなテキストエディタ "Pickles 2" のウェブ版です。
+
 ## インストール
 
 ### 1. app-burdock の依存ライブラリをインストールする
