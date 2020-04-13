@@ -18,7 +18,7 @@
         "pickles2/px2style": "^2.0",
         "predis/predis": "^1.1",
         "tomk79/filesystem": "^1.0",
-        "tomk79/remote-finder": "^0.0.3",
+        "tomk79/remote-finder": "^0.0.5",
         "twig/twig": "^2.0"
     },
     "require-dev": {

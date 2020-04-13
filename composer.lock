@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "058e8c9e8e60427192ae7d7fd989e5cf",
+    "content-hash": "d77810399eeea186bd50348c495fc9a4",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -4194,16 +4194,16 @@
         },
         {
             "name": "tomk79/remote-finder",
-            "version": "0.0.3",
+            "version": "0.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tomk79/node-remote-finder.git",
-                "reference": "c7454e9476250ed02e71f1a25442e7c99a9403e6"
+                "reference": "ff18f5163a4b18d136671c65f861188d6f761082"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tomk79/node-remote-finder/zipball/c7454e9476250ed02e71f1a25442e7c99a9403e6",
-                "reference": "c7454e9476250ed02e71f1a25442e7c99a9403e6",
+                "url": "https://api.github.com/repos/tomk79/node-remote-finder/zipball/ff18f5163a4b18d136671c65f861188d6f761082",
+                "reference": "ff18f5163a4b18d136671c65f861188d6f761082",
                 "shasum": ""
             },
             "require": {
@@ -4230,7 +4230,7 @@
                 }
             ],
             "description": "Finder や Explorer のように、サーバー上のファイルとフォルダを操作するUIを提供します。",
-            "time": "2019-06-09T01:21:44+00:00"
+            "time": "2020-03-14T07:14:53+00:00"
         },
         {
             "name": "twig/twig",
