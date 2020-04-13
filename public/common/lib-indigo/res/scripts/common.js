@@ -10605,12 +10605,12 @@ window.Indigo = function(options){
 	options = options || {};
 	options.ajaxBridge = options.ajaxBridge || function(data, callback){
 		callback = callback || function(){};
-		var url_ajax_call = document.getElementById('url_ajax_call').value;
+		var realpath_ajax_call = document.getElementById('realpath_ajax_call').value;
 		var rtn = '';
 		var error = false;
 		$.ajax ({
 			type: 'POST',
-			url: url_ajax_call,
+			url: realpath_ajax_call,
 			data: data,
 			dataType: 'json',
 			success: function(data, dataType) {
@@ -10651,7 +10651,6 @@ window.Indigo = function(options){
 					},
 					function( data, error ){
 						if( error ){
-							console.error(data, error);
 							alert('コミット取得に失敗しました。');
 							$("#textStatus").html("textStatus : " + error);
 						}

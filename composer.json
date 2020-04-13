@@ -4,6 +4,7 @@
     "keywords": ["pickles2"],
     "license": "MIT",
     "type": "project",
+    "minimum-stability": "dev",
     "require": {
         "php": "^7.1.3",
         "barryvdh/laravel-debugbar": "^3.2",
@@ -12,13 +13,13 @@
         "fzaninotto/faker": "^1.8",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
-        "pickles2/lib-indigo": "dev-develop",
-        "pickles2/lib-plum": "dev-develop",
+        "pickles2/lib-indigo": "^0.1.4",
+        "pickles2/lib-plum": "^0.1.2",
         "pickles2/px2style": "^2.0",
         "predis/predis": "^1.1",
         "tomk79/filesystem": "^1.0",
         "tomk79/remote-finder": "^0.0.3",
-        "twig/twig": "2.x-dev"
+        "twig/twig": "^2.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
@@ -74,6 +75,5 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "optimize-autoloader": true
-    },
-    "minimum-stability": "stable"
+    }
 }
