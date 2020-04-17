@@ -70,8 +70,6 @@ Route::get('themes/{project}/{branch_name}', 'ThemeController@index');
 // コンテンツ
 Route::get('pages/{project}/{branch_name}', 'PageController@index');
 Route::post('pages/{project}/{branch_name}/ajax', 'PageController@ajax');
-Route::get('pages/{project}/{branch_name}/px2ce', 'PageController@px2ce');
-Route::post('pages/{project}/{branch_name}/px2ceGpi', 'PageController@px2ceGpi');
 Route::post('pages/{project}/{branch_name}/editAjax', 'Ajax\PageController@editAjax');
 Route::post('pages/{project}/{branch_name}/searchAjax', 'Ajax\PageController@searchAjax');
 
@@ -113,5 +111,10 @@ Route::get('files-and-folders/{project}/{branch_name}', 'FilesAndFoldersControll
 Route::post('files-and-folders/{project}/{branch_name}/gpi', 'FilesAndFoldersController@remoteFinderGPI');
 Route::get('files-and-folders/{project}/{branch_name}/common-file-editor', 'FilesAndFoldersController@commonFileEditor');
 Route::post('files-and-folders/{project}/{branch_name}/common-file-editor/gpi', 'FilesAndFoldersController@commonFileEditorGPI');
+
+// --------------------------------------
+// コンテンツエディタ
+Route::get('contentsEditor/{project}/{branch_name}', 'ContentsEditorController@index');
+Route::post('contentsEditor/{project}/{branch_name}/px2ceGpi', 'ContentsEditorController@px2ceGpi');
 
 // --------------------------------------

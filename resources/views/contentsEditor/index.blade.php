@@ -74,7 +74,7 @@ foreach($px2ce_client_resources->js as $value) {
 				'gpiBridge': function(input, callback){
 					console.log(input);
 					$.ajax({
-						"url": '/pages/'+project_code+'/'+branch_name+'/px2ceGpi?page_path='+page_param, // ←呼び出し元が決める
+						"url": '/contentsEditor/'+project_code+'/'+branch_name+'/px2ceGpi?page_path='+page_param, // ←呼び出し元が決める
 						"method": 'post',
 						'data': {
 							'data':JSON.stringify(input),
