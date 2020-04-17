@@ -79,7 +79,7 @@
 									<li><a href="{{ url('projects/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="home">ホーム</a></li>
 									<li><a href="{{ url('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="sitemaps">サイトマップ</a></li>
 									<li><a href="{{ url('themes/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="themes">テーマ</a></li>
-									<li><a href="{{ url('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/index.html?page_path='.'%2Findex.html')}}" data-name="pages">コンテンツ</a></li>
+									<li><a href="{{ url('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'?page_path='.'%2Findex.html')}}" data-name="pages">コンテンツ</a></li>
 									<li><a href="{{ url('publish/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}" data-name="publish">パブリッシュ</a></li>
 								@endif
 
@@ -165,7 +165,7 @@
 				@if (Request::is('projects/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'home'; @endif
 				@if (Request::is('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'sitemaps'; @endif
 				@if (Request::is('themes/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'themes'; @endif
-				@if (Request::is('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/index.html')) current = 'pages'; @endif
+				@if (Request::is('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'pages'; @endif
 				@if (Request::is('publish/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'publish'; @endif
 				@if (Request::is('staging/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'staging'; @endif
 				@if (Request::is('delivery/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'delivery'; @endif

@@ -75,7 +75,10 @@ class PageController extends Controller
 	}
 
 
-	public function show(Request $request, Project $project, $branch_name)
+	/**
+	 * Pickles 2 Contents Editor 編集画面
+	 */
+	public function px2ce(Request $request, Project $project, $branch_name)
 	{
 		//
 		$page_param = $request->page_path;
@@ -92,12 +95,12 @@ class PageController extends Controller
 		$px2ce_client_resources = px2query(
 			$project->project_code,
 			$branch_name,
-			'/sample_pages/?PX=px2dthelper.px2ce.client_resources&dist='.urlencode($client_resources_dist)
+			'/?PX=px2dthelper.px2ce.client_resources&dist='.urlencode($client_resources_dist)
 		);
 		$px2ce_client_resources = json_decode($px2ce_client_resources);
 
 		return view(
-			'pages.show',
+			'pages.px2ce',
 			[
 				'project' => $project,
 				'branch_name' => $branch_name,
@@ -108,7 +111,11 @@ class PageController extends Controller
 	}
 
 
-	public function gpi(Request $request, Project $project, $branch_name)
+
+	/**
+	 * Pickles 2 Contents Editor の GPI
+	 */
+	public function px2ceGpi(Request $request, Project $project, $branch_name)
 	{
 		$current = px2query(
 			$project->project_code,

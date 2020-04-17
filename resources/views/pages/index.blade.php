@@ -17,7 +17,7 @@
 			<ul>
 				@if($current->navigation_info->breadcrumb_info !== false)
 				@foreach($current->navigation_info->breadcrumb_info as $breadcrumb_info)
-				<li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'/index.html?page_path='.$breadcrumb_info->path) }}">{{ $breadcrumb_info->title }}</a></li>
+				<li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'?page_path='.$breadcrumb_info->path) }}">{{ $breadcrumb_info->title }}</a></li>
 				@endforeach
 				@endif
 				<li><strong>{{ $current->page_info->title }}</strong></li>
@@ -35,7 +35,7 @@
 						</div>
 						<div class="cont_page_info-btn">
 							<div class="btn-group">
-								<a href="{{ url('/pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'?page_path='.$page_param) }}" class="btn px2-btn px2-btn--primary px2-btn--lg btn--edit" style="padding-left: 5em; padding-right: 5em; font: inherit;" target="_blank">{{ __('Edit')}}</a>
+								<a href="{{ url('/pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/px2ce?page_path='.$page_param) }}" class="btn px2-btn px2-btn--primary px2-btn--lg btn--edit" style="padding-left: 5em; padding-right: 5em; font: inherit;" target="_blank">{{ __('Edit')}}</a>
 								<a href="{{ url('https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN').$page_param) }}" class="btn px2-btn px2-btn--lg btn--preview" target="_blank" style="font: inherit;">ブラウザでプレビュー</a>
 								<!-- <button type="button" class="btn px2-btn px2-btn--lg btn--resources">リソース</button> -->
 								<button type="button" class="btn px2-btn px2-btn--lg dropdown-toggle" data-toggle="dropdown">
@@ -171,7 +171,7 @@
 					<div class="cont_sitemap_parent" data-original-title="" title="">
 						@if($current->navigation_info->parent_info !== false)
 						<ul class="listview">
-					        <li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'/index.html?page_path='.$current->navigation_info->parent_info->path.'&page_id='.$current->navigation_info->parent_info->id) }}"><span class="glyphicon glyphicon-level-up"></span><span>{{ $current->navigation_info->parent_info->title }}</span></a></li>
+					        <li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'?page_path='.$current->navigation_info->parent_info->path.'&page_id='.$current->navigation_info->parent_info->id) }}"><span class="glyphicon glyphicon-level-up"></span><span>{{ $current->navigation_info->parent_info->title }}</span></a></li>
 					    </ul>
 						@endif
 					</div>
@@ -179,11 +179,11 @@
 						<ul class="listview">
 						@if($current->navigation_info->bros_info !== false)
 						@foreach($current->navigation_info->bros_info as $bros_info)
-							<li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'/index.html?page_path='.$bros_info->path.'&page_id='.$bros_info->id) }}" @if ($page_param == $bros_info->path) class="current" @endif>{{ $bros_info->title }}</a>
+							<li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'?page_path='.$bros_info->path.'&page_id='.$bros_info->id) }}" @if ($page_param == $bros_info->path) class="current" @endif>{{ $bros_info->title }}</a>
 							@if($current->navigation_info->children_info !== false && $page_param === $bros_info->path)
 								<ul>
 								@foreach($current->navigation_info->children_info as $children_info)
-									<li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'/index.html?page_path='.$children_info->path.'&page_id='.$children_info->id) }}" style="font-size: 80%;">{{ $children_info->title }}</a></li>
+									<li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'?page_path='.$children_info->path.'&page_id='.$children_info->id) }}" style="font-size: 80%;">{{ $children_info->title }}</a></li>
 								@endforeach
 								</ul>
 							@endif
