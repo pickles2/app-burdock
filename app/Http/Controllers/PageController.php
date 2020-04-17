@@ -22,19 +22,29 @@ class PageController extends Controller
 	public function index(Request $request, Project $project, $branch_name)
 	{
 		//
-		$page_id = $request->page_id;
-		$page_param = $request->page_path;
+		$page_path = $request->page_path;
+		if( !strlen($page_path) ){
+			$page_path = '';
+		}
+		$page_id = $page_path;
+		if( strlen($request->page_id) ){
+			$page_id = $request->page_id;
+		}
 		$current = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all&filter=false&path='.urlencode($page_id)
+				// ↑ここで、ページを path ではなく id で引きたいのは、
+				// エイリアス、アクター、ダイナミックパスなどの実態を持たないパスを考慮しての処理。
 		);
 		$current = json_decode($current);
+		$page_path = $current->page_info->path;
+
 
 		$editor_type = px2query(
 			$project->project_code,
 			$branch_name,
-			'/?PX=px2dthelper.check_editor_mode&path='.urlencode($page_param)
+			'/?PX=px2dthelper.check_editor_mode&path='.urlencode($page_path)
 		);
 		$editor_type = json_decode($editor_type);
 
@@ -44,7 +54,7 @@ class PageController extends Controller
 				'project' => $project,
 				'branch_name' => $branch_name,
 				'page_id' => $page_id,
-				'page_param' => $page_param,
+				'page_path' => $page_path,
 			],
 			compact('current', 'editor_type')
 		);

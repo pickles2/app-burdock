@@ -35,8 +35,8 @@
 						</div>
 						<div class="cont_page_info-btn">
 							<div class="btn-group">
-								<a href="{{ url('/pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/px2ce?page_path='.$page_param) }}" class="btn px2-btn px2-btn--primary px2-btn--lg btn--edit" style="padding-left: 5em; padding-right: 5em; font: inherit;" target="_blank">{{ __('Edit')}}</a>
-								<a href="{{ url('https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN').$page_param) }}" class="btn px2-btn px2-btn--lg btn--preview" target="_blank" style="font: inherit;">ブラウザでプレビュー</a>
+								<a href="{{ url('/pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/px2ce?page_path='.$page_path) }}" class="btn px2-btn px2-btn--primary px2-btn--lg btn--edit" style="padding-left: 5em; padding-right: 5em; font: inherit;" target="_blank">{{ __('Edit')}}</a>
+								<a href="{{ url('https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN').$page_path) }}" class="btn px2-btn px2-btn--lg btn--preview" target="_blank" style="font: inherit;">ブラウザでプレビュー</a>
 								<!-- <button type="button" class="btn px2-btn px2-btn--lg btn--resources">リソース</button> -->
 								<button type="button" class="btn px2-btn px2-btn--lg dropdown-toggle" data-toggle="dropdown">
 									<span class="caret"></span>
@@ -76,7 +76,7 @@
 										<a data-path="/index.html" data-proc_type="html" href="javascript:;">編集方法を変更</a>
 									</li> --}}
 									<li style="max-width: 476px; overflow: hidden;">
-										<a data-param="{{ $page_param }}" onClick="publishSingle(this)">このページを単体でパブリッシュ</a>
+										<a data-param="{{ $page_path }}" onClick="publishSingle(this)">このページを単体でパブリッシュ</a>
 									</li>
 									<script>
 									function publishSingle(e) {
@@ -141,7 +141,7 @@
 							// 受信したイベントデータをajaxでコントローラーに送信
 							var decodeEventData = decodeURIComponent(escape(atob(event.data)));
 							$.ajax({
-								url: "/pages/{{ $project->project_code }}/{{ $branch_name }}/ajax?page_path={{ $page_param }}",
+								url: "/pages/{{ $project->project_code }}/{{ $branch_name }}/ajax?page_path={{ $page_path }}",
 								type: 'post',
 								data : {
 									"path_path" : JSON.stringify(decodeEventData),
@@ -153,7 +153,7 @@
 							});
 						};
 						</script>
-						<iframe id="ifrm" data-original-title="" title="" src="{{ url('https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN').$page_param) }}"></iframe>
+						<iframe id="ifrm" data-original-title="" title="" src="{{ url('https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN').$page_path) }}"></iframe>
 					</div>
 				</div>
 			</div>
@@ -179,8 +179,8 @@
 						<ul class="listview">
 						@if($current->navigation_info->bros_info !== false)
 						@foreach($current->navigation_info->bros_info as $bros_info)
-							<li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'?page_path='.$bros_info->path.'&page_id='.$bros_info->id) }}" @if ($page_param == $bros_info->path) class="current" @endif>{{ $bros_info->title }}</a>
-							@if($current->navigation_info->children_info !== false && $page_param === $bros_info->path)
+							<li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'?page_path='.$bros_info->path.'&page_id='.$bros_info->id) }}" @if ($page_path == $bros_info->path) class="current" @endif>{{ $bros_info->title }}</a>
+							@if($current->navigation_info->children_info !== false && $page_path === $bros_info->path)
 								<ul>
 								@foreach($current->navigation_info->children_info as $children_info)
 									<li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'?page_path='.$children_info->path.'&page_id='.$children_info->id) }}" style="font-size: 80%;">{{ $children_info->title }}</a></li>

@@ -79,8 +79,8 @@
 									<li><a href="{{ url('projects/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="home">ホーム</a></li>
 									<li><a href="{{ url('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="sitemaps">サイトマップ</a></li>
 									<li><a href="{{ url('themes/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="themes">テーマ</a></li>
-									<li><a href="{{ url('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'?page_path='.'%2Findex.html')}}" data-name="pages">コンテンツ</a></li>
-									<li><a href="{{ url('publish/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}" data-name="publish">パブリッシュ</a></li>
+									<li><a href="{{ url('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="pages">コンテンツ</a></li>
+									<li><a href="{{ url('publish/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="publish">パブリッシュ</a></li>
 								@endif
 
 								{{-- 認証関連のリンク --}}

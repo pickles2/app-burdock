@@ -15,10 +15,10 @@
                     <a href="{{ url('/sitemaps'.'/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}" class="px2-btn cont_mainmenu">{{ __('Edit Sitemap')}}</a>
                 </div>
                 <div class="col-sm-3">
-                    <a href="{{ url('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'?page_path='.urlencode('/index.html'))}}" class="px2-btn cont_mainmenu">{{ __('Edit Themes')}}</a>
+                    <a href="{{ url('themes/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}" class="px2-btn cont_mainmenu">{{ __('Edit Themes')}}</a>
                 </div>
                 <div class="col-sm-3">
-                    <a href="{{ url('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'?page_path='.urlencode('/index.html'))}}" class="px2-btn cont_mainmenu">{{ __('Edit Contents')}}</a>
+                    <a href="{{ url('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}" class="px2-btn cont_mainmenu">{{ __('Edit Contents')}}</a>
                 </div>
                 <div class="col-sm-3">
                     <a href="{{ url('/publish'.'/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}" class="px2-btn cont_mainmenu">{{ __('To Publish')}}</a>
