@@ -4,16 +4,16 @@
 @extends('layouts.px2_project')
 @section('content')
 <div class="container">
-	<h1 data-original-title="" title="">コンテンツ</h1>
+	<h1>コンテンツ</h1>
 </div>
-<div class="contents" data-original-title="" title="">
-	<div class="container-fluid" data-original-title="" title="">
-		<div style="float:right;" data-original-title="" title="">
-			<a href="javascript:;" data-placement="bottom" title="" data-original-title="コンテンツは、サイトマップに記述されたページ1つにつき1つ編集します。特別な場合を除き、コンテンツはヘッダー、フッターなどの共通部分(=テーマ領域)を含まない、コンテンツエリアのみのHTMLコードとして管理されています。一覧からページを選択し、コンテンツを編集してください。">
-				<span class="glyphicon glyphicon-question-sign" data-original-title="" title=""></span> ヒント
+<div class="contents">
+	<div class="container-fluid">
+		<div style="float:right;">
+			<a href="javascript:;" data-placement="bottom" title="コンテンツは、サイトマップに記述されたページ1つにつき1つ編集します。特別な場合を除き、コンテンツはヘッダー、フッターなどの共通部分(=テーマ領域)を含まない、コンテンツエリアのみのHTMLコードとして管理されています。一覧からページを選択し、コンテンツを編集してください。">
+				<span class="glyphicon glyphicon-question-sign"></span> ヒント
 			</a>
 		</div>
-		<div class="cont_breadcrumb" data-original-title="" title="">
+		<div class="cont_breadcrumb">
 			<ul>
 				@if($current->navigation_info->breadcrumb_info !== false)
 				@foreach($current->navigation_info->breadcrumb_info as $breadcrumb_info)
@@ -24,10 +24,10 @@
 			</ul>
 		</div>
 	</div>
-	<div class="container-fluid" data-original-title="" title="">
-		<div class="row" data-original-title="" title="">
-			<div class="col-xs-9" data-original-title="" title="">
-				<div class="cont_page_info clearfix" data-original-title="" title="">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xs-9">
+				<div class="cont_page_info clearfix">
 					<div>
 						<div class="cont_page_info-prop">
 							<span class="selectable">{{ $current->page_info->title }} ({{ $current->page_info->path }})</span>
@@ -116,8 +116,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="preview_window_frame cont_preview" data-original-title="" title="" style="height: 70vh;">
-					<div class="preview_window_frame--inner" data-original-title="" title="">
+				<div class="preview_window_frame cont_preview" style="height: 70vh;">
+					<div class="preview_window_frame--inner">
 						<script>
 						// .envよりプレビューサーバーのURLを取得
 						var preview_url = '{{ 'https://'.$branch_name.'.'.$project->project_code.'.'.env('BD_PREVIEW_DOMAIN') }}';
@@ -153,13 +153,13 @@
 							});
 						};
 						</script>
-						<iframe id="ifrm" data-original-title="" title="" src="{{ url('https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN').$page_path) }}"></iframe>
+						<iframe id="ifrm" src="{{ url('https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN').$page_path) }}"></iframe>
 					</div>
 				</div>
 			</div>
-			<div class="col-xs-3" data-original-title="" title="">
-				<div class="cont_workspace_search" data-original-title="" title="">
-					<div class="input-group input-group-sm" data-original-title="" title="">
+			<div class="col-xs-3">
+				<div class="cont_workspace_search">
+					<div class="input-group input-group-sm">
 						{{-- Vueコンポーネント --}}
 						<div id="app">
 							<cont-search-component project-code="{{ $project->project_code}}" branch-name="{{ $branch_name }}" page-id="{{ $page_id }}"></cont-search-component>
@@ -167,15 +167,15 @@
 					</div>
 				</div>
 				<!-- /.cont_workspace_search -->
-				<div id="sholderNavi" class="cont_workspace_container" data-original-title="" title="" style="height: 100vh; margin-top: 10px;">
-					<div class="cont_sitemap_parent" data-original-title="" title="">
+				<div class="cont_workspace_container" style="height: 100vh; margin-top: 10px;">
+					<div class="cont_sitemap_parent">
 						@if($current->navigation_info->parent_info !== false)
 						<ul class="listview">
-					        <li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'?page_path='.$current->navigation_info->parent_info->path.'&page_id='.$current->navigation_info->parent_info->id) }}"><span class="glyphicon glyphicon-level-up"></span><span>{{ $current->navigation_info->parent_info->title }}</span></a></li>
-					    </ul>
+							<li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'?page_path='.$current->navigation_info->parent_info->path.'&page_id='.$current->navigation_info->parent_info->id) }}"><span class="glyphicon glyphicon-level-up"></span><span>{{ $current->navigation_info->parent_info->title }}</span></a></li>
+						</ul>
 						@endif
 					</div>
-					<div class="cont_sitemap_broslist" data-original-title="" title="">
+					<div class="cont_sitemap_broslist">
 						<ul class="listview">
 						@if($current->navigation_info->bros_info !== false)
 						@foreach($current->navigation_info->bros_info as $bros_info)
@@ -192,10 +192,9 @@
 						@endif
 						</ul>
 					</div>
-					<div class="cont_sitemap_search" data-original-title="" title="" style="display: none;"></div>
 				</div>
 				<!-- /.cont_workspace_container -->
-				<div class="cont_comment_view" data-original-title="" title="" data-path="/index.html" style="display: none;">no comment.</div>
+				<div class="cont_comment_view" data-path="/index.html" style="display: none;">no comment.</div>
 				<!-- /.cont_comment_view -->
 			</div>
 		</div>
