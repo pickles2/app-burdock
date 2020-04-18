@@ -144,7 +144,9 @@
 
 .cont_mainmenu {
 	width: 100%;
-	line-height: 200px;
+	height: 200px;
+	display: table-cell;
+	vertical-align: middle;
 }
 
 .contents .cont_filelist_sitemap__ext-list {
