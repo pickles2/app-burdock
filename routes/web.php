@@ -17,7 +17,7 @@ Auth::routes(['verify' => true]);
 
 // --------------------------------------
 // ダッシュボード
-Route::get('/', 'HomeController@index');
+Route::get('/', 'DashboardController@index');
 
 // Route::get('users', 'UserController@index');
 // Route::get('users/create', 'UserController@create');
@@ -38,6 +38,10 @@ Route::delete('mypage', 'MypageController@destroy');
 
 // --------------------------------------
 // プロジェクト Home
+Route::get('home/{project}/{branch_name}', 'HomeController@index');
+
+// --------------------------------------
+// プロジェクト管理
 // Route::get('projects', 'ProjectController@index'); //プロジェクト一覧は封印
 Route::get('projects/create', 'ProjectController@create');
 Route::post('projects', 'ProjectController@store');
