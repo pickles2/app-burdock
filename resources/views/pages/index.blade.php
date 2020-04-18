@@ -120,20 +120,19 @@
 					<div class="preview_window_frame--inner">
 						<script>
 						// .envよりプレビューサーバーのURLを取得
-						var preview_url = '{{ 'https://'.$branch_name.'.'.$project->project_code.'.'.env('BD_PREVIEW_DOMAIN') }}';
-						// 外部サイトに送るAPP_URLとスクリプトをbase64でエンコード
+						var preview_url = '{{ 'https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN') }}';
+						// iframe内のプレビューサイトに送るAPP_URLとスクリプトをbase64でエンコード
 						var jsBase64 = '{{ base64_encode("var parent_url = '".env('APP_URL')."';".file_get_contents('../resources/views/pages/js/script.js')) }}';
 
 						// windowロードイベント
 						window.onload = function() {
 							// iframeのwindowオブジェクトを取得
 							var ifrm = document.getElementById('ifrm').contentWindow;
-							// 外部サイトにメッセージを投げる
+							// iframe内のプレビューサイトにメッセージを投げる
 							ifrm.postMessage({'scriptUrl':'data:text/javascript;base64,'+encodeURIComponent(jsBase64)}, preview_url);
 						};
 						// メッセージ受信イベント
-						window.addEventListener('message', receiveMessage, false);
-						function receiveMessage(event) {
+						window.addEventListener('message', function(event) {
 							// オリジンがpreview_urlではなかった場合終了
 							if (event.origin !== preview_url) {
 								return;
@@ -141,17 +140,17 @@
 							// 受信したイベントデータをajaxでコントローラーに送信
 							var decodeEventData = decodeURIComponent(escape(atob(event.data)));
 							$.ajax({
-								url: "/pages/{{ $project->project_code }}/{{ $branch_name }}/ajax?page_path={{ $page_path }}",
+								url: "/pages/{{ urlencode($project->project_code) }}/{{ urlencode($branch_name) }}/ajax?page_path={{ urlencode($page_path) }}",
 								type: 'post',
 								data : {
-									"path_path" : JSON.stringify(decodeEventData),
+									"page_path" : JSON.stringify(decodeEventData),
 									_token : '{{ csrf_token() }}'
 								},
 							}).done(function(data){
 								// ajaxで取得してきたパスとIDでページ遷移
-								window.location.href = 'index.html?page_path='+data.path+'&page_id='+data.id;
+								window.location.href = '?page_path='+data.path+'&page_id='+data.id;
 							});
-						};
+						}, false);
 						</script>
 						<iframe id="ifrm" src="{{ url('https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN').$page_path) }}"></iframe>
 					</div>
