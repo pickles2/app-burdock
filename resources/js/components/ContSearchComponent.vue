@@ -20,11 +20,11 @@
 			<ul v-if="results.length" class="listview">
 				<li v-for="result in results">
 					<!-- idが空だった場合＝トップページ -->
-					<a v-if="result.id === ''" v-bind:href="'/pages/'+projectCode+'/'+branchName+'?page_path='+result.path+'&page_id='+result.id" style="padding-left: 1em; font-size: 12px;" v-bind:class="{current: result.id === pageId}">{{ result.title }}</a>
+					<a v-if="result.id === ''" v-bind:href="'/contents/'+projectCode+'/'+branchName+'?page_path='+result.path+'&page_id='+result.id" style="padding-left: 1em; font-size: 12px;" v-bind:class="{current: result.id === pageId}">{{ result.title }}</a>
 					<!-- ロジカルパスが空だった場合＝カテゴリトップ -->
-					<a v-else-if="result.logical_path === ''" v-bind:href="'/pages/'+projectCode+'/'+branchName+'?page_path='+result.path+'&page_id='+result.id" style="padding-left: 2em; font-size: 12px;" v-bind:class="{current: result.id === pageId}">{{ result.title }}</a>
+					<a v-else-if="result.logical_path === ''" v-bind:href="'/contents/'+projectCode+'/'+branchName+'?page_path='+result.path+'&page_id='+result.id" style="padding-left: 2em; font-size: 12px;" v-bind:class="{current: result.id === pageId}">{{ result.title }}</a>
 					<!-- その他ページ -->
-					<a v-else v-bind:href="'/pages/'+projectCode+'/'+branchName+'?page_path='+result.path+'&page_id='+result.id" style="font-size: 12px;" v-bind:class="{current: result.id === pageId}" v-bind:style="{paddingLeft: (result.logical_path.split(/>/).length+1)*1.3+'em'}">{{ result.title }}</a>
+					<a v-else v-bind:href="'/contents/'+projectCode+'/'+branchName+'?page_path='+result.path+'&page_id='+result.id" style="font-size: 12px;" v-bind:class="{current: result.id === pageId}" v-bind:style="{paddingLeft: (result.logical_path.split(/>/).length+1)*1.3+'em'}">{{ result.title }}</a>
 				</li>
 			</ul>
 			<p v-else-if="isResult === true && str.length >= 1" class="listview">該当するページがありません。</p>
@@ -32,7 +32,7 @@
 		<div id="cont_sitemap_search_path" class="cont_sitemap_search" v-bind:style="[isPath === true && isResult === true ? {'display':'block'} : {'display':'none'}]">
 			<ul v-if="results.length" class="listview">
 				<li v-for="result in results">
-					<a v-bind:href="'/pages/'+projectCode+'/'+branchName+'?page_path='+result.path+'&page_id='+result.id" style="padding-left: 1em; font-size: 12px;" v-bind:class="{current: result.id === pageId}">{{ result.path }}</a>
+					<a v-bind:href="'/contents/'+projectCode+'/'+branchName+'?page_path='+result.path+'&page_id='+result.id" style="padding-left: 1em; font-size: 12px;" v-bind:class="{current: result.id === pageId}">{{ result.path }}</a>
 				</li>
 			</ul>
 			<p v-else-if="isResult === true && str.length >= 1" class="listview">該当するページがありません。</p>
@@ -70,7 +70,7 @@ export default {
 			this.results = [];
 			this.isResult = false;
 
-			axios.post('/pages/'+this.projectCode+'/'+this.branchName+'/searchAjax',data).then(res => {
+			axios.post('/contents/'+this.projectCode+'/'+this.branchName+'/searchAjax',data).then(res => {
 				if( data.str.length ){
 					$('.cont_workspace_container').hide();
 					this.results = res.data.info;

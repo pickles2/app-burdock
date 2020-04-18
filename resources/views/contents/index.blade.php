@@ -17,7 +17,7 @@
 			<ul>
 				@if($current->navigation_info->breadcrumb_info !== false)
 				@foreach($current->navigation_info->breadcrumb_info as $breadcrumb_info)
-				<li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'?page_path='.$breadcrumb_info->path) }}">{{ $breadcrumb_info->title }}</a></li>
+				<li><a href="{{ url('/contents/'.$project->project_code.'/'.$branch_name.'?page_path='.$breadcrumb_info->path) }}">{{ $breadcrumb_info->title }}</a></li>
 				@endforeach
 				@endif
 				<li><strong>{{ $current->page_info->title }}</strong></li>
@@ -122,7 +122,7 @@
 						// .envよりプレビューサーバーのURLを取得
 						var preview_url = '{{ 'https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN') }}';
 						// iframe内のプレビューサイトに送るAPP_URLとスクリプトをbase64でエンコード
-						var jsBase64 = '{{ base64_encode("var parent_url = '".env('APP_URL')."';".file_get_contents('../resources/views/pages/js/script.js')) }}';
+						var jsBase64 = '{{ base64_encode("var parent_url = '".env('APP_URL')."';".file_get_contents('../resources/views/contents/js/script.js')) }}';
 
 						// windowロードイベント
 						window.onload = function() {
@@ -140,7 +140,7 @@
 							// 受信したイベントデータをajaxでコントローラーに送信
 							var decodeEventData = decodeURIComponent(escape(atob(event.data)));
 							$.ajax({
-								url: "/pages/{{ urlencode($project->project_code) }}/{{ urlencode($branch_name) }}/ajax?page_path={{ urlencode($page_path) }}",
+								url: "/contents/{{ urlencode($project->project_code) }}/{{ urlencode($branch_name) }}/ajax?page_path={{ urlencode($page_path) }}",
 								type: 'post',
 								data : {
 									"page_path" : JSON.stringify(decodeEventData),
@@ -170,7 +170,7 @@
 					<div class="cont_sitemap_parent">
 						@if($current->navigation_info->parent_info !== false)
 						<ul class="listview">
-							<li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'?page_path='.$current->navigation_info->parent_info->path.'&page_id='.$current->navigation_info->parent_info->id) }}"><span class="glyphicon glyphicon-level-up"></span><span>{{ $current->navigation_info->parent_info->title }}</span></a></li>
+							<li><a href="{{ url('/contents/'.$project->project_code.'/'.$branch_name.'?page_path='.$current->navigation_info->parent_info->path.'&page_id='.$current->navigation_info->parent_info->id) }}"><span class="glyphicon glyphicon-level-up"></span><span>{{ $current->navigation_info->parent_info->title }}</span></a></li>
 						</ul>
 						@endif
 					</div>
@@ -178,11 +178,11 @@
 						<ul class="listview">
 						@if($current->navigation_info->bros_info !== false)
 						@foreach($current->navigation_info->bros_info as $bros_info)
-							<li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'?page_path='.$bros_info->path.'&page_id='.$bros_info->id) }}" @if ($page_path == $bros_info->path) class="current" @endif>{{ $bros_info->title }}</a>
+							<li><a href="{{ url('/contents/'.$project->project_code.'/'.$branch_name.'?page_path='.$bros_info->path.'&page_id='.$bros_info->id) }}" @if ($page_path == $bros_info->path) class="current" @endif>{{ $bros_info->title }}</a>
 							@if($current->navigation_info->children_info !== false && $page_path === $bros_info->path)
 								<ul>
 								@foreach($current->navigation_info->children_info as $children_info)
-									<li><a href="{{ url('/pages/'.$project->project_code.'/'.$branch_name.'?page_path='.$children_info->path.'&page_id='.$children_info->id) }}" style="font-size: 80%;">{{ $children_info->title }}</a></li>
+									<li><a href="{{ url('/contents/'.$project->project_code.'/'.$branch_name.'?page_path='.$children_info->path.'&page_id='.$children_info->id) }}" style="font-size: 80%;">{{ $children_info->title }}</a></li>
 								@endforeach
 								</ul>
 							@endif

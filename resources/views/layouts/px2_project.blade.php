@@ -79,7 +79,7 @@
 									<li><a href="{{ url('home/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="home">ホーム</a></li>
 									<li><a href="{{ url('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="sitemaps">サイトマップ</a></li>
 									<li><a href="{{ url('themes/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="themes">テーマ</a></li>
-									<li><a href="{{ url('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="pages">コンテンツ</a></li>
+									<li><a href="{{ url('contents/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="pages">コンテンツ</a></li>
 									<li><a href="{{ url('publish/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="publish">パブリッシュ</a></li>
 								@endif
 
@@ -165,7 +165,7 @@
 				@if (Request::is('home/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'home'; @endif
 				@if (Request::is('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'sitemaps'; @endif
 				@if (Request::is('themes/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'themes'; @endif
-				@if (Request::is('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'pages'; @endif
+				@if (Request::is('contents/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'contents'; @endif
 				@if (Request::is('publish/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'publish'; @endif
 				@if (Request::is('composer/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'composer'; @endif
 				@if (Request::is('git/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'git'; @endif

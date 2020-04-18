@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Page;
 use App\Project;
 
-class PageController extends Controller
+class ContentController extends Controller
 {
 	/**
 	 * 各アクションの前に実行させるミドルウェア
@@ -49,7 +48,7 @@ class PageController extends Controller
 		$editor_type = json_decode($editor_type);
 
 		return view(
-			'pages.index',
+			'contents.index',
 			[
 				'project' => $project,
 				'branch_name' => $branch_name,

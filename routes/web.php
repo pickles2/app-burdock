@@ -72,10 +72,10 @@ Route::get('themes/{project}/{branch_name}', 'ThemeController@index');
 
 // --------------------------------------
 // コンテンツ
-Route::get('pages/{project}/{branch_name}', 'PageController@index');
-Route::post('pages/{project}/{branch_name}/ajax', 'PageController@ajax');
-Route::post('pages/{project}/{branch_name}/editAjax', 'Ajax\PageController@editAjax');
-Route::post('pages/{project}/{branch_name}/searchAjax', 'Ajax\PageController@searchAjax');
+Route::get('contents/{project}/{branch_name}', 'ContentController@index');
+Route::post('contents/{project}/{branch_name}/ajax', 'ContentController@ajax');
+Route::post('contents/{project}/{branch_name}/editAjax', 'Ajax\ContentController@editAjax');
+Route::post('contents/{project}/{branch_name}/searchAjax', 'Ajax\ContentController@searchAjax');
 
 // --------------------------------------
 // パブリッシュ
