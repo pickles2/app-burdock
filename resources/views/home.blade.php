@@ -12,16 +12,16 @@
             <h2>基本的な手順</h2>
             <div class="row" style="margin-bottom: 100px;">
                 <div class="col-sm-3">
-                    <a href="{{ url('/sitemaps'.'/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}" class="px2-btn cont_mainmenu">{{ __('Edit Sitemap')}}</a>
+                    <button type="button" onclick="window.location.href='{{ url('/sitemaps'.'/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}';" class="px2-btn cont_mainmenu">{{ __('Edit Sitemap')}}</button>
                 </div>
                 <div class="col-sm-3">
-                    <a href="{{ url('themes/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}" class="px2-btn cont_mainmenu">{{ __('Edit Themes')}}</a>
+                    <button type="button" onclick="window.location.href='{{ url('themes/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}';" class="px2-btn cont_mainmenu">{{ __('Edit Themes')}}</button>
                 </div>
                 <div class="col-sm-3">
-                    <a href="{{ url('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}" class="px2-btn cont_mainmenu">{{ __('Edit Contents')}}</a>
+                    <button type="button" onclick="window.location.href='{{ url('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}';" class="px2-btn cont_mainmenu">{{ __('Edit Contents')}}</button>
                 </div>
                 <div class="col-sm-3">
-                    <a href="{{ url('/publish'.'/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}" class="px2-btn cont_mainmenu">{{ __('To Publish')}}</a>
+                    <button type="button" onclick="window.location.href='{{ url('/publish'.'/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}';" class="px2-btn cont_mainmenu">{{ __('To Publish')}}</button>
                 </div>
             </div><!-- / .row -->
         </div>
