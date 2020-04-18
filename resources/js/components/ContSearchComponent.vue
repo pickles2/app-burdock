@@ -16,7 +16,7 @@
 				<input type="radio" name="list-label" value="path">path
 			</label>
 		</div>
-		<div id="cont_sitemap_search_title" class="cont_sitemap_search" v-bind:class="[isTitle === true ? 'show' : 'hidden']">
+		<div id="cont_sitemap_search_title" class="cont_sitemap_search" v-bind:style="[isTitle === true && isResult === true ? {'display':'block'} : {'display':'none'}]">
 			<ul v-if="results.length" class="listview">
 				<li v-for="result in results">
 					<!-- idが空だった場合＝トップページ -->
@@ -29,7 +29,7 @@
 			</ul>
 			<p v-else-if="isResult === true && str.length >= 1" class="listview">該当するページがありません。</p>
 		</div>
-		<div id="cont_sitemap_search_path" class="cont_sitemap_search" v-bind:class="[isPath === true ? 'show' : 'hidden']">
+		<div id="cont_sitemap_search_path" class="cont_sitemap_search" v-bind:style="[isPath === true && isResult === true ? {'display':'block'} : {'display':'none'}]">
 			<ul v-if="results.length" class="listview">
 				<li v-for="result in results">
 					<a v-bind:href="'/pages/'+projectCode+'/'+branchName+'?page_path='+result.path+'&page_id='+result.id" style="padding-left: 1em; font-size: 12px;" v-bind:class="{current: result.id === pageId}">{{ result.path }}</a>
@@ -67,16 +67,19 @@ export default {
 			if(data.str === '') {
 				data.str = '';
 			}
-			if( data.str.length ){
+			this.results = [];
+			this.isResult = false;
 
-				axios.post('/pages/'+this.projectCode+'/'+this.branchName+'/searchAjax',data).then(res => {
+			axios.post('/pages/'+this.projectCode+'/'+this.branchName+'/searchAjax',data).then(res => {
+				if( data.str.length ){
 					$('.cont_workspace_container').hide();
 					this.results = res.data.info;
 					this.isResult = true;
-				})
-			}else{
-				$('.cont_workspace_container').show();
-			}
+				}else{
+					$('.cont_workspace_container').show();
+				}
+				$(window).resize();
+			})
 		},
 		changeTitleClass() {
 			this.isTitle = true;
