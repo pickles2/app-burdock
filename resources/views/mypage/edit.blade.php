@@ -18,7 +18,17 @@
                 @endif
         </div>
         <div class="form-group">
+            <label for="email">{{ __('Email') }}</label>
+            <input id="email" type="text" class="form-control @if ($errors->has('email')) is-invalid @endif" name="email" value="{{ old('email', $user->email) }}" required autofocus>
+                @if ($errors->has('email'))
+                    <span class="invalid-feedback" role="alert">
+                        {{ $errors->first('email') }}
+                    </span>
+                @endif
+        </div>
+        <div class="form-group">
             <label for="password">{{ __('Password') }}</label>
+            <p>パスワードを変更したい場合のみ入力してください。</p>
             <input id="password" type="password" class="form-control @if ($errors->has('password')) is-invalid @endif" name="password" value="" autofocus>
                 @if ($errors->has('password'))
                     <span class="invalid-feedback" role="alert">
@@ -28,6 +38,7 @@
         </div>
         <div class="form-group">
             <label for="password_confirmation">{{ __('Password (Confirmation)') }}</label>
+            <p>パスワードを変更したい場合のみ、確認用にもう一度入力してください。</p>
             <input id="password_confirmation" type="password" class="form-control @if ($errors->has('password_confirmation')) is-invalid @endif" name="password_confirmation" value="" autofocus>
                 @if ($errors->has('password_confirmation'))
                     <span class="invalid-feedback" role="alert">

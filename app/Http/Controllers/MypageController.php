@@ -70,8 +70,10 @@ class MypageController extends Controller
         // name欄だけを検査するため、元のStoreUserクラス内のバリデーション・ルールからname欄のルールだけを取り出す。
         $request->validate([
             'name' => (new StoreUser())->rules()['name'],
+            'email' => (new StoreUser())->rules()['email'], // TODO: 本来はメールアドレスの存在確認プロセスを踏むべき。
         ]);
         $user->name = $request->name;
+        $user->email = $request->email; // TODO: 本来はメールアドレスの存在確認プロセスを踏むべき。
         if( strlen($request->password) ){
             $request->validate([
                 'password' => (new StoreUser())->rules()['password'],
