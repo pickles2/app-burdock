@@ -69,9 +69,15 @@ class MypageController extends Controller
         $user = Auth::user();   #ログインユーザー情報を取得します。
         // name欄だけを検査するため、元のStoreUserクラス内のバリデーション・ルールからname欄のルールだけを取り出す。
         $request->validate([
-            'name' => (new StoreUser())->rules()['name']
+            'name' => (new StoreUser())->rules()['name'],
         ]);
         $user->name = $request->name;
+        if( strlen($request->password) ){
+            $request->validate([
+                'password' => (new StoreUser())->rules()['password'],
+            ]);
+            $user->password = bcrypt($request->password);
+        }
         $user->save();
         return redirect('mypage')->with('my_status', __('Updated a user.'));
     }
