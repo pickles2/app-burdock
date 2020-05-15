@@ -17,7 +17,7 @@ Auth::routes(['verify' => true]);
 
 // --------------------------------------
 // ダッシュボード
-Route::get('/', 'HomeController@index');
+Route::get('/', 'DashboardController@index');
 
 // Route::get('users', 'UserController@index');
 // Route::get('users/create', 'UserController@create');
@@ -38,6 +38,10 @@ Route::delete('mypage', 'MypageController@destroy');
 
 // --------------------------------------
 // プロジェクト Home
+Route::get('home/{project}/{branch_name}', 'HomeController@index');
+
+// --------------------------------------
+// プロジェクト管理
 // Route::get('projects', 'ProjectController@index'); //プロジェクト一覧は封印
 Route::get('projects/create', 'ProjectController@create');
 Route::post('projects', 'ProjectController@store');
@@ -68,12 +72,10 @@ Route::get('themes/{project}/{branch_name}', 'ThemeController@index');
 
 // --------------------------------------
 // コンテンツ
-Route::get('pages/{project}/{branch_name}/index.html', 'PageController@index');
-Route::post('pages/{project}/{branch_name}/ajax', 'PageController@ajax');
-Route::get('pages/{project}/{branch_name}', 'PageController@show');
-Route::post('pages/{project}/{branch_name}', 'PageController@gpi');
-Route::post('pages/{project}/{branch_name}/editAjax', 'Ajax\PageController@editAjax');
-Route::post('pages/{project}/{branch_name}/searchAjax', 'Ajax\PageController@searchAjax');
+Route::get('contents/{project}/{branch_name}', 'ContentController@index');
+Route::post('contents/{project}/{branch_name}/ajax', 'ContentController@ajax');
+Route::post('contents/{project}/{branch_name}/editAjax', 'Ajax\ContentController@editAjax');
+Route::post('contents/{project}/{branch_name}/searchAjax', 'Ajax\ContentController@searchAjax');
 
 // --------------------------------------
 // パブリッシュ
@@ -113,5 +115,10 @@ Route::get('files-and-folders/{project}/{branch_name}', 'FilesAndFoldersControll
 Route::post('files-and-folders/{project}/{branch_name}/gpi', 'FilesAndFoldersController@remoteFinderGPI');
 Route::get('files-and-folders/{project}/{branch_name}/common-file-editor', 'FilesAndFoldersController@commonFileEditor');
 Route::post('files-and-folders/{project}/{branch_name}/common-file-editor/gpi', 'FilesAndFoldersController@commonFileEditorGPI');
+
+// --------------------------------------
+// コンテンツエディタ
+Route::get('contentsEditor/{project}/{branch_name}', 'ContentsEditorController@index');
+Route::post('contentsEditor/{project}/{branch_name}/px2ceGpi', 'ContentsEditorController@px2ceGpi');
 
 // --------------------------------------

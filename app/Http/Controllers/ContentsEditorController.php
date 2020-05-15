@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Page;
 use App\Project;
 
-class PageController extends Controller
+class ContentsEditorController extends Controller
 {
 	/**
 	 * 各アクションの前に実行させるミドルウェア
@@ -19,63 +18,10 @@ class PageController extends Controller
 		$this->middleware('verified');
 	}
 
+	/**
+	 * Pickles 2 Contents Editor 編集画面
+	 */
 	public function index(Request $request, Project $project, $branch_name)
-	{
-		//
-		$page_id = $request->page_id;
-		$page_param = $request->page_path;
-		$current = px2query(
-			$project->project_code,
-			$branch_name,
-			'/?PX=px2dthelper.get.all&filter=false&path='.urlencode($page_id)
-		);
-		$current = json_decode($current);
-
-		$editor_type = px2query(
-			$project->project_code,
-			$branch_name,
-			'/?PX=px2dthelper.check_editor_mode&path='.urlencode($page_param)
-		);
-		$editor_type = json_decode($editor_type);
-
-		return view(
-			'pages.index',
-			[
-				'project' => $project,
-				'branch_name' => $branch_name,
-				'page_id' => $page_id,
-				'page_param' => $page_param,
-			],
-			compact('current', 'editor_type')
-		);
-	}
-
-
-	public function ajax(Request $request, Project $project, $branch_name)
-	{
-		$page_path = $request->path_path;
-		if( !strlen($page_path) ){
-			$page_path = '/';
-		}
-		$info = px2query(
-			$project->project_code,
-			$branch_name,
-			$page_path.'?PX=px2dthelper.get.all'
-		);
-		$info = json_decode($info);
-
-		$path = $info->page_info->path;
-		$id = $info->page_info->id;
-
-		$data = array(
-			"path" => $path,
-			"id" => $id,
-		);
-		return $data;
-	}
-
-
-	public function show(Request $request, Project $project, $branch_name)
 	{
 		//
 		$page_param = $request->page_path;
@@ -92,12 +38,12 @@ class PageController extends Controller
 		$px2ce_client_resources = px2query(
 			$project->project_code,
 			$branch_name,
-			'/sample_pages/?PX=px2dthelper.px2ce.client_resources&dist='.urlencode($client_resources_dist)
+			'/?PX=px2dthelper.px2ce.client_resources&dist='.urlencode($client_resources_dist)
 		);
 		$px2ce_client_resources = json_decode($px2ce_client_resources);
 
 		return view(
-			'pages.show',
+			'contentsEditor.index',
 			[
 				'project' => $project,
 				'branch_name' => $branch_name,
@@ -108,7 +54,11 @@ class PageController extends Controller
 	}
 
 
-	public function gpi(Request $request, Project $project, $branch_name)
+
+	/**
+	 * Pickles 2 Contents Editor の GPI
+	 */
+	public function px2ceGpi(Request $request, Project $project, $branch_name)
 	{
 		$current = px2query(
 			$project->project_code,

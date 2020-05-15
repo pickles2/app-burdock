@@ -8,7 +8,7 @@ use App\Http\Requests\StoreSitemap;
 use App\Http\Controllers\Controller;
 use App\Project;
 
-class PageController extends Controller
+class ContentController extends Controller
 {
 	//
 	/**
