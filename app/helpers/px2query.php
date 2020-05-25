@@ -51,7 +51,10 @@ function px2query($project_code, $branch_name, $query){
 	), $pipes);
 	$io = array();
 	foreach($pipes as $idx=>$pipe){
-		$io[$idx] = stream_get_contents($pipe);
+		// TODO: 大きな出力を受け取ろうとすると、↓このような E_NOTICE を発して落ちる。
+		// 分割して受け取るようにする必要がある？
+		// stream_get_contents(): read of 8192 bytes failed with errno=9 Bad file descriptor
+		$io[$idx] = @stream_get_contents($pipe);
 		fclose($pipe);
 	}
 	$return_var = proc_close($proc);
