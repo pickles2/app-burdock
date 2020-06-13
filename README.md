@@ -178,6 +178,43 @@ Apache 用の Virtual Hosts の設定ファイルを出力します。
 
 
 
+
+## システム要件 - System Requirement
+
+- PHP 7.1.3 以上
+  - [mbstring](https://www.php.net/manual/ja/book.mbstring.php) PHP Extension
+  - [ZipArchive](https://www.php.net/manual/ja/class.ziparchive.php) PHP Extension
+  - [JSON](https://www.php.net/manual/ja/book.json.php) PHP Extension
+  - [PDO](https://www.php.net/manual/ja/book.pdo.php) PHP Extension
+  - [PDO SQLite (PDO_SQLITE)](https://www.php.net/manual/ja/ref.pdo-sqlite.php) PHP Extension
+  - [XML Parser](https://www.php.net/manual/ja/book.xml.php) PHP Extension
+  - [XMLWriter](https://www.php.net/manual/ja/book.xmlwriter.php) PHP Extension
+  - [Ctype](https://www.php.net/manual/ja/book.ctype.php) PHP Extension
+  - [DOM](https://www.php.net/manual/ja/book.dom.php) PHP Extension
+  - [Fileinfo](https://www.php.net/manual/ja/book.fileinfo.php) PHP Extension
+  - [libxml](https://www.php.net/manual/ja/book.libxml.php) PHP Extension
+  - [Zlib](https://www.php.net/manual/ja/book.zlib.php) PHP Extension
+  - [OpenSSL](https://www.php.net/manual/ja/book.openssl.php) PHP Extension
+  - [Tokenizer](https://www.php.net/manual/ja/book.tokenizer.php) PHP Extension
+  - [BC Math](https://www.php.net/manual/ja/book.bc.php) PHP Extension
+
+### 推奨環境
+
+- PHP 7.2 以上
+  - [GD](https://www.php.net/manual/ja/book.image.php) PHP Extension
+  - [iconv](https://www.php.net/manual/ja/book.iconv.php) PHP Extension
+  - [SimpleXML](https://www.php.net/manual/ja/book.simplexml.php) PHP Extension
+  - [XMLReader](https://www.php.net/manual/ja/book.xmlreader.php) PHP Extension
+  - [PDO MySQL (PDO_MYSQL)](https://www.php.net/manual/ja/ref.pdo-mysql.php) PHP Extension
+- MySQL 5.7.7 以上
+
+プラグインなど他のパッケージとの構成によって、いくつかの要件が追加される場合があります。
+依存パッケージのシステム要件も確認してください。
+
+
+
+
+
 ## 更新履歴 - Change log
 
 ### Burdock v0.0.1 (リリース日未定)
