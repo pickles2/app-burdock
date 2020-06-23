@@ -207,6 +207,8 @@ Apache 用の Virtual Hosts の設定ファイルを出力します。
   - [XMLReader](https://www.php.net/manual/ja/book.xmlreader.php) PHP Extension
   - [PDO MySQL (PDO_MYSQL)](https://www.php.net/manual/ja/ref.pdo-mysql.php) PHP Extension
 - MySQL 5.7.7 以上
+- Node.js 12.16 以上
+- Redis
 
 プラグインなど他のパッケージとの構成によって、いくつかの要件が追加される場合があります。
 依存パッケージのシステム要件も確認してください。
