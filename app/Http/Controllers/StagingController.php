@@ -96,8 +96,7 @@ class StagingController extends Controller
 				'project' => $project,
 				'branch_name' => $branch_name,
 				'plum_std_out' => $plum_std_out,
-			],
-			compact('current', 'get_files')
+			]
 		);
 	}
 }
