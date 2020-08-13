@@ -40,7 +40,9 @@ class composer{
 		), $pipes);
 		$io = array();
 		foreach($pipes as $idx=>$pipe){
-			$io[$idx] = stream_get_contents($pipe);
+			if($idx){
+				$io[$idx] = stream_get_contents($pipe);
+			}
 			fclose($pipe);
 		}
 		$return_var = proc_close($proc);
