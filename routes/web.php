@@ -36,6 +36,12 @@ Route::get('mypage/edit', 'MypageController@edit');
 Route::put('mypage', 'MypageController@update');
 Route::delete('mypage', 'MypageController@destroy');
 
+
+// --------------------------------------
+// システムメンテナンス画面 System Maintenance
+Route::get('system-maintenance', 'SystemMaintenanceController@index');
+
+
 // --------------------------------------
 // プロジェクト Home
 Route::get('home/{project}/{branch_name}', 'HomeController@index');
