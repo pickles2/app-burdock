@@ -461,7 +461,7 @@ export default {
 					this.errorPassword = 1;
 					this.setupStatus = 3;
 				} else if(/new branch/.test(e.stdout)) {
-					// location.href = '/projects/'+this.projectCode+'/'+this.branchName;
+					// location.href = '/home/'+this.projectCode+'/'+this.branchName;
 				} else if(/could not read Username/.test(e.stdout)) {
 					// ユーザー名が見つからないと言われた場合
 					this.errorUserName = 1;
@@ -542,15 +542,15 @@ export default {
 			// AjaxでAjax\SetupController@setupOptionAjaxにpost処理
 			axios.post('/setup/'+this.projectCode+'/'+this.branchName+'/setupOptionAjax', data).then(res => {
 				if(this.rate === 100 && res.data.info === true) {
-					location.href = '/projects/'+this.projectCode+'/'+this.branchName;
+					location.href = '/home/'+this.projectCode+'/'+this.branchName;
 				} else if(res.data.checked_option === 'pickles2' && res.data.checked_init === false && res.data.info === true) {
 					this.rate = 100;
 					this.fraction = '100 / 100';
-					location.href = '/projects/'+this.projectCode+'/'+this.branchName;
+					location.href = '/home/'+this.projectCode+'/'+this.branchName;
 				} else if(res.data.checked_option === 'git' && res.data.checked_repository === 'none' && res.data.info === true) {
 					this.rate = 100;
 					this.fraction = '100 / 100';
-					location.href = '/projects/'+this.projectCode+'/'+this.branchName;
+					location.href = '/home/'+this.projectCode+'/'+this.branchName;
 				}
 			})
 		},
