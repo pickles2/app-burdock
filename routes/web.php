@@ -60,7 +60,6 @@ Route::delete('projects/{project}/{branch_name}', 'ProjectController@destroy');
 
 // --------------------------------------
 // セットアップ
-Route::get('setup/{project}/{branch_name}', 'SetupController@index');
 Route::post('setup/{project}/{branch_name}/setupAjax', 'Ajax\SetupController@setupAjax');
 Route::post('setup/{project}/{branch_name}/setupOptionAjax', 'Ajax\SetupController@setupOptionAjax');
 
