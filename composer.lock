@@ -3254,12 +3254,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "6140fc7047dafc5abbe84ba16a34a86c0b0229b8"
+                "reference": "3e8ea5ccddd00556b86d69d42f99f1061a704030"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/6140fc7047dafc5abbe84ba16a34a86c0b0229b8",
-                "reference": "6140fc7047dafc5abbe84ba16a34a86c0b0229b8",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/3e8ea5ccddd00556b86d69d42f99f1061a704030",
+                "reference": "3e8ea5ccddd00556b86d69d42f99f1061a704030",
                 "shasum": ""
             },
             "require": {
@@ -3330,7 +3330,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-18T17:59:13+00:00"
+            "time": "2020-08-13T14:18:44+00:00"
         },
         {
             "name": "symfony/event-dispatcher-contracts",
@@ -3546,12 +3546,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-kernel.git",
-                "reference": "f7cfbe3ab6484b5fbae2d980067ca1137f91f21f"
+                "reference": "729712e59a55cf541ff0aad0426fefe55495d1f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/f7cfbe3ab6484b5fbae2d980067ca1137f91f21f",
-                "reference": "f7cfbe3ab6484b5fbae2d980067ca1137f91f21f",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/729712e59a55cf541ff0aad0426fefe55495d1f7",
+                "reference": "729712e59a55cf541ff0aad0426fefe55495d1f7",
                 "shasum": ""
             },
             "require": {
@@ -3643,7 +3643,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-10T07:27:51+00:00"
+            "time": "2020-08-13T14:18:44+00:00"
         },
         {
             "name": "symfony/mime",
@@ -5134,12 +5134,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "76f8ead7efa2baf57ff9f2adb35bd5b7e4630482"
+                "reference": "b531196d8cfaa485d7ff84d37b19668d8d6b254b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/76f8ead7efa2baf57ff9f2adb35bd5b7e4630482",
-                "reference": "76f8ead7efa2baf57ff9f2adb35bd5b7e4630482",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/b531196d8cfaa485d7ff84d37b19668d8d6b254b",
+                "reference": "b531196d8cfaa485d7ff84d37b19668d8d6b254b",
                 "shasum": ""
             },
             "require": {
@@ -5201,7 +5201,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-05T15:10:06+00:00"
+            "time": "2020-08-13T14:11:59+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

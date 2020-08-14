@@ -28,18 +28,27 @@ class HomeController extends Controller
 	 */
 	public function index(Project $project, $branch_name)
 	{
-		$bd_object = px2query(
-			$project->project_code,
-			$branch_name,
-			'/?PX=px2dthelper.get.all'
-		);
-		$bd_object = json_decode($bd_object);
-		if($bd_object) {
+
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
+		$project_status = $burdockProjectManager->project($project->project_code)->branch($branch_name, 'preview')->status();
+
+		if ($project_status->isPxStandby) {
+			// --------------------------------------
+			// セットアップは正常に完了しているとき
+			$bd_object = px2query(
+				$project->project_code,
+				$branch_name,
+				'/?PX=px2dthelper.get.all'
+			);
+			$bd_object = json_decode($bd_object);
+
 			return view('home', [
 				'project' => $project,
-				'branch_name' => $branch_name
+				'branch_name' => $branch_name,
+				'project_status' => $project_status,
 			], compact('bd_object'));
-		} elseif(session('my_status')) {
+
+		} elseif (session('my_status')) {
 			$message = session('my_status');
 			return redirect('setup/'.$project->project_code.'/'.$branch_name)->with('my_status', __($message));
 		} else {
