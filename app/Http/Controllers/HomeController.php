@@ -38,12 +38,7 @@ class HomeController extends Controller
 		if ($project_status->isPxStandby) {
 			// --------------------------------------
 			// セットアップは正常に完了しているとき
-			$bd_object = px2query(
-				$project->project_code,
-				$branch_name,
-				'/?PX=px2dthelper.get.all'
-			);
-			$bd_object = json_decode($bd_object);
+			$bd_object = $project_branch->get_project_info();
 
 			return view('home.index', [
 				'project' => $project,
@@ -51,12 +46,6 @@ class HomeController extends Controller
 				'project_status' => $project_status,
 			], compact('bd_object'));
 
-		} elseif (session('my_status')) {
-			// TODO: このパターンは何のときに通る？
-			// $message = session('my_status');
-			// return redirect('setup/'.$project->project_code.'/'.$branch_name)->with('my_status', __($message));
-			trigger_error( 'セットアップは完了していません。 my_status がセットされています。' );
-			return;
 		} else {
 			return $this->setup($project, $branch_name);
 		}

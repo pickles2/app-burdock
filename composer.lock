@@ -4965,12 +4965,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tomk79/burdock-project-manager.git",
-                "reference": "b1415a2fc420c0fd50cb4889b9e5ba6752fb441d"
+                "reference": "da48af9eda1844e6ec255465867da85f27707181"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tomk79/burdock-project-manager/zipball/b1415a2fc420c0fd50cb4889b9e5ba6752fb441d",
-                "reference": "b1415a2fc420c0fd50cb4889b9e5ba6752fb441d",
+                "url": "https://api.github.com/repos/tomk79/burdock-project-manager/zipball/da48af9eda1844e6ec255465867da85f27707181",
+                "reference": "da48af9eda1844e6ec255465867da85f27707181",
                 "shasum": ""
             },
             "require": {
@@ -5001,7 +5001,7 @@
                     "email": "tomk79@gmail.com"
                 }
             ],
-            "time": "2020-08-14T09:14:27+00:00"
+            "time": "2020-08-14T10:18:34+00:00"
         },
         {
             "name": "tomk79/filesystem",
