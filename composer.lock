@@ -1332,12 +1332,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "6e96f54d82e71f71c4108da33ee96a7f57083710"
+                "reference": "78261db2f1b793af55a963513783839eaf8629f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/6e96f54d82e71f71c4108da33ee96a7f57083710",
-                "reference": "6e96f54d82e71f71c4108da33ee96a7f57083710",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/78261db2f1b793af55a963513783839eaf8629f2",
+                "reference": "78261db2f1b793af55a963513783839eaf8629f2",
                 "shasum": ""
             },
             "require": {
@@ -1415,7 +1415,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2020-08-12T14:23:41+00:00"
+            "time": "2020-08-14T11:40:03+00:00"
         },
         {
             "name": "league/mime-type-detection",
@@ -4965,12 +4965,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tomk79/burdock-project-manager.git",
-                "reference": "da48af9eda1844e6ec255465867da85f27707181"
+                "reference": "f9e5cdd6c6ab82e7212170e50e2598762bbaaa81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tomk79/burdock-project-manager/zipball/da48af9eda1844e6ec255465867da85f27707181",
-                "reference": "da48af9eda1844e6ec255465867da85f27707181",
+                "url": "https://api.github.com/repos/tomk79/burdock-project-manager/zipball/f9e5cdd6c6ab82e7212170e50e2598762bbaaa81",
+                "reference": "f9e5cdd6c6ab82e7212170e50e2598762bbaaa81",
                 "shasum": ""
             },
             "require": {
@@ -5001,7 +5001,7 @@
                     "email": "tomk79@gmail.com"
                 }
             ],
-            "time": "2020-08-14T10:18:34+00:00"
+            "time": "2020-08-14T12:16:27+00:00"
         },
         {
             "name": "tomk79/filesystem",

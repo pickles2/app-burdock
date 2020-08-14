@@ -11,7 +11,7 @@ use App\Setup;
 
 class SetupController extends Controller
 {
-    //
+
     /**
      * 各アクションの前に実行させるミドルウェア
      */
@@ -24,7 +24,10 @@ class SetupController extends Controller
 
     public function setupAjax(Request $request, Project $project, $branch_name)
     {
-		//
+
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
+		$pjManager = $burdockProjectManager->project($project->project_code);
+
 		$checked_option = $request->checked_option;
 		$checked_init = $request->checked_init;
 		$repository = $request->clone_repository;
@@ -39,7 +42,6 @@ class SetupController extends Controller
 		$project_data_path = get_project_dir($project_code);
 		$project_workingtree_path = get_project_workingtree_dir($project_code, $branch_name);
 		$path_composer = realpath(__DIR__.'/../../../common/composer/composer.phar');
-		$setup_log_file = $project_data_path.'/setup_log.csv';
 		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
 
 		// 再セットアップ時はディレクトリ内を削除してから処理に入る
@@ -49,23 +51,14 @@ class SetupController extends Controller
 		\File::makeDirectory($project_data_path, 0777, true, true);
 		\File::makeDirectory($project_workingtree_path, 0777, true, true);
 
-		// 作成するログファイルを$csvに代入
-		$csv = array(
-			array('log_checked_option','log_checked_init','log_repository','log_user_name','log_password','log_setup_status','log_checked_repository','log_vendor_name','log_project_name'),
-			array($checked_option,$checked_init,$repository,$user_name,$password,$setup_status,$checked_repository,$vendor_name,$project_name)
-		);
-		// ファイルを書き込み用に開きます。
-		$new_csv = fopen($setup_log_file, "w");
-		// 正常にファイルを開くことができていれば、書き込みます。
-		if ($new_csv) {
-			// $csv から順番に配列を呼び出して書き込みます。
-			foreach($csv as $line) {
-				// fputcsv関数でファイルに書き込みます。
-				fputcsv($new_csv, $line);
-			}
-		}
-		// ファイルを閉じます。
-		fclose($new_csv);
+		$pjManager->save_initializing_request(array(
+			'initializing_method' => ($checked_option === 'pickles2' ? 'create' : 'clone'),
+			'git_remote' => $repository,
+			'git_user_name' => $user_name,
+			'composer_vendor_name' => $vendor_name,
+			'composer_project_name' => $project_name,
+		));
+
 
 		if($checked_option === 'pickles2') {
 			$cmd = 'php '.$path_composer.' create-project pickles2/preset-get-start-pickles2 ./';
@@ -196,29 +189,8 @@ class SetupController extends Controller
 			$info = false;
 		}
 
-		// 作成するログファイルを$csvに代入
-		if($info === true) {
-			$setup_status += 1;
-		} else {
-			$setup_status -= 1;
-		}
-
-		$csv = array(
-			array('log_checked_option','log_checked_init','log_repository','log_user_name','log_password','log_setup_status','log_checked_repository','log_vendor_name','log_project_name'),
-			array($checked_option,$checked_init,$repository,$user_name,$password,$setup_status,$checked_repository,$vendor_name,$project_name)
-		);
-		// ファイルを書き込み用に開きます。
-		$new_csv = fopen($setup_log_file, "w");
-		// 正常にファイルを開くことができていれば、書き込みます。
-		if ($new_csv) {
-			// $csv から順番に配列を呼び出して書き込みます。
-			foreach($csv as $line) {
-				// fputcsv関数でファイルに書き込みます。
-				fputcsv($new_csv, $line);
-			}
-		}
-		// ファイルを閉じます。
-		fclose($new_csv);
+		// $initializing_request = $pjManager->get_initializing_request();
+		// $pjManager->save_initializing_request($initializing_request);
 
 		chdir($path_current_dir); // 元いたディレクトリへ戻る
 
@@ -233,7 +205,12 @@ class SetupController extends Controller
 
 	public function setupOptionAjax(Request $request, Project $project, $branch_name)
 	{
-		//
+
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
+		$pjManager = $burdockProjectManager->project($project->project_code);
+
+		$initializing_request = $pjManager->get_initializing_request();
+
 		$checked_option = $request->checked_option;
 		$checked_init = $request->checked_init;
 		$setup_status = $request->setup_status;
@@ -270,28 +247,12 @@ class SetupController extends Controller
 		$project_code = $project->project_code;
 		$project_data_path = get_project_dir($project_code);
 		$project_workingtree_path = get_project_workingtree_dir($project_code, $branch_name);
-		$setup_log_file = $project_data_path.'/setup_log.csv';
 		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
 
 		chdir($project_workingtree_path);
 
-		// 作成するログファイルを$csvに代入
-		$csv = array(
-			array('log_checked_option','log_checked_init','log_repository','log_user_name','log_password','log_setup_status','log_checked_repository','log_vendor_name','log_project_name'),
-			array($checked_option,$checked_init,$repository,$user_name,$password,$setup_status,$checked_repository,$vendor_name,$project_name)
-		);
-		// ファイルを書き込み用に開きます。
-		$new_csv = fopen($setup_log_file, "w");
-		// 正常にファイルを開くことができていれば、書き込みます。
-		if ($new_csv) {
-			// $csv から順番に配列を呼び出して書き込みます。
-			foreach($csv as $line) {
-				// fputcsv関数でファイルに書き込みます。
-				fputcsv($new_csv, $line);
-			}
-		}
-		// ファイルを閉じます。
-		fclose($new_csv);
+		// $initializing_request = $pjManager->get_initializing_request();
+		// $pjManager->save_initializing_request($initializing_request);
 
 		// ここから composer.jsonのnameを変更して上書き保存
 		if(\File::exists($project_workingtree_path.'/composer.json')) {
@@ -435,24 +396,8 @@ class SetupController extends Controller
 		}
 		$info = true;
 
-		// 作成するログファイルを$csvに代入
-		$setup_status += 1;
-		$csv = array(
-			array('log_checked_option','log_checked_init','log_repository','log_user_name','log_password','log_setup_status','log_checked_repository','log_vendor_name','log_project_name'),
-			array($checked_option,$checked_init,$repository,$user_name,$password,$setup_status,$checked_repository,$vendor_name,$project_name)
-		);
-		// ファイルを書き込み用に開きます。
-		$new_csv = fopen($setup_log_file, "w");
-		// 正常にファイルを開くことができていれば、書き込みます。
-		if ($new_csv) {
-			// $csv から順番に配列を呼び出して書き込みます。
-			foreach($csv as $line) {
-				// fputcsv関数でファイルに書き込みます。
-				fputcsv($new_csv, $line);
-			}
-		}
-		// ファイルを閉じます。
-		fclose($new_csv);
+		// $initializing_request = $pjManager->get_initializing_request();
+		// $pjManager->save_initializing_request($initializing_request);
 
 		// Git情報をDBに保存
 		$project->git_url = $repository;
