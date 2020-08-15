@@ -1,4 +1,5 @@
 @php
+	$gitUtil = new \pickles2\burdock\git($project);
 	$title = $project->project_name;
 @endphp
 @extends('layouts.px2_project')
@@ -72,7 +73,7 @@
 					@slot('id', $project->id)
 					@slot('code', $project->project_code)
 					@slot('name', $project->project_name)
-					@slot('branch', get_git_remote_default_branch_name())
+					@slot('branch', $gitUtil->get_remote_default_branch_name())
 				@endcomponent
 			</div>
 		</p>

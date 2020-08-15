@@ -18,6 +18,9 @@
             </thead>
             <tbody>
             @foreach ($projects as $project)
+@php
+	$gitUtil = new \pickles2\burdock\git($project);
+@endphp
                 <tr>
                     <td>
                         <a href="{{ url('users/' . $project->user->id) }}">
@@ -25,7 +28,7 @@
                         </a>
                     </td>
                     <td>
-                        <a href="{{ url('projects/'.urlencode($project->project_code).'/'.urlencode(get_git_remote_default_branch_name()) . '/') }}">{{ $project->project_name }}</a>
+                        <a href="{{ url('projects/'.urlencode($project->project_code).'/'.urlencode($gitUtil->get_remote_default_branch_name()) . '/') }}">{{ $project->project_name }}</a>
                     </td>
                     <td>{{ $project->git_url }}</td>
                     <td>{{ $project->created_at }}</td>

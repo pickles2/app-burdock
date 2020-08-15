@@ -26,7 +26,7 @@ class git{
 		}
 
 		if( !strlen($branch_name) ){
-			$branch_name = $this->get_remote_default_branch_name($project->git_url);
+			$branch_name = $this->get_remote_default_branch_name();
 		}
 		$this->branch_name = $branch_name;
 	}
@@ -58,7 +58,7 @@ class git{
 	public function get_remote_default_branch_name( $git_url = null ) {
 		$default = 'master';
 		if( !strlen( $git_url ) ){
-			$git_url = $this->project->git_url;
+			$git_url = $this->url_bind_confidentials();
 		}
 		if( !strlen( $git_url ) ){
 			return $default;
@@ -174,7 +174,20 @@ class git{
 	/**
 	 * URLに認証情報を埋め込む
 	 */
-	private function url_bind_confidentials($url, $user_name, $password){
+	private function url_bind_confidentials($url = null, $user_name = null, $password = null){
+		if( $this->project && !strlen($url) ){
+			$url = $this->project->git_url;
+		}
+		if( $this->project && !strlen($user_name) && strlen($this->project->git_username) ){
+			$user_name = \Crypt::decryptString( $this->project->git_username );
+		}
+		if( $this->project && !strlen($password) && strlen($this->project->git_password) ){
+			$password = \Crypt::decryptString( $this->project->git_password );
+		}
+		if( !strlen($url) ){
+			return null;
+		}
+
 		$parsed_git_url = parse_url($url);
 		$rtn = '';
 		$rtn .= $parsed_git_url['scheme'].'://';
