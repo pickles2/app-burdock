@@ -2296,13 +2296,13 @@
             "version": "v1.1.x-dev",
             "source": {
                 "type": "git",
-                "url": "https://github.com/predishq/predis.git",
-                "reference": "a6bd25412e68e7b2b03bb87fbbf5f94c5d0a1b6b"
+                "url": "https://github.com/predis/predis.git",
+                "reference": "7376902b201f380aadb32c6a89aa294aa20d6d7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/predishq/predis/zipball/a6bd25412e68e7b2b03bb87fbbf5f94c5d0a1b6b",
-                "reference": "a6bd25412e68e7b2b03bb87fbbf5f94c5d0a1b6b",
+                "url": "https://api.github.com/repos/predis/predis/zipball/7376902b201f380aadb32c6a89aa294aa20d6d7d",
+                "reference": "7376902b201f380aadb32c6a89aa294aa20d6d7d",
                 "shasum": ""
             },
             "require": {
@@ -2352,7 +2352,7 @@
                 }
             ],
             "description": "Flexible and feature-complete Redis client for PHP and HHVM",
-            "homepage": "http://github.com/predishq/predis",
+            "homepage": "http://github.com/predis/predis",
             "keywords": [
                 "nosql",
                 "predis",
@@ -2364,7 +2364,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-12T19:00:08+00:00"
+            "time": "2020-08-14T17:11:49+00:00"
         },
         {
             "name": "psr/container",

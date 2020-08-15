@@ -72,7 +72,8 @@ class DeliveryController extends Controller
 		$user = Auth::user();
 		$user_id = ($user ? $user->email : null);
 
-		$default_branch_name = get_git_remote_default_branch_name();
+		$gitUtil = new \pickles2\burdock\git($project);
+		$default_branch_name = $gitUtil->get_branch_name();
 		$realpath_pj_git_root = env('BD_DATA_DIR').'/repositories/'.urlencode($project->project_code).'---'.urlencode($default_branch_name).'/';
 		$realpath_workdir = env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/indigo/workdir/';
 

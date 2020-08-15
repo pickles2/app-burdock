@@ -27,7 +27,8 @@ class ComposerController extends Controller
 	 */
 	public function index(Request $request, Project $project, $branch_name){
 		if( !strlen($branch_name) ){
-			$branch_name = \get_git_remote_default_branch_name($project->git_url);
+			$gitUtil = new \pickles2\burdock\git($project);
+			$branch_name = $gitUtil->get_branch_name();
 		}
 
 		$realpath_pj_git_root = \get_project_workingtree_dir($project->project_code, $branch_name);

@@ -11,12 +11,22 @@ class git{
 	/**
 	 * Constructor
 	 */
-	public function __construct( $project_id, $branch_name ){
-		$this->project_id = $project_id;
-		$this->project = Project::find($project_id);
+	public function __construct( $project = null, $branch_name = null ){
+		if(is_null($project)){
+			// Project情報に関連付けないで利用する場合
+			return;
+		}else if(is_object($project)){
+			// Projectモデル を受け取った場合
+			$this->project = $project;
+			$this->project_id = $project->id;
+		}else{
+			// Project ID を受け取った場合
+			$this->project_id = $project;
+			$this->project = Project::find($project);
+		}
 
 		if( !strlen($branch_name) ){
-			$branch_name = \get_git_remote_default_branch_name($project->git_url);
+			$branch_name = $this->get_remote_default_branch_name($project->git_url);
 		}
 		$this->branch_name = $branch_name;
 	}
@@ -40,6 +50,29 @@ class git{
 	 */
 	public function get_branch_name(){
 		return $this->branch_name;
+	}
+
+	/**
+	 * Gitリモートサーバーからデフォルトのブランチ名を取得する
+	 */
+	public function get_remote_default_branch_name( $git_url = null ) {
+		$default = 'master';
+		if( !strlen( $git_url ) ){
+			$git_url = $this->project->git_url;
+		}
+		if( !strlen( $git_url ) ){
+			return $default;
+		}
+		$result = shell_exec('git ls-remote --symref '.escapeshellarg($git_url).' HEAD');
+		if(!is_string($result) || !strlen($result)){
+			return $default;
+		}
+
+		if( !preg_match('/^ref\: refs\/heads\/([^\s]+)\s+HEAD/', $result, $matched) ){
+			return $default;
+		}
+
+		return $matched[1];
 	}
 
 	/**
@@ -136,6 +169,27 @@ class git{
 		}
 
 		return true;
+	}
+
+	/**
+	 * URLに認証情報を埋め込む
+	 */
+	private function url_bind_confidentials($url, $user_name, $password){
+		$parsed_git_url = parse_url($url);
+		$rtn = '';
+		$rtn .= $parsed_git_url['scheme'].'://';
+		$rtn .= urlencode($user_name);
+		$rtn .= ':'.urlencode($password);
+		$rtn .= '@';
+		$rtn .= $parsed_git_url['host'];
+		if( array_key_exists('port', $parsed_git_url) && strlen($parsed_git_url['port']) ){
+			$rtn .= ':'.$parsed_git_url['port'];
+		}
+		$rtn .= $parsed_git_url['path'];
+		if( array_key_exists('query', $parsed_git_url) && strlen($parsed_git_url['query']) ){
+			$rtn .= '?'.$parsed_git_url['query'];
+		}
+		return $rtn;
 	}
 
 	/**

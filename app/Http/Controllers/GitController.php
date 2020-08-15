@@ -29,7 +29,8 @@ class GitController extends Controller
 		$user = Auth::user();
 
 		if( !strlen($branch_name) ){
-			$branch_name = \get_git_remote_default_branch_name($project->git_url);
+			$gitUtil = new \pickles2\burdock\git($project);
+			$branch_name = $gitUtil->get_branch_name();
 		}
 
 		$realpath_pj_git_root = \get_project_workingtree_dir($project->project_code, $branch_name);
@@ -51,25 +52,25 @@ class GitController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function gitCommand(Request $request, Project $project, $branch_name){
-		$git = new \pickles2\burdock\git($project->id, $branch_name);
+		$gitUtil = new \pickles2\burdock\git($project, $branch_name);
 		$rtn = array();
 		$git_command_array = $request->command_ary;
 		if( count($git_command_array) == 1 && $git_command_array[0] == 'branch' ){
 			// `git branch` のフェイク
-			array_push( $rtn, $this->gitFake_branch($git, $git_command_array) );
+			array_push( $rtn, $this->gitFake_branch($gitUtil, $git_command_array) );
 		}elseif( count($git_command_array) == 3 && $git_command_array[0] == 'checkout' && $git_command_array[1] == '-b' ){
 			// `git checkout -b branchname` のフェイク
-			array_push( $rtn, $this->gitFake_checkout_b($git, $git_command_array) );
+			array_push( $rtn, $this->gitFake_checkout_b($gitUtil, $git_command_array) );
 		}elseif( count($git_command_array) == 2 && $git_command_array[0] == 'merge' ){
 			// `git merge branchname` のフェイク
-			array_push( $rtn, $this->gitFake_merge($git, $git_command_array) );
+			array_push( $rtn, $this->gitFake_merge($gitUtil, $git_command_array) );
 		}elseif( count($git_command_array) == 3 && $git_command_array[0] == 'branch' && $git_command_array[1] == '--delete' ){
 			// `git branch --delete branchname` のフェイク
-			array_push( $rtn, $this->gitFake_branch_delete($git, $git_command_array) );
+			array_push( $rtn, $this->gitFake_branch_delete($gitUtil, $git_command_array) );
 		}else{
-			array_push( $rtn, $git->git( $git_command_array ) );
+			array_push( $rtn, $gitUtil->git( $git_command_array ) );
 		}
-		// array_push( $rtn, $git->git( $git_command_array ) );
+		// array_push( $rtn, $gitUtil->git( $git_command_array ) );
 		header('Content-type: application/json');
 		return json_encode($rtn);
 	}

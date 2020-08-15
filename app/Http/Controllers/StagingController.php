@@ -28,7 +28,8 @@ class StagingController extends Controller
 	 */
 	public function index(Request $request, Project $project, $branch_name){
 
-		$default_branch_name = get_git_remote_default_branch_name();
+		$gitUtil = new \pickles2\burdock\git($project);
+		$default_branch_name = $gitUtil->get_branch_name();
 
 		$fs = new \tomk79\filesystem();
 
