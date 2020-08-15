@@ -262,32 +262,44 @@ class SetupController extends Controller
 		if(\File::exists($project_workingtree_path.'/'.get_px_execute_path($project_code, $branch_name))) {
 
 			// configのmaster_formatをtimestampに変更してconfig.phpに上書き保存
-			if(\File::exists($project_workingtree_path.'/'.get_path_homedir($project->project_code, $branch_name).'config.php')) {
-				$files = null;
-				$file = file($project_workingtree_path.'/'.get_path_homedir($project->project_code, $branch_name).'config.php');
-				for($i = 0; $i < count($file); $i++) {
-					if(strpos($file[$i], "'master_format'=>'xlsx'") !== false) {
-						$files .= str_replace('xlsx', 'timestamp', $file[$i]);
-					} else {
-						$files .= $file[$i];
-					}
-				}
-				file_put_contents($project_workingtree_path.'/'.get_path_homedir($project->project_code, $branch_name).'config.php', $files);
-			}
+			// 2020-08-15 @tomk79 : 削除 :
+			// 		sitemapexcel の変換設定はプロジェクトのワークフローによって選択されるべきと考えられる。
+			// 		Burdockの都合で知らずに書き換えられるのは期待と合わない。
+			// 		デフォルトの挙動として妥当ではないと考えられる場合は、 プロジェクトの雛形の側で予め設定されているのが望ましい。
+			//
+			// if(\File::exists($project_workingtree_path.'/'.get_path_homedir($project->project_code, $branch_name).'config.php')) {
+			// 	$files = null;
+			// 	$file = file($project_workingtree_path.'/'.get_path_homedir($project->project_code, $branch_name).'config.php');
+			// 	for($i = 0; $i < count($file); $i++) {
+			// 		if(strpos($file[$i], "'master_format'=>'xlsx'") !== false) {
+			// 			$files .= str_replace('xlsx', 'timestamp', $file[$i]);
+			// 		} else {
+			// 			$files .= $file[$i];
+			// 		}
+			// 	}
+			// 	file_put_contents($project_workingtree_path.'/'.get_path_homedir($project->project_code, $branch_name).'config.php', $files);
+			// }
 
 			// .htaccess の一部をweb版用に修正
-			if(\File::exists($project_workingtree_path.'/.htaccess')) {
-				$files = null;
-				$file = file($project_workingtree_path.'/.htaccess');
-				for($i = 0; $i < count($file); $i++) {
-					if(strpos($file[$i], "\.px_execute\.php/") !== false) {
-						$files .= str_replace('\.px_execute\.php/', '/\.px_execute\.php/', $file[$i]);
-					} else {
-						$files .= $file[$i];
-					}
-				}
-				file_put_contents($project_workingtree_path.'/.htaccess', $files);
-			}
+			// 2020-08-15 @tomk79 : 削除 :
+			// 		この変換は、Apache の mod_vhost_alias を使うための変換処理だが、
+			// 		一般的なvhostとの互換性や、ディレクトリ構成変更の自由を損なう。
+			// 		サーバー構築の環境によって、 mod_vhost_alias を使わないこともあるので、必ず置換されるのは都合がよくない。
+			// 		mod_vhost_alias を使う場合に .env に変数をセットして、それに応じて置換の処理が有効になるようにする方法も考えられるが、
+			// 		同じ仕様の burdock 環境でしか動かないプロジェクトになってしまい、利便性を大きく損なう。
+			// 		ひとまず手動での対応をお願いすることにし、一旦削除とする。
+			// if(\File::exists($project_workingtree_path.'/.htaccess')) {
+			// 	$files = null;
+			// 	$file = file($project_workingtree_path.'/.htaccess');
+			// 	for($i = 0; $i < count($file); $i++) {
+			// 		if(strpos($file[$i], "\.px_execute\.php/") !== false) {
+			// 			$files .= str_replace('\.px_execute\.php/', '/\.px_execute\.php/', $file[$i]);
+			// 		} else {
+			// 			$files .= $file[$i];
+			// 		}
+			// 	}
+			// 	file_put_contents($project_workingtree_path.'/.htaccess', $files);
+			// }
 		}
 
 
