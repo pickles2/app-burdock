@@ -31,6 +31,8 @@ class SetupController extends Controller
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
 		$pjManager = $burdockProjectManager->project($project->project_code);
 
+		$gitUtil = new \pickles2\burdock\git();
+
 		$checked_option = $request->checked_option;
 		$checked_init = $request->checked_init;
 		$repository = $request->clone_repository;
@@ -78,24 +80,11 @@ class SetupController extends Controller
 		} else {
 			// 任意の gitリポジトリから
 			$git_url_plus_auth = $repository;
-			$cmd = '';
-
 			if( strlen($user_name) ){
-				$parsed_git_url = parse_url($git_url_plus_auth);
-				$git_url_plus_auth = '';
-				$git_url_plus_auth .= $parsed_git_url['scheme'].'://';
-				$git_url_plus_auth .= urlencode($user_name);
-				$git_url_plus_auth .= ':'.urlencode($password);
-				$git_url_plus_auth .= '@';
-				$git_url_plus_auth .= $parsed_git_url['host'];
-				if( array_key_exists('port', $parsed_git_url) && strlen($parsed_git_url['port']) ){
-					$git_url_plus_auth .= ':'.$parsed_git_url['port'];
-				}
-				$git_url_plus_auth .= $parsed_git_url['path'];
-				if( array_key_exists('query', $parsed_git_url) && strlen($parsed_git_url['query']) ){
-					$git_url_plus_auth .= '?'.$parsed_git_url['query'];
-				}
+				$git_url_plus_auth = $gitUtil->url_bind_confidentials($git_url_plus_auth, $user_name, $password);
 			}
+
+			$cmd = '';
 			chdir($project_workingtree_path);
 			if(\File::cleanDirectory($project_workingtree_path)) {
 				// shell_exec('rm .DS_Store');
@@ -203,6 +192,8 @@ class SetupController extends Controller
 
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
 		$pjManager = $burdockProjectManager->project($project->project_code);
+
+		$gitUtil = new \pickles2\burdock\git();
 
 		$initializing_request = $pjManager->get_initializing_request();
 
@@ -330,20 +321,7 @@ class SetupController extends Controller
 				}
 				// ユーザー名とパスワードを含むGitURLを生成
 				if( strlen($user_name) ){
-					$parsed_git_url = parse_url($git_url_plus_auth);
-					$git_url_plus_auth = '';
-					$git_url_plus_auth .= $parsed_git_url['scheme'].'://';
-					$git_url_plus_auth .= urlencode($user_name);
-					$git_url_plus_auth .= ':'.urlencode($password);
-					$git_url_plus_auth .= '@';
-					$git_url_plus_auth .= $parsed_git_url['host'];
-					if( array_key_exists('port', $parsed_git_url) && strlen($parsed_git_url['port']) ){
-						$git_url_plus_auth .= ':'.$parsed_git_url['port'];
-					}
-					$git_url_plus_auth .= $parsed_git_url['path'];
-					if( array_key_exists('query', $parsed_git_url) && strlen($parsed_git_url['query']) ){
-						$git_url_plus_auth .= '?'.$parsed_git_url['query'];
-					}
+					$git_url_plus_auth = $gitUtil->url_bind_confidentials($git_url_plus_auth, $user_name, $password);
 				}
 
 				shell_exec('git init');
@@ -355,20 +333,7 @@ class SetupController extends Controller
 				// ユーザー名とパスワードを含むGitURLを生成
 				$git_url_plus_auth = $repository;
 				if( strlen($user_name) ){
-					$parsed_git_url = parse_url($git_url_plus_auth);
-					$git_url_plus_auth = '';
-					$git_url_plus_auth .= $parsed_git_url['scheme'].'://';
-					$git_url_plus_auth .= urlencode($user_name);
-					$git_url_plus_auth .= ':'.urlencode($password);
-					$git_url_plus_auth .= '@';
-					$git_url_plus_auth .= $parsed_git_url['host'];
-					if( array_key_exists('port', $parsed_git_url) && strlen($parsed_git_url['port']) ){
-						$git_url_plus_auth .= ':'.$parsed_git_url['port'];
-					}
-					$git_url_plus_auth .= $parsed_git_url['path'];
-					if( array_key_exists('query', $parsed_git_url) && strlen($parsed_git_url['query']) ){
-						$git_url_plus_auth .= '?'.$parsed_git_url['query'];
-					}
+					$git_url_plus_auth = $gitUtil->url_bind_confidentials($git_url_plus_auth, $user_name, $password);
 				}
 
 				shell_exec('git add .');
@@ -474,8 +439,6 @@ class SetupController extends Controller
 			"project_name" => $project_name,
 			"repository" => $repository,
 			"user_name" => $user_name,
-			"password" => $password,
-			"git_url_plus_auth" => $git_url_plus_auth,
 		);
 		return $data;
 	}
