@@ -174,7 +174,7 @@ class git{
 	/**
 	 * URLに認証情報を埋め込む
 	 */
-	private function url_bind_confidentials($url = null, $user_name = null, $password = null){
+	public function url_bind_confidentials($url = null, $user_name = null, $password = null){
 		if( $this->project && !strlen($url) ){
 			$url = $this->project->git_url;
 		}
