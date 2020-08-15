@@ -18,9 +18,9 @@
             </thead>
             <tbody>
             @foreach ($projects as $project)
-@php
-	$gitUtil = new \pickles2\burdock\git($project);
-@endphp
+                @php
+                    $gitUtil = new \pickles2\burdock\git($project);
+                @endphp
                 <tr>
                     <td>
                         <a href="{{ url('users/' . $project->user->id) }}">

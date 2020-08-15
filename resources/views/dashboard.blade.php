@@ -1,7 +1,3 @@
-@php
-	$gitUtil = new \pickles2\burdock\git($project);
-@endphp
-
 @extends('layouts.px2_project')
 @section('title', env('APP_NAME'))
 @section('content')
@@ -21,9 +17,15 @@
 						<div class="list-group">
 							{{-- 全プロジェクトが見える用に一時的に変更した箇所 --}}
 							{{-- @foreach($user->projects as $project)
+								@php
+									$gitUtil = new \pickles2\burdock\git($project);
+								@endphp
 								<a class="list-group-item" href="{{ url('home/'.$project->project_code.'/'.$gitUtil->get_remote_default_branch_name()) }}">{{ $project->project_name }}</a>
 							@endforeach --}}
 							@foreach($projects as $project)
+								@php
+									$gitUtil = new \pickles2\burdock\git($project);
+								@endphp
 								<a class="list-group-item" href="{{ url('home/'.$project->project_code.'/'.$gitUtil->get_remote_default_branch_name()) }}">{{ $project->project_name }}</a>
 							@endforeach
 						</div>

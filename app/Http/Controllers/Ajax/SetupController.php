@@ -75,7 +75,7 @@ class SetupController extends Controller
 		// プロジェクトを配置する
 		if($checked_option === 'pickles2') {
 			// composer-packagist から
-			$cmd = 'php '.$path_composer.' create-project pickles2/preset-get-start-pickles2 ./';
+			$cmd = 'php '.escapeshellarg($path_composer).' create-project pickles2/preset-get-start-pickles2 ./';
 			chdir($project_workingtree_path);
 		} else {
 			// 任意の gitリポジトリから
@@ -90,7 +90,7 @@ class SetupController extends Controller
 				// shell_exec('rm .DS_Store');
 				// clone するときは認証情報が必要なので、
 				// 認証情報付きのURLで実行する
-				$cmd = 'git clone --progress '.$git_url_plus_auth.' .';
+				$cmd = 'git clone --progress '.escapeshellarg($git_url_plus_auth).' .';
 			}
 		}
 
@@ -158,7 +158,7 @@ class SetupController extends Controller
 			// gitリポジトリからロードした場合、
 			// composer のセットアップ処理が追加で必要。
 			// Packagist からセットアップした場合は同時に処理されるので不要。
-			shell_exec('php '.$path_composer.' install');
+			shell_exec('php '.escapeshellarg($path_composer).' install');
 		}
 
 
