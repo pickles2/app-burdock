@@ -551,6 +551,17 @@ export default {
 					this.rate = 100;
 					this.fraction = '100 / 100';
 					location.href = '/home/'+this.projectCode+'/'+this.branchName;
+				} else if(res.data.checked_option === 'git' && res.data.checked_repository === 'original' && res.data.info === true) {
+					this.rate = 100;
+					this.fraction = '100 / 100';
+					location.href = '/home/'+this.projectCode+'/'+this.branchName;
+				} else {
+					console.error('Burdock: Unknown Pattern');
+					this.rate = 100;
+					this.fraction = 'Unknown Pattern';
+					setTimeout(function(){
+						location.href = '/home/'+this.projectCode+'/'+this.branchName;
+					}, 5000);
 				}
 			})
 		},
