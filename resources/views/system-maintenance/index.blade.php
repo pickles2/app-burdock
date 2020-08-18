@@ -1,12 +1,17 @@
 @php
-	$title = env('APP_NAME');
+	$title = 'システムメンテナンス';
 @endphp
 @extends('layouts.px2_project')
-@section('title', env('APP_NAME'))
+@section('title', $title)
 @section('content')
 <div class="container">
 	<h1>システムメンテナンス</h1>
 	<div class="contents">
+
+		<h2>メンテナンスメニュー</h2>
+		<ul class="px2-vertical-list">
+			<li><a href="/system-maintenance/project-dirs" class="px2-a">プロジェクトディレクトリ</a></li>
+		</ul>
 
 		<h2>実行環境</h2>
 		<dl>

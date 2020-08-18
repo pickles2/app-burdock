@@ -4,9 +4,6 @@ namespace App\Http\Controllers\SystemMaintenance;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\User;
-use App\Project;
-use App\Http\Requests\StoreUser;
 
 class IndexController extends \App\Http\Controllers\Controller
 {
