@@ -53,22 +53,7 @@ class ProjectDirsController extends \App\Http\Controllers\Controller
 	public function show($project_code)
 	{
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
-		// $pj = $burdockProjectManager->project($project_code);
-		// $project_dirs = array();
-		// foreach( $projects as $project_code ){
-		// 	$row = array();
-		// 	$row['project_code'] = $project_code;
-		// 	$row['exists_on_db'] = false;
-
-		// 	if( $project->count() ){
-		// 		$row['exists_on_db'] = true;
-		// 	}
-		// 	array_push($project_dirs, $row);
-		// }
 		$project = Project::where('project_code', $project_code)->first();
-		// if( !$project->count() ){
-		// 	$project = null;
-		// }
 
 		return view(
 			'system-maintenance.project-dirs.show',
@@ -77,6 +62,23 @@ class ProjectDirsController extends \App\Http\Controllers\Controller
 				'project_obj' => $project,
 			)
 		);
+	}
+
+	/**
+	 * Store project data to DB.
+	 */
+	public function store($project_code, Request $request)
+	{
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
+
+		$project = new Project;
+		$project->project_code = $project_code;
+		$project->project_name = $project_code;
+		$project->user_id = $request->user()->id;
+		$project->save();
+
+		$message = 'プロジェクトを作成しました。';
+		return redirect('/system-maintenance/project-dirs/'.$project_code)->with('my_status', __($message));
 	}
 
 }

@@ -48,8 +48,8 @@
 			</ul>
 		@else
 			<ul class="px2-horizontal-list">
-				<!-- <li><a href="{{ url( '/system-maintenance/project-dirs/'.$project_code.'/create' ) }}" class="px2-btn">データベースに登録する</a></li>
-				<li><a href="{{ url( '/system-maintenance/project-dirs/'.$project_code.'/delete' ) }}" class="px2-btn px2-btn--danger">削除する</a></li> -->
+				<li><a href="{{ url( '/system-maintenance/project-dirs/'.$project_code.'/store' ) }}" class="px2-btn">データベースに登録する</a></li>
+				<!-- <li><a href="{{ url( '/system-maintenance/project-dirs/'.$project_code.'/delete' ) }}" class="px2-btn px2-btn--danger">削除する</a></li> -->
 			</ul>
 		@endif
 

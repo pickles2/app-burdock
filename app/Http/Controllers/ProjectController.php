@@ -194,18 +194,22 @@ class ProjectController extends Controller
 		$project_code = $project->project_code;
 		$project_path = get_project_workingtree_dir($project_code, $branch_name);
 
-		// DBからプロジェクトを削除
-		$result = $project->delete();
-
 		// プロジェクトフォルダが存在していれば削除
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
 		$pj = $burdockProjectManager->project($project->project_code);
 		$result = $pj->delete();
 
 		if(\File::exists(env('BD_DATA_DIR').'/projects/'.$project_code) === false && $result === true) {
-			$message = 'Deleted a Project.';
+			// DBからプロジェクトを削除
+			$result = $project->delete();
+
+			if( $result ){
+				$message = 'プロジェクトを削除しました。';
+			}else{
+				$message = 'プロジェクトを削除できませんでした。データベースの更新に失敗しました。';
+			}
 		} else {
-			$message = 'プロジェクトを削除できませんでした。';
+			$message = 'プロジェクトを削除できませんでした。削除できないファイルが含まれています。';
 		}
 
 		return redirect('/')->with('my_status', __($message));
