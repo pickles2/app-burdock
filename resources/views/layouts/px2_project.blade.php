@@ -51,7 +51,7 @@
 							<span></span>
 						@else
 							@if( isset($project) && ! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
-								<span>{{ 'Project_'.$project->project_name }}</span>
+								<span>Project {{ $project->project_name }}</span>
 							@else
 								<span></span>
 							@endif
@@ -124,7 +124,6 @@
 								<li><a href="{{ url('delivery/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="delivery">配信管理</a></li>
 								<li><a href="{{ url('files-and-folders/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="files-and-folders">ファイルとフォルダ</a></li>
 							@endif
-						<li><a href="{{ url('system-maintenance/') }}" data-name="system-maintenance">システムメンテナンス</a></li>
 						<li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
 							<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
 								@csrf
@@ -172,8 +171,8 @@
 				@if (Request::is('git/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'git'; @endif
 				@if (Request::is('staging/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'staging'; @endif
 				@if (Request::is('delivery/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'delivery'; @endif
-				@if (Request::is('system-maintenance')) current = 'system-maintenance'; @endif
 			@endif
+			@if (Request::is('system-maintenance*')) current = 'system-maintenance'; @endif
 			px2style.header.init({'current': current});
 		});
 		</script>

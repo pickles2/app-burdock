@@ -82,6 +82,9 @@
 		</div>
 	</div>
 	<div class="cont_top_footer">
+		<ul class="px2-horizontal-list px2-horizontal-list--center">
+			<li><a href="/system-maintenance">システムメンテナンス</a></li>
+		</ul>
 		<p>(C)Pickles 2 Project.</p>
 	</div>
 </div>

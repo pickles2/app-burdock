@@ -40,6 +40,7 @@ Route::delete('mypage', 'MypageController@destroy');
 // --------------------------------------
 // システムメンテナンス画面 System Maintenance
 Route::get('system-maintenance', 'SystemMaintenanceController@index');
+Route::get('system-maintenance/ajax/checkCommand', 'SystemMaintenanceController@ajaxCheckCommand');
 
 
 // --------------------------------------

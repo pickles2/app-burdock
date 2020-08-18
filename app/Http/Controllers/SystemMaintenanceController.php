@@ -23,11 +23,51 @@ class SystemMaintenanceController extends Controller
 
 	/**
 	 * Show the application dashboard.
-	 *
-	 * @return \Illuminate\Http\Response
 	 */
 	public function index()
 	{
 		return view('system-maintenance.index');
 	}
+
+
+	/**
+	 * コマンドの状態をチェックする
+	 */
+	public function ajaxCheckCommand(Request $request)
+	{
+		$rtn = array(
+			'result' => null,
+		);
+		$cmd = $request->cmd;
+		switch( $cmd ){
+			case 'php':
+				$rtn['result'] = true;
+				$rtn['which'] = shell_exec('which php');
+				$rtn['version'] = shell_exec('php -v');
+				break;
+			case 'composer':
+				$path_composer = realpath(__DIR__.'/../../common/composer/composer.phar');
+				$rtn['result'] = true;
+				$rtn['which'] = shell_exec('which '.$path_composer);
+				$rtn['version'] = shell_exec($path_composer.' --version');
+				break;
+			case 'node':
+				$rtn['result'] = true;
+				$rtn['which'] = shell_exec('which node');
+				$rtn['version'] = shell_exec('node -v');
+				break;
+			case 'npm':
+				$rtn['result'] = true;
+				$rtn['which'] = shell_exec('which npm');
+				$rtn['version'] = shell_exec('npm -v');
+				break;
+			case 'git':
+				$rtn['result'] = true;
+				$rtn['which'] = shell_exec('which git');
+				$rtn['version'] = shell_exec('git --version');
+				break;
+		}
+		return $rtn;
+	}
+
 }
