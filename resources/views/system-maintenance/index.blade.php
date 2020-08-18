@@ -11,14 +11,18 @@
 		<h2>実行環境</h2>
 		<dl>
 			<dt>Platform</dt>
-				<dd><?= htmlspecialchars( php_uname() ); ?></dd>
+				<dd><pre><code><?= htmlspecialchars( php_uname() ); ?></code></pre></dd>
 			<dt>PHP Version</dt>
-				<dd><?= htmlspecialchars( phpversion() ); ?></dd>
+				<dd><pre><code><?= htmlspecialchars( phpversion() ); ?></code></pre></dd>
+			<dt>phpinfo</dt>
+				<dd>
+					<p><a href="/system-maintenance/phpinfo" class="px2-a" target="_blank">新しいウィンドウで表示</a></p>
+				</dd>
 			<dt>UserName</dt>
 				<?php
 				$userName = posix_getpwuid(posix_geteuid());
 				?>
-				<dd><?= htmlspecialchars( $userName['name'] ); ?></dd>
+				<dd><pre><code><?= htmlspecialchars( $userName['name'] ); ?></code></pre></dd>
 		</dl>
 
 		<h2>コマンド</h2>
@@ -54,12 +58,11 @@ function contCheckingCommands(param){
 			'cmd': param
 		},
 		'success': function(data){
-			console.log(data);
+			// console.log(data);
 			$('.cont-checkcommand-'+param+' pre code').text(data.version);
-
 		},
 		'complete': function(){
-			console.log('done');
+			// console.log('done');
 		}
 	});
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\SystemMaintenance;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -8,7 +8,7 @@ use App\User;
 use App\Project;
 use App\Http\Requests\StoreUser;
 
-class SystemMaintenanceController extends Controller
+class IndexController extends \App\Http\Controllers\Controller
 {
 	/**
 	 * Create a new controller instance.
@@ -31,6 +31,14 @@ class SystemMaintenanceController extends Controller
 
 
 	/**
+	 * phpinfo() を表示する
+	 */
+	public function phpinfo(){
+		phpinfo();
+		return '';
+	}
+
+	/**
 	 * コマンドの状態をチェックする
 	 */
 	public function ajaxCheckCommand(Request $request)
@@ -46,7 +54,7 @@ class SystemMaintenanceController extends Controller
 				$rtn['version'] = shell_exec('php -v');
 				break;
 			case 'composer':
-				$path_composer = realpath(__DIR__.'/../../common/composer/composer.phar');
+				$path_composer = realpath(__DIR__.'/../../../common/composer/composer.phar');
 				$rtn['result'] = true;
 				$rtn['which'] = shell_exec('which '.$path_composer);
 				$rtn['version'] = shell_exec($path_composer.' --version');
