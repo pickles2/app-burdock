@@ -25,9 +25,6 @@ class git{
 			$this->project = Project::find($project);
 		}
 
-		if( !strlen($branch_name) ){
-			$branch_name = $this->get_remote_default_branch_name();
-		}
 		$this->branch_name = $branch_name;
 	}
 
@@ -49,6 +46,9 @@ class git{
 	 * ブランチ名を取得する
 	 */
 	public function get_branch_name(){
+		if( !strlen($this->branch_name) ){
+			$this->branch_name = $this->get_remote_default_branch_name();
+		}
 		return $this->branch_name;
 	}
 
@@ -100,7 +100,7 @@ class git{
 		}
 		$cmd = implode(' ', $git_sub_command);
 
-		$realpath_pj_git_root = \get_project_workingtree_dir($this->project->project_code, $this->branch_name);
+		$realpath_pj_git_root = \get_project_workingtree_dir($this->project->project_code, $this->get_branch_name());
 
 		$cd = realpath('.');
 		chdir($realpath_pj_git_root);
