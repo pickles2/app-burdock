@@ -46,7 +46,7 @@ Route::get('system-maintenance/ajax/checkCommand', 'SystemMaintenance\IndexContr
 
 // --------------------------------------
 // プロジェクト Home
-Route::get('home/{project}/{branch_name}', 'HomeController@index');
+Route::get('home/{project}/{branch_name?}', 'HomeController@index');
 
 // --------------------------------------
 // プロジェクト管理

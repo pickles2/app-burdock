@@ -28,9 +28,12 @@ class HomeController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index(Project $project, $branch_name)
+	public function index(Project $project, $branch_name = null)
 	{
 
+		if( !strlen($branch_name) ){
+			$branch_name = 'master';
+		}
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
 		$project_branch = $burdockProjectManager->project($project->project_code)->branch($branch_name, 'preview');
 		$project_status = $project_branch->status();

@@ -31,6 +31,12 @@ class DashboardController extends Controller
         $user = Auth::user();   #ログインユーザー情報を取得します。
 		//全プロジェクトが見えるように一時的に変更
 		$projects = Project::latest()->paginate();
-        return view('dashboard', ['user' => $user, 'projects' => $projects]);
+        return view(
+            'dashboard',
+            [
+                'user' => $user,
+                'projects' => $projects
+            ]
+        );
     }
 }
