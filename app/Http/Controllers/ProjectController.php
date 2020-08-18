@@ -198,38 +198,14 @@ class ProjectController extends Controller
 		$result = $project->delete();
 
 		// プロジェクトフォルダが存在していれば削除
-		if(\File::exists(env('BD_DATA_DIR').'/projects/'.$project_code) && $result === true) {
-			\File::deleteDirectory(env('BD_DATA_DIR').'/projects/'.$project_code);
-			if(\File::exists(env('BD_DATA_DIR').'/projects/'.$project_code) === false) {
-				$result = true;
-			} else {
-				$result = false;
-			}
-		} else {
-			$result = true;
-		}
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
+		$pj = $burdockProjectManager->project($project->project_code);
+		$result = $pj->delete();
 
 		if(\File::exists(env('BD_DATA_DIR').'/projects/'.$project_code) === false && $result === true) {
 			$message = 'Deleted a Project.';
 		} else {
 			$message = 'プロジェクトを削除できませんでした。';
-		}
-
-		$fs = new \tomk79\filesystem();
-		foreach( array('repositories', 'stagings') as $root_dir_name ){
-			$ls = $fs->ls( $bd_data_dir.'/'.$root_dir_name.'/' );
-			if( !is_array($ls) ){
-				continue;
-			}
-			foreach( $ls as $basename ){
-				if(preg_match('/^(.*?)\-\-\-(.*)$/', $basename, $matched)){
-					$tmp_project_code = $matched[1];
-					$tmp_branch_name = $matched[2];
-					if( $tmp_project_code == $project->project_code ){
-						\File::deleteDirectory(env('BD_DATA_DIR').'/'.$root_dir_name.'/'.$basename);
-					}
-				}
-			}
 		}
 
 		return redirect('/')->with('my_status', __($message));

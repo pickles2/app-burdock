@@ -1332,12 +1332,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "ab6a6135aae982aeb8694b9761f671a9bc8a40ae"
+                "reference": "63cd8c14708b9544d3f61d3c15b747fda1c95c6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/ab6a6135aae982aeb8694b9761f671a9bc8a40ae",
-                "reference": "ab6a6135aae982aeb8694b9761f671a9bc8a40ae",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/63cd8c14708b9544d3f61d3c15b747fda1c95c6e",
+                "reference": "63cd8c14708b9544d3f61d3c15b747fda1c95c6e",
                 "shasum": ""
             },
             "require": {
@@ -1415,7 +1415,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2020-08-15T08:21:24+00:00"
+            "time": "2020-08-18T10:57:55+00:00"
         },
         {
             "name": "league/mime-type-detection",
@@ -4986,12 +4986,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "a6c5d172fc258d12af4d05771f8a588bb8fcc759"
+                "reference": "c0807b892d3e3e03b166dc80e3260d4c7c37b0a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/a6c5d172fc258d12af4d05771f8a588bb8fcc759",
-                "reference": "a6c5d172fc258d12af4d05771f8a588bb8fcc759",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/c0807b892d3e3e03b166dc80e3260d4c7c37b0a2",
+                "reference": "c0807b892d3e3e03b166dc80e3260d4c7c37b0a2",
                 "shasum": ""
             },
             "require": {
@@ -5079,7 +5079,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-17T11:58:42+00:00"
+            "time": "2020-08-18T11:41:45+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -5553,12 +5553,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tomk79/burdock-project-manager.git",
-                "reference": "9ad642a414cfa6301b3fe28452ca9c23addf424e"
+                "reference": "7461f5fa79413a254e33055db251b030b252338d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tomk79/burdock-project-manager/zipball/9ad642a414cfa6301b3fe28452ca9c23addf424e",
-                "reference": "9ad642a414cfa6301b3fe28452ca9c23addf424e",
+                "url": "https://api.github.com/repos/tomk79/burdock-project-manager/zipball/7461f5fa79413a254e33055db251b030b252338d",
+                "reference": "7461f5fa79413a254e33055db251b030b252338d",
                 "shasum": ""
             },
             "require": {
@@ -5589,7 +5589,7 @@
                     "email": "tomk79@gmail.com"
                 }
             ],
-            "time": "2020-08-18T08:29:03+00:00"
+            "time": "2020-08-18T13:15:26+00:00"
         },
         {
             "name": "tomk79/filesystem",
