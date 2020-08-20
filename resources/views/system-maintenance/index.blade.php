@@ -25,9 +25,13 @@
 				</dd>
 			<dt>UserName</dt>
 				<?php
-				$userName = posix_getpwuid(posix_geteuid());
+				$userName = '';
+				if( is_callable('posix_getpwuid') && is_callable('posix_geteuid') ){
+					$userName = posix_getpwuid(posix_geteuid());
+					$userName = $userName['name'];
+				}
 				?>
-				<dd><pre><code><?= htmlspecialchars( $userName['name'] ); ?></code></pre></dd>
+				<dd><pre><code><?= htmlspecialchars( ($userName ? $userName : '---') ); ?></code></pre></dd>
 		</dl>
 
 		<h2>コマンド</h2>

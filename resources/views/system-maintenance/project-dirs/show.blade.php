@@ -53,6 +53,11 @@
 			</ul>
 		@endif
 
+		<hr />
+
+		<p>
+			<a href="{{ url('/system-maintenance/project-dirs') }}" class="px2-btn">戻る</a>
+		</p>
 	</div>
 </div>
 @endsection

@@ -33,6 +33,10 @@
 		</tbody>
 		</table>
 
+
+		<p>
+			<a href="{{ url('/system-maintenance') }}" class="px2-btn">戻る</a>
+		</p>
 	</div>
 </div>
 @endsection
