@@ -1776,12 +1776,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "f9d35fe11e58105dff933931344d6e6beb1406d8"
+                "reference": "aaee038b912e567780949787d5fe1977be11a778"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/f9d35fe11e58105dff933931344d6e6beb1406d8",
-                "reference": "f9d35fe11e58105dff933931344d6e6beb1406d8",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/aaee038b912e567780949787d5fe1977be11a778",
+                "reference": "aaee038b912e567780949787d5fe1977be11a778",
                 "shasum": ""
             },
             "require": {
@@ -1798,7 +1798,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.8-dev"
+                    "dev-master": "4.9-dev"
                 }
             },
             "autoload": {
@@ -1820,7 +1820,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2020-08-10T09:21:16+00:00"
+            "time": "2020-08-18T19:48:01+00:00"
         },
         {
             "name": "opis/closure",
@@ -2444,12 +2444,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/predis/predis.git",
-                "reference": "7376902b201f380aadb32c6a89aa294aa20d6d7d"
+                "reference": "2ce537d75e610550f5337e41b2a971417999b028"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/predis/predis/zipball/7376902b201f380aadb32c6a89aa294aa20d6d7d",
-                "reference": "7376902b201f380aadb32c6a89aa294aa20d6d7d",
+                "url": "https://api.github.com/repos/predis/predis/zipball/2ce537d75e610550f5337e41b2a971417999b028",
+                "reference": "2ce537d75e610550f5337e41b2a971417999b028",
                 "shasum": ""
             },
             "require": {
@@ -2511,7 +2511,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-14T17:11:49+00:00"
+            "time": "2020-08-18T21:00:59+00:00"
         },
         {
             "name": "psr/container",
@@ -4723,18 +4723,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "602c3c480f74fc9ae5de94425436af7fb60bffea"
+                "reference": "0bbd73e87a90a78587731c7fdaf0ee6f4e9f223c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/602c3c480f74fc9ae5de94425436af7fb60bffea",
-                "reference": "602c3c480f74fc9ae5de94425436af7fb60bffea",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/0bbd73e87a90a78587731c7fdaf0ee6f4e9f223c",
+                "reference": "0bbd73e87a90a78587731c7fdaf0ee6f4e9f223c",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.5",
+                "symfony/deprecation-contracts": "^2.1",
                 "symfony/polyfill-php80": "^1.15",
-                "symfony/property-info": "^5.1.1"
+                "symfony/property-info": "^5.2"
             },
             "require-dev": {
                 "symfony/cache": "^4.4|^5.0"
@@ -4797,7 +4798,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-17T07:50:35+00:00"
+            "time": "2020-08-19T13:25:50+00:00"
         },
         {
             "name": "symfony/property-info",
@@ -4805,16 +4806,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-info.git",
-                "reference": "9ba67b2b65177821478cffb9c4daef2bfdb7d44a"
+                "reference": "42929c670908c186c0d7f858d52a27004608900f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-info/zipball/9ba67b2b65177821478cffb9c4daef2bfdb7d44a",
-                "reference": "9ba67b2b65177821478cffb9c4daef2bfdb7d44a",
+                "url": "https://api.github.com/repos/symfony/property-info/zipball/42929c670908c186c0d7f858d52a27004608900f",
+                "reference": "42929c670908c186c0d7f858d52a27004608900f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.5",
+                "symfony/deprecation-contracts": "^2.1",
                 "symfony/polyfill-php80": "^1.15",
                 "symfony/string": "^5.1"
             },
@@ -4888,7 +4890,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-18T21:19:34+00:00"
+            "time": "2020-08-19T13:25:50+00:00"
         },
         {
             "name": "symfony/routing",
@@ -5597,12 +5599,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tomk79/filesystem.git",
-                "reference": "f75492982522dad55ae73d5178d8bd7549c903ce"
+                "reference": "e11ed29bfd5c23b200051d145b5aed80dfe619dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tomk79/filesystem/zipball/f75492982522dad55ae73d5178d8bd7549c903ce",
-                "reference": "f75492982522dad55ae73d5178d8bd7549c903ce",
+                "url": "https://api.github.com/repos/tomk79/filesystem/zipball/e11ed29bfd5c23b200051d145b5aed80dfe619dd",
+                "reference": "e11ed29bfd5c23b200051d145b5aed80dfe619dd",
                 "shasum": ""
             },
             "require": {
@@ -5633,7 +5635,7 @@
             "keywords": [
                 "filesystem"
             ],
-            "time": "2020-06-07T01:24:45+00:00"
+            "time": "2020-08-20T07:27:02+00:00"
         },
         {
             "name": "tomk79/remote-finder",
