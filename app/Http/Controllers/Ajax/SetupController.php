@@ -47,6 +47,7 @@ class SetupController extends Controller
 		$project_data_path = get_project_dir($project_code);
 		$project_workingtree_path = get_project_workingtree_dir($project_code, $branch_name);
 		$path_composer = realpath(__DIR__.'/../../../common/composer/composer.phar');
+		$path_composer_home = realpath(dirname($path_composer).'/home');
 		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
 
 		// 再セットアップ時はディレクトリ内を削除してから処理に入る
@@ -75,7 +76,7 @@ class SetupController extends Controller
 		// プロジェクトを配置する
 		if($checked_option === 'pickles2') {
 			// composer-packagist から
-			$cmd = 'php '.escapeshellarg($path_composer).' create-project pickles2/preset-get-start-pickles2 ./';
+			$cmd = 'export COMPOSER_HOME='.$path_composer_home.'; php '.escapeshellarg($path_composer).' create-project pickles2/preset-get-start-pickles2 ./';
 			chdir($project_workingtree_path);
 		} else {
 			// 任意の gitリポジトリから
@@ -158,7 +159,7 @@ class SetupController extends Controller
 			// gitリポジトリからロードした場合、
 			// composer のセットアップ処理が追加で必要。
 			// Packagist からセットアップした場合は同時に処理されるので不要。
-			shell_exec('php '.escapeshellarg($path_composer).' install');
+			shell_exec('export COMPOSER_HOME='.$path_composer_home.'; php '.escapeshellarg($path_composer).' install');
 		}
 
 

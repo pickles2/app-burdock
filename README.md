@@ -157,8 +157,8 @@ BROADCAST_DRIVER=redis
 次のコマンドで Redis と Laravel Echo Server を起動します。
 
 ```
-$ redis-server
-$ laravel-echo-server start
+$ redis-server --daemonize yes
+$ pm2 start laravel-echo-server-pm2.json;
 ```
 
 

@@ -6,6 +6,7 @@
 /storage/*.key
 #/composer.lock
 /vendor
+/app/common/composer/home
 /.idea
 /.vscode
 /.vagrant
