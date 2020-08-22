@@ -2,10 +2,10 @@
 <html lang="{{ app()->getLocale() }}">
 <head>
 	<meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	{{-- CSRF トークン --}}
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 
 	<title>@if (! Request::is('/')){{ $title }} | @endif{{ env('APP_NAME') }}</title>
 
@@ -29,27 +29,29 @@
 	<!-- Pickles 2 Style -->
 	<link rel="stylesheet" href="/common/px2style/dist/styles.css" charset="utf-8">
 	<script src="/common/px2style/dist/scripts.js" charset="utf-8"></script>
-    <!-- Local Resources -->
+	<!-- Local Resources -->
 	<link rel="stylesheet" href="/common/index_files/style.css" type="text/css" data-original-title="" title="">
-    <link rel="stylesheet" href="/common/index_files/styles.css" type="text/css" data-original-title="" title="">
+	<link rel="stylesheet" href="/common/index_files/styles.css" type="text/css" data-original-title="" title="">
 	{{-- CSS --}}
 	@yield('stylesheet')
 	@yield('javascript')
 </head>
 <body>
-	<div class="theme_wrap">
-		{{-- フラッシュ・メッセージ --}}
-        @if (session('my_status'))
-			@component('components.flash_message')
-			@endcomponent
-        @endif
-        <div>
-            @yield('content')
-        </div>
-	</div>
-	{{-- JavaScript --}}
-    {{-- <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/custom.js') }}"></script> --}}
-    @yield('script')
+
+{{-- フラッシュ・メッセージ --}}
+@if (session('my_status'))
+	@component('components.flash_message')
+	@endcomponent
+@endif
+{{-- Ajax用のフラッシュ・メッセージ --}}
+@component('components.ajax_flash_message')
+@endcomponent
+
+@yield('content')
+
+
+{{-- JavaScript --}}
+{{-- <script src="{{ asset('js/custom.js') }}"></script> --}}
+@yield('script')
 </body>
 </html>

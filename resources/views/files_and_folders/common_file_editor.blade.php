@@ -1,7 +1,7 @@
 @php
 	$title = __('Files And Folders: File Editor');
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.px2_plain')
 
 @section('content')
 <div class="container">

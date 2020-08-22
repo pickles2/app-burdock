@@ -61,7 +61,7 @@ Route::get('projects/{project}/{branch_name}/edit', 'ProjectController@edit');
 Route::put('projects/{project}/{branch_name}', 'ProjectController@update');
 Route::delete('projects/{project}/{branch_name}', 'ProjectController@destroy');
 
-// Route::resource('projects', 'ProjectController');
+
 
 // --------------------------------------
 // セットアップ

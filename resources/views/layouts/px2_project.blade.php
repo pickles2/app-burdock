@@ -24,9 +24,8 @@
 	<script src="/common/bootstrap/js/bootstrap.min.js"></script>
     @endif
 
-	<!-- normalize & FESS -->
+	<!-- normalize -->
 	<link rel="stylesheet" href="/common/styles/contents.css" type="text/css">
-	<link rel="stylesheet" href="/common/styles/fess.css" type="text/css">
 	<!-- Pickles 2 Style -->
 	<link rel="stylesheet" href="/common/px2style/dist/styles.css" charset="utf-8">
 	<script src="/common/px2style/dist/scripts.js" charset="utf-8"></script>
