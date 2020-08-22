@@ -77,7 +77,6 @@ class SetupController extends Controller
 		if($checked_option === 'pickles2') {
 			// composer-packagist から
 			$cmd = 'export COMPOSER_HOME='.$path_composer_home.'; php '.escapeshellarg($path_composer).' create-project pickles2/preset-get-start-pickles2 ./';
-			chdir($project_workingtree_path);
 		} else {
 			// 任意の gitリポジトリから
 			$git_url_plus_auth = $repository;
@@ -86,7 +85,6 @@ class SetupController extends Controller
 			}
 
 			$cmd = '';
-			chdir($project_workingtree_path);
 			if(\File::cleanDirectory($project_workingtree_path)) {
 				// shell_exec('rm .DS_Store');
 				// clone するときは認証情報が必要なので、
@@ -95,6 +93,7 @@ class SetupController extends Controller
 			}
 		}
 
+		chdir($project_workingtree_path);
 		$desc = array(
 		    1 => array('pipe', 'w'),
 		    2 => array('pipe', 'w'),

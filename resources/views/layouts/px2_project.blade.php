@@ -79,7 +79,7 @@
 									<li><a href="{{ url('home/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="home">ホーム</a></li>
 									<li><a href="{{ url('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="sitemaps">サイトマップ</a></li>
 									<li><a href="{{ url('themes/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="themes">テーマ</a></li>
-									<li><a href="{{ url('contents/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="pages">コンテンツ</a></li>
+									<li><a href="{{ url('contents/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="contents">コンテンツ</a></li>
 									<li><a href="{{ url('publish/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="publish">パブリッシュ</a></li>
 								@endif
 
