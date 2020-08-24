@@ -37,7 +37,6 @@ class FilesAndFoldersController extends Controller
 		);
 	}
 
-
 	/**
 	 * Show the application dashboard.
 	 *
@@ -158,5 +157,61 @@ class FilesAndFoldersController extends Controller
 		return json_encode($rtn);
 	}
 
+	/**
+	 * ファイルのパスを、Pickles 2 の外部パス(path)に変換する。
+	 *
+	 * Pickles 2 のパスは、 document_root と cont_root を含まないが、
+	 * ファイルのパスはこれを一部含んでいる可能性がある。
+	 * これを確認し、必要に応じて除いたパスを返却する。
+	 */
+	public function apiParsePx2FilePath(Request $request, Project $project, $branch_name){
+		$fs = new \tomk79\filesystem();
+		$rtn = array();
+		$pxExternalPath = $request->get('path');
+		$pxExternalPath = preg_replace( '/^\/*/', '', $pxExternalPath );
+		$realpath_basedir = get_project_workingtree_dir($project->project_code, $branch_name);
+		$realpath_file = $fs->normalize_path($fs->get_realpath($realpath_basedir.$pxExternalPath));
+
+		$is_file = is_file($realpath_file);
+
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
+		$project_branch = $burdockProjectManager->project($project->project_code)->branch($branch_name, 'preview');
+
+		$pageInfoAll = $project_branch->query(
+			'/?PX=px2dthelper.get.all',
+			array(
+				'output' => 'json'
+			)
+		);
+		$rtn['pageInfoAll'] = $pageInfoAll;
+
+
+		// --------------------------------------
+		// 外部パスを求める
+		if( preg_match( '/^'.preg_quote($pageInfoAll->realpath_docroot, '/').'/', $realpath_file) ){
+			$pxExternalPath = preg_replace('/^'.preg_quote($pageInfoAll->realpath_docroot, '/').'/', '/', $realpath_file);
+		}
+		if( preg_match( '/^'.preg_quote($pageInfoAll->path_controot, '/').'/', $pxExternalPath) ){
+			$pxExternalPath = preg_replace('/^'.preg_quote($pageInfoAll->path_controot, '/').'/', '/', $pxExternalPath);
+		}
+		$rtn['pxExternalPath'] = $pxExternalPath;
+
+
+		// --------------------------------------
+		// パスの種類を求める
+		// theme_collection, home_dir, or contents
+		$path_type = 'contents';
+		$realpath_target = $fs->normalize_path($realpath_file);
+		$realpath_homedir = $fs->normalize_path($pageInfoAll->realpath_homedir);
+		$realpath_theme_collection_dir = $fs->normalize_path($pageInfoAll->realpath_theme_collection_dir);
+		if( preg_match('/^'.preg_quote($realpath_theme_collection_dir, '/').'/', $realpath_target) ){
+			$path_type = 'theme_collection';
+		}elseif( preg_match('/^'.preg_quote($realpath_homedir, '/').'/', $realpath_target) ){
+			$path_type = 'home_dir';
+		}
+		$rtn['path_type'] = $path_type;
+
+		return json_encode($rtn);
+	}
 
 }

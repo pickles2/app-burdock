@@ -122,6 +122,7 @@ Route::match(['get', 'post'], 'delivery/{project}/{branch_name}/indigoAjaxAPI', 
 // --------------------------------------
 // ファイルとフォルダ (remote-finder)
 Route::get('files-and-folders/{project}/{branch_name}', 'FilesAndFoldersController@index');
+Route::get('files-and-folders/{project}/{branch_name}/api/parsePx2FilePath', 'FilesAndFoldersController@apiParsePx2FilePath');
 Route::post('files-and-folders/{project}/{branch_name}/gpi', 'FilesAndFoldersController@remoteFinderGPI');
 Route::get('files-and-folders/{project}/{branch_name}/common-file-editor', 'FilesAndFoldersController@commonFileEditor');
 Route::post('files-and-folders/{project}/{branch_name}/common-file-editor/gpi', 'FilesAndFoldersController@commonFileEditorGPI');

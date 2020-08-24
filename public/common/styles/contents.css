@@ -27,6 +27,12 @@ a {
 a:hover {
   color: #666; }
 
+ul, ol, pre, blockquote,
+p, .px2-p{
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
 .contents a.icon {
   position: relative;
   padding-left: 0.8em; }

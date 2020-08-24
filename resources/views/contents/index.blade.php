@@ -201,7 +201,6 @@
 </div>
 @endsection
 @section('script')
-	<script src="{{ asset('/js/app.js') }}"></script>
 	<script>
 		$(window).on('load resize', function(){
 			var $elms = {};

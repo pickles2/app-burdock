@@ -160,22 +160,22 @@
 		<script>
 		window.addEventListener('load', function(){
 			var current = '';
-			@if( isset($project) && ! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
-				@if (Request::is('home/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'home'; @endif
-				@if (Request::is('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'sitemaps'; @endif
-				@if (Request::is('themes/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'themes'; @endif
-				@if (Request::is('contents/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'contents'; @endif
-				@if (Request::is('publish/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'publish'; @endif
-				@if (Request::is('composer/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'composer'; @endif
-				@if (Request::is('git/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'git'; @endif
-				@if (Request::is('staging/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'staging'; @endif
-				@if (Request::is('delivery/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'delivery'; @endif
-			@endif
-			@if (Request::is('system-maintenance*')) current = 'system-maintenance'; @endif
+			@if (Request::is('home/*')) current = 'home'; @endif
+			@if (Request::is('sitemaps/*')) current = 'sitemaps'; @endif
+			@if (Request::is('themes/*')) current = 'themes'; @endif
+			@if (Request::is('contents/*')) current = 'contents'; @endif
+			@if (Request::is('publish/*')) current = 'publish'; @endif
+			@if (Request::is('composer/*')) current = 'composer'; @endif
+			@if (Request::is('git/*')) current = 'git'; @endif
+			@if (Request::is('staging/*')) current = 'staging'; @endif
+			@if (Request::is('delivery/*')) current = 'delivery'; @endif
+			@if (Request::is('files-and-folders/*')) current = 'files-and-folders'; @endif
+			@if (Request::is('system-maintenance') || Request::is('system-maintenance/*')) current = 'system-maintenance'; @endif
 			px2style.header.init({'current': current});
 		});
 		</script>
 	@endguest
+	<script src="{{ asset('/js/app.js') }}"></script>
 	@yield('script')
 </body>
 </html>

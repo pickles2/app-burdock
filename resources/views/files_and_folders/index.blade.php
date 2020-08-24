@@ -119,7 +119,39 @@
 					});
 				},
 				"open": function(fileinfo, callback){
-					window.open('/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/common-file-editor?filename='+encodeURIComponent(fileinfo.path));
+					// console.log(fileinfo);
+
+					switch( fileinfo.ext ){
+						case 'html':
+						case 'htm':
+							$.ajax({
+								type : 'get',
+								url : "/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/api/parsePx2FilePath",
+								headers: {
+									'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+								},
+								contentType: 'application/json',
+								dataType: 'json',
+								data: {
+									'path': fileinfo.path
+								},
+								success: function(data){
+									console.log(data);
+									var url = 'about:blank';
+									if(data.path_type == 'contents'){
+										url = '/contentsEditor/{{ $project->project_code }}/{{ $branch_name }}?page_path='+encodeURIComponent(data.pxExternalPath);
+									}else{
+										url = '/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/common-file-editor?filename='+encodeURIComponent(fileinfo.path);
+									}
+									window.open(url);
+								}
+							});
+							break;
+						default:
+							var url = '/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/common-file-editor?filename='+encodeURIComponent(fileinfo.path);
+							window.open(url);
+							break;
+					}
 					callback(true);
 				},
 				"mkdir": function(current_dir, callback){
