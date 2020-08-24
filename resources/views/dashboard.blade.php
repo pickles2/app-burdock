@@ -4,10 +4,10 @@
 <div class="theme_wrap">
 	<div class="contents">
 		<div class="cont_top_jumbotron">
-			<p class="center">
+			<p class="px2-text-align-center">
 				<img src="common/images/logo_2017.svg" style="width:50%; max-height:120px;" alt="Pickles 2">
 			</p>
-			<p class="center">Web Tool</p>
+			<p class="px2-text-align-center">Web Tool</p>
 		</div>
 		<div class="container">
 			<div class="row">
@@ -27,10 +27,11 @@
 				</div>
 				<div class="col-sm-6">
 					<h2>新規プロジェクト</h2>
-					<div class="cont_project_form unit">
+					<div class="cont_project_form px2-p">
 						<form action="{{ url('projects') }}" method="post">
 							@csrf
-							<table class="form_elements" style="width:100%;">
+							<div class="px2-p">
+							<table class="px2-table" style="width:100%;">
 								<colgroup>
 									<col width="30%">
 									<col width="70%">
@@ -66,7 +67,8 @@
 									</tr>
 								</tbody>
 							</table>
-							<p class="center">
+							</div>
+							<p class="px2-text-align-center">
 								<button type="submit" name="submit" class="px2-btn px2-btn--primary px2-btn--block">新規プロジェクト作成</button>
 							</p>
 						</form>
