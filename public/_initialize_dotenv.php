@@ -60,6 +60,12 @@ $envKeys = array(
 	# --------------------------------------
 	# Burdock 固有設定
 
+	# コマンドのパス
+	'BD_COMMAND_PHP',
+	'BD_COMMAND_PHP_INI',
+	'BD_COMMAND_PHP_EXTENSION_DIR',
+	'BD_COMMAND_GIT',
+
 	# プロジェクトを作成するディレクトリパス (必須)
 	'BD_DATA_DIR',
 
