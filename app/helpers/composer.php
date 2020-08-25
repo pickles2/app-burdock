@@ -32,6 +32,9 @@ class composer{
 		$this->branch_name = $branch_name;
 	}
 
+	/**
+	 * Composerコマンドを実行する
+	 */
 	public function composer( $composer_sub_command ){
 		$cmd = $composer_sub_command;
 		if( is_array($composer_sub_command) ){
@@ -43,8 +46,13 @@ class composer{
 		$cd = realpath('.');
 		chdir($realpath_pj_git_root);
 
+		$path_php = env('BD_COMMAND_PHP');
+		if(!strlen($path_php)){
+			$path_php = 'php';
+		}
+
 		ob_start();
-		$proc = proc_open(__DIR__.'/../common/composer/composer.phar '.$cmd, array(
+		$proc = proc_open($path_php.' '.__DIR__.'/../common/composer/composer.phar '.$cmd, array(
 			0 => array('pipe','r'),
 			1 => array('pipe','w'),
 			2 => array('pipe','w'),

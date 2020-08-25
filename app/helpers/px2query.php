@@ -25,7 +25,13 @@ function px2query($project_code, $branch_name, $query){
 		return false;
 	}
 
-	$px2agent = new \picklesFramework2\px2agent\px2agent();
+	$init_options = array(
+		'bin' => env('BD_COMMAND_PHP'),
+		'ini' => env('BD_COMMAND_PHP_INI'),
+		'extension_dir' => env('BD_COMMAND_PHP_EXTENSION_DIR'),
+	);
+
+	$px2agent = new \picklesFramework2\px2agent\px2agent($init_options);
 	$px2proj = $px2agent->createProject($realpath_entry_script);
 	return $px2proj->query($query);
 }

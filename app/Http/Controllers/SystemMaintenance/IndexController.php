@@ -44,17 +44,23 @@ class IndexController extends \App\Http\Controllers\Controller
 			'result' => null,
 		);
 		$cmd = $request->cmd;
+
+		$path_php = env('BD_COMMAND_PHP');
+		if(!strlen($path_php)){ $path_php = 'php'; }
+		$path_git = env('BD_COMMAND_GIT');
+		if(!strlen($path_git)){ $path_git = 'git'; }
+
 		switch( $cmd ){
 			case 'php':
 				$rtn['result'] = true;
-				$rtn['which'] = shell_exec('which php');
-				$rtn['version'] = shell_exec('php -v');
+				$rtn['which'] = shell_exec('which '.$path_php);
+				$rtn['version'] = shell_exec($path_php.' -v');
 				break;
 			case 'composer':
 				$path_composer = realpath(__DIR__.'/../../../common/composer/composer.phar');
 				$rtn['result'] = true;
 				$rtn['which'] = shell_exec('which '.$path_composer);
-				$rtn['version'] = shell_exec($path_composer.' --version');
+				$rtn['version'] = shell_exec($path_php.' '.$path_composer.' --version');
 				break;
 			case 'node':
 				$rtn['result'] = true;
@@ -68,8 +74,8 @@ class IndexController extends \App\Http\Controllers\Controller
 				break;
 			case 'git':
 				$rtn['result'] = true;
-				$rtn['which'] = shell_exec('which git');
-				$rtn['version'] = shell_exec('git --version');
+				$rtn['which'] = shell_exec('which '.$path_git);
+				$rtn['version'] = shell_exec($path_git.' --version');
 				break;
 		}
 		return $rtn;
