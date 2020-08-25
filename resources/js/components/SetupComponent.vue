@@ -3,9 +3,9 @@
 		<div class="contents">
 			<div class="cont_info"></div>
 			<div class="cont_maintask_ui">
-				<div class="center" style="margin-top: 70px;">
+				<div class="px2-text-align-center" style="margin-top: 70px;">
 					<h2>プロジェクトに Pickles 2 をセットアップします</h2>
-					<div class="cont_setup_options left">
+					<div class="cont_setup_options px2-text-align-left">
 						<h3>セットアップオプション</h3>
 						<ul>
 							<li>
@@ -93,7 +93,7 @@
 					<div v-else class="cont_scene" id="cont_before_publish-progress">
 						<div class="cont_canvas">
 							<div class="unit cont_progress">
-								<div class="center">
+								<div class="px2-text-align-center">
 									<p>クローンしています。</p>
 									<p>そのまましばらくお待ちください...</p>
 									<div>
@@ -109,13 +109,13 @@
 							</div>
 						</div>
 					</div>
-					<div class="dialog-buttons center" v-bind:class="[isSetupDuringButton ? 'show' : 'hidden']">
+					<div class="dialog-buttons px2-text-align-center" v-bind:class="[isSetupDuringButton ? 'show' : 'hidden']">
 						<button disabled="disabled" class="px2-btn">セットアップしています...</button>
 					</div>
-					<div class="dialog-buttons center" v-bind:class="[isSetupAfterButton ? 'show' : 'hidden']">
+					<div class="dialog-buttons px2-text-align-center" v-bind:class="[isSetupAfterButton ? 'show' : 'hidden']">
 						<button class="px2-btn px2-btn--primary" v-on:click="next">次へ</button>
 					</div>
-					<div class="dialog-buttons center" v-bind:class="[isSetupRestartButton ? 'show' : 'hidden']">
+					<div class="dialog-buttons px2-text-align-center" v-bind:class="[isSetupRestartButton ? 'show' : 'hidden']">
 						<button class="px2-btn px2-btn--danger" v-on:click="setup(1)">再セットアップ</button>
 					</div>
 				</div>
@@ -136,12 +136,12 @@
 										<p>この値は、再利用可能なテンプレートとして公開する場合は必要になります。 そうでない場合(一般的なウェブ制作プロジェクト)では、空欄のままでよいでしょう。</p>
 										<p>vendorName</p>
 										<p class="text-danger">{{ errorVendorName }}</p>
-										<p class="">
+										<p>
 											<input type="text" class="form-control" v-model="vendorName" placeholder="pickles2">
 										</p>
 										<p>projectName</p>
 										<p class="text-danger">{{ errorProjectName }}</p>
-										<p class="">
+										<p>
 											<input type="text" class="form-control" v-model="projectName" placeholder="preset-get-start-pickles2">
 										</p>
 									</td>
@@ -161,17 +161,17 @@
 												<p>コミットするGitリポジトリの情報を入力してください。</p>
 												<p>Repository <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorRepository }}{{ repositoryConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="text" class="form-control" v-model="repository" placeholder="https://github.com/pickles2/preset-get-start-pickles2.git">
 												</p>
 												<p>UserName <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorUserName }}{{ userNameConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="text" class="form-control" v-model="userName" placeholder="リモートリポジトリのユーザー名">
 												</p>
 												<p>Password <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorPassword }}{{ passwordConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="password" class="form-control" v-model="password" placeholder="リモートリポジトリのパスワード">
 												</p>
 											</div>
@@ -191,17 +191,17 @@
 												<p>クローン元のGitリポジトリの情報を入力してください。</p>
 												<p>Original Repository <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorRepository }}{{ repositoryConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="text" class="form-control" v-model="cloneRepository" placeholder="https://github.com/pickles2/preset-get-start-pickles2.git">
 												</p>
 												<p>Original UserName <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorUserName }}{{ userNameConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="text" class="form-control" v-model="cloneUserName" placeholder="リモートリポジトリのユーザー名">
 												</p>
 												<p>Original Password <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorPassword }}{{ passwordConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="password" class="form-control" v-model="clonePassword" placeholder="リモートリポジトリのパスワード">
 												</p>
 											</div>
@@ -209,17 +209,17 @@
 												<p>新規作成するGitリポジトリの情報を入力してください。</p>
 												<p>New Repository <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorRepository }}{{ repositoryConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="text" class="form-control" v-model="cloneNewRepository" placeholder="https://github.com/pickles2/preset-get-start-pickles2.git">
 												</p>
 												<p>New UserName <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorUserName }}{{ userNameConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="text" class="form-control" v-model="cloneNewUserName" placeholder="リモートリポジトリのユーザー名">
 												</p>
 												<p>New Password <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorPassword }}{{ passwordConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="password" class="form-control" v-model="cloneNewPassword" placeholder="リモートリポジトリのパスワード">
 												</p>
 											</div>
@@ -229,10 +229,10 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="dialog-buttons center" v-bind:class="classSetupEnable">
+					<div class="dialog-buttons px2-text-align-center" v-bind:class="classSetupEnable">
 						<button class="px2-btn--primary px2-btn" v-on:click="option">OK</button>
 					</div>
-					<div class="dialog-buttons center" v-bind:class="classSetupDisable">
+					<div class="dialog-buttons px2-text-align-center" v-bind:class="classSetupDisable">
 						<button disabled="disabled" class="px2-btn">OK</button>
 					</div>
 				</div>
@@ -243,7 +243,7 @@
 					<div class="cont_scene" id="cont_before_publish-progress">
 						<div class="cont_canvas">
 							<div class="unit cont_progress">
-								<div class="center">
+								<div class="px2-text-align-center">
 									<p>セットアップを完了しています。</p>
 									<p>そのまましばらくお待ちください...</p>
 									<div>

@@ -7,7 +7,7 @@
 <div class="container">
 	<h1>Project "{{ $title }}"</h1>
 	@if(env('BROADCAST_DRIVER') === 'redis')
-	{{-- Vueコンポーネント --}}
+		{{-- Vueコンポーネント --}}
 		<div id="app">
 			<setup-component
 				project-code="{{ $project->project_code}}"
@@ -30,16 +30,16 @@
 					@endcomponent
 				</div>
 			</p>
-			<address class="center">(C)Pickles 2 Project.</address>
+			<address class="px2-text-align-center">(C)Pickles 2 Project.</address>
 		</div>
 	@else
 		<div class="contents">
 			<div class="cont_info"></div>
 			<div class="cont_maintask_ui">
 				<form class="inline">
-					<div class="center">
+					<div class="px2-text-align-center">
 						<h2>プロジェクトに Pickles 2 をセットアップします</h2>
-						<div class="cont_setup_options left">
+						<div class="cont_setup_options px2-text-align-left">
 							<h3>セットアップオプション</h3>
 							<ul>
 								<li>
@@ -68,7 +68,7 @@
 					</div>
 				</form>
 			</div>
-			<address class="center">(C)Pickles 2 Project.</address>
+			<address class="px2-text-align-center">(C)Pickles 2 Project.</address>
 		</div>
 		<div class="contents" tabindex="-1" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 10000;">
 			<div style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; overflow: hidden; background: rgb(0, 0, 0); opacity: 0.5;"></div>
@@ -81,7 +81,7 @@
 						</pre>
 					</div>
 				</div>
-				<div class="dialog-buttons center">
+				<div class="dialog-buttons px2-text-align-center">
 					<button disabled="disabled" class="px2-btn">セットアップしています...</button>
 				</div>
 			</div>
