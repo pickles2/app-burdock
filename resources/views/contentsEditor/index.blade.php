@@ -1,6 +1,6 @@
 @php
 	$title = __('Contents');
-	$bootstrap = 4;
+	//$bootstrap = 4;
 @endphp
 @extends('layouts.px2_broccoli')
 
