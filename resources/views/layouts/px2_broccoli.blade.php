@@ -12,7 +12,7 @@
 	<meta name="keywords" content="">
 	<meta name="description" content="">
 	<!-- jQuery -->
-	<script src="/common/scripts/jquery-2.2.4.min.js" type="text/javascript"></script>
+	<script src="/common/scripts/jquery-3.5.1.min.js" type="text/javascript"></script>
 
     @if (isset($bootstrap) && $bootstrap == 4)
 	<!-- Bootstrap4 -->
@@ -48,7 +48,7 @@
         </div>
 	</div>
 	{{-- JavaScript --}}
-    <script src="{{ asset('js/app.js') }}"></script>
+    {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
     {{-- <script src="{{ asset('js/custom.js') }}"></script> --}}
     @yield('script')
 </body>
