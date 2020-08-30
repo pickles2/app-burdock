@@ -45,6 +45,8 @@ $(window).on('load', function(){
 				callback(true);
 			},
 			"mkdir": function(current_dir, callback){
+				// --------------------------------------
+				// 新規フォルダの作成
 				var $body = $('<div>').html( $('#template-mkdir').html() );
 				$body.find('.cont_current_dir').text(current_dir);
 				$body.find('[name=dirname]').on('change keyup', function(){
@@ -82,69 +84,110 @@ $(window).on('load', function(){
 				});
 			},
 			"mkfile": function(current_dir, callback){
+				// --------------------------------------
+				// 新規ファイルの作成
 				var $body = $('<div>').html( $('#template-mkfile').html() );
-				$body.find('.cont_current_dir').text(current_dir);
-				$body.find('[name=filename]').on('change keyup', function(){
-					var filename = $body.find('[name=filename]').val();
-					if( filename.match(/\.html?$/i) ){
-						$body.find('.cont_html_ext_option').show();
-					}else{
-						$body.find('.cont_html_ext_option').hide();
-					}
-				});
-				px2style.modal({
-					'title': 'Create new File',
-					'body': $body,
-					'buttons': [
-						$('<button type="button" class="px2-btn">')
-							.text('Cancel')
-							.on('click', function(e){
-								px2style.closeModal();
-							}),
-						$('<button class="px2-btn px2-btn--primary">')
-							.text('OK')
-					],
-					'form': {
-						'submit': function(){
-							px2style.closeModal();
+				var pxExternalPath_before;
+				var pathType_before;
+				var pxExternalPath;
+				var pathType;
+				var pageInfoAll_before;
+				new Promise(function(rlv){rlv();})
+					.then(function(){ return new Promise(function(rlv, rjt){
+						parsePx2FilePathEndpoint(current_dir+'___before.html', function(_pxExternalPath, _pathFiles, _pathType){
+							pxExternalPath_before = _pxExternalPath;
+							pathType_before = _pathType;
+							if( !pxExternalPath_before || pathType_before != 'contents' ){
+								rlv();
+								return;
+							}
+							fs('px_command', pxExternalPath_before, {px_command: 'px2dthelper.get.all'}, function(result){
+								pageInfoAll_before = result.result;
+								rlv();
+							});
+						});
+						return;
+					}); })
+					.then(function(){ return new Promise(function(rlv, rjt){
+						$body.find('.cont_current_dir').text(current_dir);
+						$body.find('[name=filename]').on('change keyup', function(){
 							var filename = $body.find('[name=filename]').val();
-							if( !filename ){ return; }
-							var pageInfoAll;
+							if( pxExternalPath_before && pathType_before == 'contents' && filename.match(/\.html?$/i) ){
+								$body.find('.cont_html_ext_option').show();
+							}else{
+								$body.find('.cont_html_ext_option').hide();
+							}
+						});
+						rlv();
+						return;
+					}); })
+					.then(function(){ return new Promise(function(rlv, rjt){
+						px2style.modal({
+							'title': 'Create new File',
+							'body': $body,
+							'buttons': [
+								$('<button type="button" class="px2-btn">')
+									.text('Cancel')
+									.on('click', function(e){
+										px2style.closeModal();
+									}),
+								$('<button class="px2-btn px2-btn--primary">')
+									.text('OK')
+							],
+							'form': {
+								'submit': function(){
+									px2style.closeModal();
+									var filename = $body.find('[name=filename]').val();
+									if( !filename ){ return; }
+									var pageInfoAll;
 
-							new Promise(function(rlv){rlv();})
-								.then(function(){ return new Promise(function(rlv, rjt){
-									fs('px_command', current_dir+filename, {px_command: 'px2dthelper.get.all'}, function(result){
-										pageInfoAll = result.result;
-										rlv();
-									});
-									return;
-								}); })
-								.then(function(){ return new Promise(function(rlv, rjt){
-									if( filename.match(/\.html?$/i) && $body.find('[name=is_guieditor]:checked').val() ){
-										// GUI編集モードが有効
-										fs('initialize_data_dir', current_dir+filename, {}, function(result){
+									new Promise(function(rlv){rlv();})
+										.then(function(){ return new Promise(function(rlv, rjt){
+											if( pxExternalPath_before && pathType_before == 'contents' && filename.match(/\.html?$/i) && $body.find('[name=is_guieditor]:checked').val() ){
+												// GUI編集モードが有効
+												parsePx2FilePathEndpoint(current_dir+filename, function(_pxExternalPath, _pathFiles, _pathType){
+													pxExternalPath = _pxExternalPath;
+													pathType = _pathType;
+													if( !pxExternalPath || pathType != 'contents' ){
+														rlv();
+														return;
+													}
+													fs('px_command', pxExternalPath, {px_command: 'px2dthelper.get.all'}, function(result){
+														pageInfoAll = result.result;
+														fs('initialize_data_dir', pxExternalPath, {}, function(result){
+															rlv();
+														});
+														return;
+													});
+													return;
+												});
+												return;
+											}
 											rlv();
-										});
-										return;
-									}
-									rlv();
-									return;
-								}); })
-								.then(function(){ return new Promise(function(rlv, rjt){
-									callback( filename );
-									rlv();
-									return;
-								}); })
-							;
+											return;
+										}); })
+										.then(function(){ return new Promise(function(rlv, rjt){
+											callback( filename );
+											rlv();
+											return;
+										}); })
+									;
 
-						}
-					},
-					'width': 460
-				}, function(){
-					$body.find('[name=filename]').focus();
-				});
+								}
+							},
+							'width': 460
+						}, function(){
+							$body.find('[name=filename]').focus();
+						});
+						rlv();
+						return;
+					}); })
+				;
+
 			},
 			"copy": function(copyFrom, callback){
+				// --------------------------------------
+				// ファイルまたはフォルダの複製
 				var is_file;
 				var pageInfoAll;
 				new Promise(function(rlv){rlv();})
@@ -233,6 +276,8 @@ $(window).on('load', function(){
 				;
 			},
 			"rename": function(renameFrom, callback){
+				// --------------------------------------
+				// ファイルまたはフォルダの移動・改名
 				var is_file;
 				var pageInfoAll;
 				new Promise(function(rlv){rlv();})
@@ -322,6 +367,8 @@ $(window).on('load', function(){
 				;
 			},
 			"remove": function(target_item, callback){
+				// --------------------------------------
+				// ファイルまたはフォルダの削除
 				var is_file;
 				var pageInfoAll;
 				var pxExternalPath;
