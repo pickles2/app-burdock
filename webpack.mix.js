@@ -12,13 +12,22 @@ const mix = require('laravel-mix');
  */
 
 mix
+	// --------------------------------------
 	// Project Common Scripts
 	.js('resources/js/app.js', 'public/js')
 	.sass('resources/sass/app.scss', 'public/css')
 
+	// --------------------------------------
 	// Project Local Resources
+
+	// publish
 	.sass('resources/cont/publish/style.scss', 'public/cont/publish/style.css')
 
+	// Files and Folders
+	.js('resources/cont/files_and_folders/script.js', 'public/cont/files_and_folders/script.js')
+	.sass('resources/cont/files_and_folders/style.scss', 'public/cont/files_and_folders/style.css')
+
+	// --------------------------------------
 	// Static Frontend Libraries
 	// .copyDirectory('vendor/pickles2/px2style/dist', 'public/common/px2style/dist')
 	.copyDirectory('vendor/pickles2/lib-plum/res', 'public/common/lib-plum/res')

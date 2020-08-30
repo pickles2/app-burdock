@@ -12,7 +12,7 @@
 	<meta name="keywords" content="">
 	<meta name="description" content="">
 	<!-- jQuery -->
-	<script src="/common/scripts/jquery-2.2.4.min.js" type="text/javascript"></script>
+	<script src="/common/scripts/jquery-3.5.1.min.js" type="text/javascript"></script>
 
     @if (isset($bootstrap) && $bootstrap == 4)
 	<!-- Bootstrap4 -->
@@ -30,11 +30,10 @@
 	<link rel="stylesheet" href="/common/px2style/dist/styles.css" charset="utf-8">
 	<script src="/common/px2style/dist/scripts.js" charset="utf-8"></script>
 	<!-- Local Resources -->
-	<link rel="stylesheet" href="/common/index_files/style.css" type="text/css" data-original-title="" title="">
-	<link rel="stylesheet" href="/common/index_files/styles.css" type="text/css" data-original-title="" title="">
+	<link rel="stylesheet" href="/common/index_files/style.css" type="text/css" />
+	<link rel="stylesheet" href="/common/index_files/styles.css" type="text/css" />
 	{{-- CSS --}}
 	@yield('stylesheet')
-	@yield('javascript')
 </head>
 <body>
 	<div class="theme_wrap">

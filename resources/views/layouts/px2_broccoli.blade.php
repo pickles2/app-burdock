@@ -34,7 +34,6 @@
     <link rel="stylesheet" href="/common/index_files/styles.css" type="text/css" data-original-title="" title="">
 	{{-- CSS --}}
 	@yield('stylesheet')
-	@yield('javascript')
 </head>
 <body>
 	<div class="theme_wrap">

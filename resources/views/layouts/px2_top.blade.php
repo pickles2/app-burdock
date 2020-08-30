@@ -30,8 +30,8 @@
 	<link rel="stylesheet" href="/common/px2style/dist/styles.css" charset="utf-8">
 	<script src="/common/px2style/dist/scripts.js" charset="utf-8"></script>
 	<!-- Local Resources -->
-	<link rel="stylesheet" href="/common/index_files/style.css" type="text/css" data-original-title="" title="">
-	<link rel="stylesheet" href="/common/index_files/styles.css" type="text/css" data-original-title="" title="">
+	<link rel="stylesheet" href="/common/index_files/style.css" type="text/css" />
+	<link rel="stylesheet" href="/common/index_files/styles.css" type="text/css" />
 	{{-- CSS --}}
 	@yield('stylesheet')
 	@yield('javascript')
