@@ -189,7 +189,14 @@ $(window).on('load', function(){
 				// --------------------------------------
 				// ファイルまたはフォルダの複製
 				var is_file;
-				var pageInfoAll;
+				var pxExternalPathFrom;
+				var pathFilesFrom;
+				var pathTypeFrom;
+				var pageInfoAllFrom;
+				var pxExternalPathTo;
+				var pathFilesTo;
+				var pathTypeTo;
+				var pageInfoAllTo;
 				new Promise(function(rlv){rlv();})
 					.then(function(){ return new Promise(function(rlv, rjt){
 						fs('is_file', copyFrom, {}, function(result){
@@ -203,9 +210,18 @@ $(window).on('load', function(){
 							rlv();
 							return;
 						}
-						fs('px_command', copyFrom, {px_command: 'px2dthelper.get.all'}, function(result){
-							pageInfoAll = result.result;
-							rlv();
+						parsePx2FilePathEndpoint(copyFrom, function(_pxExternalPath, _pathFiles, _pathType){
+							pxExternalPathFrom = _pxExternalPath;
+							pathFilesFrom = _pathFiles;
+							pathTypeFrom = _pathType;
+							if( !pxExternalPathFrom || pathTypeFrom != 'contents' ){
+								rlv();
+								return;
+							}
+							fs('px_command', pxExternalPathFrom, {px_command: 'px2dthelper.get.all'}, function(result){
+								pageInfoAllFrom = result.result;
+								rlv();
+							});
 						});
 						return;
 					}); })
@@ -213,8 +229,10 @@ $(window).on('load', function(){
 						var $body = $('<div>').html( $('#template-copy').html() );
 						$body.find('.cont_target_item').text(copyFrom);
 						$body.find('[name=copy_to]').val(copyFrom);
-						if(is_file){
+						if(is_file && pxExternalPathFrom && pathTypeFrom == 'contents'){
 							$body.find('.cont_contents_option').show();
+						}else{
+							$body.find('.cont_contents_option').hide();
 						}
 						px2style.modal({
 							'title': 'Copy',
@@ -239,19 +257,21 @@ $(window).on('load', function(){
 										.then(function(){ return new Promise(function(rlv, rjt){
 											if( is_file && $body.find('[name=is_copy_files_too]:checked').val() ){
 												// リソースも一緒に複製する
-												fs('px_command', copyTo, {px_command: 'px2dthelper.get.all'}, function(result){
-													resources = result.result;
-													var path_files_from = pageInfoAll.path_files;
-													var path_files_to = resources.path_files;
-													fs('is_dir', path_files_from, {}, function(result){
+												parsePx2FilePathEndpoint(copyTo, function(_pxExternalPath, _pathFiles, _pathType){
+													pxExternalPathTo = _pxExternalPath;
+													pathFilesTo = _pathFiles;
+													pathTypeTo = _pathType;
+
+													fs('is_dir', pathFilesFrom, {}, function(result){
 														if(result.result){
-															fs('copy', path_files_from, {to: path_files_to}, function(result){
+															fs('copy', pathFilesFrom, {to: pathFilesTo}, function(result){
 																rlv();
 															});
 															return;
 														}
 														rlv();
 													});
+													return;
 												});
 												return;
 											}
@@ -282,11 +302,9 @@ $(window).on('load', function(){
 				var pxExternalPathFrom;
 				var pathFilesFrom;
 				var pathTypeFrom;
-				var pageInfoAllFrom;
 				var pxExternalPathTo;
 				var pathFilesTo;
 				var pathTypeTo;
-				var pageInfoAllTo;
 				new Promise(function(rlv){rlv();})
 					.then(function(){ return new Promise(function(rlv, rjt){
 						fs('is_file', renameFrom, {}, function(result){
@@ -304,14 +322,8 @@ $(window).on('load', function(){
 							pxExternalPathFrom = _pxExternalPath;
 							pathFilesFrom = _pathFiles;
 							pathTypeFrom = _pathType;
-							if( !pxExternalPathFrom || pathTypeFrom != 'contents' ){
-								rlv();
-								return;
-							}
-							fs('px_command', pxExternalPathFrom, {px_command: 'px2dthelper.get.all'}, function(result){
-								pageInfoAllFrom = result.result;
-								rlv();
-							});
+							rlv();
+							return;
 						});
 						return;
 					}); })
