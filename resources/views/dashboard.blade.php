@@ -1,7 +1,7 @@
 @extends('layouts.px2_project')
 @section('title', env('APP_NAME'))
 @section('content')
-<div class="theme_wrap">
+<div class="theme-wrap">
 	<div class="contents">
 		<div class="cont_top_jumbotron">
 			<p class="px2-text-align-center">

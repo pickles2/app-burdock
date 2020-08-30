@@ -29,6 +29,9 @@
 	<!-- Pickles 2 Style -->
 	<link rel="stylesheet" href="/common/px2style/dist/styles.css" charset="utf-8">
 	<script src="/common/px2style/dist/scripts.js" charset="utf-8"></script>
+	<!-- Common Resources -->
+	<link rel="stylesheet" href="/common/styles/common.css" type="text/css" />
+	<script src="/common/scripts/common.js" charset="utf-8"></script>
 	<!-- Local Resources -->
 	<link rel="stylesheet" href="/common/index_files/style.css" type="text/css" />
 	<link rel="stylesheet" href="/common/index_files/styles.css" type="text/css" />
@@ -37,7 +40,7 @@
 	@yield('javascript')
 </head>
 <body>
-	<div class="theme_wrap">
+	<div class="theme-wrap">
 		<header class="theme-header" style="border-bottom-color: rgb(0, 160, 230); color: rgb(0, 160, 230);">
 			<div class="theme-header__inner clearfix">
 				<div class="theme-header__px2logo" style="width: 45px; height: 45px;">

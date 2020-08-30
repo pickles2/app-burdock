@@ -29,6 +29,9 @@
 	<!-- Pickles 2 Style -->
 	<link rel="stylesheet" href="/common/px2style/dist/styles.css" charset="utf-8">
 	<script src="/common/px2style/dist/scripts.js" charset="utf-8"></script>
+	<!-- Common Resources -->
+	<link rel="stylesheet" href="/common/styles/common.css" type="text/css" />
+	<script src="/common/scripts/common.js" charset="utf-8"></script>
 	<!-- Local Resources -->
 	<link rel="stylesheet" href="/common/index_files/style.css" type="text/css" data-original-title="" title="">
 	<link rel="stylesheet" href="/common/index_files/styles.css" type="text/css" data-original-title="" title="">

@@ -17,6 +17,9 @@ mix
 	.js('resources/js/app.js', 'public/js')
 	.sass('resources/sass/app.scss', 'public/css')
 
+	.js('resources/js/common.js', 'public/common/scripts')
+	.sass('resources/sass/common.scss', 'public/common/styles')
+
 	// --------------------------------------
 	// Project Local Resources
 

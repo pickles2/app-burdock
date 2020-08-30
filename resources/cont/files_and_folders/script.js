@@ -4,6 +4,7 @@ $(window).on('load', function(){
 		document.getElementById('cont-finder'),
 		{
 			"gpiBridge": function(input, callback){ // required
+				px2style.loading();
 				$.ajax({
 					type : 'post',
 					url : window.contRemoteFinderGpiEndpoint,
@@ -16,12 +17,14 @@ $(window).on('load', function(){
 						'data': JSON.stringify(input)
 					}),
 					success: function(data){
+						px2style.closeLoading();
 						callback(data);
 					}
 				});
 			},
 			"open": function(fileinfo, callback){
 				// console.log(fileinfo);
+				px2style.loading();
 
 				switch( fileinfo.ext ){
 					case 'html':
@@ -42,6 +45,7 @@ $(window).on('load', function(){
 						window.open(url);
 						break;
 				}
+				px2style.closeLoading();
 				callback(true);
 			},
 			"mkdir": function(current_dir, callback){
@@ -86,6 +90,8 @@ $(window).on('load', function(){
 			"mkfile": function(current_dir, callback){
 				// --------------------------------------
 				// 新規ファイルの作成
+				px2style.loading();
+
 				var $body = $('<div>').html( $('#template-mkfile').html() );
 				var pxExternalPath_before;
 				var pathType_before;
@@ -122,6 +128,8 @@ $(window).on('load', function(){
 						return;
 					}); })
 					.then(function(){ return new Promise(function(rlv, rjt){
+						px2style.closeLoading();
+
 						px2style.modal({
 							'title': 'Create new File',
 							'body': $body,
@@ -140,6 +148,8 @@ $(window).on('load', function(){
 									var filename = $body.find('[name=filename]').val();
 									if( !filename ){ return; }
 									var pageInfoAll;
+
+									px2style.loading();
 
 									new Promise(function(rlv){rlv();})
 										.then(function(){ return new Promise(function(rlv, rjt){
@@ -167,6 +177,7 @@ $(window).on('load', function(){
 											return;
 										}); })
 										.then(function(){ return new Promise(function(rlv, rjt){
+											px2style.closeLoading();
 											callback( filename );
 											rlv();
 											return;
@@ -188,6 +199,8 @@ $(window).on('load', function(){
 			"copy": function(copyFrom, callback){
 				// --------------------------------------
 				// ファイルまたはフォルダの複製
+				px2style.loading();
+
 				var is_file;
 				var pxExternalPathFrom;
 				var pathFilesFrom;
@@ -234,6 +247,8 @@ $(window).on('load', function(){
 						}else{
 							$body.find('.cont_contents_option').hide();
 						}
+						px2style.closeLoading();
+
 						px2style.modal({
 							'title': 'Copy',
 							'body': $body,
@@ -253,6 +268,7 @@ $(window).on('load', function(){
 									if( !copyTo ){ return; }
 									if( copyTo == copyFrom ){ return; }
 
+									px2style.loading();
 									new Promise(function(rlv){rlv();})
 										.then(function(){ return new Promise(function(rlv, rjt){
 											if( is_file && $body.find('[name=is_copy_files_too]:checked').val() ){
@@ -279,6 +295,7 @@ $(window).on('load', function(){
 											return;
 										}); })
 										.then(function(){ return new Promise(function(rlv, rjt){
+											px2style.closeLoading();
 											callback(copyFrom, copyTo);
 											rlv();
 											return;
@@ -298,6 +315,8 @@ $(window).on('load', function(){
 			"rename": function(renameFrom, callback){
 				// --------------------------------------
 				// ファイルまたはフォルダの移動・改名
+				px2style.loading();
+
 				var is_file;
 				var pxExternalPathFrom;
 				var pathFilesFrom;
@@ -336,6 +355,9 @@ $(window).on('load', function(){
 						}else{
 							$body.find('.cont_contents_option').hide();
 						}
+
+						px2style.closeLoading();
+
 						px2style.modal({
 							'title': 'Rename',
 							'body': $body,
@@ -354,6 +376,8 @@ $(window).on('load', function(){
 									var renameTo = $body.find('[name=rename_to]').val();
 									if( !renameTo ){ return; }
 									if( renameTo == renameFrom ){ return; }
+
+									px2style.loading();
 
 									new Promise(function(rlv){rlv();})
 										.then(function(){ return new Promise(function(rlv, rjt){
@@ -384,6 +408,7 @@ $(window).on('load', function(){
 											return;
 										}); })
 										.then(function(){ return new Promise(function(rlv, rjt){
+											px2style.closeLoading();
 											callback(renameFrom, renameTo);
 											rlv();
 											return;
@@ -403,6 +428,9 @@ $(window).on('load', function(){
 			"remove": function(target_item, callback){
 				// --------------------------------------
 				// ファイルまたはフォルダの削除
+
+				px2style.loading();
+
 				var is_file;
 				var pageInfoAll;
 				var pxExternalPath;
@@ -442,6 +470,9 @@ $(window).on('load', function(){
 						if(is_file && pxExternalPath && pathType == 'contents'){
 							$body.find('.cont_contents_option').show();
 						}
+
+						px2style.closeLoading();
+
 						px2style.modal({
 							'title': 'Remove',
 							'body': $body,
@@ -457,6 +488,8 @@ $(window).on('load', function(){
 							'form': {
 								'submit': function(){
 									px2style.closeModal();
+
+									px2style.loading();
 
 									new Promise(function(rlv){rlv();})
 										.then(function(){ return new Promise(function(rlv, rjt){
@@ -478,6 +511,7 @@ $(window).on('load', function(){
 											return;
 										}); })
 										.then(function(){ return new Promise(function(rlv, rjt){
+											px2style.closeLoading();
 											callback();
 											rlv();
 											return;
