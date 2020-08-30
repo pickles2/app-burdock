@@ -190,24 +190,33 @@ class FilesAndFoldersController extends Controller
 		// 外部パスを求める
 		if( preg_match( '/^'.preg_quote($pageInfoAll->realpath_docroot, '/').'/', $realpath_file) ){
 			$pxExternalPath = preg_replace('/^'.preg_quote($pageInfoAll->realpath_docroot, '/').'/', '/', $realpath_file);
-		}
-		if( preg_match( '/^'.preg_quote($pageInfoAll->path_controot, '/').'/', $pxExternalPath) ){
-			$pxExternalPath = preg_replace('/^'.preg_quote($pageInfoAll->path_controot, '/').'/', '/', $pxExternalPath);
+			$pxExternalPath = preg_replace('/\/+/', '/', $pxExternalPath);
+			if( preg_match( '/^'.preg_quote($pageInfoAll->path_controot, '/').'/', $pxExternalPath) ){
+				$pxExternalPath = preg_replace('/^'.preg_quote($pageInfoAll->path_controot, '/').'/', '/', $pxExternalPath);
+				$pxExternalPath = preg_replace('/\/+/', '/', $pxExternalPath);
+			}else{
+				$pxExternalPath = false;
+			}
+		}else{
+			$pxExternalPath = false;
 		}
 		$rtn['pxExternalPath'] = $pxExternalPath;
 
 
 		// --------------------------------------
 		// パスの種類を求める
-		// theme_collection, home_dir, or contents
-		$path_type = 'contents';
+		// theme_collection, home_dir, contents, or unknown
+		$path_type = 'unknown';
 		$realpath_target = $fs->normalize_path($realpath_file);
 		$realpath_homedir = $fs->normalize_path($pageInfoAll->realpath_homedir);
 		$realpath_theme_collection_dir = $fs->normalize_path($pageInfoAll->realpath_theme_collection_dir);
+		$realpath_docroot = $fs->normalize_path($pageInfoAll->realpath_docroot);
 		if( preg_match('/^'.preg_quote($realpath_theme_collection_dir, '/').'/', $realpath_target) ){
 			$path_type = 'theme_collection';
 		}elseif( preg_match('/^'.preg_quote($realpath_homedir, '/').'/', $realpath_target) ){
 			$path_type = 'home_dir';
+		}elseif( preg_match('/^'.preg_quote($realpath_docroot, '/').'/', $realpath_target)  && $pxExternalPath ){
+			$path_type = 'contents';
 		}
 		$rtn['path_type'] = $path_type;
 
