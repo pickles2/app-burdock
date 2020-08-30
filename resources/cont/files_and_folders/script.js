@@ -26,27 +26,15 @@ $(window).on('load', function(){
 				switch( fileinfo.ext ){
 					case 'html':
 					case 'htm':
-						$.ajax({
-							type : 'get',
-							url : window.contApiParsePx2FilePathEndpoint,
-							headers: {
-								'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-							},
-							contentType: 'application/json',
-							dataType: 'json',
-							data: {
-								'path': fileinfo.path
-							},
-							success: function(data){
-								console.log(data);
-								var url = 'about:blank';
-								if(data.path_type == 'contents'){
-									url = window.contContentsEditorEndpoint + '?page_path='+encodeURIComponent(data.pxExternalPath);
-								}else{
-									url = window.contCommonFileEditorEndpoint + '?filename='+encodeURIComponent(fileinfo.path);
-								}
-								window.open(url);
+						parsePx2FilePathEndpoint(fileinfo.path, function(pxExternalPath, pathFiles, pathType){
+							console.log(pxExternalPath, pathType);
+							var url = 'about:blank';
+							if(pathType == 'contents'){
+								url = window.contContentsEditorEndpoint + '?page_path='+encodeURIComponent(pxExternalPath);
+							}else{
+								url = window.contCommonFileEditorEndpoint + '?filename='+encodeURIComponent(fileinfo.path);
 							}
+							window.open(url);
 						});
 						break;
 					default:
@@ -336,6 +324,9 @@ $(window).on('load', function(){
 			"remove": function(target_item, callback){
 				var is_file;
 				var pageInfoAll;
+				var pxExternalPath;
+				var pathFiles;
+				var pathType;
 				new Promise(function(rlv){rlv();})
 					.then(function(){ return new Promise(function(rlv, rjt){
 						fs('is_file', target_item, {}, function(result){
@@ -349,16 +340,25 @@ $(window).on('load', function(){
 							rlv();
 							return;
 						}
-						fs('px_command', target_item, {px_command: 'px2dthelper.get.all'}, function(result){
-							pageInfoAll = result.result;
-							rlv();
+						parsePx2FilePathEndpoint(target_item, function(_pxExternalPath, _pathFiles, _pathType){
+							pxExternalPath = _pxExternalPath;
+							pathFiles = _pathFiles;
+							pathType = _pathType;
+							if( !pxExternalPath || pathType != 'contents' ){
+								rlv();
+								return;
+							}
+							fs('px_command', pxExternalPath, {px_command: 'px2dthelper.get.all'}, function(result){
+								pageInfoAll = result.result;
+								rlv();
+							});
 						});
 						return;
 					}); })
 					.then(function(){ return new Promise(function(rlv, rjt){
 						var $body = $('<div>').html( $('#template-remove').html() );
 						$body.find('.cont_target_item').text(target_item);
-						if(is_file){
+						if(is_file && pxExternalPath && pathType == 'contents'){
 							$body.find('.cont_contents_option').show();
 						}
 						px2style.modal({
@@ -379,12 +379,12 @@ $(window).on('load', function(){
 
 									new Promise(function(rlv){rlv();})
 										.then(function(){ return new Promise(function(rlv, rjt){
-											if( is_file && $body.find('[name=is_remove_files_too]:checked').val() ){
+
+											if( is_file && pxExternalPath && pathType == 'contents' && $body.find('[name=is_remove_files_too]:checked').val() ){
 												// リソースも一緒に削除する
-												var path_files = pageInfoAll.path_files;
-												fs('is_dir', path_files, {}, function(result){
+												fs('is_dir', pathFiles, {}, function(result){
 													if(result.result){
-														fs('remove', path_files, {}, function(result){
+														fs('remove', pathFiles, {}, function(result){
 															rlv();
 														});
 														return;
@@ -418,6 +418,29 @@ $(window).on('load', function(){
 	remoteFinder.init('/', {}, function(){
 		console.log('ready.');
 	});
+
+
+	function parsePx2FilePathEndpoint( filepath, callback ){
+		callback = callback || function(){};
+		$.ajax({
+			type : 'get',
+			url : window.contApiParsePx2FilePathEndpoint,
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			contentType: 'application/json',
+			dataType: 'json',
+			data: {
+				'path': filepath
+			},
+			success: function(data){
+				// console.log(data);
+				callback(data.pxExternalPath, data.pathFiles, data.pathType);
+			}
+		});
+		return;
+	}
+
 
 	function fs(method, filename, options, callback){
 		callback = callback || function(){};

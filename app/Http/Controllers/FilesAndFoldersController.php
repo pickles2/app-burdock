@@ -136,6 +136,7 @@ class FilesAndFoldersController extends Controller
 				$branch_name,
 				( strlen($filename) ? $filename : '/' ).'?PX='.urlencode($request->px_command)
 			);
+			$rtn['result'] = json_decode($rtn['result']);
 
 		}elseif( $request->method == 'initialize_data_dir' ){
 			$json = px2query(
@@ -183,7 +184,7 @@ class FilesAndFoldersController extends Controller
 				'output' => 'json'
 			)
 		);
-		$rtn['pageInfoAll'] = $pageInfoAll;
+		// $rtn['pageInfoAll'] = $pageInfoAll;
 
 
 		// --------------------------------------
@@ -218,7 +219,21 @@ class FilesAndFoldersController extends Controller
 		}elseif( preg_match('/^'.preg_quote($realpath_docroot, '/').'/', $realpath_target)  && $pxExternalPath ){
 			$path_type = 'contents';
 		}
-		$rtn['path_type'] = $path_type;
+		$rtn['pathType'] = $path_type;
+
+		$rtn['pathFiles'] = false;
+		if( $rtn['pxExternalPath'] && $rtn['pathType'] == 'contents' ){
+			$pageInfoAll = $project_branch->query(
+				$rtn['pxExternalPath'].'?PX=px2dthelper.get.all',
+				array(
+					'output' => 'json'
+				)
+			);
+			$realpath_files = $pageInfoAll->realpath_files;
+			$realpath_basedir = get_project_workingtree_dir($project->project_code, $branch_name);
+			$path_files = preg_replace('/^'.preg_quote($realpath_basedir, '/').'/', '/', $realpath_files);
+			$rtn['pathFiles'] = $path_files;
+		}
 
 		return json_encode($rtn);
 	}
