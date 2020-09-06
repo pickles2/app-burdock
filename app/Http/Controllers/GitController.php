@@ -55,18 +55,23 @@ class GitController extends Controller
 		$gitUtil = new \pickles2\burdock\git($project, $branch_name);
 		$rtn = array();
 		$git_command_array = $request->command_ary;
-		if( count($git_command_array) == 1 && $git_command_array[0] == 'branch' ){
+
+		if( count($git_command_array) == 2 && $git_command_array[0] == 'branch' && $git_command_array[1] == '-a' ){
 			// `git branch` のフェイク
-			array_push( $rtn, $this->gitFake_branch($gitUtil, $git_command_array) );
+			// ブランチの一覧を取得する
+			array_push( $rtn, GitControllerHelpers\GitBranch::execute($gitUtil, $git_command_array) );
 		}elseif( count($git_command_array) == 3 && $git_command_array[0] == 'checkout' && $git_command_array[1] == '-b' ){
 			// `git checkout -b branchname` のフェイク
-			array_push( $rtn, $this->gitFake_checkout_b($gitUtil, $git_command_array) );
+			// 新しいブランチを作成する
+			array_push( $rtn, GitControllerHelpers\GitCheckoutNewBranch::execute($gitUtil, $git_command_array) );
 		}elseif( count($git_command_array) == 2 && $git_command_array[0] == 'merge' ){
 			// `git merge branchname` のフェイク
-			array_push( $rtn, $this->gitFake_merge($gitUtil, $git_command_array) );
+			// マージする
+			array_push( $rtn, GitControllerHelpers\GitMerge::execute($gitUtil, $git_command_array) );
 		}elseif( count($git_command_array) == 3 && $git_command_array[0] == 'branch' && $git_command_array[1] == '--delete' ){
 			// `git branch --delete branchname` のフェイク
-			array_push( $rtn, $this->gitFake_branch_delete($gitUtil, $git_command_array) );
+			// ブランチを削除する
+			array_push( $rtn, GitControllerHelpers\GitBranchDelete::execute($gitUtil, $git_command_array) );
 		}else{
 			array_push( $rtn, $gitUtil->git( $git_command_array ) );
 		}
@@ -75,98 +80,4 @@ class GitController extends Controller
 		return json_encode($rtn);
 	}
 
-	/**
-	 * `git branch` のフェイク処理
-	 */
-	private function gitFake_branch($git, $git_command_array){
-		$fs = new \tomk79\filesystem();
-
-		$realpath_pj_git_root = \get_project_workingtree_dir($git->get_project_code(), $git->get_branch_name());
-
-		$filelist = $fs->ls($realpath_pj_git_root.'../');
-		$stdout = '';
-		foreach( $filelist as $filename ){
-			if( is_dir( $realpath_pj_git_root.'../'.$filename ) ){
-				if(preg_match('/^(.*?)\-\-\-(.*)$/', $filename, $matched)){
-					$tmp_project_code = $matched[1];
-					$tmp_branch_name = $matched[2];
-					if($tmp_project_code == $git->get_project_code()){
-						$stdout .= ( $git->get_branch_name() == $tmp_branch_name ? '*' : ' ' ).' '.$tmp_branch_name."\n";
-					}
-				}
-			}
-		}
-
-		$cmd_result = array(
-			'stdout' => trim($stdout),
-			'stderr' => '',
-			'return' => 0,
-		);
-		return $cmd_result;
-	}
-
-	/**
-	 * `git checkout -b branchname` のフェイク処理
-	 */
-	private function gitFake_checkout_b($git, $git_command_array){
-		$fs = new \tomk79\filesystem();
-		$new_branch_name = $git_command_array[2];
-
-		$realpath_pj_git_root = $fs->get_realpath( \get_project_workingtree_dir($git->get_project_code(), $git->get_branch_name()) );
-		$realpath_pj_git_new_branch_root = $fs->get_realpath( \get_project_workingtree_dir($git->get_project_code(), $new_branch_name) );
-
-		// ひとまず複製
-		$fs->copy_r($realpath_pj_git_root, $realpath_pj_git_new_branch_root);
-
-		$newGit = new \pickles2\burdock\git($git->get_project_id(), $new_branch_name);
-		$result = $newGit->git(['checkout', 'HEAD', '--', './']);
-		$result = $newGit->git(['checkout', '-b', $new_branch_name]);
-		$result = $newGit->git(['branch', '--delete', $git->get_branch_name()]);
-
-		$cmd_result = array(
-			'stdout' => 'Switched to a new branch \''.$new_branch_name.'\''."\n",
-			'stderr' => '',
-			'return' => 0,
-		);
-		return $cmd_result;
-	}
-
-	/**
-	 * `git merge branchname` のフェイク処理
-	 */
-	private function gitFake_merge($git, $git_command_array){
-		$fs = new \tomk79\filesystem();
-		$target_branch_name = $git_command_array[1];
-
-		$realpath_pj_git_root = $fs->get_realpath( \get_project_workingtree_dir($git->get_project_code(), $git->get_branch_name()) );
-		$realpath_pj_git_target_branch_root = $fs->get_realpath( \get_project_workingtree_dir($git->get_project_code(), $target_branch_name) );
-
-		$result = $git->git(['pull', $realpath_pj_git_target_branch_root, $target_branch_name.":".$target_branch_name]);
-		// $result = $git->git(['branch']);
-		$cmd_result = $git->git(['merge', $target_branch_name]);
-		$result = $git->git(['branch', '--delete', $target_branch_name]);
-
-		return $cmd_result;
-	}
-
-	/**
-	 * `git branch --delete branchname` のフェイク処理
-	 */
-	private function gitFake_branch_delete($git, $git_command_array){
-		$fs = new \tomk79\filesystem();
-		$target_branch_name = $git_command_array[2];
-
-		$realpath_pj_git_root = $fs->get_realpath( \get_project_workingtree_dir($git->get_project_code(), $git->get_branch_name()) );
-		$realpath_pj_git_target_branch_root = $fs->get_realpath( \get_project_workingtree_dir($git->get_project_code(), $target_branch_name) );
-
-		// ディレクトリごと削除
-		$fs->rm($realpath_pj_git_target_branch_root);
-
-		$cmd_result = array(
-			'stdout' => 'Deleted branch '.$target_branch_name.' (was 0000000).'."\n",
-			'stderr' => '',
-			'return' => 0,
-		);
-		return $cmd_result;
-	}
 }
