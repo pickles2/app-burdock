@@ -1,3 +1,8 @@
+<?php
+if( !isset($branch_name) || !strlen($branch_name) ){
+	$branch_name = 'master';
+}
+?>
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -121,6 +126,7 @@
 						@guest
 						@else
 							@if( isset($project) && ! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
+								<li><a href="{{ url('projects/'.urlencode($project->project_code).'/edit') }}" data-name="config">プロジェクト概要設定</a></li>
 								<li><a href="{{ url('composer/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="composer">Composer</a></li>
 								<li><a href="{{ url('git/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="git">Git</a></li>
 								<li><a href="{{ url('staging/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="staging">ステージング管理</a></li>
@@ -169,12 +175,14 @@
 			@if (Request::is('themes/*')) current = 'themes'; @endif
 			@if (Request::is('contents/*')) current = 'contents'; @endif
 			@if (Request::is('publish/*')) current = 'publish'; @endif
+			@if (Request::is('projects/*')) current = 'projects'; @endif
 			@if (Request::is('composer/*')) current = 'composer'; @endif
 			@if (Request::is('git/*')) current = 'git'; @endif
 			@if (Request::is('staging/*')) current = 'staging'; @endif
 			@if (Request::is('delivery/*')) current = 'delivery'; @endif
 			@if (Request::is('files-and-folders/*')) current = 'files-and-folders'; @endif
 			@if (Request::is('system-maintenance') || Request::is('system-maintenance/*')) current = 'system-maintenance'; @endif
+			@if (Request::is('mypage') || Request::is('mypage/*')) current = 'mypage'; @endif
 			px2style.header.init({'current': current});
 		});
 		</script>

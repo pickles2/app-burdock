@@ -53,13 +53,11 @@ Route::get('home/{project}/{branch_name?}', 'HomeController@index');
 
 // --------------------------------------
 // プロジェクト管理
-// Route::get('projects', 'ProjectController@index'); //プロジェクト一覧は封印
 Route::get('projects/create', 'ProjectController@create');
 Route::post('projects', 'ProjectController@store');
-Route::get('projects/{project}/{branch_name}', 'ProjectController@show');
-Route::get('projects/{project}/{branch_name}/edit', 'ProjectController@edit');
-Route::put('projects/{project}/{branch_name}', 'ProjectController@update');
-Route::delete('projects/{project}/{branch_name}', 'ProjectController@destroy');
+Route::get('projects/{project}/edit', 'ProjectController@edit');
+Route::put('projects/{project}/edit', 'ProjectController@update');
+Route::delete('projects/{project}', 'ProjectController@destroy');
 
 
 

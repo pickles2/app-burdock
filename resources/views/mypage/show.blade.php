@@ -54,7 +54,7 @@
 @endphp
                     <tr>
                         <td>
-                            <a href="{{ url('projects/'.urlencode($project->project_code).'/'.urlencode($gitUtil->get_remote_default_branch_name())) }}">
+                            <a href="{{ url('home/'.urlencode($project->project_code)) }}">
                                 {{ $project->project_name }}
                             </a>
                         </td>
@@ -63,7 +63,7 @@
                         <td>{{ $project->updated_at }}</td>
                         @can('edit', $user)
                             <td nowrap>
-                                <a href="{{ url('projects/'.urlencode($project->project_code).'/'.urlencode($gitUtil->get_remote_default_branch_name()).'/edit') }}" class="btn btn-primary">
+                                <a href="{{ url('projects/'.urlencode($project->project_code).'/edit') }}" class="btn btn-primary">
                                     {{ __('Edit') }}
                                 </a>
                                 @component('components.btn-del')

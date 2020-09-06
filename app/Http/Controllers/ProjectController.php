@@ -19,28 +19,6 @@ class ProjectController extends Controller
 	}
 
 	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function index()
-	{
-		//
-		// 1. 新しい順に取得できない
-		// $projects = Project::all();
-
-		// 2. 記述が長くなる
-		// $projects = Project::orderByDesc('created_at')->get();
-
-		// 3. latestメソッドがおすすめ
-		// ページネーション（1ページに5件表示）
-		$projects = Project::latest()->paginate(5);
-		// Debugbarを使ってみる
-		\Debugbar::info($projects);
-		return view('projects.index', ['projects' => $projects]);
-	}
-
-	/**
 	 * Show the form for creating a new resource.
 	 *
 	 * @return \Illuminate\Http\Response
@@ -80,36 +58,12 @@ class ProjectController extends Controller
 	}
 
 	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show(Project $project, $branch_name)
-	{
-		$bd_object = px2query(
-			$project->project_code,
-			$branch_name,
-			'/?PX=px2dthelper.get.all'
-		);
-		$bd_object = json_decode($bd_object);
-		if($bd_object) {
-			return view('projects.show', ['project' => $project, 'branch_name' => $branch_name], compact('bd_object'));
-		} elseif(session('my_status')) {
-			$message = session('my_status');
-			return redirect('setup/'.$project->project_code.'/'.$branch_name)->with('my_status', __($message));
-		} else {
-			return redirect('setup/'.$project->project_code.'/'.$branch_name);
-		}
-	}
-
-	/**
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit(Project $project, $branch_name)
+	public function edit(Project $project)
 	{
 		//
 		// update, destroyでも同様に
@@ -118,7 +72,6 @@ class ProjectController extends Controller
 			'projects.edit',
 			[
 				'project' => $project,
-				'branch_name' => $branch_name
 			]
 		);
 	}
@@ -130,7 +83,7 @@ class ProjectController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(StoreProject $request, Project $project, $branch_name)
+	public function update(StoreProject $request, Project $project)
 	{
 		//
 		$this->authorize('edit', $project);
@@ -174,7 +127,7 @@ class ProjectController extends Controller
 		}
 		$project->save();
 
-		return redirect('projects/' . $project->project_code . '/' . $branch_name)->with('my_status', __('Updated a Project.'));
+		return redirect('home/' . urlencode($project->project_code))->with('my_status', __('Updated a Project.'));
 	}
 
 	/**
@@ -183,7 +136,7 @@ class ProjectController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy(Request $request, Project $project, $branch_name)
+	public function destroy(Request $request, Project $project)
 	{
 		//
 		$bd_data_dir = env('BD_DATA_DIR');
@@ -192,7 +145,6 @@ class ProjectController extends Controller
 		$page_id = $request->page_id;
 
 		$project_code = $project->project_code;
-		$project_path = get_project_workingtree_dir($project_code, $branch_name);
 
 		// プロジェクトフォルダが存在していれば削除
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
