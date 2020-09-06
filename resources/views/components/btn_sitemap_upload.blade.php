@@ -62,10 +62,10 @@
                 							</script>
         								</div>
         								<button id="submitStatus" type="submit" class="px2-btn px2-btn--primary" disabled="disabled">送信</button>
-        								<button type="reset" class="px2-btn px2-btn--danger" onclick="cancelButton(event);">キャンセル</button>
+        								<button type="reset" class="px2-btn" onclick="cancelButton();">キャンセル</button>
                                         <script>
                                             // キャンセルボタンを押した際に送信ボタンをdisabledにする
-                                            function cancelButton(e) {
+                                            function cancelButton() {
                                                 var errorMessage = document.getElementById("errorMessage");
                                                 var submitStatus = document.getElementById("submitStatus");
                                                 errorMessage.innerHTML = '';
@@ -87,8 +87,8 @@
         			</ul>
 	            </div>
 	        </div>
-	        <div class="dialog-buttons center">
-	            <button type="button" class="px2-btn px2-btn--primary" data-dismiss="modal">閉じる</button>
+	        <div class="dialog-buttons px2-text-align-center">
+	            <button type="button" class="px2-btn" data-dismiss="modal">閉じる</button>
 	        </div>
 	    </div>
 	</div>

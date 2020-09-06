@@ -1,5 +1,5 @@
 @php
-	$id_attr = 'modal-sitemap_destroy' . $controller;
+	$id_attr = 'modal-sitemap_destroy' . $controller . '-' . md5($file_name);
 @endphp
 
 {{-- 削除ボタン --}}
@@ -14,27 +14,18 @@
 			<h1>サイトマップの削除</h1>
 			<div>
 				<div class="px2dt-git-commit">
-					<ul class="listview" style="margin: 20px 20px;">
-						<li>
-							<ul class="cont_filelist_sitemap__ext-list" style="margin: 40px 20px;">
-								<li>
-									<h4>本当に削除してもよろしいですか？</h4>
-								</li>
-								<li>
-									<form class="form-inline" method="POST" action="{{ url('/sitemaps/'.urlencode($project_code).'/'.urlencode($branch_name).'/destroy') }}" enctype="multipart/form-data">
-										@csrf
-										@method('POST')
-										<input type="hidden" name="file_name" value="{{ $file_name }}">
-										<button id="submitStatus" type="submit" class="px2-btn px2-btn--danger">削除する</button>
-									</form>
-								</li>
-							</ul>
-						</li>
-					</ul>
+					<p>サイトマップファイル <code>{{ $file_name }}</code> を削除します。</p>
+					<p>本当に削除してもよろしいですか？</p>
+					<form class="form-inline" method="POST" action="{{ url('/sitemaps/'.urlencode($project_code).'/'.urlencode($branch_name).'/destroy') }}" enctype="multipart/form-data">
+						@csrf
+						@method('POST')
+						<input type="hidden" name="file_name" value="{{ $file_name }}">
+						<button id="submitStatus" type="submit" class="px2-btn px2-btn--danger">削除する</button>
+					</form>
 				</div>
 			</div>
-			<div class="dialog-buttons center">
-				<button type="button" class="px2-btn px2-btn--primary" data-dismiss="modal">閉じる</button>
+			<div class="dialog-buttons px2-text-align-center">
+				<button type="button" class="px2-btn" data-dismiss="modal">閉じる</button>
 			</div>
 		</div>
 	</div>
