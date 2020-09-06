@@ -122,7 +122,7 @@
 				<div class="dialog_box" style="width: 80%; margin: 3em auto;" v-bind:class="classOption">
 					<h1>Pickles 2 プロジェクトのセットアップ</h1>
 					<div style="margin-bottom: 1em;">
-						<table class="form_elements" style="width:100%;">
+						<table class="px2-table" style="width:100%;">
 							<colgroup>
 								<col width="30%">
 								<col width="70%">
