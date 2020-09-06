@@ -13,7 +13,7 @@ class ProjectController extends Controller
 	 */
 	public function __construct()
 	{
-		// ログイン・登録完了してなくても閲覧だけはできるようにexcept()で指定します。
+		// ログイン・登録完了してなくても閲覧だけはできるように except() で指定します。
 		$this->middleware('auth');
 		$this->middleware('verified');
 	}
@@ -37,7 +37,7 @@ class ProjectController extends Controller
 	 */
 	public function store(StoreProject $request)
 	{
-		//
+
 		$bd_data_dir = env('BD_DATA_DIR');
 		$branch_name = 'master';
 
@@ -65,9 +65,6 @@ class ProjectController extends Controller
 	 */
 	public function edit(Project $project)
 	{
-		//
-		// update, destroyでも同様に
-		$this->authorize('edit', $project);
 		return view(
 			'projects.edit',
 			[
@@ -85,9 +82,6 @@ class ProjectController extends Controller
 	 */
 	public function update(StoreProject $request, Project $project)
 	{
-		//
-		$this->authorize('edit', $project);
-
 		$bd_data_dir = env('BD_DATA_DIR');
 
 		if( is_dir($bd_data_dir.'/projects/'.urlencode($project->project_code)) ){
@@ -138,7 +132,6 @@ class ProjectController extends Controller
 	 */
 	public function destroy(Request $request, Project $project)
 	{
-		//
 		$bd_data_dir = env('BD_DATA_DIR');
 
 		$page_param = $request->page_path;
