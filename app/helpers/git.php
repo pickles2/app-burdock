@@ -149,6 +149,7 @@ class git{
 			case 'log':
 			case 'show':
 			case 'remote':
+			case 'fetch':
 			case 'checkout':
 			case 'add':
 			case 'commit':
