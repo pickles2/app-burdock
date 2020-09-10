@@ -46,11 +46,10 @@
 		<header class="theme-header" style="border-bottom-color: rgb(0, 160, 230); color: rgb(0, 160, 230);">
 			<div class="theme-header__inner clearfix">
 				<div class="theme-header__px2logo" style="width: 45px; height: 45px;">
-					<img src="/common/images/logo.svg">
+					<img src="/common/images/logo.svg" alt="{{ env('APP_NAME') }}" />
 				</div>
 				<div class="theme-header__id" style="opacity: 1;">
 					<div><a class="app_name" href="{{ url('/') }}">{{ config('app.name') }}</a></div>
-					<div></div>
 				</div>
 				<div class="theme-header__gmenu" id="navbarLeftContent">
 					{{-- Navbarの右側 --}}
