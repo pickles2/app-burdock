@@ -77,7 +77,7 @@ $envKeys = array(
 	# ステージング環境のドメイン名 (必須)
 	# ポート番号を含む場合は、合わせて設定してください。 (例: staging.example.com:8080)
 	# 実際は、この前にサブドメインを1つ追加して使用されます。 (例: proj-code---stg1.staging.example.com)
-	'BD_PLUM_STAGING_DOMAIN',
+	'BD_STAGING_DOMAIN',
 );
 
 

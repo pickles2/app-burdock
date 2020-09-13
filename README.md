@@ -53,7 +53,7 @@ Application key set successfully.
 ```
 APP_URL=https://example.com
 BD_PREVIEW_DOMAIN=preview.example.com
-BD_PLUM_STAGING_DOMAIN=staging.example.com
+BD_STAGING_DOMAIN=staging.example.com
 ```
 
 #### データベース接続設定

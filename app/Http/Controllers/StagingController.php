@@ -42,7 +42,7 @@ class StagingController extends Controller
 			array_push($preview_server, array(
 				'name' => 'stg'.$i.'',
 				'path' => env('BD_DATA_DIR').'/stagings/'.urlencode($project->project_code).'---stg'.$i.'/',
-				'url' => 'http'.($_SERVER["HTTPS"] ? 's' : '').'://'.urlencode($project->project_code).'---stg'.$i.'.'.env('BD_PLUM_STAGING_DOMAIN').'/',
+				'url' => 'http'.($_SERVER["HTTPS"] ? 's' : '').'://'.urlencode($project->project_code).'---stg'.$i.'.'.env('BD_STAGING_DOMAIN').'/',
 			));
 		}
 
