@@ -37,6 +37,10 @@
 	<!-- Local Resources -->
 	<link rel="stylesheet" href="/common/index_files/style.css" type="text/css" data-original-title="" title="">
 	<link rel="stylesheet" href="/common/index_files/styles.css" type="text/css" data-original-title="" title="">
+
+	<!-- App Resources -->
+	<link rel="stylesheet" href="{{ asset('/css/app.css') }}" type="text/css" />
+
 	{{-- CSS --}}
 	@yield('stylesheet')
 	@yield('javascript')

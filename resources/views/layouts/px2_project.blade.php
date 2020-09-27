@@ -42,6 +42,10 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 	<!-- Local Resources -->
 	<link rel="stylesheet" href="/common/index_files/style.css" type="text/css" />
 	<link rel="stylesheet" href="/common/index_files/styles.css" type="text/css" />
+
+	<!-- App Resources -->
+	<link rel="stylesheet" href="{{ asset('/css/app.css') }}" type="text/css" />
+
 	{{-- CSS --}}
 	@yield('stylesheet')
 </head>
