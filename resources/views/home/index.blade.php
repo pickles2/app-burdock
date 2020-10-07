@@ -37,28 +37,34 @@
 						<tbody>
 							<tr>
 								<th>Project Name</th>
-								<td class="tpl_name selectable">{{ $bd_object->packages->package_list->projects[0]->name }}</td>
+								<td class="tpl_name">
+								@if (is_object($bd_object) && is_object($bd_object->packages))
+									{{ $bd_object->packages->package_list->projects[0]->name }}
+								@else
+									---
+								@endif
+								</td>
 							</tr>
 							<tr>
 								<th>Project Code</th>
-								<td class="tpl_code selectable">{{ $project->project_code }}</td>
+								<td class="tpl_code">{{ $project->project_code }}</td>
 							</tr>
 							<tr>
 								<th>Git URL</th>
-								<td class="tpl_code selectable">{{ $project->git_url }}</td>
+								<td class="tpl_code">{{ $project->git_url }}</td>
 							</tr>
 							{{-- ↓不要なサーバー内部の情報は、なるべくクライアントへ送出したくない。 --}}
 							{{-- <tr>
 								<th>Path</th>
-								<td class="tpl_path selectable">{{ $bd_object->realpath_docroot }}</td>
+								<td class="tpl_path">{{ $bd_object->realpath_docroot }}</td>
 							</tr>
 							<tr>
 								<th>Home Directory</th>
-								<td class="tpl_home_dir selectable">{{ $bd_object->packages->package_list->projects[0]->path_homedir }}</td>
+								<td class="tpl_home_dir">{{ $bd_object->packages->package_list->projects[0]->path_homedir }}</td>
 							</tr>
 							<tr>
 								<th>Entry Script</th>
-								<td class="tpl_entry_script selectable">{{ $bd_object->packages->package_list->projects[0]->path }}</td>
+								<td class="tpl_entry_script">{{ $bd_object->packages->package_list->projects[0]->path }}</td>
 							</tr> --}}
 						</tbody>
 					</table>

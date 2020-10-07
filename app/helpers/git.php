@@ -147,11 +147,15 @@ class git{
 			case 'status':
 			case 'branch':
 			case 'log':
+			case 'diff':
 			case 'show':
 			case 'remote':
 			case 'fetch':
 			case 'checkout':
 			case 'add':
+			case 'rm':
+			case 'reset':
+			case 'clean':
 			case 'commit':
 			case 'merge':
 			case 'push':

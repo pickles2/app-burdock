@@ -38,7 +38,7 @@ class HomeController extends Controller
 		$project_branch = $burdockProjectManager->project($project->project_code)->branch($branch_name, 'preview');
 		$project_status = $project_branch->status();
 
-		if ($project_status->isPxStandby) {
+		if( $project_status->pathExists && $project_status->isPxStandby ){
 			// --------------------------------------
 			// セットアップは正常に完了しているとき
 			$bd_object = $project_branch->get_project_info();
@@ -49,7 +49,19 @@ class HomeController extends Controller
 				'project_status' => $project_status,
 			], compact('bd_object'));
 
-		} else {
+		}elseif( $project_status->pathExists && $project_status->composerJsonExists && !$project_status->vendorDirExists ){
+			// --------------------------------------
+			// composer.json はすでにあるが、vendorディレクトリはまだないとき
+
+			return view('home.do_composer', [
+				'project' => $project,
+				'branch_name' => $branch_name,
+				'project_status' => $project_status,
+			]);
+
+		}else{
+			// --------------------------------------
+			// セットアップされていないとき
 			return $this->setup($project, $branch_name);
 		}
 	}

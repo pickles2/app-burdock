@@ -37,6 +37,14 @@ class ContentController extends Controller
 				// エイリアス、アクター、ダイナミックパスなどの実態を持たないパスを考慮しての処理。
 		);
 		$current = json_decode($current);
+		if( !is_object($current) ){
+			return view(
+				'errors.common',
+				[
+					'error_message' => 'Pickles 2 の環境情報を読み取れません。',
+				]
+			);
+		}
 		$page_path = $current->page_info->path;
 
 
