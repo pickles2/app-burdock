@@ -11,6 +11,15 @@ class GitCheckoutNewBranch
 		$current_branch_name = $gitUtil->get_branch_name();
 		$new_branch_name = $git_command_array[2];
 
+		if( !preg_match('/^[a-zA-Z0-9\_\-]+$/', $new_branch_name) ){
+			// 使用されている文字をバリデート
+			return array(
+				'stdout' => '',
+				'stderr' => 'New branch name contains invalid characters.',
+				'return' => 1,
+			);
+		}
+
 		$realpath_pj_git_root = $fs->get_realpath( \get_project_workingtree_dir($gitUtil->get_project_code(), $current_branch_name) );
 		$realpath_pj_git_new_branch_root = $fs->get_realpath( \get_project_workingtree_dir($gitUtil->get_project_code(), $new_branch_name) );
 

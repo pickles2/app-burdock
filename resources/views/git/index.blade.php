@@ -60,11 +60,15 @@ window.contApp = new (function(){
 					result = result.concat(data);
 				},
 				complete: function(){
-					// console.log('complete', result);
+					console.log('complete', result);
 					if( cmdAry.length == 3 && cmdAry[0] == 'checkout' && cmdAry[1] == '-b' ){
 						// `git checkout -b branchname` のフェイク
-						window.location.href = "/git/{{ $project->project_code }}/"+cmdAry[2];
-						return;
+						if( result[0].return ){
+							alert('Error: ' + result[0].stderr);
+						}else{
+							window.location.href = "/git/{{ $project->project_code }}/"+cmdAry[2];
+							return;
+						}
 					}
 
 					try{
