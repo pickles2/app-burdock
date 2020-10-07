@@ -13,6 +13,10 @@ class GitBranchDelete
 		$realpath_pj_git_root = $fs->get_realpath( \get_project_workingtree_dir($gitUtil->get_project_code(), $gitUtil->get_branch_name()) );
 		$realpath_pj_git_target_branch_root = $fs->get_realpath( \get_project_workingtree_dir($gitUtil->get_project_code(), $target_branch_name) );
 
+		// .git の中に 444 (r--r--r--) となるファイルが生成されている事があるので、
+		// 削除を受け付けるパーミッションを変更しておく。
+		$result = $fs->chmod_r($realpath_pj_git_target_branch_root, 0777);
+
 		// ディレクトリごと削除
 		$result = $fs->rm($realpath_pj_git_target_branch_root);
 
