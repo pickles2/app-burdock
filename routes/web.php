@@ -109,6 +109,11 @@ Route::post('composer/{project}/{branch_name}/composer-install', 'ComposerContro
 Route::post('composer/{project}/{branch_name}/composer-update', 'ComposerController@update');
 
 // --------------------------------------
+// キャッシュを消去する
+Route::get('clearcache/{project}/{branch_name}', 'ClearCacheController@index');
+Route::post('clearcache/{project}/{branch_name}/clearcache', 'ClearCacheController@clearcache');
+
+// --------------------------------------
 // ステージング切り替え (Plum)
 Route::match(['get', 'post'], 'staging/{project}/{branch_name}', 'StagingController@index');
 
