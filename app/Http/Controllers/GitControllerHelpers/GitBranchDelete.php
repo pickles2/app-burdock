@@ -14,7 +14,7 @@ class GitBranchDelete
 		$realpath_pj_git_target_branch_root = $fs->get_realpath( \get_project_workingtree_dir($gitUtil->get_project_code(), $target_branch_name) );
 
 		// ディレクトリごと削除
-		$fs->rm($realpath_pj_git_target_branch_root);
+		$result = $fs->rm($realpath_pj_git_target_branch_root);
 
 		$cmd_result = array(
 			'stdout' => 'Deleted branch '.$target_branch_name.' (was 0000000).'."\n",

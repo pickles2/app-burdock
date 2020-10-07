@@ -51,8 +51,8 @@
 							<div class="cont_results-errorMessage" v-bind:class="classAlertLog">{{ alert }}件のエラーが検出されています。</div>
 							<div class="cont_results-spentTime">time: <span>{{ time }} sec</span></div>
 							<p><a class="px2-btn px2-btn--primary" v-bind:href="publishFileDownload">パブリッシュされたファイルをダウンロードする</a></p>
-							<ul class="horizontal">
-								<li class="horizontal-li"><a class="px2-link px2-link--burette" v-bind:href="publishReportDownload">パブリッシュレポート</a></li>
+							<ul class="px2-horizontal-list px2-horizontal-list--right">
+								<li><a class="px2-link px2-link--burette" v-bind:href="publishReportDownload">パブリッシュレポート</a></li>
 							</ul>
 						</div>
 					</div>
