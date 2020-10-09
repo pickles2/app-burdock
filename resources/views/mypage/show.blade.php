@@ -8,10 +8,8 @@
 
     {{-- 編集・削除ボタン --}}
     @can('edit', $user)
-        <div>
-            <a href="{{ url('mypage/edit') }}" class="btn btn-primary">
-                {{ __('Edit') }}
-            </a>
+        <div class="px2-p">
+            <a href="{{ url('mypage/edit') }}" class="px2-btn px2-btn--primary">プロフィールを編集する</a>
             {{-- 削除ボタンは後で正式なものに置き換えます --}}
             @component('components.btn-user-del')
                 @slot('controller', 'mypage')
@@ -22,14 +20,23 @@
     @endcan
 
     {{-- ユーザー1件の情報 --}}
-    <dl class="row">
-        <dt class="col-md-2">{{ __('ID') }}</dt>
-        <dd class="col-md-10">{{ $user->id }}</dd>
-        <dt class="col-md-2">{{ __('Name') }}</dt>
-        <dd class="col-md-10">{{ $user->name }}</dd>
-        <dt class="col-md-2">{{ __('E-Mail Address') }}</dt>
-        <dd class="col-md-10">{{ $user->email }}</dd>
-    </dl>
+    <div class="px2-p">
+        <table class="px2-table">
+            <tr>
+                <th>{{ __('ID') }}</th>
+                <td>{{ $user->id }}</td>
+            </tr>
+            <tr>
+                <th>{{ __('Name') }}</th>
+                <td>{{ $user->name }}</td>
+            </tr>
+            <tr>
+                <th>{{ __('E-Mail Address') }}</th>
+                <td>{{ $user->email }}</td>
+            </tr>
+        </table>
+    </div>
+
     {{-- ユーザーの記事一覧 --}}
     <h2>{{ __('Projects') }}</h2>
     <div class="table-responsive">

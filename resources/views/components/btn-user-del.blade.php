@@ -3,9 +3,7 @@
 @endphp
 
 {{-- 削除ボタン --}}
-<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#{{ $id_attr }}">
-  {{ __('Delete') }}
-</button>
+<button type="button" class="px2-btn px2-btn--danger" data-toggle="modal" data-target="#{{ $id_attr }}">退会する</button>
 
 {{-- モーダルウィンドウ --}}
 <div class="modal fade" id="{{ $id_attr }}" tabindex="-1" role="dialog" aria-labelledby="{{ $id_attr }}-label" aria-hidden="true">
@@ -24,16 +22,14 @@
                 <p><strong>{{ $name }}</strong></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                <button type="button" class="px2-btn px2-btn--secondary" data-dismiss="modal">
                     {{ __('Cancel') }}
                 </button>
                 {{-- 削除用のアクションを実行させるフォーム --}}
                 <form action="{{ url($controller . '/') }}" method="post">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger">
-                        {{ __('Delete') }}
-                    </button>
+                    <button type="submit" class="px2-btn px2-btn--danger">退会する</button>
                 </form>
             </div>
         </div>
