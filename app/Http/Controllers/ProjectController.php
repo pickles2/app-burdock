@@ -115,9 +115,9 @@ class ProjectController extends Controller
 		$project->project_name = $request->project_name;
 		$project->git_url = $request->git_url;
 		$project->git_username = \Crypt::encryptString($request->git_username);
-		if( property_exists($request, 'git_password') && strlen($request->git_password) ){
+		if( is_object($request) && strlen($request->git_password) ){
 			// 入力があった場合だけ上書き
-			$project->git_password = \Crypt::encryptString($request->git_password);
+			$project->git_password = \Crypt::encryptString( $request->git_password );
 		}
 		$project->save();
 

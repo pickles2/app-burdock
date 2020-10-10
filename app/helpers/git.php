@@ -177,6 +177,24 @@ class git{
 	}
 
 	/**
+	 * origin をセットする
+	 */
+	public function set_remote_origin(){
+		$git_remote = $this->url_bind_confidentials();
+		$this->git(array('remote', 'add', 'origin', $git_remote));
+		$this->git(array('remote', 'set-url', 'origin', $git_remote));
+		return true;
+	}
+
+	/**
+	 * origin を削除する
+	 */
+	public function clear_remote_origin(){
+		$this->git(array('remote', 'remove', 'origin'));
+		return true;
+	}
+
+	/**
 	 * URLに認証情報を埋め込む
 	 */
 	public function url_bind_confidentials($url = null, $user_name = null, $password = null){
@@ -196,9 +214,13 @@ class git{
 		$parsed_git_url = parse_url($url);
 		$rtn = '';
 		$rtn .= $parsed_git_url['scheme'].'://';
-		$rtn .= urlencode($user_name);
-		$rtn .= ':'.urlencode($password);
-		$rtn .= '@';
+		if( strlen($user_name) ){
+			$rtn .= urlencode($user_name);
+			if( strlen($password) ){
+				$rtn .= ':'.urlencode($password);
+			}
+			$rtn .= '@';
+		}
 		$rtn .= $parsed_git_url['host'];
 		if( array_key_exists('port', $parsed_git_url) && strlen($parsed_git_url['port']) ){
 			$rtn .= ':'.$parsed_git_url['port'];

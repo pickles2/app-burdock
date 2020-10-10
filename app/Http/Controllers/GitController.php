@@ -56,8 +56,10 @@ class GitController extends Controller
 		$rtn = array();
 		$git_command_array = $request->command_ary;
 
+		$gitUtil->set_remote_origin();
+
 		if( count($git_command_array) == 2 && $git_command_array[0] == 'branch' && $git_command_array[1] == '-a' ){
-			// `git branch` のフェイク
+			// `git branch -a` のフェイク
 			// ブランチの一覧を取得する
 			array_push( $rtn, GitControllerHelpers\GitBranch::execute($gitUtil, $git_command_array) );
 		}elseif( count($git_command_array) == 3 && $git_command_array[0] == 'checkout' && $git_command_array[1] == '-b' ){
@@ -75,6 +77,9 @@ class GitController extends Controller
 		}else{
 			array_push( $rtn, $gitUtil->git( $git_command_array ) );
 		}
+
+		$gitUtil->clear_remote_origin();
+
 		// array_push( $rtn, $gitUtil->git( $git_command_array ) );
 		header('Content-type: application/json');
 		return json_encode($rtn);
