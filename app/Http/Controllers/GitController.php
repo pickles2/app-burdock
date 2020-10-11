@@ -57,6 +57,7 @@ class GitController extends Controller
 		$git_command_array = $request->command_ary;
 
 		$gitUtil->set_remote_origin();
+		$gitUtil->git( ['fetch'] );
 
 		if( count($git_command_array) == 2 && $git_command_array[0] == 'branch' && $git_command_array[1] == '-a' ){
 			// `git branch -a` のフェイク
@@ -70,9 +71,10 @@ class GitController extends Controller
 			// `git checkout -b localBranchname remoteBranch` のフェイク
 			// リモートブランチをチェックアウトする
 			array_push( $rtn, GitControllerHelpers\GitCheckoutRemoteBranch::execute($gitUtil, $git_command_array) );
-		}elseif( count($git_command_array) == 2 && $git_command_array[0] == 'merge' ){
+		}elseif( count($git_command_array) == 2 && $git_command_array[0] == 'merge' && !preg_match('/^remotes\//', $git_command_array[1]) ){
 			// `git merge branchname` のフェイク
 			// マージする
+			// ただし、ここを通過するのはマージ元がローカルブランチの場合のみ。リモートブランチからのマージする場合はフェイクは要らない。
 			array_push( $rtn, GitControllerHelpers\GitMerge::execute($gitUtil, $git_command_array) );
 		}elseif( count($git_command_array) == 3 && $git_command_array[0] == 'branch' && $git_command_array[1] == '--delete' ){
 			// `git branch --delete branchname` のフェイク
