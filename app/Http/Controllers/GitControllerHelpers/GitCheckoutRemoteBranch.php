@@ -28,10 +28,14 @@ class GitCheckoutRemoteBranch
 
 
 		// ブランチ名指定でcloneする
-		$newGitUtil = new \pickles2\burdock\git($gitUtil->get_project_id(), $new_branch_name);
+		$newGitUtil = new \pickles2\burdock\git( $gitUtil->get_project_id(), $new_branch_name );
 		$git_remote = $newGitUtil->url_bind_confidentials();
 		$result = $newGitUtil->git(['clone', '-b', $new_branch_name, $git_remote, './']);
 		$newGitUtil->clear_remote_origin();
+
+
+		$newComposer = new \pickles2\burdock\composer( $gitUtil->get_project_id(), $new_branch_name );
+		$newComposer->composer(['install']);
 
 
 		$cmd_result = array(

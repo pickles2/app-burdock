@@ -61,8 +61,9 @@ window.contApp = new (function(){
 				},
 				complete: function(){
 					console.log('complete', result);
-					if( cmdAry.length == 3 && cmdAry[0] == 'checkout' && cmdAry[1] == '-b' ){
-						// `git checkout -b branchname` のフェイク
+					if( cmdAry[0] == 'checkout' && cmdAry[1] == '-b' && cmdAry.length >= 3 && cmdAry.length <= 4 ){
+						// `git checkout -b branchname` のフェイク および
+						// `git checkout -b localBranchname remoteBranch` のフェイク
 						if( result[0].return ){
 							alert('Error: ' + result[0].stderr);
 						}else{
