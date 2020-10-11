@@ -64,8 +64,12 @@ class GitController extends Controller
 			array_push( $rtn, GitControllerHelpers\GitBranch::execute($gitUtil, $git_command_array) );
 		}elseif( count($git_command_array) == 3 && $git_command_array[0] == 'checkout' && $git_command_array[1] == '-b' ){
 			// `git checkout -b branchname` のフェイク
-			// 新しいブランチを作成する
+			// カレントブランチから新しいブランチを作成する
 			array_push( $rtn, GitControllerHelpers\GitCheckoutNewBranch::execute($gitUtil, $git_command_array) );
+		}elseif( count($git_command_array) == 4 && $git_command_array[0] == 'checkout' && $git_command_array[1] == '-b' ){
+			// `git checkout -b localBranchname remoteBranch` のフェイク
+			// リモートブランチをチェックアウトする
+			array_push( $rtn, GitControllerHelpers\GitCheckoutRemoteBranch::execute($gitUtil, $git_command_array) );
 		}elseif( count($git_command_array) == 2 && $git_command_array[0] == 'merge' ){
 			// `git merge branchname` のフェイク
 			// マージする

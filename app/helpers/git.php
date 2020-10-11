@@ -143,6 +143,7 @@ class git{
 
 		// 許可されたコマンド
 		switch( $git_sub_command[0] ){
+			case 'clone':
 			case 'config':
 			case 'status':
 			case 'branch':
