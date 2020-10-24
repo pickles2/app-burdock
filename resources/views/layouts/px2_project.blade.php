@@ -133,6 +133,11 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 								<li><a href="{{ url('projects/'.urlencode($project->project_code).'/edit') }}" data-name="config">プロジェクト概要設定</a></li>
 								<li><a href="{{ url('composer/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="composer">Composerを操作する</a></li>
 								<li><a href="{{ url('git/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="git">Gitを操作する</a></li>
+								<li><a href="javascript:;">ツール</a>
+									<ul>
+										<li><a href="{{ url('search/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="search">検索</a></li>
+									</ul>
+								</li>
 								<li><a href="{{ url('staging/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="staging">ステージング管理</a></li>
 								<li><a href="{{ url('delivery/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="delivery">配信管理</a></li>
 								<li><a href="{{ url('clearcache/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="clearcache">キャッシュを消去する</a></li>
@@ -183,6 +188,7 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 			@if (Request::is('projects/*')) current = 'projects'; @endif
 			@if (Request::is('composer/*')) current = 'composer'; @endif
 			@if (Request::is('git/*')) current = 'git'; @endif
+			@if (Request::is('search/*')) current = 'search'; @endif
 			@if (Request::is('staging/*')) current = 'staging'; @endif
 			@if (Request::is('delivery/*')) current = 'delivery'; @endif
 			@if (Request::is('files-and-folders/*')) current = 'files-and-folders'; @endif

@@ -114,6 +114,11 @@ Route::get('clearcache/{project}/{branch_name}', 'ClearCacheController@index');
 Route::post('clearcache/{project}/{branch_name}/clearcache', 'ClearCacheController@clearcache');
 
 // --------------------------------------
+// 検索
+Route::get('search/{project}/{branch_name}', 'SearchController@index');
+Route::post('search/{project}/{branch_name}/api', 'SearchController@api');
+
+// --------------------------------------
 // ステージング切り替え (Plum)
 Route::match(['get', 'post'], 'staging/{project}/{branch_name}', 'StagingController@index');
 
