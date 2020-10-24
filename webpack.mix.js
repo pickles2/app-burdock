@@ -40,4 +40,5 @@ mix
 	.copyDirectory('submodules/node-git-parser/dist', 'public/common/gitparse79/dist')
 	.copyDirectory('submodules/common-file-editor/dist', 'public/common/common-file-editor/dist')
 	.copyDirectory('submodules/px2style/dist', 'public/common/px2style/dist')
+	.copyDirectory('node_modules/@tomk79/pickles2-code-search/dist', 'public/common/pickles2-code-search/dist')
 ;

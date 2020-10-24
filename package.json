@@ -26,6 +26,7 @@
     },
     "dependencies": {
         "@tomk79/common-file-editor": "file:submodules/common-file-editor",
+        "@tomk79/pickles2-code-search": "https://github.com/tomk79/pickles2-code-search.git#develop",
         "imagemin": "^6.0.0",
         "img-loader": "^3.0.1",
         "laravel-echo": "^1.5.3",
