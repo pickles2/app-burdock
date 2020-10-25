@@ -36,4 +36,20 @@ class SearchController extends Controller
 			]
 		);
 	}
+
+
+	/**
+	 * Search API
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function api(Request $request, Project $project, $branch_name){
+		$rtn = new \stdClass();
+		$rtn->result = true;
+
+		// array_push( $rtn, $gitUtil->git( $git_command_array ) );
+		header('Content-type: application/json');
+		return json_encode($rtn);
+	}
+
 }
