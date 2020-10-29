@@ -90,6 +90,7 @@ class SearchController extends Controller
 					$data['new'] = array();
 					array_push($data['new'], array(
 						'path' => $file,
+						'highlights' => array(), // TODO: 未実装
 					));
 					broadcast(new \App\Events\SearchEvent($data));
 				},
@@ -126,6 +127,11 @@ class SearchController extends Controller
 		// var_dump($matched);
 		// var_dump($done.'/'.$total);
 
+
+		$data = array();
+		$data['command'] = 'finished';
+		broadcast(new \App\Events\SearchEvent($data));
+
 		header('Content-type: application/json');
 		return json_encode($rtn);
 	}
@@ -149,7 +155,7 @@ class SearchController extends Controller
 		$publicCacheDir = ($pageInfoAll->config->public_cache_dir ? $pageInfoAll->config->public_cache_dir : '/caches/');
 
 
-		$targetDir = $request->target;
+		$targetDir = $request->options['target'];
 		switch($targetDir){
 			case 'home_dir':
 				array_push($rtn['target'], $this->fs->get_realpath($pageInfoAll->realpath_homedir));
@@ -212,7 +218,7 @@ class SearchController extends Controller
 		if( !is_dir($realpath) && !is_file($realpath) ){
 			return;
 		}
-		$path = $this->getPath( $this->fs->get_realpath($realpath) );
+		$path = $this->realpath2projectlocalpath( $this->fs->get_realpath($realpath) );
 		$preg_pattern = '/^'.preg_quote( $path, '/' ).'/';
 		if( array_search($itemName, $ignore) !== false ){
 			array_push( $rtn['ignore'], $preg_pattern );
@@ -221,8 +227,9 @@ class SearchController extends Controller
 	}
 
 	/**
+	 * 絶対パスからプロジェクト内のパスだけ取り出す
 	 */
-	private function getPath($realpath_file){
+	private function realpath2projectlocalpath($realpath_file){
 		$project_path = $this->fs->get_realpath($this->project_path.'/');
 		$realpath_file = preg_replace( '/^'.preg_quote($project_path, '/').'/', '/', $realpath_file );
 		return $realpath_file;
