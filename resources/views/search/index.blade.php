@@ -34,6 +34,18 @@ window.contApp = new (function($){
 			document.getElementById('cont-pickles2-code-search')
 		);
 
+		window.Echo.channel('search-event')
+			.listen('SearchEvent', (message) => {
+				// console.log(message);
+				pickles2CodeSearch.update({
+					'total': message.data.total,
+					'done': message.data.done,
+					'new': message.data.new
+				});
+
+			})
+		;
+
 		pickles2CodeSearch.init(
 			{
 				'start': function(keyword, searchOptions, callback){
@@ -41,13 +53,15 @@ window.contApp = new (function($){
 
 					$.ajax({
 						type : 'POST',
-						url : "/search/{{ $project->project_code }}/{{ $branch_name }}/api",
+						url : "/search/{{ $project->project_code }}/{{ $branch_name }}/search",
 						headers: {
 							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 						},
 						contentType: 'application/json',
 						dataType: 'json',
 						data: JSON.stringify({
+							'keyword': keyword,
+							'options': searchOptions,
 						}),
 						error: function(data){
 							console.error('error', data);

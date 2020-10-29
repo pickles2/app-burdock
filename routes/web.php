@@ -116,7 +116,7 @@ Route::post('clearcache/{project}/{branch_name}/clearcache', 'ClearCacheControll
 // --------------------------------------
 // 検索
 Route::get('search/{project}/{branch_name}', 'SearchController@index');
-Route::post('search/{project}/{branch_name}/api', 'SearchController@api');
+Route::post('search/{project}/{branch_name}/search', 'SearchController@search');
 
 // --------------------------------------
 // ステージング切り替え (Plum)
