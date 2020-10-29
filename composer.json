@@ -21,6 +21,7 @@
         "tomk79/burdock-project-manager": "^0.0",
         "tomk79/filesystem": "^1.0",
         "tomk79/remote-finder": "^0.0.5",
+        "tomk79/search-in-directory": "~0.0",
         "twig/twig": "^2.0"
     },
     "require-dev": {

@@ -1,10 +1,14 @@
+.DS_Store
+Thumbs.db
+.~*.csv#
+~$*
 /node_modules
 /public/hot
 /public/storage
 /public/projects
 /public/assets/px2ce_resources
 /storage/*.key
-#/composer.lock
+/composer.lock
 /vendor
 /app/common/composer/home
 /.idea
