@@ -72,6 +72,7 @@ class SearchController extends Controller
 			// 検索対象とするディレクトリを列挙する
 			$searchOptions['target'],
 			array(
+				'temporary_data_dir' => $project_branch->get_temporary_data_dir('search'),
 				'progress' => function( $_done, $_total ) use ( &$total, &$done ){
 					// 進行状況を受けるコールバック
 					// var_dump($_done.'/'.$_total);
@@ -108,6 +109,14 @@ class SearchController extends Controller
 		);
 
 
+		if( $request->command == 'cancel' ){
+			// キャンセルする
+			$rtn->result = $searcher->cancel();
+
+			header('Content-type: application/json');
+			return json_encode($rtn);
+		}
+
 		// 検索する
 		$matched = array();
 		$unmatched = array();
@@ -138,24 +147,33 @@ class SearchController extends Controller
 
 
 	/**
+	 * 検索条件を整える
 	 */
 	private function decideTargets( $request ){
 		$project_path = $this->project_path;
 		$pageInfoAll = $this->pageInfoAll;
 
+		$options = $request->options;
+		$options = ( is_array($options) ? $options : array() );
+		$options['allowRegExp'] = ( array_key_exists('allowRegExp', $options) ? $options['allowRegExp'] : false );
+		$options['caseSensitive'] = ( array_key_exists('caseSensitive', $options) ? $options['caseSensitive'] : false );
+		$options['matchFileName'] = ( array_key_exists('matchFileName', $options) ? $options['matchFileName'] : false );
+		$options['target'] = ( array_key_exists('target', $options) ? $options['target'] : 'all' );
+		$options['ignore'] = ( array_key_exists('ignore', $options) ? $options['ignore'] : array() );
+
 		$rtn = array(
 			'target' => array(),
 			'filter' => array(),
 			'ignore' => array(),
-			'allowRegExp' => $request->options['allowRegExp'],
-			'ignoreCase' => !$request->options['caseSensitive'],
-			'matchFileName' => $request->options['matchFileName'],
+			'allowRegExp' => $options['allowRegExp'],
+			'ignoreCase' => !$options['caseSensitive'],
+			'matchFileName' => $options['matchFileName'],
 		);
 
 		$publicCacheDir = ($pageInfoAll->config->public_cache_dir ? $pageInfoAll->config->public_cache_dir : '/caches/');
 
 
-		$targetDir = $request->options['target'];
+		$targetDir = $options['target'];
 		switch($targetDir){
 			case 'home_dir':
 				array_push($rtn['target'], $this->fs->get_realpath($pageInfoAll->realpath_homedir));
@@ -188,23 +206,23 @@ class SearchController extends Controller
 				break;
 		}
 
-		if( array_search('contents-comment', $request->options['ignore']) !== false ){
+		if( array_search('contents-comment', $options['ignore']) !== false ){
 			array_push( $rtn['ignore'], '/'.preg_quote('/comments.ignore/comment.', '/').'/' );
 		}
 
-		$this->setIgnore( 'sitemap', $pageInfoAll->realpath_homedir.'sitemaps/', $request->options['ignore'], $rtn );
-		$this->setIgnore( 'px-files', $pageInfoAll->realpath_homedir , $request->options['ignore'], $rtn );
-		$this->setIgnore( 'sys-caches', $project_path.'/'.$publicCacheDir, $request->options['ignore'], $rtn );
-		$this->setIgnore( 'sys-caches', $pageInfoAll->realpath_homedir.'_sys/', $request->options['ignore'], $rtn );
+		$this->setIgnore( 'sitemap', $pageInfoAll->realpath_homedir.'sitemaps/', $options['ignore'], $rtn );
+		$this->setIgnore( 'px-files', $pageInfoAll->realpath_homedir , $options['ignore'], $rtn );
+		$this->setIgnore( 'sys-caches', $project_path.'/'.$publicCacheDir, $options['ignore'], $rtn );
+		$this->setIgnore( 'sys-caches', $pageInfoAll->realpath_homedir.'_sys/', $options['ignore'], $rtn );
 
 		if($project_path){
-			$this->setIgnore( 'packages', $project_path.'vendor/', $request->options['ignore'], $rtn );
-			$this->setIgnore( 'packages', $project_path.'composer.json', $request->options['ignore'], $rtn );
-			$this->setIgnore( 'packages', $project_path.'composer.lock', $request->options['ignore'], $rtn );
+			$this->setIgnore( 'packages', $project_path.'vendor/', $options['ignore'], $rtn );
+			$this->setIgnore( 'packages', $project_path.'composer.json', $options['ignore'], $rtn );
+			$this->setIgnore( 'packages', $project_path.'composer.lock', $options['ignore'], $rtn );
 		}
 		if($project_path){
-			$this->setIgnore( 'packages', $project_path.'node_modules/', $request->options['ignore'], $rtn );
-			$this->setIgnore( 'packages', $project_path.'package.json', $request->options['ignore'], $rtn );
+			$this->setIgnore( 'packages', $project_path.'node_modules/', $options['ignore'], $rtn );
+			$this->setIgnore( 'packages', $project_path.'package.json', $options['ignore'], $rtn );
 		}
 		array_push($rtn['ignore'], '/\.git/');
 

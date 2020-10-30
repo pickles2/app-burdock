@@ -71,6 +71,7 @@ window.contApp = new (function($){
 						contentType: 'application/json',
 						dataType: 'json',
 						data: JSON.stringify({
+							'command': 'start',
 							'keyword': keyword,
 							'options': searchOptions,
 						}),
@@ -89,7 +90,29 @@ window.contApp = new (function($){
 				},
 				'abort': function(callback){
 					console.log('abort -----');
-					callback();
+
+					$.ajax({
+						type : 'POST',
+						url : "/search/{{ $project->project_code }}/{{ $branch_name }}/search",
+						headers: {
+							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+						},
+						contentType: 'application/json',
+						dataType: 'json',
+						data: JSON.stringify({
+							'command': 'cancel',
+						}),
+						error: function(data){
+							console.error('abort: error', data);
+						},
+						success: function(data){
+							console.log(data);
+						},
+						complete: function(){
+							console.log('abort: complete');
+							callback();
+						}
+					});
 					return;
 				},
 				'tools': [
