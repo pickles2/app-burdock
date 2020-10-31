@@ -76,6 +76,7 @@ class SearchController extends Controller
 				'progress' => function( $_done, $_total ) use ( &$total, &$done ){
 					// 進行状況を受けるコールバック
 					// var_dump($_done.'/'.$_total);
+					set_time_limit(30);
 					$total = $_total;
 					$done = $_done;
 					$data = array();
@@ -90,15 +91,15 @@ class SearchController extends Controller
 					$data = array();
 					$data['new'] = array();
 					array_push($data['new'], array(
-						'path' => $file,
-						'highlights' => array(), // TODO: 未実装
+						'path' => $this->realpath2projectlocalpath( $file ),
+						'highlights' => $result['highlights'],
 					));
 					broadcast(new \App\Events\SearchEvent($data));
 				},
 				'unmatch' => function( $file, $result ) use ( &$unmatched ){
 					// 検索にマッチしなかったファイルの情報を受けるコールバック
 					// var_dump('Unmatched! '.$file);
-					array_push($unmatched, $file);
+					array_push($unmatched, $this->realpath2projectlocalpath( $file ));
 				},
 				'error' => function( $file, $error ){
 					// 検索エラー情報を受けるコールバック
