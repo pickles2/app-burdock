@@ -279,7 +279,7 @@ class GenerateVirtualHostsCommand extends Command
 		for( $i = 0; $i < 10; $i ++ ){
 
 			$tpl_vars = [
-				'domain' => $project->project_code.'---stg'.($i+1).'.'.env('BD_STAGING_DOMAIN'),
+				'domain' => $project->project_code.'---stg'.($i+1).'.'.env('BD_PLUM_STAGING_DOMAIN'),
 				'project_code' => $project->project_code,
 				'document_root' => $this->fs->normalize_path($this->fs->get_realpath( env('BD_DATA_DIR').'/stagings/'.$project->project_code.'---stg'.($i+1).'/'.$relpath_docroot_dist )),
 				'staging_index' => $i+1,

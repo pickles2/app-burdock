@@ -121,6 +121,7 @@ Route::post('search/{project}/{branch_name}/search', 'SearchController@search');
 // --------------------------------------
 // ステージング切り替え (Plum)
 Route::match(['get', 'post'], 'staging/{project}/{branch_name}', 'StagingController@index');
+Route::match(['get', 'post'], 'staging/{project}/{branch_name}/gpi', 'StagingController@gpi');
 
 // --------------------------------------
 // 配信 (Indigo)

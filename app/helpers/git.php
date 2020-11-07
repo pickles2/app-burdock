@@ -77,6 +77,9 @@ class git{
 
 	/**
 	 * Gitコマンドを実行する
+	 *
+	 * @param array $git_sub_command Gitコマンドオプション
+	 * @return array 実行結果
 	 */
 	public function git( $git_sub_command ){
 		if( !is_array($git_sub_command) ){

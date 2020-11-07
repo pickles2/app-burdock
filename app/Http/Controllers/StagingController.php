@@ -28,12 +28,29 @@ class StagingController extends Controller
 	 */
 	public function index(Request $request, Project $project, $branch_name){
 
+		return view(
+			'staging.index',
+			[
+				'project' => $project,
+				'branch_name' => $branch_name,
+			]
+		);
+	}
+
+
+	/**
+	 * GPI
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function gpi(Request $request, Project $project, $branch_name){
+
 		$gitUtil = new \pickles2\burdock\git($project);
 		$default_branch_name = $gitUtil->get_branch_name();
 
 		$fs = new \tomk79\filesystem();
 
-		$realpath_pj_git_root = env('BD_DATA_DIR').'/repositories/'.urlencode($project->project_code).'---'.urlencode($default_branch_name).'/';
+		$realpath_pj_git_root = env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/plum_temporary_data_dir/';
 		$fs->mkdir_r($realpath_pj_git_root);
 		$fs->mkdir_r(env('BD_DATA_DIR').'/stagings/');
 
@@ -42,7 +59,7 @@ class StagingController extends Controller
 			array_push($preview_server, array(
 				'name' => 'stg'.$i.'',
 				'path' => env('BD_DATA_DIR').'/stagings/'.urlencode($project->project_code).'---stg'.$i.'/',
-				'url' => 'http'.($_SERVER["HTTPS"] ? 's' : '').'://'.urlencode($project->project_code).'---stg'.$i.'.'.env('BD_STAGING_DOMAIN').'/',
+				'url' => 'http'.($_SERVER["HTTPS"] ? 's' : '').'://'.urlencode($project->project_code).'---stg'.$i.'.'.env('BD_PLUM_STAGING_DOMAIN').'/',
 			));
 		}
 
@@ -58,46 +75,20 @@ class StagingController extends Controller
 
 		$plum = new \hk\plum\main(
 			array(
-
-				// 追加するパラメータ
-				'additional_params' => array(
-					'_token' => csrf_token(),
-				),
-
-				// プレビューサーバ定義
+				'temporary_data_dir' => $realpath_pj_git_root,
 				'preview_server' => $preview_server,
-
-				// Git情報定義
 				'git' => array(
-					
-					// リポジトリのパス
-					// ウェブプロジェクトのリポジトリパスを設定。
-					'repository' => $realpath_pj_git_root,
-
-					// GitリポジトリのURL
 					'url' => $project->git_url,
-
-					// ユーザ名
-					// Gitリポジトリのユーザ名を設定。
 					'username' => $git_username,
-
-					// パスワード
-					// Gitリポジトリのパスワードを設定。
 					'password' => $git_password,
 				)
 			)
 		);
 
-		$plum_std_out = $plum->run();
+		$json = $plum->gpi( $_POST['data'] );
 
-
-		return view(
-			'staging.index',
-			[
-				'project' => $project,
-				'branch_name' => $branch_name,
-				'plum_std_out' => $plum_std_out,
-			]
-		);
+		header('Content-type: application/json');
+		return json_encode( $json );
 	}
+
 }
