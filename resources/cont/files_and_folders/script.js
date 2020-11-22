@@ -494,7 +494,7 @@ $(window).on('load', function(){
 									new Promise(function(rlv){rlv();})
 										.then(function(){ return new Promise(function(rlv, rjt){
 
-											if( is_file && pxExternalPath && pathType == 'contents' && $body.find('[name=is_remove_files_too]:checked').val() ){
+											if( is_file && pxExternalPath && pathType == 'contents' && $body.find('[name=is_remove_files_too]:checked').val() && pathFiles.length ){
 												// リソースも一緒に削除する
 												fs('is_dir', pathFiles, {}, function(result){
 													if(result.result){
