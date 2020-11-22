@@ -90,8 +90,11 @@ class FilesAndFoldersController extends Controller
 		$fs = new \tomk79\filesystem();
 		$realpath_basedir = get_project_workingtree_dir($project->project_code, $branch_name);
 		$rtn = array();
-		$filename = $fs->get_realpath('/'.$request->filename);
-		if( !strlen($filename) ){
+		if( !strlen($request->filename) ){
+			return json_encode(false);
+		}
+		$filename = $fs->normalize_path( $fs->get_realpath('/'.$request->filename) );
+		if( !strlen($filename) || $filename == '/' ){
 			return json_encode(false);
 		}
 		$realpath_filename = $realpath_basedir.$filename;
