@@ -97,7 +97,14 @@ class FilesAndFoldersController extends Controller
 		if( !strlen($filename) || $filename == '/' ){
 			return json_encode(false);
 		}
-		$realpath_filename = $realpath_basedir.$filename;
+		if(
+			$filename == '/.git' || preg_match( '/^\/\.git(?:\/.*)?$/', $filename ) ||
+			$filename == '/vendor' || preg_match( '/^\/vendor(?:\/.*)?$/', $filename ) ||
+			$filename == '/node_modules' || preg_match( '/^\/node_modules(?:\/.*)?$/', $filename )
+		){
+			return json_encode(false);
+		}
+		$realpath_filename = $fs->normalize_path( $fs->get_realpath( $realpath_basedir.$filename) );
 
 
 		if( $request->method == 'read' ){
