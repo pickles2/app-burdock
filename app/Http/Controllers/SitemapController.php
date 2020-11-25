@@ -95,7 +95,7 @@ class SitemapController extends Controller
 			$message = 'Updated a Sitemap.';
 		}
 
-		return redirect('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name))->with('my_status', __($message));
+		return redirect('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name))->with('bd_flash_message', __($message));
 	}
 
 
@@ -165,6 +165,6 @@ class SitemapController extends Controller
 			$message = 'サイトマップを削除できませんでした。';
 		}
 
-		return redirect('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name))->with('my_status', __($message));
+		return redirect('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name))->with('bd_flash_message', __($message));
 	}
 }

@@ -106,7 +106,7 @@ class PublishController extends Controller
 		return redirect(
 			'publish/'.urlencode($project->project_code).'/'.urlencode($branch_name)
 		)->with(
-			'my_status', __('Publish is complete.')
+			'bd_flash_message', __('Publish is complete.')
 		);
 	}
 
@@ -126,7 +126,7 @@ class PublishController extends Controller
 		return redirect(
 			'publish/'.urlencode($project->project_code).'/'.urlencode($branch_name)
 		)->with(
-			'my_status', __($message)
+			'bd_flash_message', __($message)
 		);
 	}
 

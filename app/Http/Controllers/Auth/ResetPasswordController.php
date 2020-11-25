@@ -64,6 +64,6 @@ class ResetPasswordController extends Controller
     {
         // リダイレクト先でフラッシュメッセージを表示する
         return redirect($this->redirectPath())
-                            ->with('my_status', trans($response));
+                            ->with('bd_flash_message', trans($response));
     }
 }

@@ -81,7 +81,7 @@ class MypageController extends Controller
             $user->password = bcrypt($request->password);
         }
         $user->save();
-        return redirect('mypage')->with('my_status', __('Updated a user.'));
+        return redirect('mypage')->with('bd_flash_message', __('Updated a user.'));
     }
 
     /**
@@ -96,6 +96,6 @@ class MypageController extends Controller
         $user = Auth::user();   #ログインユーザー情報を取得します。
         $this->authorize('edit', $user);
         $user->delete();
-        return redirect('/')->with('my_status', __('Deleted a user.'));
+        return redirect('/')->with('bd_flash_message', __('Deleted a user.'));
     }
 }

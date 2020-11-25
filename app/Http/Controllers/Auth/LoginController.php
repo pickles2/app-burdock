@@ -48,7 +48,7 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         // ログインしたら、トップページへ移動
-        return redirect('/')->with('my_status', __('You logged in.'));
+        return redirect('/')->with('bd_flash_message', __('You logged in.'));
     }
 
     /**
@@ -63,6 +63,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
 
         // ログアウトしたら、トップページへ移動
-        return $this->loggedOut($request) ?: redirect('/')->with('my_status', __('You logged out.'));
+        return $this->loggedOut($request) ?: redirect('/')->with('bd_flash_message', __('You logged out.'));
     }
 }

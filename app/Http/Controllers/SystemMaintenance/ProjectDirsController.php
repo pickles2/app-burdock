@@ -78,7 +78,7 @@ class ProjectDirsController extends \App\Http\Controllers\Controller
 		$project->save();
 
 		$message = 'プロジェクトを作成しました。';
-		return redirect('/system-maintenance/project-dirs/'.$project_code)->with('my_status', __($message));
+		return redirect('/system-maintenance/project-dirs/'.$project_code)->with('bd_flash_message', __($message));
 	}
 
 }

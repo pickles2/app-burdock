@@ -54,7 +54,7 @@ class ProjectController extends Controller
 		\File::makeDirectory($project_path, 0777, true, true);
 
 		$message = 'プロジェクトを作成しました。';
-		return redirect('/')->with('my_status', __($message));
+		return redirect('/')->with('bd_flash_message', __($message));
 	}
 
 	/**
@@ -121,7 +121,7 @@ class ProjectController extends Controller
 		}
 		$project->save();
 
-		return redirect('home/' . urlencode($project->project_code))->with('my_status', __('Updated a Project.'));
+		return redirect('home/' . urlencode($project->project_code))->with('bd_flash_message', __('Updated a Project.'));
 	}
 
 	/**
@@ -153,6 +153,6 @@ class ProjectController extends Controller
 			$message = 'プロジェクトを削除できませんでした。データベースの更新に失敗しました。';
 		}
 
-		return redirect('/')->with('my_status', __($message));
+		return redirect('/')->with('bd_flash_message', __($message));
 	}
 }

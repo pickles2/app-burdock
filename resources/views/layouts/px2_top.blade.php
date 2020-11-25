@@ -143,7 +143,7 @@
 			</div>
 		</header>
 		{{-- フラッシュ・メッセージ --}}
-		@if (session('my_status'))
+		@if (session('bd_flash_message'))
 			@component('components.flash_message')
 			@endcomponent
 		@endif
