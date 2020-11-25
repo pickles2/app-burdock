@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\MustVerifyEmail;
 use App\Notifications\CustomPasswordReset;
 use App\Notifications\CustomVerifyEmail;
@@ -13,12 +14,20 @@ use Ramsey\Uuid\Uuid;
 class User extends Authenticatable implements MustVerifyEmailContract
 {
     use MustVerifyEmail, Notifiable;
+	use SoftDeletes;
 
     /** プライマリーキーの型 */
     protected $keyType = 'string';
 
     /** プライマリーキーは自動連番か？ */
     public $incrementing = false;
+
+	/**
+	 * 日付へキャストする属性
+	 *
+	 * @var array
+	 */
+	protected $dates = ['deleted_at'];
 
     /**
      * The attributes that are mass assignable.

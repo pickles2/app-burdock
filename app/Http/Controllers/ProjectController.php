@@ -139,22 +139,18 @@ class ProjectController extends Controller
 
 		$project_code = $project->project_code;
 
-		// プロジェクトフォルダが存在していれば削除
-		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
-		$pj = $burdockProjectManager->project($project->project_code);
-		$result = $pj->delete();
+		// // プロジェクトフォルダが存在していれば削除 <- ※softDeleteに変更したため、ここでは削除しない
+		// $burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
+		// $pj = $burdockProjectManager->project($project->project_code);
+		// $result = $pj->delete();
 
-		if(\File::exists(env('BD_DATA_DIR').'/projects/'.$project_code) === false && $result === true) {
-			// DBからプロジェクトを削除
-			$result = $project->delete();
+		// DBからプロジェクトを削除
+		$result = $project->delete();
 
-			if( $result ){
-				$message = 'プロジェクトを削除しました。';
-			}else{
-				$message = 'プロジェクトを削除できませんでした。データベースの更新に失敗しました。';
-			}
-		} else {
-			$message = 'プロジェクトを削除できませんでした。削除できないファイルが含まれています。';
+		if( $result ){
+			$message = 'プロジェクトを削除しました。';
+		}else{
+			$message = 'プロジェクトを削除できませんでした。データベースの更新に失敗しました。';
 		}
 
 		return redirect('/')->with('my_status', __($message));
