@@ -36,7 +36,7 @@
 						<div class="cont_page_info-btn">
 							<div class="btn-group">
 								<a href="{{ url('/contentsEditor/'.urlencode($project->project_code).'/'.urlencode($branch_name).'?page_path='.$page_path) }}" class="btn px2-btn px2-btn--primary px2-btn--lg btn--edit" style="padding-left: 5em; padding-right: 5em; font: inherit;" target="_blank">{{ __('Edit')}}</a>
-								<a href="{{ url('https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN').$page_path) }}" class="btn px2-btn px2-btn--lg btn--preview" target="_blank" style="font: inherit;">ブラウザでプレビュー</a>
+								<a href="{{ url($preview_url) }}" class="btn px2-btn px2-btn--lg btn--preview" target="_blank" style="font: inherit;">ブラウザでプレビュー</a>
 								<!-- <button type="button" class="btn px2-btn px2-btn--lg btn--resources">リソース</button> -->
 								<button type="button" class="btn px2-btn px2-btn--lg dropdown-toggle" data-toggle="dropdown">
 									<span class="caret"></span>
@@ -152,7 +152,7 @@
 							});
 						}, false);
 						</script>
-						<iframe id="ifrm" src="{{ url('https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN').$page_path) }}"></iframe>
+						<iframe id="ifrm" src="{{ url($preview_url) }}"></iframe>
 					</div>
 				</div>
 			</div>

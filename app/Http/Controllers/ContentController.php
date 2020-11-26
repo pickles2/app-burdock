@@ -20,7 +20,8 @@ class ContentController extends Controller
 
 	public function index(Request $request, Project $project, $branch_name)
 	{
-		//
+		$fs = new \tomk79\filesystem();
+
 		$page_path = $request->page_path;
 		if( !strlen($page_path) ){
 			$page_path = '';
@@ -47,6 +48,14 @@ class ContentController extends Controller
 		}
 		$page_path = $current->page_info->path;
 
+		$preview_url = 'https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN');
+		$tmp_preview_path = $page_path;
+		if( property_exists( $current, 'config' ) && property_exists( $current->config, 'path_controot' ) ){
+			if( strlen( $current->config->path_controot ) ){
+				$tmp_preview_path = $fs->get_realpath($current->config->path_controot.$page_path);
+			}
+		}
+		$preview_url .= $tmp_preview_path;
 
 		$editor_type = px2query(
 			$project->project_code,
@@ -62,6 +71,7 @@ class ContentController extends Controller
 				'branch_name' => $branch_name,
 				'page_id' => $page_id,
 				'page_path' => $page_path,
+				'preview_url' => $preview_url,
 			],
 			compact('current', 'editor_type')
 		);
