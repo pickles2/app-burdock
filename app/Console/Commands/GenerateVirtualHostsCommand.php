@@ -88,10 +88,11 @@ class GenerateVirtualHostsCommand extends Command
 		$current = 0;
 
 		foreach ($projects as $project) {
+			$current ++;
 			$this->line( '' );
 			$this->info( $project->project_name );
 			$this->line( ' ('.$project->id.' - '.$project->project_code.')' );
-			$this->line( ' '.$count.'/'.$count );
+			$this->line( ' '.$current.'/'.$count );
 
 			$result = $this->execute_project_task( $project );
 
