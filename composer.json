@@ -75,6 +75,10 @@
         "start-echo-server": [
             "redis-server --daemonize yes",
             "pm2 start laravel-echo-server-pm2.json"
+        ],
+        "stop-echo-server": [
+            "pm2 stop laravel-echo-server-pm2.json",
+            "redis-cli shutdown"
         ]
     },
     "config": {
