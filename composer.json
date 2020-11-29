@@ -71,6 +71,10 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover"
+        ],
+        "start-echo-server": [
+            "redis-server --daemonize yes",
+            "pm2 start laravel-echo-server-pm2.json"
         ]
     },
     "config": {
