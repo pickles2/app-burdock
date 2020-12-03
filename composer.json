@@ -39,8 +39,7 @@
             "app/helpers/git.php",
             "app/helpers/composer.php",
 			"app/helpers/px2query.php",
-			"app/helpers/get_px_execute_path.php",
-			"app/helpers/get_path_homedir.php"
+			"app/helpers/get_px_execute_path.php"
         ],
         "classmap": [
             "database/seeds",

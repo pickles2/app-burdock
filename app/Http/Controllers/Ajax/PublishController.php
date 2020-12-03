@@ -28,9 +28,17 @@ class PublishController extends Controller
 		$fs = new \tomk79\filesystem;
 		$project_name = $project->project_code;
 		$project_path = get_project_workingtree_dir($project_name, $branch_name);
-		$publish_log_file = $project_path.'/'.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/publish_log.csv';
-		$alert_log_file = $project_path.'/'.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/alert_log.csv';
-		$applock_file = $project_path.'/'.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/applock.txt';
+
+		$bd_object = px2query(
+			$project->project_code,
+			$branch_name,
+			'/?PX=px2dthelper.get.all'
+		);
+		$bd_object = json_decode($bd_object);
+
+		$publish_log_file = $bd_object->realpath_homedir.'_sys/ram/publish/publish_log.csv';
+		$alert_log_file = $bd_object->realpath_homedir.'_sys/ram/publish/alert_log.csv';
+		$applock_file = $bd_object->realpath_homedir.'_sys/ram/publish/applock.txt';
 
 		if(\File::exists($publish_log_file)) {
 			$exists_publish_log = true;
@@ -244,8 +252,15 @@ class PublishController extends Controller
 		$kill_info = exec('kill -USR1 '.$request->process);
 		chdir($path_current_dir); // 元いたディレクトリへ戻る
 
+		$bd_object = px2query(
+			$project->project_code,
+			$branch_name,
+			'/?PX=px2dthelper.get.all'
+		);
+		$bd_object = json_decode($bd_object);
+
 		// applock.txtを削除
-		$applock_file = $project_path.'/'.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/applock.txt';
+		$applock_file = $bd_object->realpath_homedir.'_sys/ram/publish/applock.txt';
 		\File::delete($applock_file);
 
 		// 削除の結果をテキストで返す
