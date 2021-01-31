@@ -29,10 +29,6 @@ class PublishController extends Controller
 
 		$fs = new \tomk79\filesystem;
 		$project_name = $project->project_code;
-		$project_path = get_project_workingtree_dir($project_name, $branch_name);
-		$publish_log_file = $project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/publish_log.csv';
-		$alert_log_file = $project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/alert_log.csv';
-		$applock_file = $project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/applock.txt';
 
 		$bd_object = px2query(
 			$project->project_code,
@@ -40,6 +36,11 @@ class PublishController extends Controller
 			'/?PX=px2dthelper.get.all'
 		);
 		$bd_object = json_decode($bd_object);
+
+		$publish_log_file = $bd_object->realpath_homedir.'_sys/ram/publish/publish_log.csv';
+		$alert_log_file = $bd_object->realpath_homedir.'_sys/ram/publish/alert_log.csv';
+		$applock_file = $bd_object->realpath_homedir.'_sys/ram/publish/applock.txt';
+
 		$publish_patterns = $bd_object->config->plugins->px2dt->publish_patterns;
 
 		if(\File::exists($publish_log_file)) {
@@ -106,15 +107,22 @@ class PublishController extends Controller
 		return redirect(
 			'publish/'.urlencode($project->project_code).'/'.urlencode($branch_name)
 		)->with(
-			'my_status', __('Publish is complete.')
+			'bd_flash_message', __('Publish is complete.')
 		);
 	}
 
 	public function deleteApplock(Request $request, Project $project, $branch_name)
 	{
 		$project_code = $project->project_code;
-		$project_path = get_project_workingtree_dir($project_code, $branch_name);
-		$applock_file = $project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/applock.txt';
+
+		$bd_object = px2query(
+			$project->project_code,
+			$branch_name,
+			'/?PX=px2dthelper.get.all'
+		);
+		$bd_object = json_decode($bd_object);
+
+		$applock_file = $bd_object->realpath_homedir.'_sys/ram/publish/applock.txt';
 		\File::delete($applock_file);
 
 		if(\File::exists($applock_file)) {
@@ -126,22 +134,22 @@ class PublishController extends Controller
 		return redirect(
 			'publish/'.urlencode($project->project_code).'/'.urlencode($branch_name)
 		)->with(
-			'my_status', __($message)
+			'bd_flash_message', __($message)
 		);
 	}
 
 	public function publishFileDownload(Request $request, Project $project, $branch_name)
 	{
-		$current = px2query(
+		$bd_object = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
 		);
-		$current = json_decode($current);
+		$bd_object = json_decode($bd_object);
 
 		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
-		$publish_dir_path = $project_path.$current->config->path_publish_dir;
-		// dd($project_path.$current->config->path_publish_dir.'publish.zip');
+		$publish_dir_path = $project_path.$bd_object->config->path_publish_dir;
+
 		if(\File::exists($publish_dir_path.'publish.zip')) {
 			\File::delete($publish_dir_path.'publish.zip');
 		}
@@ -153,15 +161,14 @@ class PublishController extends Controller
 
 	public function publishReportDownload(Request $request, Project $project, $branch_name)
 	{
-		$current = px2query(
+		$bd_object = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
 		);
-		$current = json_decode($current);
+		$bd_object = json_decode($bd_object);
 
-		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
-		$publish_reports_path = $project_path.get_path_homedir($project->project_code, $branch_name).'_sys/ram/publish/';
+		$publish_reports_path = $bd_object->realpath_homedir.'_sys/ram/publish/';
 		if(\File::exists($publish_reports_path.'publish_reports.zip')) {
 			\File::delete($publish_reports_path.'publish_reports.zip');
 		}

@@ -3,9 +3,9 @@
 		<div class="contents">
 			<div class="cont_info"></div>
 			<div class="cont_maintask_ui">
-				<div class="center" style="margin-top: 70px;">
+				<div class="px2-text-align-center" style="margin-top: 70px;">
 					<h2>プロジェクトに Pickles 2 をセットアップします</h2>
-					<div class="cont_setup_options left">
+					<div class="cont_setup_options px2-text-align-left">
 						<h3>セットアップオプション</h3>
 						<ul>
 							<li>
@@ -93,7 +93,7 @@
 					<div v-else class="cont_scene" id="cont_before_publish-progress">
 						<div class="cont_canvas">
 							<div class="unit cont_progress">
-								<div class="center">
+								<div class="px2-text-align-center">
 									<p>クローンしています。</p>
 									<p>そのまましばらくお待ちください...</p>
 									<div>
@@ -109,20 +109,20 @@
 							</div>
 						</div>
 					</div>
-					<div class="dialog-buttons center" v-bind:class="[isSetupDuringButton ? 'show' : 'hidden']">
+					<div class="dialog-buttons px2-text-align-center" v-bind:class="[isSetupDuringButton ? 'show' : 'hidden']">
 						<button disabled="disabled" class="px2-btn">セットアップしています...</button>
 					</div>
-					<div class="dialog-buttons center" v-bind:class="[isSetupAfterButton ? 'show' : 'hidden']">
+					<div class="dialog-buttons px2-text-align-center" v-bind:class="[isSetupAfterButton ? 'show' : 'hidden']">
 						<button class="px2-btn px2-btn--primary" v-on:click="next">次へ</button>
 					</div>
-					<div class="dialog-buttons center" v-bind:class="[isSetupRestartButton ? 'show' : 'hidden']">
+					<div class="dialog-buttons px2-text-align-center" v-bind:class="[isSetupRestartButton ? 'show' : 'hidden']">
 						<button class="px2-btn px2-btn--danger" v-on:click="setup(1)">再セットアップ</button>
 					</div>
 				</div>
 				<div class="dialog_box" style="width: 80%; margin: 3em auto;" v-bind:class="classOption">
 					<h1>Pickles 2 プロジェクトのセットアップ</h1>
 					<div style="margin-bottom: 1em;">
-						<table class="form_elements" style="width:100%;">
+						<table class="px2-table" style="width:100%;">
 							<colgroup>
 								<col width="30%">
 								<col width="70%">
@@ -136,12 +136,12 @@
 										<p>この値は、再利用可能なテンプレートとして公開する場合は必要になります。 そうでない場合(一般的なウェブ制作プロジェクト)では、空欄のままでよいでしょう。</p>
 										<p>vendorName</p>
 										<p class="text-danger">{{ errorVendorName }}</p>
-										<p class="">
+										<p>
 											<input type="text" class="form-control" v-model="vendorName" placeholder="pickles2">
 										</p>
 										<p>projectName</p>
 										<p class="text-danger">{{ errorProjectName }}</p>
-										<p class="">
+										<p>
 											<input type="text" class="form-control" v-model="projectName" placeholder="preset-get-start-pickles2">
 										</p>
 									</td>
@@ -161,17 +161,17 @@
 												<p>コミットするGitリポジトリの情報を入力してください。</p>
 												<p>Repository <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorRepository }}{{ repositoryConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="text" class="form-control" v-model="repository" placeholder="https://github.com/pickles2/preset-get-start-pickles2.git">
 												</p>
 												<p>UserName <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorUserName }}{{ userNameConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="text" class="form-control" v-model="userName" placeholder="リモートリポジトリのユーザー名">
 												</p>
 												<p>Password <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorPassword }}{{ passwordConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="password" class="form-control" v-model="password" placeholder="リモートリポジトリのパスワード">
 												</p>
 											</div>
@@ -191,17 +191,17 @@
 												<p>クローン元のGitリポジトリの情報を入力してください。</p>
 												<p>Original Repository <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorRepository }}{{ repositoryConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="text" class="form-control" v-model="cloneRepository" placeholder="https://github.com/pickles2/preset-get-start-pickles2.git">
 												</p>
 												<p>Original UserName <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorUserName }}{{ userNameConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="text" class="form-control" v-model="cloneUserName" placeholder="リモートリポジトリのユーザー名">
 												</p>
 												<p>Original Password <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorPassword }}{{ passwordConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="password" class="form-control" v-model="clonePassword" placeholder="リモートリポジトリのパスワード">
 												</p>
 											</div>
@@ -209,17 +209,17 @@
 												<p>新規作成するGitリポジトリの情報を入力してください。</p>
 												<p>New Repository <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorRepository }}{{ repositoryConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="text" class="form-control" v-model="cloneNewRepository" placeholder="https://github.com/pickles2/preset-get-start-pickles2.git">
 												</p>
 												<p>New UserName <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorUserName }}{{ userNameConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="text" class="form-control" v-model="cloneNewUserName" placeholder="リモートリポジトリのユーザー名">
 												</p>
 												<p>New Password <span class="must">Required</span></p>
 												<p class="text-danger">{{ errorPassword }}{{ passwordConfirm }}</p>
-												<p class="">
+												<p>
 													<input type="password" class="form-control" v-model="cloneNewPassword" placeholder="リモートリポジトリのパスワード">
 												</p>
 											</div>
@@ -229,10 +229,10 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="dialog-buttons center" v-bind:class="classSetupEnable">
+					<div class="dialog-buttons px2-text-align-center" v-bind:class="classSetupEnable">
 						<button class="px2-btn--primary px2-btn" v-on:click="option">OK</button>
 					</div>
-					<div class="dialog-buttons center" v-bind:class="classSetupDisable">
+					<div class="dialog-buttons px2-text-align-center" v-bind:class="classSetupDisable">
 						<button disabled="disabled" class="px2-btn">OK</button>
 					</div>
 				</div>
@@ -243,7 +243,7 @@
 					<div class="cont_scene" id="cont_before_publish-progress">
 						<div class="cont_canvas">
 							<div class="unit cont_progress">
-								<div class="center">
+								<div class="px2-text-align-center">
 									<p>セットアップを完了しています。</p>
 									<p>そのまましばらくお待ちください...</p>
 									<div>
@@ -291,7 +291,7 @@ export default {
 			info: '',
 			setup_status: 1,
 			message: '',
-			stderr: '',
+			stdout: '',
 			isSetupBefore: true,
 			cloneRepository: '',
 			cloneRepositoryConfirm: '',
@@ -379,19 +379,20 @@ export default {
 			// Ajax\SetupController@setupAjaxの返り値
 			window.Echo.channel('setup-event').listen('SetupEvent', (e) => {
 				//
+				console.log(e);
 				this.isCheckedOption === e.checked_option;
 				this.i++;
 				this.isSetupBefore = false;
 				this.isSetupDuring = true;
-				if(e.stderr) {
-					this.message = this.message+e.stderr;
-					if(/Generating autoload files/.test(e.stderr)) {
-						this.stderr = e.stderr;
+				if(e.stdout) {
+					this.message = this.message+e.stdout;
+					if(/Generating autoload files/.test(e.stdout)) {
+						this.stdout = e.stdout;
 					}
 				}
 				if(e.std_array[0] === 'Receiving' && e.std_array[1] === 'objects:') {
-					if(/Receiving objects: 100%/.test(e.stderr)) {
-						this.stderr = e.stderr;
+					if(/Receiving objects: 100%/.test(e.stdout)) {
+						this.stdout = e.stdout;
 						this.fraction = e.denominator + ' / ' + e.denominator;
 						this.rate = 100;
 					} else if(e.rate !== '') {
@@ -399,29 +400,29 @@ export default {
 						this.rate = e.rate;
 					}
 				}
-				if(/remote: Not Found/.test(e.stderr)) {
+				if(/remote: Not Found/.test(e.stdout)) {
 					// リモートリポジトリが存在しない場合
 					this.errorCloneRepository = 1;
 					this.setupStatus = 1;
-				} else if(/rejected/.test(e.stderr)) {
+				} else if(/rejected/.test(e.stdout)) {
 					// リモートリポジトリから拒否された場合
 					this.errorCloneRepository = 2;
 					this.setupStatus = 1;
-				} else if(/unable to access/.test(e.stderr)) {
+				} else if(/unable to access/.test(e.stdout)) {
 					// リモートリポジトリにアクセスできない場合
 					this.errorCloneRepository = 3;
 					this.setupStatus = 1;
-				} else if(/could not read Username/.test(e.stderr)) {
+				} else if(/could not read Username/.test(e.stdout)) {
 					// ユーザー名が見つからないと言われた場合
 					this.errorCloneUserName = 1;
 					this.errorClonePassword = 1;
 					this.setupStatus = 1;
-				} else if(/Authentication failed/.test(e.stderr)) {
+				} else if(/Authentication failed/.test(e.stdout)) {
 					// 認証に失敗した場合
 					this.errorCloneUserName = 2;
 					this.errorClonePassword = 2;
 					this.setupStatus = 1;
-				} else if (/early EOF/.test(e.stderr)) {
+				} else if (/early EOF/.test(e.stdout)) {
 					// 早期EOFエラーが発生した場合
 					this.errorCloneRepository = 4;
 					this.setupStatus = 1;
@@ -433,7 +434,7 @@ export default {
 				this.i++;
 
 				if(e.std_array[0] === 'Writing' && e.std_array[1] === 'objects:') {
-					if(/Writing objects: 100%/.test(e.stderr)) {
+					if(/Writing objects: 100%/.test(e.stdout)) {
 						this.fraction = e.denominator + ' / ' + e.denominator;
 						this.rate = 100;
 					} else if(e.rate !== '') {
@@ -442,26 +443,26 @@ export default {
 					}
 				}
 
-				if(/remote: Repository not found/.test(e.stderr)) {
+				if(/remote: Repository not found/.test(e.stdout)) {
 					// リモートリポジトリが存在しない場合
 					this.errorRepository = 1;
 					this.setupStatus = 3;
-				} else if(/rejected/.test(e.stderr)) {
+				} else if(/rejected/.test(e.stdout)) {
 					// リモートリポジトリから拒否された場合
 					this.errorRepository = 2;
 					this.setupStatus = 3;
-				} else if(/unable to access/.test(e.stderr)) {
+				} else if(/unable to access/.test(e.stdout)) {
 					// リモートリポジトリにアクセスできない場合
 					this.errorRepository = 3;
 					this.setupStatus = 3;
-				} else if(/Invalid username or password/.test(e.stderr)) {
+				} else if(/Invalid username or password/.test(e.stdout)) {
 					// ユーザー名またはパスワードが違う場合
 					this.errorUserName = 1;
 					this.errorPassword = 1;
 					this.setupStatus = 3;
-				} else if(/new branch/.test(e.stderr)) {
-					// location.href = '/projects/'+this.projectCode+'/'+this.branchName;
-				} else if(/could not read Username/.test(e.stderr)) {
+				} else if(/new branch/.test(e.stdout)) {
+					// location.href = '/home/'+this.projectCode+'/'+this.branchName;
+				} else if(/could not read Username/.test(e.stdout)) {
 					// ユーザー名が見つからないと言われた場合
 					this.errorUserName = 1;
 					this.errorPassword = 1;
@@ -492,12 +493,12 @@ export default {
 			// AjaxでAjax\SetupController@setupAjaxにpost処理
 			axios.post('/setup/'+this.projectCode+'/'+this.branchName+'/setupAjax', data).then(res => {
 				//
-				if(/Generating autoload files/.test(this.stderr) && res.data.info === true) {
+				if(/Generating autoload files/.test(this.stdout) && res.data.info === true) {
 					this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
 					this.isSetupDuringButton = false;
 					this.isSetupAfterButton = true;
 					// this.next();
-				} else if(/Receiving objects: 100%/.test(this.stderr) && res.data.info === true) {
+				} else if(/Receiving objects: 100%/.test(this.stdout) && res.data.info === true) {
 					this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
 					this.isSetupDuringButton = false;
 					this.isSetupAfterButton = true;
@@ -541,15 +542,26 @@ export default {
 			// AjaxでAjax\SetupController@setupOptionAjaxにpost処理
 			axios.post('/setup/'+this.projectCode+'/'+this.branchName+'/setupOptionAjax', data).then(res => {
 				if(this.rate === 100 && res.data.info === true) {
-					location.href = '/projects/'+this.projectCode+'/'+this.branchName;
+					location.href = '/home/'+this.projectCode+'/'+this.branchName;
 				} else if(res.data.checked_option === 'pickles2' && res.data.checked_init === false && res.data.info === true) {
 					this.rate = 100;
 					this.fraction = '100 / 100';
-					location.href = '/projects/'+this.projectCode+'/'+this.branchName;
+					location.href = '/home/'+this.projectCode+'/'+this.branchName;
 				} else if(res.data.checked_option === 'git' && res.data.checked_repository === 'none' && res.data.info === true) {
 					this.rate = 100;
 					this.fraction = '100 / 100';
-					location.href = '/projects/'+this.projectCode+'/'+this.branchName;
+					location.href = '/home/'+this.projectCode+'/'+this.branchName;
+				} else if(res.data.checked_option === 'git' && res.data.checked_repository === 'original' && res.data.info === true) {
+					this.rate = 100;
+					this.fraction = '100 / 100';
+					location.href = '/home/'+this.projectCode+'/'+this.branchName;
+				} else {
+					console.error('Burdock: Unknown Pattern');
+					this.rate = 100;
+					this.fraction = 'Unknown Pattern';
+					setTimeout(function(){
+						location.href = '/home/'+this.projectCode+'/'+this.branchName;
+					}, 5000);
 				}
 			})
 		},

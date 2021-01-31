@@ -69,11 +69,19 @@ class MypageController extends Controller
         $user = Auth::user();   #ログインユーザー情報を取得します。
         // name欄だけを検査するため、元のStoreUserクラス内のバリデーション・ルールからname欄のルールだけを取り出す。
         $request->validate([
-            'name' => (new StoreUser())->rules()['name']
+            'name' => (new StoreUser())->rules()['name'],
+            'email' => (new StoreUser())->rules()['email'], // TODO: 本来はメールアドレスの存在確認プロセスを踏むべき。
         ]);
         $user->name = $request->name;
+        $user->email = $request->email; // TODO: 本来はメールアドレスの存在確認プロセスを踏むべき。
+        if( strlen($request->password) ){
+            $request->validate([
+                'password' => (new StoreUser())->rules()['password'],
+            ]);
+            $user->password = bcrypt($request->password);
+        }
         $user->save();
-        return redirect('mypage')->with('my_status', __('Updated a user.'));
+        return redirect('mypage')->with('bd_flash_message', __('Updated a user.'));
     }
 
     /**
@@ -88,6 +96,6 @@ class MypageController extends Controller
         $user = Auth::user();   #ログインユーザー情報を取得します。
         $this->authorize('edit', $user);
         $user->delete();
-        return redirect('/')->with('my_status', __('Deleted a user.'));
+        return redirect('/')->with('bd_flash_message', __('Deleted a user.'));
     }
 }

@@ -5,7 +5,7 @@
 @section('content')
 <div class="container">
 	<h1>{{ $title }}</h1>
-	<form action="{{ url('projects/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}" method="post">
+	<form action="{{ url('projects/'.urlencode($project->project_code).'/edit') }}" method="post">
 		@csrf
 		@method('PUT')
 		<div class="form-group">

@@ -1,0 +1,17 @@
+.theme-main{
+    .container{
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        .contents{
+            flex-grow: 100;
+            overflow: auto;
+
+            display: flex;
+            flex-direction: column;
+            #cont-finder{
+                height: 100%;
+            }
+        }
+    }
+}

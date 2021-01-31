@@ -37,7 +37,6 @@ class FilesAndFoldersController extends Controller
 		);
 	}
 
-
 	/**
 	 * Show the application dashboard.
 	 *
@@ -91,11 +90,21 @@ class FilesAndFoldersController extends Controller
 		$fs = new \tomk79\filesystem();
 		$realpath_basedir = get_project_workingtree_dir($project->project_code, $branch_name);
 		$rtn = array();
-		$filename = $fs->get_realpath('/'.$request->filename);
-		if( !strlen($filename) ){
+		if( !strlen($request->filename) ){
 			return json_encode(false);
 		}
-		$realpath_filename = $realpath_basedir.$filename;
+		$filename = $fs->normalize_path( $fs->get_realpath('/'.$request->filename) );
+		if( !strlen($filename) || $filename == '/' ){
+			return json_encode(false);
+		}
+		if(
+			$filename == '/.git' || preg_match( '/^\/\.git(?:\/.*)?$/', $filename ) ||
+			$filename == '/vendor' || preg_match( '/^\/vendor(?:\/.*)?$/', $filename ) ||
+			$filename == '/node_modules' || preg_match( '/^\/node_modules(?:\/.*)?$/', $filename )
+		){
+			return json_encode(false);
+		}
+		$realpath_filename = $fs->normalize_path( $fs->get_realpath( $realpath_basedir.$filename) );
 
 
 		if( $request->method == 'read' ){
@@ -137,6 +146,7 @@ class FilesAndFoldersController extends Controller
 				$branch_name,
 				( strlen($filename) ? $filename : '/' ).'?PX='.urlencode($request->px_command)
 			);
+			$rtn['result'] = json_decode($rtn['result']);
 
 		}elseif( $request->method == 'initialize_data_dir' ){
 			$json = px2query(
@@ -158,5 +168,84 @@ class FilesAndFoldersController extends Controller
 		return json_encode($rtn);
 	}
 
+	/**
+	 * ファイルのパスを、Pickles 2 の外部パス(path)に変換する。
+	 *
+	 * Pickles 2 のパスは、 document_root と cont_root を含まないが、
+	 * ファイルのパスはこれを一部含んでいる可能性がある。
+	 * これを確認し、必要に応じて除いたパスを返却する。
+	 */
+	public function apiParsePx2FilePath(Request $request, Project $project, $branch_name){
+		$fs = new \tomk79\filesystem();
+		$rtn = array();
+		$pxExternalPath = $request->get('path');
+		$pxExternalPath = preg_replace( '/^\/*/', '', $pxExternalPath );
+		$realpath_basedir = get_project_workingtree_dir($project->project_code, $branch_name);
+		$realpath_file = $fs->normalize_path($fs->get_realpath($realpath_basedir.$pxExternalPath));
+
+		$is_file = is_file($realpath_file);
+
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
+		$project_branch = $burdockProjectManager->project($project->project_code)->branch($branch_name, 'preview');
+
+		$pageInfoAll = $project_branch->query(
+			'/?PX=px2dthelper.get.all',
+			array(
+				'output' => 'json'
+			)
+		);
+		// $rtn['pageInfoAll'] = $pageInfoAll;
+
+
+		// --------------------------------------
+		// 外部パスを求める
+		if( preg_match( '/^'.preg_quote($pageInfoAll->realpath_docroot, '/').'/', $realpath_file) ){
+			$pxExternalPath = preg_replace('/^'.preg_quote($pageInfoAll->realpath_docroot, '/').'/', '/', $realpath_file);
+			$pxExternalPath = preg_replace('/\/+/', '/', $pxExternalPath);
+			if( preg_match( '/^'.preg_quote($pageInfoAll->path_controot, '/').'/', $pxExternalPath) ){
+				$pxExternalPath = preg_replace('/^'.preg_quote($pageInfoAll->path_controot, '/').'/', '/', $pxExternalPath);
+				$pxExternalPath = preg_replace('/\/+/', '/', $pxExternalPath);
+			}else{
+				$pxExternalPath = false;
+			}
+		}else{
+			$pxExternalPath = false;
+		}
+		$rtn['pxExternalPath'] = $pxExternalPath;
+
+
+		// --------------------------------------
+		// パスの種類を求める
+		// theme_collection, home_dir, contents, or unknown
+		$path_type = 'unknown';
+		$realpath_target = $fs->normalize_path($realpath_file);
+		$realpath_homedir = $fs->normalize_path($pageInfoAll->realpath_homedir);
+		$realpath_theme_collection_dir = $fs->normalize_path($pageInfoAll->realpath_theme_collection_dir);
+		$realpath_docroot = $fs->normalize_path($pageInfoAll->realpath_docroot);
+		if( preg_match('/^'.preg_quote($realpath_theme_collection_dir, '/').'/', $realpath_target) ){
+			$path_type = 'theme_collection';
+		}elseif( preg_match('/^'.preg_quote($realpath_homedir, '/').'/', $realpath_target) ){
+			$path_type = 'home_dir';
+		}elseif( preg_match('/^'.preg_quote($realpath_docroot, '/').'/', $realpath_target)  && $pxExternalPath ){
+			$path_type = 'contents';
+		}
+		$rtn['pathType'] = $path_type;
+
+		$rtn['pathFiles'] = false;
+		if( $rtn['pxExternalPath'] && $rtn['pathType'] == 'contents' ){
+			$pageInfoAll = $project_branch->query(
+				$rtn['pxExternalPath'].'?PX=px2dthelper.get.all',
+				array(
+					'output' => 'json'
+				)
+			);
+			$realpath_files = $pageInfoAll->realpath_files;
+			$realpath_basedir = get_project_workingtree_dir($project->project_code, $branch_name);
+			$path_files = preg_replace('/^'.preg_quote($realpath_basedir, '/').'/', '/', $realpath_files);
+			$rtn['pathFiles'] = $path_files;
+		}
+
+		return json_encode($rtn);
+	}
 
 }

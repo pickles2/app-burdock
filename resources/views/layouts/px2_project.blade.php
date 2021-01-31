@@ -1,3 +1,8 @@
+<?php
+if( !isset($branch_name) || !strlen($branch_name) ){
+	$branch_name = 'master';
+}
+?>
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -11,49 +16,56 @@
 
 	<meta name="keywords" content="">
 	<meta name="description" content="">
+
+	@if (isset($bootstrap) && $bootstrap == 4)
+	<!-- jQuery -->
+	<script src="/common/scripts/jquery-3.5.1.min.js" type="text/javascript"></script>
+	<!-- Bootstrap4 -->
+	<link rel="stylesheet" href="/common/bootstrap4/css/bootstrap.css">
+	<script src="/common/bootstrap4/js/bootstrap.min.js"></script>
+	@else
 	<!-- jQuery -->
 	<script src="/common/scripts/jquery-2.2.4.min.js" type="text/javascript"></script>
-
-    @if (isset($bootstrap) && $bootstrap == 4)
-	<!-- Bootstrap4 -->
-    <link rel="stylesheet" href="/common/bootstrap4/css/bootstrap.css">
-	<script src="/common/bootstrap4/js/bootstrap.min.js"></script>
-    @else
 	<!-- Bootstrap -->
-    <link rel="stylesheet" href="/common/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="/common/bootstrap/css/bootstrap.css">
 	<script src="/common/bootstrap/js/bootstrap.min.js"></script>
-    @endif
+	@endif
 
-	<!-- normalize & FESS -->
+	<!-- normalize -->
 	<link rel="stylesheet" href="/common/styles/contents.css" type="text/css">
-	<link rel="stylesheet" href="/common/styles/fess.css" type="text/css">
 	<!-- Pickles 2 Style -->
 	<link rel="stylesheet" href="/common/px2style/dist/styles.css" charset="utf-8">
 	<script src="/common/px2style/dist/scripts.js" charset="utf-8"></script>
+	<!-- Common Resources -->
+	<link rel="stylesheet" href="/common/styles/common.css" type="text/css" />
+	<script src="/common/scripts/common.js" charset="utf-8"></script>
 	<!-- Local Resources -->
-	<link rel="stylesheet" href="/common/index_files/style.css" type="text/css" data-original-title="" title="">
-	<link rel="stylesheet" href="/common/index_files/styles.css" type="text/css" data-original-title="" title="">
+	<link rel="stylesheet" href="/common/index_files/style.css" type="text/css" />
+	<link rel="stylesheet" href="/common/index_files/styles.css" type="text/css" />
+
+	<!-- App Resources -->
+	<link rel="stylesheet" href="{{ asset('/css/app.css') }}" type="text/css" />
+
 	{{-- CSS --}}
 	@yield('stylesheet')
-	@yield('javascript')
 </head>
 <body>
-	<div class="theme_wrap">
+	<div class="theme-wrap">
 
 		<header class="px2-header">
 			<div class="px2-header__inner">
 				<div class="px2-header__px2logo">
-					<a href="{{ url('/') }}"><img src="/common/images/logo.svg" alt="Pickles 2" /></a>
+					<a href="{{ url('/') }}"><img src="/common/images/logo.svg" alt="{{ env('APP_NAME') }}" /></a>
 				</div>
 				<div class="px2-header__block">
 					<div class="px2-header__id">
 						@guest
-							<span><a class="app_name" href="{{ url('/') }}">{{ config('app.name') }}</a></span>
+							<span></span>
 						@else
-							@if(! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
-								<span>{{ 'Project_'.$project->project_name }}</span>
+							@if( isset($project) && ! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
+								<span>Project {{ $project->project_name }}</span>
 							@else
-								<span><a class="app_name" href="{{ url('/') }}">{{ config('app.name') }}</a></span>
+								<span></span>
 							@endif
 						@endguest
 					</div>
@@ -75,12 +87,12 @@
 									</ul>
 								</li>
 							@else
-								@if(! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
-									<li><a href="{{ url('projects/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="home">ホーム</a></li>
+								@if( isset($project) && ! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
+									<li><a href="{{ url('home/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="home">ホーム</a></li>
 									<li><a href="{{ url('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="sitemaps">サイトマップ</a></li>
 									<li><a href="{{ url('themes/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="themes">テーマ</a></li>
-									<li><a href="{{ url('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/index.html?page_path='.'%2Findex.html')}}" data-name="pages">コンテンツ</a></li>
-									<li><a href="{{ url('publish/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}" data-name="publish">パブリッシュ</a></li>
+									<li><a href="{{ url('contents/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="contents">コンテンツ</a></li>
+									<li><a href="{{ url('publish/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="publish">パブリッシュ</a></li>
 								@endif
 
 								{{-- 認証関連のリンク --}}
@@ -117,11 +129,18 @@
 						<li><a href="{{ url('/') }}">ダッシュボード</a></li>
 						@guest
 						@else
-							@if(! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
-								<li><a href="{{ url('composer/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="composer">Composer</a></li>
-								<li><a href="{{ url('git/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="git">Git</a></li>
+							@if( isset($project) && ! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
+								<li><a href="{{ url('projects/'.urlencode($project->project_code).'/edit') }}" data-name="config">プロジェクト概要設定</a></li>
+								<li><a href="{{ url('composer/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="composer">Composerを操作する</a></li>
+								<li><a href="{{ url('git/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="git">Gitを操作する</a></li>
+								<li><a href="javascript:;">ツール</a>
+									<ul>
+										<li><a href="{{ url('search/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="search">検索</a></li>
+									</ul>
+								</li>
 								<li><a href="{{ url('staging/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="staging">ステージング管理</a></li>
 								<li><a href="{{ url('delivery/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="delivery">配信管理</a></li>
+								<li><a href="{{ url('clearcache/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="clearcache">キャッシュを消去する</a></li>
 								<li><a href="{{ url('files-and-folders/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="files-and-folders">ファイルとフォルダ</a></li>
 							@endif
 						<li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
@@ -135,14 +154,14 @@
 		</header>
 
 		{{-- フラッシュ・メッセージ --}}
-		@if (session('my_status'))
+		@if (session('bd_flash_message'))
 			@component('components.flash_message')
 			@endcomponent
 		@endif
 		{{-- Ajax用のフラッシュ・メッセージ --}}
 		@component('components.ajax_flash_message')
 		@endcomponent
-		<div>
+		<div class="theme-main">
 			@yield('content')
 		</div>
 		<footer class="theme-footer">
@@ -161,19 +180,25 @@
 		<script>
 		window.addEventListener('load', function(){
 			var current = '';
-			@if(! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
-				@if (Request::is('projects/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'home'; @endif
-				@if (Request::is('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'sitemaps'; @endif
-				@if (Request::is('themes/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'themes'; @endif
-				@if (Request::is('pages/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/index.html')) current = 'pages'; @endif
-				@if (Request::is('publish/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'publish'; @endif
-				@if (Request::is('staging/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'staging'; @endif
-				@if (Request::is('delivery/'.urlencode($project->project_code).'/'.urlencode($branch_name))) current = 'delivery'; @endif
-			@endif
+			@if (Request::is('home/*')) current = 'home'; @endif
+			@if (Request::is('sitemaps/*')) current = 'sitemaps'; @endif
+			@if (Request::is('themes/*')) current = 'themes'; @endif
+			@if (Request::is('contents/*')) current = 'contents'; @endif
+			@if (Request::is('publish/*')) current = 'publish'; @endif
+			@if (Request::is('projects/*')) current = 'projects'; @endif
+			@if (Request::is('composer/*')) current = 'composer'; @endif
+			@if (Request::is('git/*')) current = 'git'; @endif
+			@if (Request::is('search/*')) current = 'search'; @endif
+			@if (Request::is('staging/*')) current = 'staging'; @endif
+			@if (Request::is('delivery/*')) current = 'delivery'; @endif
+			@if (Request::is('files-and-folders/*')) current = 'files-and-folders'; @endif
+			@if (Request::is('system-maintenance') || Request::is('system-maintenance/*')) current = 'system-maintenance'; @endif
+			@if (Request::is('mypage') || Request::is('mypage/*')) current = 'mypage'; @endif
 			px2style.header.init({'current': current});
 		});
 		</script>
 	@endguest
+	<script src="{{ asset('/js/app.js') }}"></script>
 	@yield('script')
 </body>
 </html>

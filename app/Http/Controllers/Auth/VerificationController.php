@@ -53,6 +53,6 @@ class VerificationController extends Controller
             $request->user()->markEmailAsVerified()) {
             event(new Verified($request->user()));
         }
-        return redirect($this->redirectPath())->with('my_status', __('Registration completed.'));
+        return redirect($this->redirectPath())->with('bd_flash_message', __('Registration completed.'));
     }
 }

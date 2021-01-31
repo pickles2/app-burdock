@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\UsersEmailWhiteList;
 
 class StoreUser extends FormRequest
 {
@@ -22,11 +23,18 @@ class StoreUser extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($id = null)
     {
         return [
             'name' => 'required|string|max:191',
-            'email' => 'required|string|email|max:191|unique:users',
+			'email' => [
+				'required',
+				'string',
+				'email',
+				'max:255',
+                new UsersEmailWhiteList,
+			],
+            // 'email' => 'unique:users',
             'password' => 'required|string|min:6|max:191|confirmed',
         ];
     }

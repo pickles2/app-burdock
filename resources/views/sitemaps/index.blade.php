@@ -7,23 +7,25 @@
 <div class="container">
 	<h1>サイトマップ</h1>
 	<div class="contents">
-		<div class="btn-group cont_buttons" role="group">
-			@component('components.btn_sitemap_upload')
-				@slot('controller', 'sitemap')
-				@slot('project_code', $project->project_code)
-				@slot('branch_name', $branch_name)
-				@slot('errors', $errors)
-			@endcomponent
-			{{-- <button class="btn px2-btn">サイトマップをコミットする</button>
-			<button class="btn px2-btn">コミットログ</button> --}}
-			@component('components.btn_sitemap_help')
-				@slot('controller', 'sitemap')
-			@endcomponent
+		<div class="px2-p">
+			<div class="btn-group cont_buttons" role="group">
+				@component('components.btn_sitemap_upload')
+					@slot('controller', 'sitemap')
+					@slot('project_code', $project->project_code)
+					@slot('branch_name', $branch_name)
+					@slot('errors', $errors)
+				@endcomponent
+				{{-- <button class="btn px2-btn">サイトマップをコミットする</button>
+				<button class="btn px2-btn">コミットログ</button> --}}
+				@component('components.btn_sitemap_help')
+					@slot('controller', 'sitemap')
+				@endcomponent
+			</div>
 		</div>
 		<div class="cont_filelist_sitemap" style="height: 630px;">
 			@if(isset($get_files))
-				@foreach($get_files as $file)
 				<ul class="listview">
+				@foreach($get_files as $file)
 					<li>
 						<a href="javascript:;" data-filename="{{ $file['basename'] }}" data-num="sitemap">
 						<h2>{{ $file['basename'] }}</h2>
@@ -51,8 +53,8 @@
 						</ul>
 						</a>
 					</li>
-				</ul>
 				@endforeach
+				</ul>
 			@endif
 		</div>
 	</div>

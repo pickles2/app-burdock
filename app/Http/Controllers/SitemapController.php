@@ -21,6 +21,11 @@ class SitemapController extends Controller
 		$this->middleware('verified');
 	}
 
+
+
+	/**
+	 * サイトマップファイルの一覧画面
+	 */
 	public function index(Request $request, Project $project, $branch_name)
 	{
 		//
@@ -65,6 +70,11 @@ class SitemapController extends Controller
 		);
 	}
 
+
+
+	/**
+	 * アップロードされたサイトマップファイルを保存する
+	 */
 	public function upload(StoreSitemap $request, Project $project, $branch_name)
 	{
 		$current = px2query(
@@ -85,9 +95,14 @@ class SitemapController extends Controller
 			$message = 'Updated a Sitemap.';
 		}
 
-		return redirect('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name))->with('my_status', __($message));
+		return redirect('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name))->with('bd_flash_message', __($message));
 	}
 
+
+
+	/**
+	 * サイトマップファイルをダウンロードする
+	 */
 	public function download(Request $request, Project $project, $branch_name)
 	{
 		//
@@ -118,6 +133,10 @@ class SitemapController extends Controller
 		}
 	}
 
+
+	/**
+	 * サイトマップファイルの削除を実行する
+	 */
 	public function destroy(Request $request, Project $project, $branch_name)
 	{
 		//
@@ -130,12 +149,15 @@ class SitemapController extends Controller
 		);
 		$current = json_decode($current);
 
-		$xlsx_file_name = $request->file_name;
-		$csv_file_name = str_replace('xlsx', 'csv', $xlsx_file_name);
+		$base_file_name = $request->file_name;
+		$base_file_name = preg_replace('/\.[a-zA-Z0-9]+$/', '', $base_file_name);
+		$xlsx_file_name = $base_file_name.'.xlsx';
+		$csv_file_name = $base_file_name.'.csv';
 		$xlsx_file_path = $current->realpath_homedir.'sitemaps/'.$xlsx_file_name;
 		$csv_file_path = $current->realpath_homedir.'sitemaps/'.$csv_file_name;
 
 		\File::delete($xlsx_file_path, $csv_file_path);
+		clearstatcache();
 
 		if(\File::exists($xlsx_file_path) === false && \File::exists($csv_file_path) === false) {
 			$message = $xlsx_file_name.'と'.$csv_file_name.'を削除しました。';
@@ -143,6 +165,6 @@ class SitemapController extends Controller
 			$message = 'サイトマップを削除できませんでした。';
 		}
 
-		return redirect('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name))->with('my_status', __($message));
+		return redirect('sitemaps/'.urlencode($project->project_code).'/'.urlencode($branch_name))->with('bd_flash_message', __($message));
 	}
 }

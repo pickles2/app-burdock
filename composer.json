@@ -1,9 +1,10 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "name": "pickles2/app-burdock",
+    "description": "PHPサーバー+ブラウザ上で動作する Pickles 2 のGUIツール。Pickles Framework 2 に特化した CMSライクなテキストエディタ \"Pickles 2\" のウェブ版です。",
+    "keywords": ["pickles2"],
     "license": "MIT",
     "type": "project",
+    "minimum-stability": "dev",
     "require": {
         "php": "^7.1.3",
         "barryvdh/laravel-debugbar": "^3.2",
@@ -12,13 +13,16 @@
         "fzaninotto/faker": "^1.8",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
-        "pickles2/lib-indigo": "dev-develop",
-        "pickles2/lib-plum": "dev-develop",
-        "pickles2/lib-px2-contents-editor": "^2.0",
+        "pickles2/lib-indigo": "^0.1.4",
+        "pickles2/lib-plum": "^0.2.0",
+        "pickles2/px2agent": "^0.0",
         "pickles2/px2style": "^2.0",
         "predis/predis": "^1.1",
+        "tomk79/burdock-project-manager": "^0.0",
         "tomk79/filesystem": "^1.0",
-        "tomk79/remote-finder": "^0.0.3"
+        "tomk79/remote-finder": "^0.0.5",
+        "tomk79/search-in-directory": "~0.0",
+        "twig/twig": "^2.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
@@ -32,12 +36,10 @@
             "app/helpers/locale_url.php",
             "app/helpers/get_project_dir.php",
             "app/helpers/get_project_workingtree_dir.php",
-            "app/helpers/get_git_remote_default_branch_name.php",
             "app/helpers/git.php",
             "app/helpers/composer.php",
 			"app/helpers/px2query.php",
-			"app/helpers/get_px_execute_path.php",
-			"app/helpers/get_path_homedir.php"
+			"app/helpers/get_px_execute_path.php"
         ],
         "classmap": [
             "database/seeds",
@@ -68,12 +70,19 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover"
+        ],
+        "start-echo-server": [
+            "redis-server --daemonize yes",
+            "pm2 start laravel-echo-server-pm2.json"
+        ],
+        "stop-echo-server": [
+            "pm2 stop laravel-echo-server-pm2.json",
+            "redis-cli shutdown"
         ]
     },
     "config": {
         "preferred-install": "dist",
         "sort-packages": true,
         "optimize-autoloader": true
-    },
-    "minimum-stability": "dev"
+    }
 }

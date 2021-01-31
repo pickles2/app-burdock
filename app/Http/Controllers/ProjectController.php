@@ -13,31 +13,9 @@ class ProjectController extends Controller
 	 */
 	public function __construct()
 	{
-		// ログイン・登録完了してなくても閲覧だけはできるようにexcept()で指定します。
+		// ログイン・登録完了してなくても閲覧だけはできるように except() で指定します。
 		$this->middleware('auth');
 		$this->middleware('verified');
-	}
-
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function index()
-	{
-		//
-		// 1. 新しい順に取得できない
-		// $projects = Project::all();
-
-		// 2. 記述が長くなる
-		// $projects = Project::orderByDesc('created_at')->get();
-
-		// 3. latestメソッドがおすすめ
-		// ページネーション（1ページに5件表示）
-		$projects = Project::latest()->paginate(5);
-		// Debugbarを使ってみる
-		\Debugbar::info($projects);
-		return view('projects.index', ['projects' => $projects]);
 	}
 
 	/**
@@ -59,7 +37,7 @@ class ProjectController extends Controller
 	 */
 	public function store(StoreProject $request)
 	{
-		//
+
 		$bd_data_dir = env('BD_DATA_DIR');
 		$branch_name = 'master';
 
@@ -76,31 +54,7 @@ class ProjectController extends Controller
 		\File::makeDirectory($project_path, 0777, true, true);
 
 		$message = 'プロジェクトを作成しました。';
-		return redirect('/')->with('my_status', __($message));
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show(Project $project, $branch_name)
-	{
-		$bd_object = px2query(
-			$project->project_code,
-			$branch_name,
-			'/?PX=px2dthelper.get.all'
-		);
-		$bd_object = json_decode($bd_object);
-		if($bd_object) {
-			return view('projects.show', ['project' => $project, 'branch_name' => $branch_name], compact('bd_object'));
-		} elseif(session('my_status')) {
-			$message = session('my_status');
-			return redirect('setup/'.$project->project_code.'/'.$branch_name)->with('my_status', __($message));
-		} else {
-			return redirect('setup/'.$project->project_code.'/'.$branch_name);
-		}
+		return redirect('/')->with('bd_flash_message', __($message));
 	}
 
 	/**
@@ -109,16 +63,12 @@ class ProjectController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit(Project $project, $branch_name)
+	public function edit(Project $project)
 	{
-		//
-		// update, destroyでも同様に
-		$this->authorize('edit', $project);
 		return view(
 			'projects.edit',
 			[
 				'project' => $project,
-				'branch_name' => $branch_name
 			]
 		);
 	}
@@ -130,11 +80,8 @@ class ProjectController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(StoreProject $request, Project $project, $branch_name)
+	public function update(StoreProject $request, Project $project)
 	{
-		//
-		$this->authorize('edit', $project);
-
 		$bd_data_dir = env('BD_DATA_DIR');
 
 		if( is_dir($bd_data_dir.'/projects/'.urlencode($project->project_code)) ){
@@ -168,13 +115,13 @@ class ProjectController extends Controller
 		$project->project_name = $request->project_name;
 		$project->git_url = $request->git_url;
 		$project->git_username = \Crypt::encryptString($request->git_username);
-		if( property_exists($request, 'git_password') && strlen($request->git_password) ){
+		if( is_object($request) && strlen($request->git_password) ){
 			// 入力があった場合だけ上書き
-			$project->git_password = \Crypt::encryptString($request->git_password);
+			$project->git_password = \Crypt::encryptString( $request->git_password );
 		}
 		$project->save();
 
-		return redirect('projects/' . $project->project_code . '/' . $branch_name)->with('my_status', __('Updated a Project.'));
+		return redirect('home/' . urlencode($project->project_code))->with('bd_flash_message', __('Updated a Project.'));
 	}
 
 	/**
@@ -183,55 +130,29 @@ class ProjectController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy(Request $request, Project $project, $branch_name)
+	public function destroy(Request $request, Project $project)
 	{
-		//
 		$bd_data_dir = env('BD_DATA_DIR');
 
 		$page_param = $request->page_path;
 		$page_id = $request->page_id;
 
 		$project_code = $project->project_code;
-		$project_path = get_project_workingtree_dir($project_code, $branch_name);
+
+		// // プロジェクトフォルダが存在していれば削除 <- ※softDeleteに変更したため、ここでは削除しない
+		// $burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
+		// $pj = $burdockProjectManager->project($project->project_code);
+		// $result = $pj->delete();
 
 		// DBからプロジェクトを削除
 		$result = $project->delete();
 
-		// プロジェクトフォルダが存在していれば削除
-		if(\File::exists(env('BD_DATA_DIR').'/projects/'.$project_code) && $result === true) {
-			\File::deleteDirectory(env('BD_DATA_DIR').'/projects/'.$project_code);
-			if(\File::exists(env('BD_DATA_DIR').'/projects/'.$project_code) === false) {
-				$result = true;
-			} else {
-				$result = false;
-			}
-		} else {
-			$result = true;
+		if( $result ){
+			$message = 'プロジェクトを削除しました。';
+		}else{
+			$message = 'プロジェクトを削除できませんでした。データベースの更新に失敗しました。';
 		}
 
-		if(\File::exists(env('BD_DATA_DIR').'/projects/'.$project_code) === false && $result === true) {
-			$message = 'Deleted a Project.';
-		} else {
-			$message = 'プロジェクトを削除できませんでした。';
-		}
-
-		$fs = new \tomk79\filesystem();
-		foreach( array('repositories', 'stagings') as $root_dir_name ){
-			$ls = $fs->ls( $bd_data_dir.'/'.$root_dir_name.'/' );
-			if( !is_array($ls) ){
-				continue;
-			}
-			foreach( $ls as $basename ){
-				if(preg_match('/^(.*?)\-\-\-(.*)$/', $basename, $matched)){
-					$tmp_project_code = $matched[1];
-					$tmp_branch_name = $matched[2];
-					if( $tmp_project_code == $project->project_code ){
-						\File::deleteDirectory(env('BD_DATA_DIR').'/'.$root_dir_name.'/'.$basename);
-					}
-				}
-			}
-		}
-
-		return redirect('/')->with('my_status', __($message));
+		return redirect('/')->with('bd_flash_message', __($message));
 	}
 }

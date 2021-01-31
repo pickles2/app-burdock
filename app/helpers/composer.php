@@ -11,16 +11,30 @@ class composer{
 	/**
 	 * Constructor
 	 */
-	public function __construct( $project_id, $branch_name ){
-		$this->project_id = $project_id;
-		$this->project = Project::find($project_id);
+	public function __construct( $project = null, $branch_name = null ){
+		if(is_null($project)){
+			// Project情報に関連付けないで利用する場合
+			return;
+		}else if(is_object($project)){
+			// Projectモデル を受け取った場合
+			$this->project = $project;
+			$this->project_id = $project->id;
+		}else{
+			// Project ID を受け取った場合
+			$this->project_id = $project;
+			$this->project = Project::find($project);
+		}
 
 		if( !strlen($branch_name) ){
-			$branch_name = \get_git_remote_default_branch_name($project->git_url);
+			$gitUtil = new \pickles2\burdock\git($this->project);
+			$branch_name = $gitUtil->get_branch_name();
 		}
 		$this->branch_name = $branch_name;
 	}
 
+	/**
+	 * Composerコマンドを実行する
+	 */
 	public function composer( $composer_sub_command ){
 		$cmd = $composer_sub_command;
 		if( is_array($composer_sub_command) ){
@@ -32,15 +46,22 @@ class composer{
 		$cd = realpath('.');
 		chdir($realpath_pj_git_root);
 
+		$path_php = env('BD_COMMAND_PHP');
+		if(!strlen($path_php)){
+			$path_php = 'php';
+		}
+
 		ob_start();
-		$proc = proc_open(__DIR__.'/../common/composer/composer.phar '.$cmd, array(
+		$proc = proc_open($path_php.' '.__DIR__.'/../common/composer/composer.phar '.$cmd, array(
 			0 => array('pipe','r'),
 			1 => array('pipe','w'),
 			2 => array('pipe','w'),
 		), $pipes);
 		$io = array();
 		foreach($pipes as $idx=>$pipe){
-			$io[$idx] = stream_get_contents($pipe);
+			if($idx){
+				$io[$idx] = stream_get_contents($pipe);
+			}
 			fclose($pipe);
 		}
 		$return_var = proc_close($proc);

@@ -2,14 +2,14 @@
 	<div>
 		<div class="contents" style="height: 70vh;">
 			<div class="cont_scene" id="cont_before_publish" v-bind:class="classPublishButton">
-				<div class="unit center">
+				<div class="px2-p px2-text-align-center">
 					<p>パブリッシュは実行されていません。</p>
 					<p>次のボタンを押して、パブリッシュを実行します。</p>
 					<p><button class="px2-btn px2-btn--primary" v-on:click="publish_option">パブリッシュする</button></p>
 				</div>
 			</div>
 			<div class="cont_scene hidden" id="cont_after_publish-zero_files">
-				<div class="unit center">
+				<div class="px2-p px2-text-align-center">
 					<p>パブリッシュを実行しましたが、何も出力されませんでした。</p>
 					<p>パブリッシュ対象範囲に何も含まれていない可能性があります。</p>
 					<p>次のボタンを押し、パブリッシュ範囲の設定を変えてもう一度パブリッシュを実行してみてください。</p>
@@ -18,8 +18,8 @@
 			</div>
 			<div class="cont_scene" id="cont_before_publish-progress" v-bind:class="classPublishProgress">
 				<div class="cont_canvas">
-					<div class="unit cont_progress">
-						<div class="center">
+					<div class="px2-p cont_progress">
+						<div class="px2-text-align-center">
 							<p>パブリッシュしています。</p>
 							<p>そのまましばらくお待ちください...</p>
 							<div>
@@ -51,8 +51,8 @@
 							<div class="cont_results-errorMessage" v-bind:class="classAlertLog">{{ alert }}件のエラーが検出されています。</div>
 							<div class="cont_results-spentTime">time: <span>{{ time }} sec</span></div>
 							<p><a class="px2-btn px2-btn--primary" v-bind:href="publishFileDownload">パブリッシュされたファイルをダウンロードする</a></p>
-							<ul class="horizontal">
-								<li class="horizontal-li"><a class="px2-link px2-link--burette" v-bind:href="publishReportDownload">パブリッシュレポート</a></li>
+							<ul class="px2-horizontal-list px2-horizontal-list--right">
+								<li><a class="px2-link px2-link--burette" v-bind:href="publishReportDownload">パブリッシュレポート</a></li>
 							</ul>
 						</div>
 					</div>
@@ -79,9 +79,9 @@
 					<p>パブリッシュ中であれば、このファイルが存在することは健康な状態です。しかし、パブリッシュの途中でプロセスが異常終了した場合(途中でアプリを落とす、なども含む)、このファイルが残ってしまうため、次のパブリッシュが実行できない状態になります。</p>
 					<h2>復旧方法</h2>
 					<p>ロックファイル <code>./px-files/_sys/ram/publish/applock.txt</code> を手動で<a v-bind:href="deleteApplock">削除します</a>。</p>
-					<ul class="notes">
-						<li class="notes-li">※ただし、バックグラウンドでプロセスが進行中ではないか、事前に確認してください。</li>
-						<li class="notes-li">※<code>applock.txt</code> をテキストファイルで開くと、このファイルを生成したプロセスの <strong>プロセスID</strong> と <strong>最終アクセス日時</strong> が記載されています。この情報が手がかりになるはずです。</li>
+					<ul class="px2-note-list">
+						<li>ただし、バックグラウンドでプロセスが進行中ではないか、事前に確認してください。</li>
+						<li><code>applock.txt</code> をテキストファイルで開くと、このファイルを生成したプロセスの <strong>プロセスID</strong> と <strong>最終アクセス日時</strong> が記載されています。この情報が手がかりになるはずです。</li>
 					</ul>
 				</div>
 			</div>
@@ -127,7 +127,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="dialog-buttons center">
+					<div class="dialog-buttons px2-text-align-center">
 						<button type="submit" class="px2-btn px2-btn--primary" v-on:click="publish">パブリッシュを実行する</button>
 						<button class="px2-btn" v-on:click="cancel">キャンセル</button>
 					</div>

@@ -32,7 +32,7 @@ class CheckLocale
             // セッションから言語指定を取得する
             $locale = session('locale');
             // セッションがなければ、ブラウザのAccept-Languageを参照する
-            if (!$locale && isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+            if (!$locale && isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && is_callable('locale_accept_from_http') ) {
                 $locale = locale_accept_from_http($_SERVER['HTTP_ACCEPT_LANGUAGE']);
                 $locale = substr($locale, 0, 2);
             }

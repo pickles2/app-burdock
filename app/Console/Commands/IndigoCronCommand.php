@@ -77,7 +77,8 @@ class IndigoCronCommand extends Command
 				continue;
 			}
 
-			$default_branch_name = \get_git_remote_default_branch_name($project->git_url);
+			$gitUtil = new \pickles2\burdock\git($project);
+			$default_branch_name = $gitUtil->get_branch_name();
 
 			$parameter = $indigoController->mk_indigo_options($project, $default_branch_name);
 

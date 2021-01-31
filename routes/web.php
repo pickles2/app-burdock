@@ -17,7 +17,7 @@ Auth::routes(['verify' => true]);
 
 // --------------------------------------
 // ダッシュボード
-Route::get('/', 'HomeController@index');
+Route::get('/', 'DashboardController@index');
 
 // Route::get('users', 'UserController@index');
 // Route::get('users/create', 'UserController@create');
@@ -41,21 +41,33 @@ Route::get('mypage/edit', 'MypageController@edit');
 Route::put('mypage', 'MypageController@update');
 Route::delete('mypage', 'MypageController@destroy');
 
+
+// --------------------------------------
+// システムメンテナンス画面 System Maintenance
+Route::get('system-maintenance', 'SystemMaintenance\IndexController@index');
+Route::get('system-maintenance/phpinfo', 'SystemMaintenance\IndexController@phpinfo');
+Route::get('system-maintenance/project-dirs', 'SystemMaintenance\ProjectDirsController@index');
+Route::get('system-maintenance/project-dirs/{project}', 'SystemMaintenance\ProjectDirsController@show');
+Route::get('system-maintenance/project-dirs/{project}/store', 'SystemMaintenance\ProjectDirsController@store');
+Route::get('system-maintenance/ajax/checkCommand', 'SystemMaintenance\IndexController@ajaxCheckCommand');
+
+
 // --------------------------------------
 // プロジェクト Home
-// Route::get('projects', 'ProjectController@index'); //プロジェクト一覧は封印
+Route::get('home/{project}/{branch_name?}', 'HomeController@index');
+
+// --------------------------------------
+// プロジェクト管理
 Route::get('projects/create', 'ProjectController@create');
 Route::post('projects', 'ProjectController@store');
-Route::get('projects/{project}/{branch_name}', 'ProjectController@show');
-Route::get('projects/{project}/{branch_name}/edit', 'ProjectController@edit');
-Route::put('projects/{project}/{branch_name}', 'ProjectController@update');
-Route::delete('projects/{project}/{branch_name}', 'ProjectController@destroy');
+Route::get('projects/{project}/edit', 'ProjectController@edit');
+Route::put('projects/{project}/edit', 'ProjectController@update');
+Route::delete('projects/{project}', 'ProjectController@destroy');
 
-// Route::resource('projects', 'ProjectController');
+
 
 // --------------------------------------
 // セットアップ
-Route::get('setup/{project}/{branch_name}', 'SetupController@index');
 Route::post('setup/{project}/{branch_name}/setupAjax', 'Ajax\SetupController@setupAjax');
 Route::post('setup/{project}/{branch_name}/setupOptionAjax', 'Ajax\SetupController@setupOptionAjax');
 
@@ -73,12 +85,10 @@ Route::get('themes/{project}/{branch_name}', 'ThemeController@index');
 
 // --------------------------------------
 // コンテンツ
-Route::get('pages/{project}/{branch_name}/index.html', 'PageController@index');
-Route::post('pages/{project}/{branch_name}/ajax', 'PageController@ajax');
-Route::get('pages/{project}/{branch_name}', 'PageController@show');
-Route::post('pages/{project}/{branch_name}', 'PageController@gpi');
-Route::post('pages/{project}/{branch_name}/editAjax', 'Ajax\PageController@editAjax');
-Route::post('pages/{project}/{branch_name}/searchAjax', 'Ajax\PageController@searchAjax');
+Route::get('contents/{project}/{branch_name}', 'ContentController@index');
+Route::post('contents/{project}/{branch_name}/ajax', 'ContentController@ajax');
+Route::post('contents/{project}/{branch_name}/editAjax', 'Ajax\ContentController@editAjax');
+Route::post('contents/{project}/{branch_name}/searchAjax', 'Ajax\ContentController@searchAjax');
 
 // --------------------------------------
 // パブリッシュ
@@ -104,8 +114,19 @@ Route::post('composer/{project}/{branch_name}/composer-install', 'ComposerContro
 Route::post('composer/{project}/{branch_name}/composer-update', 'ComposerController@update');
 
 // --------------------------------------
+// キャッシュを消去する
+Route::get('clearcache/{project}/{branch_name}', 'ClearCacheController@index');
+Route::post('clearcache/{project}/{branch_name}/clearcache', 'ClearCacheController@clearcache');
+
+// --------------------------------------
+// 検索
+Route::get('search/{project}/{branch_name}', 'SearchController@index');
+Route::post('search/{project}/{branch_name}/search', 'SearchController@search');
+
+// --------------------------------------
 // ステージング切り替え (Plum)
 Route::match(['get', 'post'], 'staging/{project}/{branch_name}', 'StagingController@index');
+Route::match(['get', 'post'], 'staging/{project}/{branch_name}/gpi', 'StagingController@gpi');
 
 // --------------------------------------
 // 配信 (Indigo)
@@ -115,8 +136,14 @@ Route::match(['get', 'post'], 'delivery/{project}/{branch_name}/indigoAjaxAPI', 
 // --------------------------------------
 // ファイルとフォルダ (remote-finder)
 Route::get('files-and-folders/{project}/{branch_name}', 'FilesAndFoldersController@index');
+Route::get('files-and-folders/{project}/{branch_name}/api/parsePx2FilePath', 'FilesAndFoldersController@apiParsePx2FilePath');
 Route::post('files-and-folders/{project}/{branch_name}/gpi', 'FilesAndFoldersController@remoteFinderGPI');
 Route::get('files-and-folders/{project}/{branch_name}/common-file-editor', 'FilesAndFoldersController@commonFileEditor');
 Route::post('files-and-folders/{project}/{branch_name}/common-file-editor/gpi', 'FilesAndFoldersController@commonFileEditorGPI');
+
+// --------------------------------------
+// コンテンツエディタ
+Route::get('contentsEditor/{project}/{branch_name}', 'ContentsEditorController@index');
+Route::post('contentsEditor/{project}/{branch_name}/px2ceGpi', 'ContentsEditorController@px2ceGpi');
 
 // --------------------------------------

@@ -88,10 +88,11 @@ class GenerateVirtualHostsCommand extends Command
 		$current = 0;
 
 		foreach ($projects as $project) {
+			$current ++;
 			$this->line( '' );
 			$this->info( $project->project_name );
 			$this->line( ' ('.$project->id.' - '.$project->project_code.')' );
-			$this->line( ' '.$count.'/'.$count );
+			$this->line( ' '.$current.'/'.$count );
 
 			$result = $this->execute_project_task( $project );
 
@@ -101,12 +102,22 @@ class GenerateVirtualHostsCommand extends Command
 		}
 
 		if( !is_file($this->realpath_vhosts_dir.'vhosts.conf') || md5_file($this->realpath_vhosts_dir.'vhosts.conf') != md5_file($this->realpath_vhosts_dir.'vhosts.conf.tmp') ){
+			// 前回の結果との差分があったら置き換える
 			copy( $this->realpath_vhosts_dir.'vhosts.conf.tmp', $this->realpath_vhosts_dir.'vhosts.conf' );
 		}
 		$this->fs->rm( $this->realpath_vhosts_dir.'vhosts.conf.tmp' );
 
 		$this->line(' finished!');
 		$this->line( '' );
+
+		$this->line( 'Reloading Web Server Config...' );
+		if( $this->reload_webserver_config() ){
+			$this->line( 'Done!' );
+		}else{
+			$this->line( 'Failed...!' );
+		}
+		$this->line( '' );
+
 		$this->line('Local Time: '.date('Y-m-d H:i:s'));
 		$this->line('GMT: '.gmdate('Y-m-d H:i:s'));
 		$this->comment('------------ '.$this->signature.' successful ------------');
@@ -119,9 +130,15 @@ class GenerateVirtualHostsCommand extends Command
 	 * プロジェクト１件分のタスクを実行する
 	 */
 	private function execute_project_task( $project ){
+		$realpath_template_root_dir = __DIR__.'/../../../settings/generate_vhosts/';
+		$twig_loader = new \Twig\Loader\FilesystemLoader($realpath_template_root_dir);
+		$twig = new \Twig\Environment($twig_loader, [
+		]);
+
+		$gitUtil = new \pickles2\burdock\git($project);
 		$default_branch_name = 'master';
 		if( strlen($project->git_url) ){
-			$default_branch_name = \get_git_remote_default_branch_name($project->git_url);
+			$default_branch_name = $gitUtil->get_branch_name();
 		}
 		if( !strlen($default_branch_name) ){
 			$default_branch_name = 'master';
@@ -153,7 +170,7 @@ class GenerateVirtualHostsCommand extends Command
 				$px2packages = array($composerJson->extra->px2package);
 			}
 		}
-		var_dump($px2packages);
+		// var_dump($px2packages);
 
 
 		// --------------------------------------
@@ -173,6 +190,31 @@ class GenerateVirtualHostsCommand extends Command
 		}
 
 
+		// --------------------------------------
+		// 必要なパス情報を計算
+		$path_entry_script = \get_px_execute_path($project->project_code, $default_branch_name);
+		$path_publish_dir = null;
+		if( property_exists($config, 'path_publish_dir') ){
+			$path_publish_dir = $config->path_publish_dir;
+		}
+		$path_controot = null;
+		if( property_exists($config, 'path_controot') ){
+			$path_controot = $config->path_controot;
+		}
+		// var_dump($path_entry_script);
+		// var_dump($path_publish_dir);
+		// var_dump($path_controot);
+
+		$relpath_docroot_dist = $this->fs->normalize_path($this->fs->get_realpath('/'.dirname($path_entry_script).'/'.$path_publish_dir.'/'));
+		$relpath_docroot_preview = $this->fs->normalize_path($this->fs->get_realpath('/'.dirname($path_entry_script).'/'));
+		if( strlen($path_controot) ){
+			$path_controot = $this->fs->normalize_path($this->fs->get_realpath('/'.$path_controot.'/'));
+			$relpath_docroot_preview = preg_replace( '/'.preg_quote($path_controot, '/').'$/s', '/', $relpath_docroot_preview );
+		}
+		// var_dump($relpath_docroot_dist);
+		// var_dump($relpath_docroot_preview);
+
+		// --------------------------------------
 		// config header
 		$src_vhosts = '';
 		$src_vhosts .= "\n\n";
@@ -180,79 +222,121 @@ class GenerateVirtualHostsCommand extends Command
 		$src_vhosts .= '## '.$project->project_name."\n";
 		$src_vhosts .= '## '.$project->project_code.' - '.$project->id."\n";
 		$src_vhosts .= "\n";
-		file_put_contents( $this->realpath_vhosts_dir.'vhosts.conf.tmp', $src_vhosts, FILE_APPEND );
+		$this->put_tmp_contents( $src_vhosts );
 
 		// Production
 		$src_vhosts = '';
 		$src_vhosts .= "\n";
 		$src_vhosts .= '# Production'."\n";
-		file_put_contents( $this->realpath_vhosts_dir.'vhosts.conf.tmp', $src_vhosts, FILE_APPEND );
+		$this->put_tmp_contents( $src_vhosts );
 
 		$src_vhosts = '';
+		$tpl_vars = [
+			'domain' => $domain,
+			'project_code' => $project->project_code,
+			'document_root' => $this->fs->normalize_path($this->fs->get_realpath( env('BD_DATA_DIR').'/projects/'.$project->project_code.'/indigo/production/'.$relpath_docroot_dist )),
+		];
 		if( !strlen($domain) ){
 			$src_vhosts .= '# NO DOMAIN'."\n";
+		}elseif( is_file( $realpath_template_root_dir.'production.twig' ) ){
+			$template = $twig->load('production.twig');
+			$src_vhosts .= $template->render($tpl_vars);
 		}else{
-			$src_vhosts .= '<VirtualHost '.$domain.':443>'."\n";
-			$src_vhosts .= '	# Production ('.$project->project_code.')'."\n";
-			$src_vhosts .= '	ServerName '.$domain.''."\n";
-			$src_vhosts .= '	VirtualDocumentRoot '.env('BD_DATA_DIR').'/projects/'.$project->project_code.'/indigo/production/dist'."\n";
-			$src_vhosts .= '	SSLEngine on'."\n";
-			$src_vhosts .= '	SSLProtocol all -SSLv2 -SSLv3'."\n";
-			$src_vhosts .= '	SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW'."\n";
-			$src_vhosts .= '	SSLCertificateFile "/path/to/localhost.crt"'."\n";
-			$src_vhosts .= '	SSLCertificateKeyFile "/path/to/localhost.key"'."\n";
+			$src_vhosts .= '<VirtualHost '.$tpl_vars['domain'].':80>'."\n";
+			$src_vhosts .= '	# Production ('.$tpl_vars['project_code'].')'."\n";
+			$src_vhosts .= '	ServerName '.$tpl_vars['domain'].''."\n";
+			$src_vhosts .= '	DocumentRoot '.$tpl_vars['document_root']."\n";
 			$src_vhosts .= '</VirtualHost>'."\n";
 		}
 
-		file_put_contents( $this->realpath_vhosts_dir.'vhosts.conf.tmp', $src_vhosts, FILE_APPEND );
+		$this->put_tmp_contents( $src_vhosts );
 
 		// Preview dirs
 		$src_vhosts = '';
 		$src_vhosts .= "\n";
 		$src_vhosts .= '# Previews'."\n";
-		file_put_contents( $this->realpath_vhosts_dir.'vhosts.conf.tmp', $src_vhosts, FILE_APPEND );
+		$this->put_tmp_contents( $src_vhosts );
+
 		foreach($this->list_preview_dirs[$project->project_code] as $branch_name){
 
+			$tpl_vars = [
+				'domain' => $project->project_code.'---'.$branch_name.'.'.env('BD_PREVIEW_DOMAIN'),
+				'project_code' => $project->project_code,
+				'document_root' => $this->fs->normalize_path($this->fs->get_realpath( env('BD_DATA_DIR').'/repositories/'.$project->project_code.'---'.$branch_name.'/'.$relpath_docroot_preview )),
+				'branch_name' => $branch_name,
+			];
 			$src_vhosts = '';
-			$src_vhosts .= '<VirtualHost '.$project->project_code.'---'.$branch_name.'.'.env('BD_PREVIEW_DOMAIN').':443>'."\n";
-			$src_vhosts .= '	# Preview ('.$project->project_code.')'."\n";
-			$src_vhosts .= '	ServerName '.$project->project_code.'---'.$branch_name.'.'.env('BD_PREVIEW_DOMAIN').''."\n";
-			$src_vhosts .= '	VirtualDocumentRoot '.env('BD_DATA_DIR').'/repositories/'.$project->project_code.'---'.$branch_name.'/htdocs'."\n";
-			$src_vhosts .= '	SSLEngine on'."\n";
-			$src_vhosts .= '	SSLProtocol all -SSLv2 -SSLv3'."\n";
-			$src_vhosts .= '	SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW'."\n";
-			$src_vhosts .= '	SSLCertificateFile "/path/to/localhost.crt"'."\n";
-			$src_vhosts .= '	SSLCertificateKeyFile "/path/to/localhost.key"'."\n";
-			$src_vhosts .= '</VirtualHost>'."\n";
+			if( is_file( $realpath_template_root_dir.'preview.twig' ) ){
+				$template = $twig->load('preview.twig');
+				$src_vhosts .= $template->render($tpl_vars);
+			}else{
+				$src_vhosts .= '<VirtualHost '.$tpl_vars['domain'].':80>'."\n";
+				$src_vhosts .= '	# Preview '.$tpl_vars['branch_name'].' ('.$tpl_vars['project_code'].')'."\n";
+				$src_vhosts .= '	ServerName '.$tpl_vars['domain'].''."\n";
+				$src_vhosts .= '	DocumentRoot '.$tpl_vars['document_root']."\n";
+				$src_vhosts .= '</VirtualHost>'."\n";
+			}
 
-			file_put_contents( $this->realpath_vhosts_dir.'vhosts.conf.tmp', $src_vhosts, FILE_APPEND );
+			$this->put_tmp_contents( $src_vhosts );
 		}
 
 		// Staging dirs
 		$src_vhosts = '';
 		$src_vhosts .= "\n";
 		$src_vhosts .= '# Stagings'."\n";
-		file_put_contents( $this->realpath_vhosts_dir.'vhosts.conf.tmp', $src_vhosts, FILE_APPEND );
+		$this->put_tmp_contents( $src_vhosts );
+
 		for( $i = 0; $i < 10; $i ++ ){
 
-			$src_vhosts = '';
-			$src_vhosts .= '<VirtualHost '.$project->project_code.'---stg'.($i+1).'.'.env('BD_PLUM_STAGING_DOMAIN').':443>'."\n";
-			$src_vhosts .= '	# Staging '.($i+1).' ('.$project->project_code.')'."\n";
-			$src_vhosts .= '	ServerName '.$project->project_code.'---stg'.($i+1).'.'.env('BD_PLUM_STAGING_DOMAIN').''."\n";
-			$src_vhosts .= '	VirtualDocumentRoot '.env('BD_DATA_DIR').'/stagings/'.$project->project_code.'---stg'.($i+1).'/dist'."\n";
-			$src_vhosts .= '	SSLEngine on'."\n";
-			$src_vhosts .= '	SSLProtocol all -SSLv2 -SSLv3'."\n";
-			$src_vhosts .= '	SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW'."\n";
-			$src_vhosts .= '	SSLCertificateFile "/path/to/localhost.crt"'."\n";
-			$src_vhosts .= '	SSLCertificateKeyFile "/path/to/localhost.key"'."\n";
-			$src_vhosts .= '</VirtualHost>'."\n";
+			$tpl_vars = [
+				'domain' => $project->project_code.'---stg'.($i+1).'.'.env('BD_PLUM_STAGING_DOMAIN'),
+				'project_code' => $project->project_code,
+				'document_root' => $this->fs->normalize_path($this->fs->get_realpath( env('BD_DATA_DIR').'/stagings/'.$project->project_code.'---stg'.($i+1).'/'.$relpath_docroot_dist )),
+				'staging_index' => $i+1,
+			];
 
-			file_put_contents( $this->realpath_vhosts_dir.'vhosts.conf.tmp', $src_vhosts, FILE_APPEND );
+			$src_vhosts = '';
+			if( is_file( $realpath_template_root_dir.'staging.twig' ) ){
+				$template = $twig->load('staging.twig');
+				$src_vhosts .= $template->render($tpl_vars);
+			}else{
+				$src_vhosts .= '<VirtualHost '.$tpl_vars['domain'].':80>'."\n";
+				$src_vhosts .= '	# Staging '.$tpl_vars['staging_index'].' ('.$tpl_vars['project_code'].')'."\n";
+				$src_vhosts .= '	ServerName '.$tpl_vars['domain'].''."\n";
+				$src_vhosts .= '	DocumentRoot '.$tpl_vars['document_root']."\n";
+				$src_vhosts .= '</VirtualHost>'."\n";
+			}
+
+			$this->put_tmp_contents( $src_vhosts );
 		}
 
 		return array(
 			'result' => true,
 			'message' => 'OK',
 		);
+	}
+
+
+	/**
+	 * ウェブサーバーの設定を再読み込みする
+	 */
+	private function reload_webserver_config(){
+		$command = env('BD_COMMAND_RELOAD_WEBSERVER_CONFIG');
+		if( !$command ){
+			$this->line( 'env "BD_COMMAND_RELOAD_WEBSERVER_CONFIG" is not set.' );
+			return false;
+		}
+
+		$result = exec( $command );
+
+		return true;
+	}
+
+	/**
+	 * 一時ファイルにテキストを出力
+	 */
+	private function put_tmp_contents($src){
+		file_put_contents( $this->realpath_vhosts_dir.'vhosts.conf.tmp', $src, FILE_APPEND );
+		return true;
 	}
 }

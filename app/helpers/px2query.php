@@ -14,10 +14,6 @@
  * 期待される出力がJSONとは限らないので、デコードは呼び出し側の責任とする。
  */
 function px2query($project_code, $branch_name, $query){
-	$php_command = array();
-
-	// PHPコマンド
-	array_push($php_command, addslashes('php'));
 
 	// Pickles 2 の EntryScript
 	$project_path = get_project_workingtree_dir($project_code, $branch_name);
@@ -28,44 +24,14 @@ function px2query($project_code, $branch_name, $query){
 	if(!\File::exists($realpath_entry_script)) {
 		return false;
 	}
-	array_push($php_command, escapeshellarg($realpath_entry_script));
 
-	// Request Path
-	array_push($php_command, escapeshellarg($query));
+	$init_options = array(
+		'bin' => env('BD_COMMAND_PHP'),
+		'ini' => env('BD_COMMAND_PHP_INI'),
+		'extension_dir' => env('BD_COMMAND_PHP_EXTENSION_DIR'),
+	);
 
-
-	// --------------------------------------
-
-
-	$str_command = implode( ' ', $php_command );
-
-	$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
-	chdir($project_path);
-
-	// コマンドを実行
-	ob_start();
-	$proc = proc_open($str_command, array(
-		0 => array('pipe','r'),
-		1 => array('pipe','w'),
-		2 => array('pipe','w'),
-	), $pipes);
-	$io = array();
-	foreach($pipes as $idx=>$pipe){
-		$io[$idx] = stream_get_contents($pipe);
-		fclose($pipe);
-	}
-	$return_var = proc_close($proc);
-	ob_get_clean();
-
-	$bin = $io[1]; // stdout
-	if( strlen( $io[2] ) ){
-		$bin .= $io[2]; // stderr
-	}
-
-	chdir($path_current_dir); // 元いたディレクトリへ戻る
-
-
-	// $bin = json_decode($bin); // ← 期待される出力がJSONとは限らないので、デコードは呼び出し側の責任とする。
-
-	return $bin;
+	$px2agent = new \picklesFramework2\px2agent\px2agent($init_options);
+	$px2proj = $px2agent->createProject($realpath_entry_script);
+	return $px2proj->query($query);
 }

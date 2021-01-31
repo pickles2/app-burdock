@@ -1,6 +1,10 @@
 @charset "UTF-8";
-@import url(./fess.css);
 @import url(./filter.css);
+html,
+body {
+  font-size: medium;
+  font-family: Meiryo, "Hiragino Kaku Gothic ProN", Verdana, sans-serif; }
+
 body {
   background-color: #fff;
   cursor: default;
@@ -22,6 +26,12 @@ a {
 
 a:hover {
   color: #666; }
+
+ul, ol, pre, blockquote,
+p, .px2-p{
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
 
 .contents a.icon {
   position: relative;
@@ -163,6 +173,22 @@ ul.listview {
   zoom: 1; }
 
 /**
+ * 必須項目
+ */
+.must {
+  color: #f00;
+  font-weight: bold;
+  display: inline;
+  white-space: nowrap;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  border: 1px solid #f63;
+  background-color: #fdd;
+  padding: 0.2em 0.8em;
+  font-size: 90%;
+  border-radius: 1.2em; }
+
+/**
  * プレビューウィンドウ
  * ※JSとセットです。
  */
@@ -223,3 +249,13 @@ ul.listview {
  */
 .tooltip[role=tooltip] {
   word-wrap: break-word; }
+
+/**
+ * px2style
+ */
+.px2-header p,
+.px2-header li,
+.px2-header dt,
+.px2-header dd{
+  line-height: 1;
+}
