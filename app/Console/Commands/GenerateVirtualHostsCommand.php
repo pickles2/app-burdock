@@ -109,6 +109,15 @@ class GenerateVirtualHostsCommand extends Command
 
 		$this->line(' finished!');
 		$this->line( '' );
+
+		$this->line( 'Reloading Web Server Config...' );
+		if( $this->reload_webserver_config() ){
+			$this->line( 'Done!' );
+		}else{
+			$this->line( 'Failed...!' );
+		}
+		$this->line( '' );
+
 		$this->line('Local Time: '.date('Y-m-d H:i:s'));
 		$this->line('GMT: '.gmdate('Y-m-d H:i:s'));
 		$this->comment('------------ '.$this->signature.' successful ------------');
@@ -305,6 +314,22 @@ class GenerateVirtualHostsCommand extends Command
 			'result' => true,
 			'message' => 'OK',
 		);
+	}
+
+
+	/**
+	 * ウェブサーバーの設定を再読み込みする
+	 */
+	private function reload_webserver_config(){
+		$command = env('BD_COMMAND_RELOAD_WEBSERVER_CONFIG');
+		if( !$command ){
+			$this->line( 'env "BD_COMMAND_RELOAD_WEBSERVER_CONFIG" is not set.' );
+			return false;
+		}
+
+		$result = exec( $command );
+
+		return true;
 	}
 
 	/**
