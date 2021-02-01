@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Project;
-use App\Jobs\Publish;
 use Carbon\Carbon;
 use \Zipper;
 
@@ -24,10 +23,6 @@ class PublishController extends Controller
 
 	public function index(Request $request, Project $project, $branch_name)
 	{
-
-		// パブリッシュキューを発行する
-		// TODO: パブリッシュボタン押下時に実行させること。
-		Publish::dispatch($project->project_code, $branch_name);
 
 		$page_param = $request->page_path;
 		$page_id = $request->page_id;

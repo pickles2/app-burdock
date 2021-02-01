@@ -294,6 +294,7 @@ export default {
 			}
 			// AjaxでAjax\PublishController@publishAjaxにpost処理
 			axios.post('/publish/'+this.projectCode+'/'+this.branchName+'/publishAjax',data).then(res => {
+				// console.log('*********', res);
 				this.info = res.data.info;
 			})
 		},
