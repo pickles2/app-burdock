@@ -47,6 +47,8 @@ class PublishJob implements ShouldQueue
 		$project_path = \get_project_workingtree_dir($project_code, $branch_name);
 		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
 
+		set_time_limit(60);
+
 		chdir($project_path);
 		// proc_openでパブリッシュ
 		$desc = array(
@@ -82,6 +84,7 @@ class PublishJob implements ShouldQueue
 		// 標準出力が------------かどうかを判定する変数
 		$reserve = 0;
 		while (feof($pipes[1]) === false || feof($pipes[2]) === false) {
+			set_time_limit(60);
 			$stdout = $stderr = '';
 			$read = array($pipes[1], $pipes[2]);
 			$write = null;
@@ -89,10 +92,10 @@ class PublishJob implements ShouldQueue
 			$timeout = 60000;
 			$ret = stream_select($read, $write, $except, $timeout);
 			if ($ret === false) {
-				echo "error\n";
+				// echo "error\n";
 				break;
 			} else if ($ret === 0) {
-				echo "timeout\n";
+				// echo "timeout\n";
 				continue;
 			} else {
 				foreach ($read as $sock) {
@@ -168,9 +171,11 @@ class PublishJob implements ShouldQueue
 				}
 			}
 			$process = proc_get_status($proc);
+
 			// ブロードキャストイベントに標準出力、標準エラー出力、パース結果を渡す、判定変数、キュー数、アラート配列、経過時間配列、パブリッシュファイルを渡す
 			broadcast(new \App\Events\PublishEvent($parse, $judge, $queue_count, $publish_file, $end_publish, $process, $pipes));
 		}
+
 		fclose($pipes[1]);
 		fclose($pipes[2]);
 		proc_close($proc);
