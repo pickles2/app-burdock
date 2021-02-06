@@ -85,13 +85,11 @@ class ContentsEditorController extends Controller
 			$branch_name,
 			$page_param.'?PX=px2dthelper.px2ce.gpi&data_filename='.urlencode($tmpFileName)
 		);
-		$result = json_decode($result);
+		$result = json_decode($result, true);
 
-		header('Content-type: text/json');
-		echo json_encode($result);
 		// 作成した一時ファイルを削除
 		unlink($file);
 
-		exit;
+		return $result;
 	}
 }

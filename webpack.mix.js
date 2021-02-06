@@ -23,6 +23,10 @@ mix
 	// --------------------------------------
 	// Project Local Resources
 
+	// Theme
+	.js('resources/cont/theme/script.js', 'public/cont/theme/script.js')
+	.sass('resources/cont/theme/style.scss', 'public/cont/theme/style.css')
+
 	// publish
 	.sass('resources/cont/publish/style.scss', 'public/cont/publish/style.css')
 

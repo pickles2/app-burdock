@@ -77,6 +77,8 @@ Route::post('sitemaps/{project}/{branch_name}/destroy', 'SitemapController@destr
 // --------------------------------------
 // テーマ
 Route::get('themes/{project}/{branch_name}', 'ThemeController@index');
+Route::post('themes/{project}/{branch_name}/ajax', 'ThemeController@ajax');
+Route::post('themes/{project}/{branch_name}/px2teGpi', 'ThemeController@px2teGpi');
 
 // --------------------------------------
 // コンテンツ

@@ -1,7 +1,9 @@
 {
+    "/cont/theme/script.js": "/cont/theme/script.js",
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/common/styles/common.css": "/common/styles/common.css",
+    "/cont/theme/style.css": "/cont/theme/style.css",
     "/cont/publish/style.css": "/cont/publish/style.css",
     "/cont/files_and_folders/style.css": "/cont/files_and_folders/style.css",
     "/common/scripts/common.js": "/common/scripts/common.js",
