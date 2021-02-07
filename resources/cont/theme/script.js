@@ -1,6 +1,8 @@
 $(window).on('load', function(){
 	const it79 = require('iterate79');
 	let csrfToken = $('meta[name=csrf-token]').attr('content');
+	let project_code = window.project_code;
+	let branch_name = window.branch_name;
 	let px2all;
 	let realpathDataDir;
 	let realpathThemeCollectionDir;
@@ -99,37 +101,6 @@ $(window).on('load', function(){
 							}
 						});
 
-
-						var testTimestamp = (new Date()).getTime();
-						var tmpFileName = '__tmp_'+utils79.md5( Date.now() )+'.json';
-						main.fs.writeFileSync( realpathDataDir+tmpFileName, JSON.stringify(input) );
-
-						pj.execPx2(
-							'/?PX=px2dthelper.px2te.gpi&appMode=web&data_filename='+encodeURIComponent( tmpFileName ),
-							{
-								complete: function(rtn){
-									console.log('--- returned(millisec)', (new Date()).getTime() - testTimestamp);
-									new Promise(function(rlv){rlv();})
-										.then(function(){ return new Promise(function(rlv, rjt){
-											try{
-												rtn = JSON.parse(rtn);
-											}catch(e){
-												console.error('Failed to parse JSON String -> ' + rtn);
-											}
-											rlv();
-										}); })
-										.then(function(){ return new Promise(function(rlv, rjt){
-											main.fs.unlinkSync( realpathDataDir+tmpFileName );
-											// pj.updateGitStatus(function(){});
-											rlv();
-										}); })
-										.then(function(){ return new Promise(function(rlv, rjt){
-											callback( rtn );
-										}); })
-									;
-								}
-							}
-						);
 						return;
 					},
 					'themeLayoutEditor': function(themeId, layoutId){
@@ -152,7 +123,6 @@ $(window).on('load', function(){
 					}
 				},
 				function(){
-					// スタンバイ完了したら呼び出されるコールバックメソッドです。
 					it1.next();
 				}
 			);
@@ -170,7 +140,6 @@ $(window).on('load', function(){
 			});
 
 			console.log('Theme Editor: Standby.');
-			callback();
 		}
 	]);
 

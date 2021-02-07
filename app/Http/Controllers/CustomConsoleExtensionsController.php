@@ -36,6 +36,35 @@ class CustomConsoleExtensionsController extends Controller
 		);
 	}
 
+	public function ajax(Request $request, $cce_id, Project $project, $branch_name)
+	{
+		$request_path = $request->path;
+		if( $request_path == '/?PX=px2dthelper.custom_console_extensions.'.urlencode($cce_id).'.client_resources' ){
+			$client_resources_dist = realpath(__DIR__.'/../../../public/assets/cce/');
+			$client_resources_dist .= '/'.urlencode($cce_id);
+			if( !is_dir($client_resources_dist) ){
+				mkdir($client_resources_dist);
+			}
+			$client_resources_dist .= '/'.urlencode($project->project_code);
+			if( !is_dir($client_resources_dist) ){
+				mkdir($client_resources_dist);
+			}
+			$client_resources_dist .= '/'.urlencode($branch_name);
+			if( !is_dir($client_resources_dist) ){
+				mkdir($client_resources_dist);
+			}
+			$request_path .= '&dist='.urlencode($client_resources_dist);
+		}
+		$info = px2query(
+			$project->project_code,
+			$branch_name,
+			$request_path
+		);
+		$info = json_decode($info, true);
+
+		return $info;
+	}
+
 	public function gpi(Request $request, $cce_id, Project $project, $branch_name)
 	{
 		$current = px2query(

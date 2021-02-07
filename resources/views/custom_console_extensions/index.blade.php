@@ -17,6 +17,7 @@
 
 @section('script')
 <script>
+var cce_id = <?php echo json_encode($cce_id); ?>;
 var project_code = <?php echo json_encode($project->project_code); ?>;
 var branch_name = <?php echo json_encode($branch_name); ?>;
 </script>

@@ -8,6 +8,7 @@ Thumbs.db
 /public/projects
 /public/assets/px2ce_resources
 /public/assets/px2te_resources
+/public/assets/cce
 /storage/*.key
 /composer.lock
 /vendor

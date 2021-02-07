@@ -102,6 +102,7 @@ Route::get('publish/{project}/{branch_name}/publishReportDownload', 'PublishCont
 // --------------------------------------
 // Custom Console Extensions
 Route::get('custom_console_extensions/{cce_id}/{project}/{branch_name}', 'CustomConsoleExtensionsController@index');
+Route::post('custom_console_extensions/{cce_id}/{project}/{branch_name}/ajax', 'CustomConsoleExtensionsController@ajax');
 Route::post('custom_console_extensions/{cce_id}/{project}/{branch_name}/gpi', 'CustomConsoleExtensionsController@gpi');
 
 // --------------------------------------

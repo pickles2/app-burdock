@@ -1,10 +1,14 @@
 $(window).on('load', function(){
 	const it79 = require('iterate79');
 	let csrfToken = $('meta[name=csrf-token]').attr('content');
+	let cce_id = window.cce_id;
+	let project_code = window.project_code;
+	let branch_name = window.branch_name;
 	let px2all;
 	let realpathDataDir;
-	let realpathThemeCollectionDir;
-	let pickles2ThemeEditor;
+	let customConsoleExtensionId;
+	let cceInfo;
+	let $elm;
 
 	it79.fnc({}, [
 		function(it1){
@@ -15,7 +19,36 @@ $(window).on('load', function(){
 						// console.log('=-=-=-=-=-=-=', result);
 						px2all = result;
 						realpathDataDir = px2all.realpath_homedir+'_sys/ram/data/';
-						realpathThemeCollectionDir = px2all.realpath_theme_collection_dir;
+						it1.next();
+					}
+				}
+			);
+		},
+		function(it1){
+			customConsoleExtensionId = window.cce_id;
+			$elm = $('.contents');
+			it1.next();
+		},
+		function(it1){
+			$elm.text(customConsoleExtensionId);
+			it1.next();
+		},
+		function(it1){
+			// 拡張機能情報をロード
+			execPx2(
+				'/?PX=px2dthelper.custom_console_extensions.'+customConsoleExtensionId,
+				{
+					complete: function(objRes){
+						console.log(objRes);
+						if( !objRes ){
+							alert('Undefined Extension.');
+							return;
+						}
+						if( !objRes.result ){
+							alert('Undefined Extension. ' + objRes.message);
+							return;
+						}
+						cceInfo = objRes.info;
 						it1.next();
 					}
 				}
@@ -24,10 +57,16 @@ $(window).on('load', function(){
 		function(it1){
 			// クライアントリソースをロード
 			execPx2(
-				'/?PX=px2dthelper.px2te.client_resources',
+				'/?PX=px2dthelper.custom_console_extensions.'+customConsoleExtensionId+'.client_resources',
 				{
-					complete: function(resources){
-						console.log('resources:', resources);
+					complete: function(res){
+						// console.log('--- client_resources', res);
+						if( !res.result ){
+							alert('Undefined Extension. ' + res.message);
+							return;
+						}
+						var resources = res.resources;
+
 						it79.ary(
 							resources.css,
 							function(it2, row, idx){
@@ -37,7 +76,7 @@ $(window).on('load', function(){
 								});
 								$('head').append(link);
 								link.rel = 'stylesheet';
-								link.href = '/assets/px2te_resources/'+project_code+'/'+branch_name+'/'+row;
+								link.href = '/assets/cce/'+customConsoleExtensionId+'/'+project_code+'/'+branch_name+'/'+row;
 							},
 							function(){
 								it79.ary(
@@ -48,7 +87,7 @@ $(window).on('load', function(){
 											it3.next();
 										});
 										$('head').append(script);
-										script.src = '/assets/px2te_resources/'+project_code+'/'+branch_name+'/'+row;
+										script.src = '/assets/cce/'+customConsoleExtensionId+'/'+project_code+'/'+branch_name+'/'+row;
 									},
 									function(){
 										it1.next();
@@ -61,117 +100,87 @@ $(window).on('load', function(){
 				}
 			);
 		},
+		// function(it1){
+
+		// 	var watchDir = main.cceWatcher.getWatchDir();
+		// 	// console.log('watchDir:', watchDir);
+
+		// 	if(!main.utils.isDirectory(watchDir+'async/'+pj.projectInfo.id+'/')){
+		// 		main.fs.mkdirSync(watchDir+'async/'+pj.projectInfo.id+'/');
+		// 	}
+		// 	if(!main.utils.isDirectory(watchDir+'broadcast/'+pj.projectInfo.id+'/')){
+		// 		main.fs.mkdirSync(watchDir+'broadcast/'+pj.projectInfo.id+'/');
+		// 	}
+
+		// 	px2dthelperCceAgent = new Px2dthelperCceAgent({
+		// 		'elm': $('.contents').get(0),
+		// 		'lang': main.getDb().language,
+		// 		'appMode': 'desktop',
+		// 		'gpiBridge': function(input, callback){
+		// 			// GPI(General Purpose Interface) Bridge
+
+		// 			var getParam = '';
+		// 			getParam += 'PX=px2dthelper.custom_console_extensions.'+customConsoleExtensionId+'.gpi'
+		// 				+'&request='+encodeURIComponent( JSON.stringify(input) )
+		// 				+'&appMode=desktop'
+		// 				+'&asyncMethod=file'
+		// 				+'&asyncDir='+watchDir+'async/'+pj.projectInfo.id+'/'
+		// 				+'&broadcastMethod=file'
+		// 				+'&broadcastDir='+watchDir+'broadcast/'+pj.projectInfo.id+'/';
+		// 			// console.log(getParam);
+
+		// 			var testTimestamp = (new Date()).getTime();
+		// 			var tmpFileName = '__tmp_'+main.utils79.md5( Date.now() )+'.json';
+		// 			// console.log('=-=-=-=-=-=-=-=', realpathDataDir+tmpFileName, getParam);
+		// 			main.fs.writeFileSync( realpathDataDir+tmpFileName, getParam );
+
+		// 			pj.execPx2(
+		// 				'/?' + getParam,
+		// 				{
+		// 					'method': 'post',
+		// 					'bodyFile': tmpFileName,
+		// 					'complete': function(rtn){
+		// 						// console.log('--- returned(millisec)', (new Date()).getTime() - testTimestamp);
+		// 						new Promise(function(rlv){rlv();})
+		// 							.then(function(){ return new Promise(function(rlv, rjt){
+		// 								try{
+		// 									rtn = JSON.parse(rtn);
+		// 								}catch(e){
+		// 									console.error('Failed to parse JSON String -> ' + rtn);
+		// 								}
+		// 								rlv();
+		// 							}); })
+		// 							.then(function(){ return new Promise(function(rlv, rjt){
+		// 								main.fs.unlinkSync( realpathDataDir+tmpFileName );
+		// 								rlv();
+		// 							}); })
+		// 							.then(function(){ return new Promise(function(rlv, rjt){
+		// 								callback( rtn );
+		// 							}); })
+		// 						;
+		// 					}
+		// 				}
+		// 			);
+		// 			return;
+		// 		}
+		// 	});
+		// 	pj.onCceBroadcast(function(message){
+		// 		px2dthelperCceAgent.putBroadcastMessage(message);
+		// 	});
+		// 	it1.next();
+
+		// } ,
+		// function(it1){
+		// 	eval(cceInfo.client_initialize_function+'(px2dthelperCceAgent);');
+		// 	it1.next();
+
+		// } ,
 		function(it1){
-			pickles2ThemeEditor = new Pickles2ThemeEditor(); // px2te client
-			it1.next();
-		},
-		function(it1){
-
-			pickles2ThemeEditor.init(
-				{
-					'elmCanvas': $('.contents').get(0), // <- 編集画面を描画するための器となる要素
-					'lang': 'ja',
-					'gpiBridge': function(input, callback){
-						// GPI(General Purpose Interface) Bridge
-						// broccoliは、バックグラウンドで様々なデータ通信を行います。
-						// GPIは、これらのデータ通信を行うための汎用的なAPIです。
-
-						console.log('gpiBridge:', input);
-						let rtn;
-
-						$.ajax({
-							"url": '/themes/'+project_code+'/'+branch_name+'/px2teGpi',
-							"method": 'post',
-							'data': {
-								'data': input,
-								'_token': csrfToken
-							},
-							"success": function(data){
-								// console.log(data);
-								rtn = data;
-							},
-							"error": function(e){
-								console.error('Ajax Error:', e);
-							},
-							"complete": function(){
-								// console.log('=-=-=-=-=-=', rtn);
-								callback(rtn);
-							}
-						});
-
-
-						var testTimestamp = (new Date()).getTime();
-						var tmpFileName = '__tmp_'+utils79.md5( Date.now() )+'.json';
-						main.fs.writeFileSync( realpathDataDir+tmpFileName, JSON.stringify(input) );
-
-						pj.execPx2(
-							'/?PX=px2dthelper.px2te.gpi&appMode=web&data_filename='+encodeURIComponent( tmpFileName ),
-							{
-								complete: function(rtn){
-									console.log('--- returned(millisec)', (new Date()).getTime() - testTimestamp);
-									new Promise(function(rlv){rlv();})
-										.then(function(){ return new Promise(function(rlv, rjt){
-											try{
-												rtn = JSON.parse(rtn);
-											}catch(e){
-												console.error('Failed to parse JSON String -> ' + rtn);
-											}
-											rlv();
-										}); })
-										.then(function(){ return new Promise(function(rlv, rjt){
-											main.fs.unlinkSync( realpathDataDir+tmpFileName );
-											// pj.updateGitStatus(function(){});
-											rlv();
-										}); })
-										.then(function(){ return new Promise(function(rlv, rjt){
-											callback( rtn );
-										}); })
-									;
-								}
-							}
-						);
-						return;
-					},
-					'themeLayoutEditor': function(themeId, layoutId){
-						alert('※TODO:開発中です。' + themeId+'/'+layoutId);
-						return;
-					},
-					'openInFinder': function(path){
-						var url = realpathThemeCollectionDir;
-						if(path){
-							url += path;
-						}
-						alert('※TODO:開発中です。' + url);
-					},
-					'openInTextEditor': function(path){
-						var url = realpathThemeCollectionDir;
-						if(path){
-							url += path;
-						}
-						alert('※TODO:開発中です。' + url);
-					}
-				},
-				function(){
-					// スタンバイ完了したら呼び出されるコールバックメソッドです。
-					it1.next();
-				}
-			);
-
-		} ,
-		function(it1){
-
-			$(window).on('resize', function(){
-				console.log('window.resized');
-				$elms.editor
-					.css({
-						'height': $(window).innerHeight() - 0
-					})
-				;
-			});
-
-			console.log('Theme Editor: Standby.');
-			callback();
+			// --------------------------------------
+			// スタンバイ完了
+			console.log('Standby.');
 		}
+
 	]);
 
 	function execPx2(path, options){
@@ -181,7 +190,7 @@ $(window).on('load', function(){
 		let rtn;
 
 		$.ajax({
-			"url": '/themes/'+project_code+'/'+branch_name+'/ajax',
+			"url": '/custom_console_extensions/'+customConsoleExtensionId+'/'+project_code+'/'+branch_name+'/ajax',
 			"method": 'post',
 			'data': {
 				'path': path,
