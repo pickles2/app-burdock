@@ -38,8 +38,8 @@
 							<tr>
 								<th>Project Name</th>
 								<td class="tpl_name">
-								@if (is_object($bd_object) && is_object($bd_object->packages) && is_object($bd_object->packages->package_list) && is_array($bd_object->packages->package_list->projects) && count($bd_object->packages->package_list->projects))
-									{{ $bd_object->packages->package_list->projects[0]->name }}
+								@if (is_object($project_branch_info) && is_object($project_branch_info->packages) && is_object($project_branch_info->packages->package_list) && is_array($project_branch_info->packages->package_list->projects) && count($project_branch_info->packages->package_list->projects))
+									{{ $project_branch_info->packages->package_list->projects[0]->name }}
 								@else
 									---
 								@endif
@@ -56,15 +56,15 @@
 							{{-- ↓不要なサーバー内部の情報は、なるべくクライアントへ送出したくない。 --}}
 							{{-- <tr>
 								<th>Path</th>
-								<td class="tpl_path">{{ $bd_object->realpath_docroot }}</td>
+								<td class="tpl_path">{{ $project_branch_info->realpath_docroot }}</td>
 							</tr>
 							<tr>
 								<th>Home Directory</th>
-								<td class="tpl_home_dir">{{ $bd_object->packages->package_list->projects[0]->path_homedir }}</td>
+								<td class="tpl_home_dir">{{ $project_branch_info->packages->package_list->projects[0]->path_homedir }}</td>
 							</tr>
 							<tr>
 								<th>Entry Script</th>
-								<td class="tpl_entry_script">{{ $bd_object->packages->package_list->projects[0]->path }}</td>
+								<td class="tpl_entry_script">{{ $project_branch_info->packages->package_list->projects[0]->path }}</td>
 							</tr> --}}
 						</tbody>
 					</table>

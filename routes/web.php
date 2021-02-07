@@ -100,6 +100,11 @@ Route::get('publish/{project}/{branch_name}/publishFileDownload', 'PublishContro
 Route::get('publish/{project}/{branch_name}/publishReportDownload', 'PublishController@publishReportDownload');
 
 // --------------------------------------
+// Custom Console Extensions
+Route::get('custom_console_extensions/{cce_id}/{project}/{branch_name}', 'CustomConsoleExtensionsController@index');
+Route::post('custom_console_extensions/{cce_id}/{project}/{branch_name}/gpi', 'CustomConsoleExtensionsController@gpi');
+
+// --------------------------------------
 // Git
 Route::get('git/{project}/{branch_name}', 'GitController@index');
 Route::post('git/{project}/{branch_name}/git', 'GitController@gitCommand');

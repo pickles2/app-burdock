@@ -138,6 +138,15 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 										<li><a href="{{ url('search/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="search">検索</a></li>
 									</ul>
 								</li>
+								@if( isset($project_branch_info) && isset($project_branch_info->custom_console_extensions) )
+								<li><a href="javascript:;">拡張機能</a>
+									<ul>
+										@foreach($project_branch_info->custom_console_extensions as $cce_id=>$cce_info)
+										<li><a href="{{ url('custom_console_extensions/'.urlencode($cce_id).'/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="custom_console_extensions.{{ $cce_id }}">{{ $cce_id }}</a></li>
+										@endforeach
+									</ul>
+								</li>
+								@endif
 								<li><a href="{{ url('staging/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="staging">ステージング管理</a></li>
 								<li><a href="{{ url('delivery/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="delivery">配信管理</a></li>
 								<li><a href="{{ url('clearcache/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="clearcache">キャッシュを消去する</a></li>

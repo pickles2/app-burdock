@@ -34,6 +34,10 @@ mix
 	.js('resources/cont/files_and_folders/script.js', 'public/cont/files_and_folders/script.js')
 	.sass('resources/cont/files_and_folders/style.scss', 'public/cont/files_and_folders/style.css')
 
+	// Custom Console Extensions
+	.js('resources/cont/custom_console_extensions/script.js', 'public/cont/custom_console_extensions/script.js')
+	.sass('resources/cont/custom_console_extensions/style.scss', 'public/cont/custom_console_extensions/style.css')
+
 	// --------------------------------------
 	// Static Frontend Libraries
 	// .copyDirectory('vendor/pickles2/px2style/dist', 'public/common/px2style/dist')

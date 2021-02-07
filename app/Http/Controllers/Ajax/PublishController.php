@@ -29,16 +29,16 @@ class PublishController extends Controller
 		$project_name = $project->project_code;
 		$project_path = get_project_workingtree_dir($project_name, $branch_name);
 
-		$bd_object = px2query(
+		$px2all = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
 		);
-		$bd_object = json_decode($bd_object);
+		$px2all = json_decode($px2all);
 
-		$publish_log_file = $bd_object->realpath_homedir.'_sys/ram/publish/publish_log.csv';
-		$alert_log_file = $bd_object->realpath_homedir.'_sys/ram/publish/alert_log.csv';
-		$applock_file = $bd_object->realpath_homedir.'_sys/ram/publish/applock.txt';
+		$publish_log_file = $px2all->realpath_homedir.'_sys/ram/publish/publish_log.csv';
+		$alert_log_file = $px2all->realpath_homedir.'_sys/ram/publish/alert_log.csv';
+		$applock_file = $px2all->realpath_homedir.'_sys/ram/publish/applock.txt';
 
 		if(\File::exists($publish_log_file)) {
 			$exists_publish_log = true;
@@ -136,15 +136,15 @@ class PublishController extends Controller
 		$kill_info = exec('kill -USR1 '.$request->process);
 		chdir($path_current_dir); // 元いたディレクトリへ戻る
 
-		$bd_object = px2query(
+		$px2all = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
 		);
-		$bd_object = json_decode($bd_object);
+		$px2all = json_decode($px2all);
 
 		// applock.txtを削除
-		$applock_file = $bd_object->realpath_homedir.'_sys/ram/publish/applock.txt';
+		$applock_file = $px2all->realpath_homedir.'_sys/ram/publish/applock.txt';
 		\File::delete($applock_file);
 
 		// 削除の結果をテキストで返す
@@ -162,14 +162,14 @@ class PublishController extends Controller
 	public function publishSingleAjax(Request $request, Project $project, $branch_name)
 	{
 		$path_region = $request->path_region;
-		$bd_object = px2query(
+		$px2all = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=publish.run&path_region='.urlencode($path_region)
 		);
-		$bd_object = json_decode($bd_object);
+		$px2all = json_decode($px2all);
 
-		if($bd_object !== false) {
+		if($px2all !== false) {
 			$info = 'をパブリッシュしました。';
 		} else {
 			$info = 'をパブリッシュできませんでした。';
