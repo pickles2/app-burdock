@@ -16,6 +16,8 @@ class PublishEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+	public $project_code;
+	public $branch_name;
 	public $parse;
 	public $judge;
 	public $queue_count;
@@ -28,9 +30,10 @@ class PublishEvent implements ShouldBroadcastNow
      *
      * @return void
      */
-    public function __construct($parse, $judge, $queue_count, $publish_file, $end_publish, $process, $pipes)
+    public function __construct($project_code, $branch_name, $parse, $judge, $queue_count, $publish_file, $end_publish, $process, $pipes)
     {
-        //
+		$this->project_code = $project_code;
+		$this->branch_name = $branch_name;
 		$this->parse = $parse;
 		$this->judge = $judge;
 		$this->queue_count = $queue_count;
@@ -47,7 +50,7 @@ class PublishEvent implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel('publish-event');
+        return new Channel($this->project_code.'---'.$this->branch_name.'___publish');
     }
 
 	public function broadcastWith()

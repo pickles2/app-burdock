@@ -38,7 +38,7 @@
 							<tr>
 								<th>Project Name</th>
 								<td class="tpl_name">
-								@if (is_object($bd_object) && is_object($bd_object->packages))
+								@if (is_object($bd_object) && is_object($bd_object->packages) && is_object($bd_object->packages->package_list) && is_array($bd_object->packages->package_list->projects) && count($bd_object->packages->package_list->projects))
 									{{ $bd_object->packages->package_list->projects[0]->name }}
 								@else
 									---

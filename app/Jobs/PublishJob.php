@@ -173,7 +173,7 @@ class PublishJob implements ShouldQueue
 			$process = proc_get_status($proc);
 
 			// ブロードキャストイベントに標準出力、標準エラー出力、パース結果を渡す、判定変数、キュー数、アラート配列、経過時間配列、パブリッシュファイルを渡す
-			broadcast(new \App\Events\PublishEvent($parse, $judge, $queue_count, $publish_file, $end_publish, $process, $pipes));
+			broadcast(new \App\Events\PublishEvent($project_code, $branch_name, $parse, $judge, $queue_count, $publish_file, $end_publish, $process, $pipes));
 		}
 
 		fclose($pipes[1]);
