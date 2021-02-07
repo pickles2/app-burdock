@@ -67,12 +67,35 @@ class CustomConsoleExtensionsController extends Controller
 
 	public function gpi(Request $request, $cce_id, Project $project, $branch_name)
 	{
+		// TODO: バックエンドから Queue と Broadcast への接続方法を検討する
+
 		$current = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
 		);
 		$current = json_decode($current);
+
+		// var watchDir = main.cceWatcher.getWatchDir();
+		// // console.log('watchDir:', watchDir);
+
+		// if(!main.utils.isDirectory(watchDir+'async/'+pj.projectInfo.id+'/')){
+		// 	main.fs.mkdirSync(watchDir+'async/'+pj.projectInfo.id+'/');
+		// }
+		// if(!main.utils.isDirectory(watchDir+'broadcast/'+pj.projectInfo.id+'/')){
+		// 	main.fs.mkdirSync(watchDir+'broadcast/'+pj.projectInfo.id+'/');
+		// }
+
+		$getParam = '';
+		$getParam .= 'PX=px2dthelper.custom_console_extensions.'.$cce_id.'.gpi'
+			.'&request='.urlencode( json_encode($request->data) )
+			.'&appMode=web'
+			.'&asyncMethod=file'
+			// .'&asyncDir='.$watchDir.'async/'.$project->project_code.'/'
+			.'&broadcastMethod=file'
+			// .'&broadcastDir='.$watchDir.'broadcast/'.$project->project_code.'/'
+		;
+
 
 		// ミリ秒を含むUnixタイムスタンプを数値（Float）で取得
 		$timestamp = microtime(true);
@@ -84,12 +107,16 @@ class CustomConsoleExtensionsController extends Controller
 		$tmpFileName = '__tmp_'.md5($timeWithMillisec).'_data.json';
 		// 一時ファイルを保存
 		$file = $current->realpath_homedir.'_sys/ram/data/'.$tmpFileName;
-		file_put_contents($file, json_encode($request->data));
+		file_put_contents($file, $getParam);
 
 		$result = px2query(
 			$project->project_code,
 			$branch_name,
-			'/?PX=px2dthelper.px2te.gpi&appMode=web&data_filename='.urlencode($tmpFileName)
+			'/?'.$getParam,
+			array(
+				'method' => 'post',
+				'bodyFile' => $tmpFileName,
+			)
 		);
 		$result = json_decode($result, true);
 
@@ -97,5 +124,7 @@ class CustomConsoleExtensionsController extends Controller
 		unlink($file);
 
 		return $result;
+
 	}
+
 }

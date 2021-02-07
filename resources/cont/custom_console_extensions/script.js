@@ -100,81 +100,62 @@ $(window).on('load', function(){
 				}
 			);
 		},
-		// function(it1){
+		function(it1){
 
-		// 	var watchDir = main.cceWatcher.getWatchDir();
-		// 	// console.log('watchDir:', watchDir);
+			// var watchDir = main.cceWatcher.getWatchDir();
+			// // console.log('watchDir:', watchDir);
 
-		// 	if(!main.utils.isDirectory(watchDir+'async/'+pj.projectInfo.id+'/')){
-		// 		main.fs.mkdirSync(watchDir+'async/'+pj.projectInfo.id+'/');
-		// 	}
-		// 	if(!main.utils.isDirectory(watchDir+'broadcast/'+pj.projectInfo.id+'/')){
-		// 		main.fs.mkdirSync(watchDir+'broadcast/'+pj.projectInfo.id+'/');
-		// 	}
+			// if(!main.utils.isDirectory(watchDir+'async/'+pj.projectInfo.id+'/')){
+			// 	main.fs.mkdirSync(watchDir+'async/'+pj.projectInfo.id+'/');
+			// }
+			// if(!main.utils.isDirectory(watchDir+'broadcast/'+pj.projectInfo.id+'/')){
+			// 	main.fs.mkdirSync(watchDir+'broadcast/'+pj.projectInfo.id+'/');
+			// }
 
-		// 	px2dthelperCceAgent = new Px2dthelperCceAgent({
-		// 		'elm': $('.contents').get(0),
-		// 		'lang': main.getDb().language,
-		// 		'appMode': 'desktop',
-		// 		'gpiBridge': function(input, callback){
-		// 			// GPI(General Purpose Interface) Bridge
+			px2dthelperCceAgent = new Px2dthelperCceAgent({
+				'elm': $('.contents').get(0),
+				'lang': 'ja',
+				'appMode': 'web',
+				'gpiBridge': function(input, callback){
+					// GPI(General Purpose Interface) Bridge
 
-		// 			var getParam = '';
-		// 			getParam += 'PX=px2dthelper.custom_console_extensions.'+customConsoleExtensionId+'.gpi'
-		// 				+'&request='+encodeURIComponent( JSON.stringify(input) )
-		// 				+'&appMode=desktop'
-		// 				+'&asyncMethod=file'
-		// 				+'&asyncDir='+watchDir+'async/'+pj.projectInfo.id+'/'
-		// 				+'&broadcastMethod=file'
-		// 				+'&broadcastDir='+watchDir+'broadcast/'+pj.projectInfo.id+'/';
-		// 			// console.log(getParam);
+					console.log('gpiBridge:', input);
+					let rtn;
 
-		// 			var testTimestamp = (new Date()).getTime();
-		// 			var tmpFileName = '__tmp_'+main.utils79.md5( Date.now() )+'.json';
-		// 			// console.log('=-=-=-=-=-=-=-=', realpathDataDir+tmpFileName, getParam);
-		// 			main.fs.writeFileSync( realpathDataDir+tmpFileName, getParam );
+					$.ajax({
+						"url": '/custom_console_extensions/'+customConsoleExtensionId+'/'+project_code+'/'+branch_name+'/gpi',
+						"method": 'post',
+						'data': {
+							'data': input,
+							'_token': csrfToken
+						},
+						"success": function(data){
+							// console.log(data);
+							rtn = data;
+						},
+						"error": function(e){
+							console.error('Ajax Error:', e);
+						},
+						"complete": function(){
+							// console.log('=-=-=-=-=-=', rtn);
+							callback(rtn);
+						}
+					});
 
-		// 			pj.execPx2(
-		// 				'/?' + getParam,
-		// 				{
-		// 					'method': 'post',
-		// 					'bodyFile': tmpFileName,
-		// 					'complete': function(rtn){
-		// 						// console.log('--- returned(millisec)', (new Date()).getTime() - testTimestamp);
-		// 						new Promise(function(rlv){rlv();})
-		// 							.then(function(){ return new Promise(function(rlv, rjt){
-		// 								try{
-		// 									rtn = JSON.parse(rtn);
-		// 								}catch(e){
-		// 									console.error('Failed to parse JSON String -> ' + rtn);
-		// 								}
-		// 								rlv();
-		// 							}); })
-		// 							.then(function(){ return new Promise(function(rlv, rjt){
-		// 								main.fs.unlinkSync( realpathDataDir+tmpFileName );
-		// 								rlv();
-		// 							}); })
-		// 							.then(function(){ return new Promise(function(rlv, rjt){
-		// 								callback( rtn );
-		// 							}); })
-		// 						;
-		// 					}
-		// 				}
-		// 			);
-		// 			return;
-		// 		}
-		// 	});
-		// 	pj.onCceBroadcast(function(message){
-		// 		px2dthelperCceAgent.putBroadcastMessage(message);
-		// 	});
-		// 	it1.next();
+					return;
+				}
+			});
+			window.Echo.channel(this.projectCode+'---'+this.branchName+'___cce---'+customConsoleExtensionId).listen('PublishEvent', (e) => {
+				px2dthelperCceAgent.putBroadcastMessage(e.message);
+			})
+			it1.next();
 
-		// } ,
-		// function(it1){
-		// 	eval(cceInfo.client_initialize_function+'(px2dthelperCceAgent);');
-		// 	it1.next();
+		} ,
+		function(it1){
+			eval(cceInfo.client_initialize_function+'(px2dthelperCceAgent);');
+			it1.next();
 
-		// } ,
+		} ,
 		function(it1){
 			// --------------------------------------
 			// スタンバイ完了

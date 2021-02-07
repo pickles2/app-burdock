@@ -13,7 +13,7 @@
  * @return string Pickles 2 が出力した文字列。
  * 期待される出力がJSONとは限らないので、デコードは呼び出し側の責任とする。
  */
-function px2query($project_code, $branch_name, $query){
+function px2query($project_code, $branch_name, $query, $px2agentOptions = array()){
 
 	// Pickles 2 の EntryScript
 	$project_path = get_project_workingtree_dir($project_code, $branch_name);
@@ -33,5 +33,5 @@ function px2query($project_code, $branch_name, $query){
 
 	$px2agent = new \picklesFramework2\px2agent\px2agent($init_options);
 	$px2proj = $px2agent->createProject($realpath_entry_script);
-	return $px2proj->query($query);
+	return $px2proj->query($query, $px2agentOptions);
 }

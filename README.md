@@ -162,6 +162,7 @@ BROADCAST_DRIVER=redis
 redis-server --daemonize yes;
 pm2 start laravel-echo-server-pm2.json;
 php artisan queue:work --timeout=30000;
+node node/cceWatcher.js;
 ```
 
 
