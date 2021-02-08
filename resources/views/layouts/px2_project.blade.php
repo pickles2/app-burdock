@@ -138,7 +138,7 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 										<li><a href="{{ url('search/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="search">検索</a></li>
 									</ul>
 								</li>
-								@if( isset($project_branch_info) && isset($project_branch_info->custom_console_extensions) )
+								@if( isset($project_branch_info) && isset($project_branch_info->custom_console_extensions) && (is_object($project_branch_info->custom_console_extensions) || is_array($project_branch_info->custom_console_extensions)) )
 								<li><a href="javascript:;">拡張機能</a>
 									<ul>
 										@foreach($project_branch_info->custom_console_extensions as $cce_id=>$cce_info)

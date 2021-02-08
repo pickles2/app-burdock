@@ -67,7 +67,7 @@ class CustomConsoleExtensionsController extends Controller
 
 	public function gpi(Request $request, $cce_id, Project $project, $branch_name)
 	{
-		// TODO: バックエンドから Queue と Broadcast への接続方法を検討する
+		$fs = new \tomk79\filesystem();
 
 		$current = px2query(
 			$project->project_code,
@@ -76,24 +76,22 @@ class CustomConsoleExtensionsController extends Controller
 		);
 		$current = json_decode($current);
 
-		// var watchDir = main.cceWatcher.getWatchDir();
-		// // console.log('watchDir:', watchDir);
-
-		// if(!main.utils.isDirectory(watchDir+'async/'+pj.projectInfo.id+'/')){
-		// 	main.fs.mkdirSync(watchDir+'async/'+pj.projectInfo.id+'/');
-		// }
-		// if(!main.utils.isDirectory(watchDir+'broadcast/'+pj.projectInfo.id+'/')){
-		// 	main.fs.mkdirSync(watchDir+'broadcast/'+pj.projectInfo.id+'/');
-		// }
+		$watchDir = env('BD_DATA_DIR').'/customConsoleExtensions/watcher/';
+		if(!is_dir($watchDir.'async/'.$project->project_code.'/'.$branch_name.'/')){
+			$fs->mkdir_r($watchDir.'async/'.$project->project_code.'/'.$branch_name.'/');
+		}
+		if(!is_dir($watchDir.'broadcast/'.$project->project_code.'/'.$branch_name.'/')){
+			$fs->mkdir_r($watchDir.'broadcast/'.$project->project_code.'/'.$branch_name.'/');
+		}
 
 		$getParam = '';
 		$getParam .= 'PX=px2dthelper.custom_console_extensions.'.$cce_id.'.gpi'
 			.'&request='.urlencode( json_encode($request->data) )
 			.'&appMode=web'
 			.'&asyncMethod=file'
-			// .'&asyncDir='.$watchDir.'async/'.$project->project_code.'/'
+			.'&asyncDir='.$watchDir.'async/'.$project->project_code.'/'.$branch_name.'/'
 			.'&broadcastMethod=file'
-			// .'&broadcastDir='.$watchDir.'broadcast/'.$project->project_code.'/'
+			.'&broadcastDir='.$watchDir.'broadcast/'.$project->project_code.'/'.$branch_name.'/'
 		;
 
 
