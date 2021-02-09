@@ -24,7 +24,7 @@ class PublishController extends Controller
 
 	public function readCsvAjax(Request $request, Project $project, $branch_name)
 	{
-		//
+
 		$fs = new \tomk79\filesystem;
 		$project_name = $project->project_code;
 		$project_path = get_project_workingtree_dir($project_name, $branch_name);
@@ -89,7 +89,7 @@ class PublishController extends Controller
 
 	public function publishAjax(Request $request, Project $project, $branch_name)
 	{
-		//
+        $user_id = Auth::id();
 		$publish_option = $request->publish_option;
 		$paths_region = $request->paths_region;
 		$paths_ignore = $request->paths_ignore;
@@ -101,6 +101,7 @@ class PublishController extends Controller
 
 		// パブリッシュキューを発行する
 		\App\Jobs\PublishJob::dispatch(
+			$user_id,
 			$project_code,
 			$branch_name,
 			array(

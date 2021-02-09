@@ -146,7 +146,8 @@ $(window).on('load', function(){
 				}
 			});
 
-			window.Echo.channel(project_code+'---'+branch_name+'___cce---'+customConsoleExtensionId).listen('CustomConsoleExtensionsEvent', (e) => {
+			var user_id = $('meta[name=login-user-id]').attr('content');
+			window.Echo.channel(project_code+'---'+branch_name+'___cce---'+customConsoleExtensionId+'.'+user_id).listen('CustomConsoleExtensionsEvent', (e) => {
 				px2dthelperCceAgent.putBroadcastMessage(e.message);
 			})
 			it1.next();

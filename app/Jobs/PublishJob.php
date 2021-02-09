@@ -12,6 +12,7 @@ class PublishJob implements ShouldQueue
 {
 	use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+	private $user_id;
 	private $project_code;
 	private $branch_name;
 	private $publish_options;
@@ -21,8 +22,9 @@ class PublishJob implements ShouldQueue
 	 *
 	 * @return void
 	 */
-	public function __construct( $project_code, $branch_name, $publish_options = array() )
+	public function __construct( $user_id, $project_code, $branch_name, $publish_options = array() )
 	{
+		$this->user_id = $user_id;
 		$this->project_code = $project_code;
 		$this->branch_name = $branch_name;
 		$this->publish_options = $publish_options;
@@ -41,6 +43,7 @@ class PublishJob implements ShouldQueue
 		$paths_ignore = $this->publish_options['paths_ignore'];
 		$keep_cache = $this->publish_options['keep_cache'];
 
+		$user_id = $this->user_id;
 		$project_code = $this->project_code;
 		$branch_name = $this->branch_name;
 
@@ -173,7 +176,7 @@ class PublishJob implements ShouldQueue
 			$process = proc_get_status($proc);
 
 			// ブロードキャストイベントに標準出力、標準エラー出力、パース結果を渡す、判定変数、キュー数、アラート配列、経過時間配列、パブリッシュファイルを渡す
-			broadcast(new \App\Events\PublishEvent($project_code, $branch_name, $parse, $judge, $queue_count, $publish_file, $end_publish, $process, $pipes));
+			broadcast(new \App\Events\PublishEvent($user_id, $project_code, $branch_name, $parse, $judge, $queue_count, $publish_file, $end_publish, $process, $pipes));
 		}
 
 		fclose($pipes[1]);

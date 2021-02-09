@@ -302,7 +302,10 @@ export default {
 		// 購読するチャンネルの設定
 		connectChannel() {
 			// Ajax\PublishController@publishAjaxの返り値
-			window.Echo.channel(this.projectCode+'---'+this.branchName+'___publish').listen('PublishEvent', (e) => {
+			var user_id = $('meta[name=login-user-id]').attr('content');
+			// console.log('Login User:', user_id);
+			// console.log(this.projectCode+'---'+this.branchName+'___publish.'+user_id);
+			window.Echo.channel(this.projectCode+'---'+this.branchName+'___publish.'+user_id).listen('PublishEvent', (e) => {
 				this.process = e.process.pid;
 				this.publishStatus = 2;
 				// 標準出力が数値または数値+改行コードだった場合parseに代入

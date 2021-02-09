@@ -12,7 +12,7 @@ class CustomConsoleExtensionsBroadcastCommand extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'bd:custom_console_extensions_broadcast {project_code} {branch_name} {cce_id} {realpathMessageFile}';
+	protected $signature = 'bd:custom_console_extensions_broadcast {user_id} {project_code} {branch_name} {cce_id} {realpathMessageFile}';
 
 	/**
 	 * The console command description.
@@ -56,6 +56,7 @@ class CustomConsoleExtensionsBroadcastCommand extends Command
 		$this->info('----------------------------------------------------------------');
 		$this->line( '' );
 
+		$user_id = $this->argument('user_id');
 		$realpathMessageFile = $this->argument('realpathMessageFile');
 		$project_code = $this->argument('project_code');
 		$branch_name = $this->argument('branch_name');
@@ -66,7 +67,7 @@ class CustomConsoleExtensionsBroadcastCommand extends Command
 		$json = json_decode($jsonStr, true);
 
 		// ブロードキャストイベントに標準出力、標準エラー出力、パース結果を渡す、判定変数、キュー数、アラート配列、経過時間配列、パブリッシュファイルを渡す
-		broadcast(new \App\Events\CustomConsoleExtensionsEvent($project_code, $branch_name, $cce_id, $json));
+		broadcast(new \App\Events\CustomConsoleExtensionsEvent($user_id, $project_code, $branch_name, $cce_id, $json));
 
 		$this->line('Local Time: '.date('Y-m-d H:i:s'));
 		$this->line('GMT: '.gmdate('Y-m-d H:i:s'));

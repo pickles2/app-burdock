@@ -10,12 +10,11 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
-use App\Publish;
-
 class CustomConsoleExtensionsEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+	public $user_id;
 	public $project_code;
 	public $branch_name;
 	public $cce_id;
@@ -26,8 +25,9 @@ class CustomConsoleExtensionsEvent implements ShouldBroadcastNow
      *
      * @return void
      */
-    public function __construct($project_code, $branch_name, $cce_id, $message)
+    public function __construct($user_id, $project_code, $branch_name, $cce_id, $message)
     {
+		$this->user_id = $user_id;
 		$this->project_code = $project_code;
 		$this->branch_name = $branch_name;
 		$this->cce_id = $cce_id;
@@ -41,7 +41,7 @@ class CustomConsoleExtensionsEvent implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel($this->project_code.'---'.$this->branch_name.'___cce---'.$this->cce_id);
+        return new Channel($this->project_code.'---'.$this->branch_name.'___cce---'.$this->cce_id.'.'.$this->user_id);
     }
 
 	public function broadcastWith()

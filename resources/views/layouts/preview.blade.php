@@ -8,6 +8,9 @@
 	{{-- CSRF トークン --}}
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
+	{{-- ログインユーザーID --}}
+	<meta name="login-user-id" content="{{ Auth::id() }}">
+
 	<title>@if (! Request::is('/')){{ $title }} | @endif{{ env('APP_NAME') }}</title>
 
 	{{-- CSS --}}

@@ -67,6 +67,7 @@ class CustomConsoleExtensionsController extends Controller
 
 	public function gpi(Request $request, $cce_id, Project $project, $branch_name)
 	{
+        $user_id = Auth::id();
 		$fs = new \tomk79\filesystem();
 
 		$current = px2query(
@@ -77,11 +78,11 @@ class CustomConsoleExtensionsController extends Controller
 		$current = json_decode($current);
 
 		$watchDir = env('BD_DATA_DIR').'/customConsoleExtensions/watcher/';
-		if(!is_dir($watchDir.'async/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/')){
-			$fs->mkdir_r($watchDir.'async/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/');
+		if(!is_dir($watchDir.'async/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/'.$user_id.'/')){
+			$fs->mkdir_r($watchDir.'async/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/'.$user_id.'/');
 		}
-		if(!is_dir($watchDir.'broadcast/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/')){
-			$fs->mkdir_r($watchDir.'broadcast/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/');
+		if(!is_dir($watchDir.'broadcast/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/'.$user_id.'/')){
+			$fs->mkdir_r($watchDir.'broadcast/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/'.$user_id.'/');
 		}
 
 		$getParam = '';
@@ -89,9 +90,9 @@ class CustomConsoleExtensionsController extends Controller
 			.'&request='.urlencode( json_encode($request->data) )
 			.'&appMode=web'
 			.'&asyncMethod=file'
-			.'&asyncDir='.$watchDir.'async/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/'
+			.'&asyncDir='.$watchDir.'async/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/'.$user_id.'/'
 			.'&broadcastMethod=file'
-			.'&broadcastDir='.$watchDir.'broadcast/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/'
+			.'&broadcastDir='.$watchDir.'broadcast/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/'.$user_id.'/'
 		;
 
 
