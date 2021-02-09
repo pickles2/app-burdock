@@ -33,6 +33,7 @@
         "img-loader": "^3.0.1",
         "iterate79": "^1.1.1",
         "laravel-echo": "^1.5.3",
+        "px2agent": "^2.0.7",
         "px2style": "file:submodules/px2style",
         "socket.io-client": "^2.2.0",
         "utils79": "0.0.5",
