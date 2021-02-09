@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 		'boot' => \App\Http\Middleware\boot::class, // Burdock Custom Middleware
+		'project' => \App\Http\Middleware\project::class, // Burdock Custom Middleware
     ];
 }

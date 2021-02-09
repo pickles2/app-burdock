@@ -31,11 +31,6 @@ class boot
 		// }
 
 		$user = Auth::user();
-		if( $user ){
-			if( !$user->icon ){
-				$user->icon = url('/common/images/nophoto.png');
-			}
-		}
 		$global->user = $user;
 
 		return $next($request);
