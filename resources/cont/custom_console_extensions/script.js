@@ -12,6 +12,15 @@ $(window).on('load', function(){
 
 	it79.fnc({}, [
 		function(it1){
+			customConsoleExtensionId = window.cce_id;
+			$elm = $('.contents');
+			it1.next();
+		},
+		function(it1){
+			$elm.text('Now Loading: '+customConsoleExtensionId);
+			it1.next();
+		},
+		function(it1){
 			execPx2(
 				'/?PX=px2dthelper.get.all',
 				{
@@ -23,15 +32,6 @@ $(window).on('load', function(){
 					}
 				}
 			);
-		},
-		function(it1){
-			customConsoleExtensionId = window.cce_id;
-			$elm = $('.contents');
-			it1.next();
-		},
-		function(it1){
-			$elm.text(customConsoleExtensionId);
-			it1.next();
 		},
 		function(it1){
 			// 拡張機能情報をロード
