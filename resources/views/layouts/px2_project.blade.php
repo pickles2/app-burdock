@@ -141,11 +141,11 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 										<li><a href="{{ url('search/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="search">検索</a></li>
 									</ul>
 								</li>
-								@if( isset($project_branch_info) && isset($project_branch_info->custom_console_extensions) && (is_object($project_branch_info->custom_console_extensions) || is_array($project_branch_info->custom_console_extensions)) )
+								@if( isset($global->cce) && (is_object($global->cce) || is_array($global->cce)) )
 								<li><a href="javascript:;">拡張機能</a>
 									<ul>
-										@foreach($project_branch_info->custom_console_extensions as $cce_id=>$cce_info)
-										<li><a href="{{ url('custom_console_extensions/'.urlencode($cce_id).'/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="custom_console_extensions.{{ $cce_id }}">{{ $cce_id }}</a></li>
+										@foreach($global->cce as $cce_id=>$cce_info)
+										<li><a href="{{ url('custom_console_extensions/'.urlencode($cce_id).'/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="custom_console_extensions.{{ $cce_id }}">{{ $cce_info->label }}</a></li>
 										@endforeach
 									</ul>
 								</li>
@@ -204,6 +204,11 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 			@if (Request::is('staging/*')) current = 'staging'; @endif
 			@if (Request::is('delivery/*')) current = 'delivery'; @endif
 			@if (Request::is('files-and-folders/*')) current = 'files-and-folders'; @endif
+			@if( isset($global->cce) && (is_object($global->cce) || is_array($global->cce)) )
+				@foreach($global->cce as $cce_id=>$cce_info)
+					@if (Request::is('custom_console_extensions/'.$cce_id.'/*')) current = 'custom_console_extensions.{{$cce_id}}'; @endif
+				@endforeach
+			@endif
 			@if (Request::is('system-maintenance') || Request::is('system-maintenance/*')) current = 'system-maintenance'; @endif
 			@if (Request::is('mypage') || Request::is('mypage/*')) current = 'mypage'; @endif
 			px2style.header.init({'current': current});

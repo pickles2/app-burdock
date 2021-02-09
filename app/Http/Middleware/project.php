@@ -4,9 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Auth;
-use App;
-use App\Project as AppProject;
 
 class project
 {
@@ -30,12 +27,12 @@ class project
 
 		$request_path = $request->path();
 
-		if( preg_match('/^custom_console_extensions\/([a-zA-Z0-9\_\-]+)\/([a-zA-Z0-9\_\-]+)\/([a-zA-Z0-9\_\-]+)(?:\/[\s\S]*)$/is', $request_path, $matched) ){
+		if( preg_match('/^custom_console_extensions\/([a-zA-Z0-9\_\-]+)\/([a-zA-Z0-9\_\-]+)\/([a-zA-Z0-9\_\-]+)(?:\/[\s\S]*)?$/is', $request_path, $matched) ){
 			$global->function_name = 'custom_console_extensions';
 			$global->cce_id = $matched[1];
 			$global->project_code = $matched[2];
 			$global->branch_name = $matched[3];
-		}elseif( preg_match('/^([a-zA-Z0-9\_\-]+)\/([a-zA-Z0-9\_\-]+)\/([a-zA-Z0-9\_\-]+)(?:\/[\s\S]*)$/', $request_path, $matched) ){
+		}elseif( preg_match('/^([a-zA-Z0-9\_\-]+)\/([a-zA-Z0-9\_\-]+)\/([a-zA-Z0-9\_\-]+)(?:\/[\s\S]*)?$/', $request_path, $matched) ){
 			$global->function_name = $matched[1];
 			$global->cce_id = null;
 			$global->project_code = $matched[2];
@@ -53,7 +50,7 @@ class project
 			);
 		}
 		if( is_object($global->px2all) && property_exists($global->px2all, 'px2dtconfig') && property_exists($global->px2all->px2dtconfig, 'custom_console_extensions') ){
-			$global->cce = px2query(
+			$cceResult = px2query(
 				$global->project_code,
 				$global->branch_name,
 				'/?PX=px2dthelper.custom_console_extensions',
@@ -61,8 +58,8 @@ class project
 					'output' => 'json',
 				)
 			);
+			$global->cce = $cceResult->list;
 		}
-
 
 		return $next($request);
 	}
