@@ -56,13 +56,14 @@ module.exports = class{
 			},
 			function(event, filename) {
 				// console.log('=-=-=-=-=', event, filename);
-				if( !filename.match(/^(async|broadcast)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([\s\S]+\.json)$/) ){
+				if( !filename.match(/^(async|broadcast)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([\s\S]+\.json)$/) ){
 					return;
 				}
 				var eventType = RegExp.$1;
 				var projectCode = RegExp.$2;
 				var branchName = RegExp.$3;
-				// console.log('* ', eventType, projectCode, branchName, event);
+				var cceId = RegExp.$4;
+				// console.log('* ', eventType, projectCode, branchName, cceId, event);
 
 				var fileInfo = {};
 				fileInfo.realpath = require('path').resolve(_targetPath+'/'+filename);
@@ -76,7 +77,7 @@ module.exports = class{
 				var fileBin = _this.fs.readFileSync(fileInfo.realpath).toString();
 				var fileJson = JSON.parse(fileBin);
 
-				_this.recieveCceEvents(projectCode, branchName, eventType, fileJson, fileInfo);
+				_this.recieveCceEvents(projectCode, branchName, cceId, eventType, fileJson, fileInfo);
 				return;
 
 			}
@@ -156,7 +157,7 @@ module.exports = class{
 	/**
 	 * Custom Console Extensions: サーバーサイドからの非同期イベントを受信する
 	 */
-	recieveCceEvents(projectCode, branchName, eventType, content, fileInfo){
+	recieveCceEvents(projectCode, branchName, cceId, eventType, content, fileInfo){
 		const _this = this;
 		// console.log(projectCode, branchName, eventType, content);
 		let prjectWorkingTreeDir = this.get_project_workingtree_dir(projectCode, branchName);
@@ -187,9 +188,10 @@ module.exports = class{
 					getParam += 'PX=px2dthelper.custom_console_extensions_async_run'
 						+'&appMode=desktop'
 						+'&asyncMethod=file'
-						+'&asyncDir='+watchDir+'async/'+projectCode+'/'+branchName+'/'
+						+'&asyncDir='+watchDir+'async/'+projectCode+'/'+branchName+'/'+cceId+'/'
 						+'&broadcastMethod=file'
-						+'&broadcastDir='+watchDir+'broadcast/'+projectCode+'/'+branchName+'/';
+						+'&broadcastDir='+watchDir+'broadcast/'+projectCode+'/'+branchName+'/'+cceId+'/'
+					;
 					// console.log(getParam);
 
 					var testTimestamp = (new Date()).getTime();
@@ -216,13 +218,16 @@ module.exports = class{
 			// --------------------
 			// Broadcast
 
-			console.log('TODO: ブロードキャストイベントの伝達方法を検討する。artisanコマンドがよいか？');
-			console.log(fileInfo.realpath);
-			_this.fsEx.removeSync(fileInfo.realpath);
-
-			return;
 			console.log('*** Broadcast:', content);
-			_cceBroadcastCallback( content );
+			console.log(fileInfo.realpath);
+
+			const childProc = require('child_process');
+			childProc.exec('php ./artisan bd:custom_console_extensions_broadcast "'+projectCode+'" "'+branchName+'" "'+cceId+'" "'+fileInfo.realpath+'"', (err, stdout, stderr) => {
+				// console.log('------------------');
+				// console.log(err, stdout, stderr);
+				_this.fsEx.removeSync(fileInfo.realpath);
+			});
+
 		}
 		return;
 	}

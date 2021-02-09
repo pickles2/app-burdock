@@ -77,11 +77,11 @@ class CustomConsoleExtensionsController extends Controller
 		$current = json_decode($current);
 
 		$watchDir = env('BD_DATA_DIR').'/customConsoleExtensions/watcher/';
-		if(!is_dir($watchDir.'async/'.$project->project_code.'/'.$branch_name.'/')){
-			$fs->mkdir_r($watchDir.'async/'.$project->project_code.'/'.$branch_name.'/');
+		if(!is_dir($watchDir.'async/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/')){
+			$fs->mkdir_r($watchDir.'async/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/');
 		}
-		if(!is_dir($watchDir.'broadcast/'.$project->project_code.'/'.$branch_name.'/')){
-			$fs->mkdir_r($watchDir.'broadcast/'.$project->project_code.'/'.$branch_name.'/');
+		if(!is_dir($watchDir.'broadcast/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/')){
+			$fs->mkdir_r($watchDir.'broadcast/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/');
 		}
 
 		$getParam = '';
@@ -89,9 +89,9 @@ class CustomConsoleExtensionsController extends Controller
 			.'&request='.urlencode( json_encode($request->data) )
 			.'&appMode=web'
 			.'&asyncMethod=file'
-			.'&asyncDir='.$watchDir.'async/'.$project->project_code.'/'.$branch_name.'/'
+			.'&asyncDir='.$watchDir.'async/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/'
 			.'&broadcastMethod=file'
-			.'&broadcastDir='.$watchDir.'broadcast/'.$project->project_code.'/'.$branch_name.'/'
+			.'&broadcastDir='.$watchDir.'broadcast/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/'
 		;
 
 

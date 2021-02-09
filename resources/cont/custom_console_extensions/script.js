@@ -145,7 +145,8 @@ $(window).on('load', function(){
 					return;
 				}
 			});
-			window.Echo.channel(this.projectCode+'---'+this.branchName+'___cce---'+customConsoleExtensionId).listen('PublishEvent', (e) => {
+
+			window.Echo.channel(project_code+'---'+branch_name+'___cce---'+customConsoleExtensionId).listen('CustomConsoleExtensionsEvent', (e) => {
 				px2dthelperCceAgent.putBroadcastMessage(e.message);
 			})
 			it1.next();
