@@ -104,7 +104,7 @@ $(window).on('load', function(){
 						return;
 					},
 					'themeLayoutEditor': function(themeId, layoutId){
-						alert('※TODO:開発中です。' + themeId+'/'+layoutId);
+						window.open('/contentsEditor/'+project_code+'/'+branch_name+'?theme_id='+themeId+'&layout_id='+layoutId);
 						return;
 					},
 					'openInFinder': function(path){

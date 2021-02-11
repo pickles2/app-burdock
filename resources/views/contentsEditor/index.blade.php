@@ -27,13 +27,22 @@ foreach($px2ce_client_resources->js as $value) {
 
 <script type="text/javascript">
 	(function(){
-		var project_code = <?php echo json_encode($project->project_code); ?>;
-		var branch_name = <?php echo json_encode($branch_name); ?>;
-		var page_param = <?php echo json_encode($page_param); ?>;
+		var project_code = <?php echo json_encode($project->project_code, JSON_UNESCAPED_SLASHES); ?>;
+		var branch_name = <?php echo json_encode($branch_name, JSON_UNESCAPED_SLASHES); ?>;
+		var page_path = <?php echo json_encode($page_path, JSON_UNESCAPED_SLASHES); ?>;
+		var theme_id = <?php echo json_encode($theme_id, JSON_UNESCAPED_SLASHES); ?>;
+		var layout_id = <?php echo json_encode($layout_id, JSON_UNESCAPED_SLASHES); ?>;
+		var target_mode = 'page_content';
 		// .envよりプレビューサーバーのURLを取得
 		var preview_url = '{{ 'https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN') }}';
 		var resizeTimer;
 
+		if( page_path ){
+			target_mode = 'page_content';
+		}else if( theme_id && layout_id ){
+			target_mode = 'theme_layout';
+			page_path = '/'+theme_id+'/'+layout_id+'.html';
+		}
 
 		// Px2CE の初期化
 		var pickles2ContentsEditor = new Pickles2ContentsEditor(); // px2ce client
@@ -42,7 +51,7 @@ foreach($px2ce_client_resources->js as $value) {
 				// いろんな設定値
 				// これについては Px2CE の README を参照
 				// https://github.com/pickles2/node-pickles2-contents-editor
-				'page_path': '/'+page_param , // <- 編集対象ページのパス
+				'page_path': page_path , // <- 編集対象ページのパス
 				'elmCanvas': document.getElementById('canvas'), // <- 編集画面を描画するための器となる要素
 				'preview':{
 					'origin': preview_url// プレビュー用サーバーの情報を設定します。
@@ -51,7 +60,7 @@ foreach($px2ce_client_resources->js as $value) {
 				'gpiBridge': function(input, callback){
 					console.log(input);
 					$.ajax({
-						"url": '/contentsEditor/'+project_code+'/'+branch_name+'/px2ceGpi?page_path='+page_param, // ←呼び出し元が決める
+						"url": '/contentsEditor/'+project_code+'/'+branch_name+'/px2ceGpi?page_path='+page_path+'&target_mode='+target_mode, // ←呼び出し元が決める
 						"method": 'post',
 						'data': {
 							'data':JSON.stringify(input),
@@ -68,7 +77,8 @@ foreach($px2ce_client_resources->js as $value) {
 					window.open('about:blank','_self').close();
 				},
 				'onClickContentsLink': function( uri, data ){
-					alert('編集: ' + uri);
+					// TODO: 編集リンクを生成する
+					// alert('編集: ' + uri);
 				},
 				'onMessage': function( message ){
 					// ユーザーへ知らせるメッセージを表示する

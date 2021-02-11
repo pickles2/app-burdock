@@ -23,8 +23,9 @@ class ContentsEditorController extends Controller
 	 */
 	public function index(Request $request, Project $project, $branch_name)
 	{
-		//
-		$page_param = $request->page_path;
+		$page_path = $request->page_path;
+		$theme_id = $request->theme_id;
+		$layout_id = $request->layout_id;
 		$client_resources_dist = realpath(__DIR__.'/../../../public/assets/px2ce_resources');
 		$client_resources_dist .= '/'.urlencode($project->project_code);
 		if( !is_dir($client_resources_dist) ){
@@ -47,7 +48,9 @@ class ContentsEditorController extends Controller
 			[
 				'project' => $project,
 				'branch_name' => $branch_name,
-				'page_param' => $page_param,
+				'page_path' => $page_path,
+				'theme_id' => $theme_id,
+				'layout_id' => $layout_id,
 			],
 			compact('px2ce_client_resources')
 		);
@@ -79,11 +82,13 @@ class ContentsEditorController extends Controller
 		$file = $current->realpath_homedir.'_sys/ram/data/'.$tmpFileName;
 		file_put_contents($file, $request->data);
 
-		$page_param = $request->page_path;
+		$page_path = $request->page_path;
+		$target_mode = $request->target_mode;
+
 		$result = px2query(
 			$project->project_code,
 			$branch_name,
-			$page_param.'?PX=px2dthelper.px2ce.gpi&data_filename='.urlencode($tmpFileName)
+			$page_path.'?PX=px2dthelper.px2ce.gpi&data_filename='.urlencode($tmpFileName).'&target_mode='.urlencode($target_mode)
 		);
 		$result = json_decode($result, true);
 
