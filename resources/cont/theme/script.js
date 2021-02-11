@@ -4,8 +4,7 @@ $(window).on('load', function(){
 	let project_code = window.project_code;
 	let branch_name = window.branch_name;
 	let px2all;
-	let realpathDataDir;
-	let realpathThemeCollectionDir;
+	let pathThemeCollectionDir;
 	let pickles2ThemeEditor;
 
 	it79.fnc({}, [
@@ -16,8 +15,7 @@ $(window).on('load', function(){
 					complete: function(result){
 						// console.log('=-=-=-=-=-=-=', result);
 						px2all = result;
-						realpathDataDir = px2all.realpath_homedir+'_sys/ram/data/';
-						realpathThemeCollectionDir = px2all.realpath_theme_collection_dir;
+						pathThemeCollectionDir = px2all.path_theme_collection_dir;
 						it1.next();
 					}
 				}
@@ -108,18 +106,18 @@ $(window).on('load', function(){
 						return;
 					},
 					'openInFinder': function(path){
-						var url = realpathThemeCollectionDir;
+						var filename = pathThemeCollectionDir;
 						if(path){
-							url += path;
+							filename += path;
 						}
-						alert('※TODO:開発中です。' + url);
+						window.open('/files-and-folders/'+project_code+'/'+branch_name+'?filename='+filename);
 					},
 					'openInTextEditor': function(path){
-						var url = realpathThemeCollectionDir;
+						var filename = pathThemeCollectionDir;
 						if(path){
-							url += path;
+							filename += path;
 						}
-						alert('※TODO:開発中です。' + url);
+						window.open('/files-and-folders/'+project_code+'/'+branch_name+'?filename='+filename);
 					}
 				},
 				function(){
