@@ -1,5 +1,6 @@
 
 $(window).on('load', function(){
+	var defaultFileName = window.filename ||'/';
 	var remoteFinder = window.remoteFinder = new RemoteFinder(
 		document.getElementById('cont-finder'),
 		{
@@ -530,7 +531,7 @@ $(window).on('load', function(){
 		}
 	);
 	// console.log(remoteFinder);
-	remoteFinder.init('/', {}, function(){
+	remoteFinder.init(defaultFileName, {}, function(){
 		console.log('ready.');
 	});
 

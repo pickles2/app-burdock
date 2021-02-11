@@ -32,7 +32,8 @@ class FilesAndFoldersController extends Controller
 			[
 				'bootstrap' => 4,
 				'project' => $project,
-				'branch_name' => $branch_name
+				'branch_name' => $branch_name,
+				'filename' => $request->filename
 			]
 		);
 	}

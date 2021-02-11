@@ -24,6 +24,7 @@ window.contCommonFileEditorEndpoint = '/files-and-folders/{{ $project->project_c
 window.contCommonFileEditorGpiEndpoint = '/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/common-file-editor/gpi';
 window.contContentsEditorEndpoint = '/contentsEditor/{{ $project->project_code }}/{{ $branch_name }}';
 window.contApiParsePx2FilePathEndpoint = '/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/api/parsePx2FilePath';
+window.filename = <?= json_encode( $filename, JSON_UNESCAPED_SLASHES ) ?>;
 </script>
 <script src="/common/remote-finder/dist/remote-finder.js"></script>
 <script src="{{ asset('/cont/files_and_folders/script.js') }}"></script>
