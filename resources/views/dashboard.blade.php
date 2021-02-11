@@ -1,4 +1,4 @@
-@extends('layouts.px2_project')
+@extends('layouts.default')
 @section('title', env('APP_NAME'))
 @section('content')
 

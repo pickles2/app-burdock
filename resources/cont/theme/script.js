@@ -69,7 +69,7 @@ $(window).on('load', function(){
 
 			pickles2ThemeEditor.init(
 				{
-					'elmCanvas': $('.contents').get(0), // <- 編集画面を描画するための器となる要素
+					'elmCanvas': $('.cont-main').get(0), // <- 編集画面を描画するための器となる要素
 					'lang': 'ja',
 					'gpiBridge': function(input, callback){
 						// GPI(General Purpose Interface) Bridge

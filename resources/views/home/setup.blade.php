@@ -2,7 +2,7 @@
 	$gitUtil = new \pickles2\burdock\git($project);
     $title = $project->project_name;
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.default')
 @section('content')
 <div class="container">
 	<h1>Project "{{ $title }}"</h1>

@@ -1,19 +1,18 @@
 @php
 	$title = __('Composer');
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.default')
 
 @section('content')
-<div class="container">
-	<h1>Composer</h1>
-	<div class="contents cont-composer">
-		<div class="btn-group" role="group">
-			<button class="btn px2-btn cont-btn-composer-install">install</button>
-			<button class="btn px2-btn cont-btn-composer-update">update</button>
-		</div>
-		<pre><code></code></pre>
+
+<div class="cont-composer">
+	<div class="btn-group" role="group">
+		<button class="btn px2-btn cont-btn-composer-install">install</button>
+		<button class="btn px2-btn cont-btn-composer-update">update</button>
 	</div>
+	<pre><code></code></pre>
 </div>
+
 @endsection
 
 @section('script')

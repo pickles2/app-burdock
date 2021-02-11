@@ -1,14 +1,13 @@
 @php
 	$title = __('Custom Console Extensions');
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.default')
 
 @section('content')
-<div class="container">
-	<h1>Custom Console Extensions</h1>
-	<div class="contents">
-	</div>
+
+<div class="cont-main">
 </div>
+
 @endsection
 
 @section('stylesheet')

@@ -1,13 +1,10 @@
 @php
 	$title = __('Git');
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.default')
 
 @section('content')
-<div class="container">
-	<h1>Git</h1>
-	<div class="contents"></div>
-</div>
+<div class="cont-git"></div>
 @endsection
 
 @section('stylesheet')
@@ -27,9 +24,9 @@ window.contApp = new (function(){
 	 * initialize
 	 */
 	function init(){
-		$cont = $('.contents').html('');
+		$cont = $('.cont-git').html('');
 
-		var $elm = document.querySelector('.contents');
+		var $elm = document.querySelector('.cont-git');
 		var gitUi79 = new GitUi79( $elm, function( cmdAry, callback ){
 			var method = 'post';
 			var result = [];

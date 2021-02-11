@@ -1,18 +1,17 @@
 @php
 	$title = __('キャッシュを消去');
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.default')
 
 @section('content')
-<div class="container">
-	<h1>キャッシュを消去</h1>
-	<div class="contents cont-clearcache">
-		<div class="btn-group" role="group">
-			<button class="px2-btn px2-btn--primary cont-btn-clearcache">Pickles 2 のキャッシュをクリアする</button>
-		</div>
-		<pre><code></code></pre>
+
+<div class="cont-clearcache">
+	<div class="btn-group" role="group">
+		<button class="px2-btn px2-btn--primary cont-btn-clearcache">Pickles 2 のキャッシュをクリアする</button>
 	</div>
+	<pre><code></code></pre>
 </div>
+
 @endsection
 
 @section('script')

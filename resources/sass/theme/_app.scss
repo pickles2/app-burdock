@@ -1,0 +1,25 @@
+// app.scss
+
+// メインカラム
+.theme-main-block{
+	padding: 13px 10px 24px 10px;
+	background-color: #fff;
+	&__inner{
+		max-width: 1024px;
+		margin: 0 auto;
+	}
+	h1{
+		margin: 1em 0 0.5em 0;
+	}
+}
+
+// フッター
+.theme-footer{
+	padding: 13px 10px;
+	margin: 0 auto;
+	border-top: 1px solid #ccc;
+	&__inner{
+		max-width: 1024px;
+		margin: 0 auto;
+	}
+}

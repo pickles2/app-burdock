@@ -1,15 +1,14 @@
 @php
 	$title = __('Delivery');
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.default')
 
 @section('content')
-<div class="container">
-	<h1>配信管理</h1>
-	<div class="contents">
-		{!! $indigo_std_out !!}
-	</div>
+
+<div class="contents">
+	{!! $indigo_std_out !!}
 </div>
+
 @endsection
 
 @section('stylesheet')

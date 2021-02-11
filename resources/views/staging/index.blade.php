@@ -1,18 +1,12 @@
 @php
 	$title = __('Staging');
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.default')
 
 @section('content')
-<div class="container">
-	<h1>ステージング管理</h1>
-	<div class="contents">
-
 
 <div id="cont-plum-area"></div>
 
-	</div>
-</div>
 @endsection
 
 @section('stylesheet')

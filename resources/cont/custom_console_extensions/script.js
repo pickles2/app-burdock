@@ -13,7 +13,7 @@ $(window).on('load', function(){
 	it79.fnc({}, [
 		function(it1){
 			customConsoleExtensionId = window.cce_id;
-			$elm = $('.contents');
+			$elm = $('.cont-main');
 			it1.next();
 		},
 		function(it1){

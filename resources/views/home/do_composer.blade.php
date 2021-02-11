@@ -1,7 +1,7 @@
 @php
 	$title = $project->project_name;
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.default')
 @section('content')
 <div class="container">
 	<h1 id="project-title" style="margin-bottom: 50px;">Project "{{ $title }}"</h1>

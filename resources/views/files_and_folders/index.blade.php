@@ -1,15 +1,12 @@
 @php
 	$title = __('Files And Folders');
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.default')
 
 @section('content')
-<div class="container">
-	<h1>{{ __('Files And Folders') }}</h1>
-	<div class="contents">
-		<div id="cont-finder"></div>
-	</div>
-</div>
+
+<div id="cont-finder"></div>
+
 @endsection
 
 @section('stylesheet')

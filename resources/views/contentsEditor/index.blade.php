@@ -1,8 +1,7 @@
 @php
 	$title = __('Contents');
-	//$bootstrap = 4;
 @endphp
-@extends('layouts.px2_broccoli')
+@extends('layouts.contents_editor')
 
 @section('stylesheet')
 <?php

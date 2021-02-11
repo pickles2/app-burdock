@@ -1,15 +1,12 @@
 @php
 	$title = __('Search');
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.default')
 
 @section('content')
-<div class="container">
-	<h1>検索</h1>
-	<div class="contents">
-		<div id="cont-pickles2-code-search"></div>
-	</div>
-</div>
+
+<div id="cont-pickles2-code-search"></div>
+
 @endsection
 
 @section('stylesheet')

@@ -1,14 +1,13 @@
 @php
 	$title = __('Theme');
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.default')
 
 @section('content')
-<div class="container">
-	<h1>Theme</h1>
-	<div class="contents">
-	</div>
+
+<div class="cont-main">
 </div>
+
 @endsection
 
 @section('stylesheet')

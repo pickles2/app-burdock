@@ -1,7 +1,7 @@
 @php
     $title = __('User') . ': ' . $user->name;
 @endphp
-@extends('layouts.preview')
+@extends('layouts.default')
 @section('content')
 <div class="container">
     <h1>{{ $title }}</h1>
