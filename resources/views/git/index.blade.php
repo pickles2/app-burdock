@@ -7,7 +7,7 @@
 <div class="cont-git"></div>
 @endsection
 
-@section('stylesheet')
+@section('head')
 <link rel="stylesheet" href="/common/gitui79/dist/gitui79.min.css">
 @endsection
 

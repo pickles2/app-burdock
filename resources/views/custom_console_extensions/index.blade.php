@@ -10,7 +10,7 @@
 
 @endsection
 
-@section('stylesheet')
+@section('head')
 <link rel="stylesheet" href="{{ asset('/cont/custom_console_extensions/style.css') }}" type="text/css" />
 @endsection
 

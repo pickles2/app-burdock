@@ -9,7 +9,7 @@
 
 @endsection
 
-@section('stylesheet')
+@section('head')
 <link rel="stylesheet" href="/common/common-file-editor/dist/common-file-editor.css">
 @endsection
 

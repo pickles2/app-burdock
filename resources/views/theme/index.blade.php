@@ -10,7 +10,7 @@
 
 @endsection
 
-@section('stylesheet')
+@section('head')
 <link rel="stylesheet" href="{{ asset('/cont/theme/style.css') }}" type="text/css" />
 @endsection
 

@@ -3,7 +3,7 @@
 @endphp
 @extends('layouts.default')
 
-@section('stylesheet')
+@section('head')
 	<link rel="stylesheet" href="{{ asset('/cont/publish/style.css') }}" type="text/css">
 @endsection
 

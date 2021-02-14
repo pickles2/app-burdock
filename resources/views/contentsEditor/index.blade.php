@@ -3,13 +3,21 @@
 @endphp
 @extends('layouts.contents_editor')
 
-@section('stylesheet')
+@section('head')
 <?php
 foreach($px2ce_client_resources->css as $value) {
 	echo '<link href="'.'/assets/px2ce_resources/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/'.$value.'" rel="stylesheet" />'."\n";
 }
 ?>
 @endsection
+
+
+
+@section('content')
+<div id="canvas" style="height:100vh;"></div>
+@endsection
+
+
 
 @section('foot')
 <?php
@@ -105,11 +113,4 @@ foreach($px2ce_client_resources->js as $value) {
 	})();
 </script>
 
-@endsection
-
-@section('content')
-<div>
-	<div id="canvas" style="height:100vh;">
-	</div>
-</div>
 @endsection

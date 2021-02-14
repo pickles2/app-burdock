@@ -9,7 +9,7 @@
 
 @endsection
 
-@section('stylesheet')
+@section('head')
 <!-- plum -->
 <link rel="stylesheet" href="/common/lib-plum/dist/plum.css" />
 @endsection

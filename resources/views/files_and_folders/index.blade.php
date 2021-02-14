@@ -9,7 +9,7 @@
 
 @endsection
 
-@section('stylesheet')
+@section('head')
 <link rel="stylesheet" href="/common/remote-finder/dist/remote-finder.css" />
 <link rel="stylesheet" href="{{ asset('/cont/files_and_folders/style.css') }}" type="text/css" />
 @endsection

@@ -9,7 +9,7 @@
 
 @endsection
 
-@section('stylesheet')
+@section('head')
 <link rel="stylesheet" href="/common/pickles2-code-search/dist/pickles2-code-search.css" />
 @endsection
 @section('foot')
