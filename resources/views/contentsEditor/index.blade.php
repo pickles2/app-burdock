@@ -11,7 +11,7 @@ foreach($px2ce_client_resources->css as $value) {
 ?>
 @endsection
 
-@section('script')
+@section('foot')
 <?php
 foreach($px2ce_client_resources->js as $value) {
 	echo '<script src="'.'/assets/px2ce_resources/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/'.$value.'"></script>'."\n";

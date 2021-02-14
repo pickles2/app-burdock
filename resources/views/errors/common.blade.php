@@ -9,5 +9,6 @@
 </div>
 
 @endsection
-@section('script')
+
+@section('foot')
 @endsection

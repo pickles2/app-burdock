@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="/common/common-file-editor/dist/common-file-editor.css">
 @endsection
 
-@section('script')
+@section('foot')
 <script src="/common/common-file-editor/dist/common-file-editor.js"></script>
 
 <script>

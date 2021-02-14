@@ -232,6 +232,7 @@ Apache 用の Virtual Hosts の設定ファイルを出力します。
 
 MIT License
 
+
 ## 開発者向け情報 - for Developer
 
 ### データベースへのダミーデータシーディング

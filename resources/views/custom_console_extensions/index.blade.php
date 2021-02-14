@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="{{ asset('/cont/custom_console_extensions/style.css') }}" type="text/css" />
 @endsection
 
-@section('script')
+@section('foot')
 <script>
 var cce_id = <?php echo json_encode($cce_id); ?>;
 var project_code = <?php echo json_encode($project->project_code); ?>;

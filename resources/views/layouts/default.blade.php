@@ -70,6 +70,5 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 	@include("layouts.inc.footer")
 
 	@yield('foot')
-	@yield('script')
 </body>
 </html>

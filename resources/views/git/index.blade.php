@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="/common/gitui79/dist/gitui79.min.css">
 @endsection
 
-@section('script')
+@section('foot')
 <script src="/common/gitparse79/dist/gitParse79.min.js"></script>
 <script src="/common/gitui79/dist/gitui79.min.js"></script>
 

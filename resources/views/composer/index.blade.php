@@ -15,7 +15,7 @@
 
 @endsection
 
-@section('script')
+@section('foot')
 <script>
 var $preview = document.querySelector('.cont-composer pre code');
 

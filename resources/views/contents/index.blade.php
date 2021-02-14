@@ -198,62 +198,62 @@
 
 @endsection
 
-@section('script')
-	<script>
-		$(window).on('load resize', function(){
-			var $elms = {};
-			$elms.editor = $('<div>');
-			$elms.sitemapParent = $('.cont_sitemap_parent');
-			$elms.brosList = $('.cont_sitemap_broslist');
-			$elms.searchList = $('.cont_sitemap_search');
-			$elms.preview = $('.cont_preview');
-			$elms.previewIframe = $elms.preview.find('iframe');
-			$elms.pageinfo = $('.cont_page_info');
-			$elms.commentView = $('.cont_comment_view');
-			$elms.wasabiView = $('.cont-wasabi-view');
-			$elms.workspaceSearch = $('.cont_workspace_search');
-			$elms.breadcrumb = $('.cont_breadcrumb');
+@section('foot')
+<script>
+	$(window).on('load resize', function(){
+		var $elms = {};
+		$elms.editor = $('<div>');
+		$elms.sitemapParent = $('.cont_sitemap_parent');
+		$elms.brosList = $('.cont_sitemap_broslist');
+		$elms.searchList = $('.cont_sitemap_search');
+		$elms.preview = $('.cont_preview');
+		$elms.previewIframe = $elms.preview.find('iframe');
+		$elms.pageinfo = $('.cont_page_info');
+		$elms.commentView = $('.cont_comment_view');
+		$elms.wasabiView = $('.cont-wasabi-view');
+		$elms.workspaceSearch = $('.cont_workspace_search');
+		$elms.breadcrumb = $('.cont_breadcrumb');
 
-			var heightBreadcrumb = $elms.breadcrumb.outerHeight();
+		var heightBreadcrumb = $elms.breadcrumb.outerHeight();
 
-			var $contents = $('.contents');
-			$contents.css({
-				'height': $(window).innerHeight()
-					- $('header.px2-header').outerHeight()
-					- $('.container').outerHeight()
-					- 20
-			});
-
-			var $workspaceContainer = $('.cont_workspace_container');
-			$workspaceContainer
-				.css({
-					'height': $contents.innerHeight()
-						- ( $elms.commentView.is(':visible') ? $elms.commentView.outerHeight() + 10 : 0 )
-						- ( $elms.wasabiView.is(':visible') ? $elms.wasabiView.outerHeight() + 10 : 0 )
-						- $elms.workspaceSearch.outerHeight()
-						- heightBreadcrumb
-						- 20,
-					'margin-top': 10
-				})
-			;
-			$('.cont_sitemap_search').css({
-				'height': $workspaceContainer.outerHeight(),
-				'overflow': 'auto'
-			});
-
-			$elms.brosList
-				.css({
-					'height': $workspaceContainer.innerHeight() - $elms.sitemapParent.outerHeight()
-				})
-			;
-			$elms.preview
-				.css({
-					'height': $contents.outerHeight()
-						- $('.cont_page_info').outerHeight()
-						- heightBreadcrumb
-						- 20
-				})
-			;
+		var $contents = $('.contents');
+		$contents.css({
+			'height': $(window).innerHeight()
+				- $('header.px2-header').outerHeight()
+				- $('.container').outerHeight()
+				- 20
 		});
-	</script>
+
+		var $workspaceContainer = $('.cont_workspace_container');
+		$workspaceContainer
+			.css({
+				'height': $contents.innerHeight()
+					- ( $elms.commentView.is(':visible') ? $elms.commentView.outerHeight() + 10 : 0 )
+					- ( $elms.wasabiView.is(':visible') ? $elms.wasabiView.outerHeight() + 10 : 0 )
+					- $elms.workspaceSearch.outerHeight()
+					- heightBreadcrumb
+					- 20,
+				'margin-top': 10
+			})
+		;
+		$('.cont_sitemap_search').css({
+			'height': $workspaceContainer.outerHeight(),
+			'overflow': 'auto'
+		});
+
+		$elms.brosList
+			.css({
+				'height': $workspaceContainer.innerHeight() - $elms.sitemapParent.outerHeight()
+			})
+		;
+		$elms.preview
+			.css({
+				'height': $contents.outerHeight()
+					- $('.cont_page_info').outerHeight()
+					- heightBreadcrumb
+					- 20
+			})
+		;
+	});
+</script>
 @endsection

@@ -13,7 +13,8 @@
 <!-- plum -->
 <link rel="stylesheet" href="/common/lib-plum/dist/plum.css" />
 @endsection
-@section('script')
+
+@section('foot')
 <!-- plum -->
 <script src="/common/lib-plum/dist/plum.js"></script>
 

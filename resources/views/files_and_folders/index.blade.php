@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="{{ asset('/cont/files_and_folders/style.css') }}" type="text/css" />
 @endsection
 
-@section('script')
+@section('foot')
 <script>
 window.contRemoteFinderGpiEndpoint = "/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/gpi";
 window.contCommonFileEditorEndpoint = '/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/common-file-editor';
