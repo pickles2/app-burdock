@@ -24,7 +24,7 @@
 		</div>
 	</div><!-- / .row -->
 </div>
-<div class="alert alert-info">Hint! : <span class="cont_hint">Burdock は Pickles2をベースにしたWebアプリケーションです。</span></div>
+<div class="alert alert-info">Hint! : <span class="cont_hint">Burdock は Pickles 2 をウェブ上で操作するWebアプリケーションです。</span></div>
 <div class="row">
 	<div class="col-sm-12">
 

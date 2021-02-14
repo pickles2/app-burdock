@@ -1,6 +1,3 @@
-{{-- JavaScript --}}
-{{-- <script src="{{ asset('js/custom.js') }}"></script> --}}
-
 <script>
 window.addEventListener('load', function(){
 	var current = '';
