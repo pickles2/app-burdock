@@ -2,6 +2,12 @@
 	$title = __('Contents');
 @endphp
 @extends('layouts.default')
+
+
+@section('head')
+<link href="{{ asset('/cont/contents/style.css') }}" rel="stylesheet" />
+@endsection
+
 @section('content')
 
 <div class="container-fluid">
@@ -119,7 +125,7 @@
 					// .envよりプレビューサーバーのURLを取得
 					var preview_url = '{{ 'https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN') }}';
 					// iframe内のプレビューサイトに送るAPP_URLとスクリプトをbase64でエンコード
-					var jsBase64 = '{{ base64_encode("var parent_url = '".env('APP_URL')."';".file_get_contents('../resources/views/contents/js/script.js')) }}';
+					var jsBase64 = '{{ base64_encode("var parent_url = '".env('APP_URL')."';".file_get_contents('../resources/views/contents/js/iframe_preview_script.js')) }}';
 
 					// windowロードイベント
 					window.onload = function() {

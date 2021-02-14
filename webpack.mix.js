@@ -20,6 +20,19 @@ mix
 	// --------------------------------------
 	// Project Local Resources
 
+	// Dashboard
+	.js('resources/cont/dashboard/script.js', 'public/cont/dashboard/script.js')
+	.sass('resources/cont/dashboard/style.scss', 'public/cont/dashboard/style.css')
+
+	// Home
+	.sass('resources/cont/home/style.scss', 'public/cont/home/style.css')
+
+	// Contents
+	.sass('resources/cont/contents/style.scss', 'public/cont/contents/style.css')
+
+	// Sitemaps
+	.sass('resources/cont/sitemaps/style.scss', 'public/cont/sitemaps/style.css')
+
 	// Theme
 	.js('resources/cont/theme/script.js', 'public/cont/theme/script.js')
 	.sass('resources/cont/theme/style.scss', 'public/cont/theme/style.css')

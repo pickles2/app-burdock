@@ -82,3 +82,11 @@
 	<p>(C)Pickles 2 Project.</p>
 </div>
 @endsection
+
+@section('head')
+<link href="{{ asset('/cont/dashboard/style.css') }}" rel="stylesheet" />
+@endsection
+
+@section('foot')
+<script src="{{ asset('/cont/dashboard/script.js') }}"></script>
+@endsection

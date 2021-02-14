@@ -3,6 +3,10 @@
 @endphp
 @extends('layouts.default')
 
+@section('head')
+<link href="{{ asset('/cont/sitemaps/style.css') }}" rel="stylesheet" />
+@endsection
+
 @section('content')
 
 <div class="px2-p">

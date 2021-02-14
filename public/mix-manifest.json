@@ -3,9 +3,14 @@
     "/cont/custom_console_extensions/script.js": "/cont/custom_console_extensions/script.js",
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
+    "/cont/dashboard/style.css": "/cont/dashboard/style.css",
+    "/cont/home/style.css": "/cont/home/style.css",
+    "/cont/contents/style.css": "/cont/contents/style.css",
+    "/cont/sitemaps/style.css": "/cont/sitemaps/style.css",
     "/cont/theme/style.css": "/cont/theme/style.css",
     "/cont/publish/style.css": "/cont/publish/style.css",
     "/cont/files_and_folders/style.css": "/cont/files_and_folders/style.css",
     "/cont/custom_console_extensions/style.css": "/cont/custom_console_extensions/style.css",
-    "/cont/files_and_folders/script.js": "/cont/files_and_folders/script.js"
+    "/cont/files_and_folders/script.js": "/cont/files_and_folders/script.js",
+    "/cont/dashboard/script.js": "/cont/dashboard/script.js"
 }
