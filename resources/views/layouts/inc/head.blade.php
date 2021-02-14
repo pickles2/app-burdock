@@ -14,9 +14,6 @@
 <script src="/common/bootstrap/js/bootstrap.min.js"></script>
 @endif
 
-<!-- normalize -->
-<link rel="stylesheet" href="/common/styles/contents.css" type="text/css">
-
 <!-- Pickles 2 Style -->
 <link rel="stylesheet" href="/common/px2style/dist/px2style.css" charset="utf-8">
 <script src="/common/px2style/dist/px2style.js" charset="utf-8"></script>
