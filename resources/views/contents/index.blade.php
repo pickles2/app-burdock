@@ -29,7 +29,7 @@
 </div>
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-9">
+		<div class="col-xs-9">
 			<div class="cont_page_info clearfix">
 				<div>
 					<div class="cont_page_info-prop">
@@ -46,7 +46,7 @@
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
 							<ul class="dropdown-menu cont_page-dropdown-menu">
-								{{-- <li style="max-width: 476px; overflow: hidden;">
+								{{-- <!-- <li style="max-width: 476px; overflow: hidden;">
 									<a data-content="/index.html" href="javascript:;">フォルダを開く</a>
 								</li>
 								<li style="max-width: 476px; overflow: hidden;">
@@ -77,7 +77,7 @@
 								</li>
 								<li style="max-width: 476px; overflow: hidden;">
 									<a data-path="/index.html" data-proc_type="html" href="javascript:;">編集方法を変更</a>
-								</li> --}}
+								</li> --> --}}
 								<li style="max-width: 476px; overflow: hidden;">
 									<a data-param="{{ $page_path }}" onClick="publishSingle(this)">このページを単体でパブリッシュ</a>
 								</li>
@@ -104,7 +104,7 @@
 									});
 								};
 								</script>
-								{{-- <li style="max-width: 476px; overflow: hidden;">
+								{{-- <!-- <li style="max-width: 476px; overflow: hidden;">
 									<a data-path="/index.html" href="javascript:;">コンテンツをコミット</a>
 								</li>
 								<li style="max-width: 476px; overflow: hidden;">
@@ -112,7 +112,7 @@
 								</li>
 								<li style="max-width: 476px; overflow: hidden;">
 									<a data-path="/index.html" href="javascript:;">ページをリロード</a>
-								</li> --}}
+								</li> --> --}}
 							</ul>
 						</div>
 						<!-- /btn-group -->
@@ -159,7 +159,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-3">
+		<div class="col-xs-3">
 			<div class="cont_workspace_search">
 				<div class="input-group input-group-sm">
 					{{-- Vueコンポーネント --}}

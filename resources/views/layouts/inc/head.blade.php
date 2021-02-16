@@ -15,7 +15,9 @@
 @endif
 
 <!-- Pickles 2 Style -->
-<link rel="stylesheet" href="/common/px2style/dist/px2style.css" charset="utf-8">
+{{-- <!-- 
+NOTE: CSS `px2style.css` は、 `app.css` 内にビルドされるので、ここでは読み込まない。
+--> --}}
 <script src="/common/px2style/dist/px2style.js" charset="utf-8"></script>
 
 <!-- App Resources -->
