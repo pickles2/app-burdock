@@ -26,11 +26,23 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 		@include("layouts.inc.header")
 
 
-		{{-- main block --}}
-		<div class="theme-main-block">
-			<div class="theme-main-block__inner" id="app">
+		<div class="theme-h1-container">
+			<div class="theme-h1-container__heading">
+				@if (isset($title))
+				@guest
+				<h1>{{ $title }}</h1>
+				@else
+				@if ( Request::is('') )
+				@else
+				<h1>{{ $title }}</h1>
+				@endif
+				@endguest
+				@endif
+			</div>
+		</div>
 
-
+		<div class="theme-main-container">
+			<div class="theme-main-container__header-info">
 				{{-- フラッシュ・メッセージ --}}
 				@if (session('bd_flash_message'))
 					@component('components.flash_message')
@@ -40,29 +52,15 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 				@component('components.ajax_flash_message')
 				@endcomponent
 
-				<main class="theme-main">
-					@if (isset($title))
-					@guest
-					<h1>{{ $title }}</h1>
-					@else
-					@if ( Request::is('') )
-					@else
-					<h1>{{ $title }}</h1>
-					@endif
-					@endguest
-					@endif
+				@if (session('flash_message'))
+				<div class="alert alert-success" role="alert">
+					{{ session('flash_message') }}
+				</div>
+				@endif
+			</div>
 
-					@if (session('flash_message'))
-						<div class="alert alert-success" role="alert">
-							{{ session('flash_message') }}
-						</div>
-					@endif
-
-					<div class="contents">
-						@yield('content')
-					</div>
-				</main>
-
+			<div class="contents">
+				@yield('content')
 			</div>
 		</div>
 
