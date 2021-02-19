@@ -18,6 +18,50 @@
 
 		@include("layouts.inc.head")
 
+		<style>
+			body{
+				width: 100%;
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+			}
+			.theme-wrap {
+				flex-grow: 100;
+				max-height: 100%;
+				height: 100%;
+
+				display: flex;
+				flex-direction: column;
+
+			}
+			.theme-wrap .theme-main{
+				flex-grow: 100;
+				height: 100%;
+				overflow: auto;
+			}
+			.theme-wrap footer.theme-footer{
+				flex-grow: 1;
+			}
+
+			/* via: styles.css */
+			/*
+			.contents {
+				top: 0;
+				left: 0;
+				width: 100%;
+				min-height: 150px;
+				z-index: 50;
+			}
+			.contents iframe {
+				width: 100%;
+				max-height: 100%;
+				border: none;
+				margin: 0;
+				padding: 0;
+			}
+			*/
+		</style>
+
 		@yield('head')
 	</head>
 	<body>

@@ -1,8 +1,5 @@
-@php
-	$title = 'システムメンテナンス';
-@endphp
 @extends('layouts.default')
-@section('title', $title)
+@section('title', 'システムメンテナンス')
 @section('content')
 
 <h2>メンテナンスメニュー</h2>

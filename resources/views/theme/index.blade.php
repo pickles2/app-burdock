@@ -1,5 +1,5 @@
 @php
-	$title = __('Theme');
+	$title = __('Themes');
 @endphp
 @extends('layouts.default')
 

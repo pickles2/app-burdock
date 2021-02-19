@@ -18,7 +18,6 @@
 {{-- <!-- 
 NOTE: CSS `px2style.css` は、 `app.css` 内にビルドされるので、ここでは読み込まない。
 --> --}}
-<script src="/common/px2style/dist/px2style.js" charset="utf-8"></script>
 
 <!-- App Resources -->
 <link rel="stylesheet" href="{{ asset('css/app.css') }}" type="text/css" />

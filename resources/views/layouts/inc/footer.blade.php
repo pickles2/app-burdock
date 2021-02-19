@@ -29,3 +29,6 @@ window.addEventListener('load', function(){
 
 <!-- App Resources -->
 <script src="{{ asset('js/app.js') }}"></script>
+
+<!-- Pickles 2 Style -->
+<script src="/common/px2style/dist/px2style.js" charset="utf-8"></script>
