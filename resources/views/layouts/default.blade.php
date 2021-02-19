@@ -30,6 +30,9 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 		@include("layouts.inc.header")
 
 
+		@hasSection('first-view')
+		@yield('first-view')
+		@else
 		<div class="theme-h1-container">
 			<div class="theme-h1-container__heading">
 				@if (isset($title))
@@ -49,6 +52,7 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 				@endif
 			</div>
 		</div>
+		@endif
 
 		<div class="theme-main-container">
 			<div class="theme-main-container__header-info">

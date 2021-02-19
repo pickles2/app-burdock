@@ -9,9 +9,7 @@
 					<span>{{ config('app.name') }}</span>
 				@else
 					@if( isset($project) && ! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
-						<span>Project {{ $project->project_name }}</span>
-					@else
-						<span>{{ config('app.name') }}</span>
+						<span>{{ $project->project_name }}</span>
 					@endif
 				@endguest
 			</div>

@@ -1,14 +1,14 @@
 @extends('layouts.default')
 @section('title', env('APP_NAME'))
-@section('content')
 
-<div class="cont_top_jumbotron">
-	<p class="px2-text-align-center">
-		<img src="common/images/logo_2017.svg" style="width:50%; max-height:120px;" alt="Pickles 2">
-	</p>
-	<p class="px2-text-align-center">Web Tool</p>
+@section('first-view')
+<div class="cont-top-jumbotron">
+	<h1><img src="common/images/logo_2017.svg" style="width:50%; max-height:120px;" alt="Pickles 2" /></h1>
+	<p>Web Tool</p>
 </div>
+@endsection
 
+@section('content')
 <div class="row">
 	<div class="col-sm-6">
 		<h2>プロジェクトを選択してください</h2>
@@ -76,7 +76,7 @@
 </div>
 
 
-<div class="cont_top_footer">
+<div class="cont-top-footer">
 	<ul class="px2-horizontal-list px2-horizontal-list--center">
 		<li><a href="/system-maintenance" class="px2-a">システムメンテナンス</a></li>
 	</ul>

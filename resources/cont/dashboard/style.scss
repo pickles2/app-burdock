@@ -1,13 +1,19 @@
-.cont_top_jumbotron {
+.cont-top-jumbotron {
 	background-color: #f6f6f6;
 	background-image: url("/common/images/main.png");
 	background-position: center center;
 	background-size: cover;
 	color: #00a0e6;
 	padding: 3em 0.5em;
+	text-align: center;
+	h1 {
+		margin: 0;
+		padding: 0;
+		background: none;
+	}
 }
 
-.cont_top_footer {
+.cont-top-footer {
 	text-align: center;
 	padding: 5px;
 	border-top: 1px solid #999;
