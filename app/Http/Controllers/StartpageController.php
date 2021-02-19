@@ -8,7 +8,7 @@ use App\User;
 use App\Project;
 use App\Http\Requests\StoreUser;
 
-class DashboardController extends Controller
+class StartpageController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -17,22 +17,25 @@ class DashboardController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
-        $this->middleware('verified');
     }
 
     /**
-     * Show the application dashboard.
+	 * はじめの画面
+	 * ログイン時はダッシュボードを表示する。
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(User $user)
+    public function startpage(User $user)
     {
         $user = Auth::user();   #ログインユーザー情報を取得します。
+		if( !$user ){
+			return view('startpage.index');
+		}
+
 		//全プロジェクトが見えるように一時的に変更
 		$projects = Project::latest()->paginate();
         return view(
-            'dashboard',
+            'startpage.dashboard',
             [
                 'user' => $user,
                 'projects' => $projects

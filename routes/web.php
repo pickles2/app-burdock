@@ -16,11 +16,12 @@ use Illuminate\Contracts\Console\Kernel;
 Route::middleware(['boot'])
 ->group(function () {
 
-	Auth::routes(['verify' => true]);
-
 	// --------------------------------------
-	// ダッシュボード
-	Route::get('/', 'DashboardController@index');
+	// スタートページ/ダッシュボード
+	Route::get('/', 'StartpageController@startpage');
+
+
+	Auth::routes(['verify' => true]);
 
 	// Route::get('users', 'UserController@index');
 	// Route::get('users/create', 'UserController@create');
