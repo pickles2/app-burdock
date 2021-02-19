@@ -1,5 +1,6 @@
 @php
 	$title = __('Publish');
+	$bootstrap = 3;
 @endphp
 @extends('layouts.default')
 

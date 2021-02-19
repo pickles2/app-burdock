@@ -22,16 +22,6 @@
 						{{-- 「ログイン」と「ユーザー登録」へのリンク --}}
 						<li><a href="{{ route('login') }}" data-name="login">{{ __('Login') }}</a></li>
 						<li><a href="{{ route('register') }}" data-name="register">{{ __('Register') }}</a></li>
-						<li><a href="javascript:void(0)">{{ __('locale.'.App::getLocale()) }}</a>
-							<ul>
-								@if (!App::isLocale('en'))
-									<li><a class="dropdown-item" href="{{ locale_url('en') }}">{{ __('locale.en') }}</a></li>
-								@endif
-								@if (!App::isLocale('ja'))
-									<li><a class="dropdown-item" href="{{ locale_url('ja') }}">{{ __('locale.ja') }}</a></li>
-								@endif
-							</ul>
-						</li>
 					@else
 						@if( isset($project) && ! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
 							<li><a href="{{ url('home/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="home">ホーム</a></li>
@@ -54,17 +44,6 @@
 							</ul>
 						</li>
 
-						<li>
-							<a href="javascript:void(0)">{{ __('locale.'.App::getLocale()) }}</a>
-							<ul>
-								@if (!App::isLocale('en'))
-									<li><a class="dropdown-item" href="{{ locale_url('en') }}">{{ __('locale.en') }}</a></li>
-								@endif
-								@if (!App::isLocale('ja'))
-									<li><a class="dropdown-item" href="{{ locale_url('ja') }}">{{ __('locale.ja') }}</a></li>
-								@endif
-							</ul>
-						</li>
 					@endguest
 				</ul>
 			</div>
@@ -75,10 +54,32 @@
 				@guest
 				<li><a href="{{ route('login') }}" data-name="login">ログイン</a></li>
 				<li><a href="{{ route('register') }}" data-name="register">新規ユーザー登録</a></li>
+				<li>
+					<a href="javascript:void(0)">{{ __('locale.'.App::getLocale()) }}</a>
+					<ul>
+						@if (!App::isLocale('en'))
+							<li><a class="dropdown-item" href="{{ locale_url('en') }}">{{ __('locale.en') }}</a></li>
+						@endif
+						@if (!App::isLocale('ja'))
+							<li><a class="dropdown-item" href="{{ locale_url('ja') }}">{{ __('locale.ja') }}</a></li>
+						@endif
+					</ul>
+				</li>
 				@else
 					<li><a href="{{ url('/') }}">ダッシュボード</a></li>
+					<li>
+						<a href="javascript:void(0)">{{ __('locale.'.App::getLocale()) }}</a>
+						<ul>
+							@if (!App::isLocale('en'))
+								<li><a class="dropdown-item" href="{{ locale_url('en') }}">{{ __('locale.en') }}</a></li>
+							@endif
+							@if (!App::isLocale('ja'))
+								<li><a class="dropdown-item" href="{{ locale_url('ja') }}">{{ __('locale.ja') }}</a></li>
+							@endif
+						</ul>
+					</li>
 					@if( isset($project) && ! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
-						<li><a href="{{ url('projects/'.urlencode($project->project_code).'/edit') }}" data-name="config">プロジェクト概要設定</a></li>
+						<li><a href="{{ url('projects/'.urlencode($project->project_code).'/edit') }}" data-name="projects">プロジェクト概要設定</a></li>
 						<li><a href="{{ url('composer/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="composer">Composerを操作する</a></li>
 						<li><a href="{{ url('git/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="git">Gitを操作する</a></li>
 						<li><a href="javascript:;">ツール</a>

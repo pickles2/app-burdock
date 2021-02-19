@@ -10,7 +10,11 @@
 		{{-- ログインユーザーID --}}
 		<meta name="login-user-id" content="{{ Auth::id() }}">
 
+		@hasSection('title')
+		<title>@yield('title') | {{ env('APP_NAME') }}</title>
+		@else
 		<title>@if (! Request::is('/')){{ $title }} | @endif{{ env('APP_NAME') }}</title>
+		@endif
 
 		@include("layouts.inc.head")
 

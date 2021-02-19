@@ -20,6 +20,7 @@ window.addEventListener('load', function(){
 			@if (Request::is('custom_console_extensions/'.$cce_id.'/*')) current = 'custom_console_extensions.{{$cce_id}}'; @endif
 		@endforeach
 	@endif
+	@if (Request::is('clearcache') || Request::is('clearcache/*')) current = 'clearcache'; @endif
 	@if (Request::is('system-maintenance') || Request::is('system-maintenance/*')) current = 'system-maintenance'; @endif
 	@if (Request::is('mypage') || Request::is('mypage/*')) current = 'mypage'; @endif
 	px2style.header.init({'current': current});

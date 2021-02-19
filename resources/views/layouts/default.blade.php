@@ -15,7 +15,11 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 		{{-- ログインユーザーID --}}
 		<meta name="login-user-id" content="{{ Auth::id() }}">
 
+		@hasSection('title')
+		<title>@yield('title') | {{ env('APP_NAME') }}</title>
+		@else
 		<title>@if (! Request::is('/')){{ $title }} | @endif{{ env('APP_NAME') }}</title>
+		@endif
 
 		@include("layouts.inc.head")
 
@@ -37,6 +41,11 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 				<h1>{{ $title }}</h1>
 				@endif
 				@endguest
+				@endif
+
+				@hasSection('title')
+				{{-- TODO: `@yield` する↓こちらのほうが正しい？ --}}
+				<h1>@yield('title')</h1>
 				@endif
 			</div>
 		</div>
