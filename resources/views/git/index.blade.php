@@ -4,7 +4,13 @@
 @extends('layouts.default')
 
 @section('content')
+@if ($error_message)
+<div>
+	<p>{{ $error_message }}</p>
+</div>
+@else
 <div class="cont-git"></div>
+@endif
 @endsection
 
 @section('head')
@@ -12,6 +18,9 @@
 @endsection
 
 @section('foot')
+
+@if (!$error_message)
+
 <script src="/common/gitparse79/dist/gitParse79.min.js"></script>
 <script src="/common/gitui79/dist/gitui79.min.js"></script>
 
@@ -100,4 +109,8 @@ window.contApp = new (function(){
 })();
 
 </script>
+
+@else
+@endif
+
 @endsection

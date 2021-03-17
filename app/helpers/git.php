@@ -82,6 +82,17 @@ class git{
 	 * @return array 実行結果
 	 */
 	public function git( $git_sub_command ){
+		$realpath_pj_git_root = \get_project_workingtree_dir($this->project->project_code, $this->get_branch_name());
+		$error_message = false;
+		if( !is_dir($realpath_pj_git_root) || !is_dir($realpath_pj_git_root.'.git/') ){
+			// .git がなければ実行させない。
+			return array(
+				'stdout' => '',
+				'stderr' => 'Git is not initialized.',
+				'return' => 1,
+			);
+		}
+
 		if( !is_array($git_sub_command) ){
 			return array(
 				'stdout' => '',
@@ -102,8 +113,6 @@ class git{
 			$git_sub_command[$idx] = escapeshellarg($git_sub_command_row);
 		}
 		$cmd = implode(' ', $git_sub_command);
-
-		$realpath_pj_git_root = \get_project_workingtree_dir($this->project->project_code, $this->get_branch_name());
 
 		$cd = realpath('.');
 		chdir($realpath_pj_git_root);

@@ -34,6 +34,12 @@ class GitController extends Controller
 		}
 
 		$realpath_pj_git_root = \get_project_workingtree_dir($project->project_code, $branch_name);
+		$error_message = false;
+		if( !is_dir($realpath_pj_git_root) ){
+			$error_message = 'Project root directory is not exists.';
+		}elseif( !is_dir($realpath_pj_git_root.'.git/') ){
+			$error_message = 'Git is not initialized.';
+		}
 
 		return view(
 			'git.index',
@@ -41,6 +47,7 @@ class GitController extends Controller
 				'project' => $project,
 				'branch_name' => $branch_name,
 				'user' => $user,
+				'error_message' => $error_message,
 			]
 		);
 	}
