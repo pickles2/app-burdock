@@ -45,10 +45,12 @@ Route::middleware(['boot'])
 	// システムメンテナンス画面 System Maintenance
 	Route::get('system-maintenance', 'SystemMaintenance\IndexController@index');
 	Route::get('system-maintenance/phpinfo', 'SystemMaintenance\IndexController@phpinfo');
+	Route::get('system-maintenance/ajax/checkCommand', 'SystemMaintenance\IndexController@ajaxCheckCommand');
 	Route::get('system-maintenance/project-dirs', 'SystemMaintenance\ProjectDirsController@index');
 	Route::get('system-maintenance/project-dirs/{project}', 'SystemMaintenance\ProjectDirsController@show');
 	Route::get('system-maintenance/project-dirs/{project}/store', 'SystemMaintenance\ProjectDirsController@store');
-	Route::get('system-maintenance/ajax/checkCommand', 'SystemMaintenance\IndexController@ajaxCheckCommand');
+	Route::get('system-maintenance/healthcheck', 'SystemMaintenance\HealthCheckController@index');
+	Route::post('system-maintenance/healthcheck/ajax', 'SystemMaintenance\HealthCheckController@ajax');
 
 
 	Route::middleware(['project'])

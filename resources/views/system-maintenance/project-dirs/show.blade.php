@@ -1,8 +1,5 @@
-@php
-	$title = 'プロジェクトディレクトリ詳細';
-@endphp
 @extends('layouts.default')
-@section('title', $title)
+@section('title', 'プロジェクトディレクトリ詳細')
 @section('content')
 
 <h2>ディレクトリ情報</h2>

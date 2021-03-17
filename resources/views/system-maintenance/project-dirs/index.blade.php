@@ -1,8 +1,5 @@
-@php
-	$title = 'プロジェクトディレクトリ一覧';
-@endphp
 @extends('layouts.default')
-@section('title', $title)
+@section('title', 'プロジェクトディレクトリ一覧')
 @section('content')
 
 <table class="px2-table">
