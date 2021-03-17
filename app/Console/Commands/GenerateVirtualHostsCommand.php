@@ -135,7 +135,7 @@ class GenerateVirtualHostsCommand extends Command
 		$twig = new \Twig\Environment($twig_loader, [
 		]);
 
-		$gitUtil = new \pickles2\burdock\git($project);
+		$gitUtil = new \App\Helpers\git($project);
 		$default_branch_name = 'master';
 		if( strlen($project->git_url) ){
 			$default_branch_name = $gitUtil->get_branch_name();

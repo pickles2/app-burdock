@@ -29,7 +29,7 @@ class GitController extends Controller
 		$user = Auth::user();
 
 		if( !strlen($branch_name) ){
-			$gitUtil = new \pickles2\burdock\git($project);
+			$gitUtil = new \App\Helpers\git($project);
 			$branch_name = $gitUtil->get_branch_name();
 		}
 
@@ -58,7 +58,7 @@ class GitController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function gitCommand(Request $request, Project $project, $branch_name){
-		$gitUtil = new \pickles2\burdock\git($project, $branch_name);
+		$gitUtil = new \App\Helpers\git($project, $branch_name);
 		$rtn = array();
 		$git_command_array = $request->command_ary;
 

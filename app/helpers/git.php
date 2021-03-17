@@ -1,5 +1,5 @@
 <?php
-namespace pickles2\burdock;
+namespace App\Helpers;
 
 use App\Project;
 

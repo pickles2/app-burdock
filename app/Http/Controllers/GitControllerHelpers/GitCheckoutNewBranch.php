@@ -26,7 +26,7 @@ class GitCheckoutNewBranch
 		// ひとまず複製
 		$fs->copy_r($realpath_pj_git_root, $realpath_pj_git_new_branch_root);
 
-		$newGitUtil = new \pickles2\burdock\git($gitUtil->get_project_id(), $new_branch_name);
+		$newGitUtil = new \App\Helpers\git($gitUtil->get_project_id(), $new_branch_name);
 		$result = $newGitUtil->git(['checkout', 'HEAD', '--', './']);
 		$result = $newGitUtil->git(['checkout', '-b', $new_branch_name]);
 		$result = $newGitUtil->git(['branch', '--delete', $current_branch_name]);

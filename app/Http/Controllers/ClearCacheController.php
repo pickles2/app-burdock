@@ -27,7 +27,7 @@ class ClearCacheController extends Controller
 	 */
 	public function index(Request $request, Project $project, $branch_name){
 		if( !strlen($branch_name) ){
-			$gitUtil = new \pickles2\burdock\git($project);
+			$gitUtil = new \App\Helpers\git($project);
 			$branch_name = $gitUtil->get_branch_name();
 		}
 

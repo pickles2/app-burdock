@@ -31,7 +31,7 @@ class SetupController extends Controller
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
 		$pjManager = $burdockProjectManager->project($project->project_code);
 
-		$gitUtil = new \pickles2\burdock\git();
+		$gitUtil = new \App\Helpers\git();
 
 		$checked_option = $request->checked_option;
 		$checked_init = $request->checked_init;
@@ -193,7 +193,7 @@ class SetupController extends Controller
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
 		$pjManager = $burdockProjectManager->project($project->project_code);
 
-		$gitUtil = new \pickles2\burdock\git();
+		$gitUtil = new \App\Helpers\git();
 
 		$initializing_request = $pjManager->get_initializing_request();
 

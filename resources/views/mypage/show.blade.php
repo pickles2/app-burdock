@@ -55,7 +55,7 @@
 		<tbody>
 			@foreach ($user->projects as $project)
 @php
-$gitUtil = new \pickles2\burdock\git($project);
+$gitUtil = new \App\Helpers\git($project);
 @endphp
 				<tr>
 					<td>

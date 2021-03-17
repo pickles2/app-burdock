@@ -77,7 +77,7 @@ class IndigoCronCommand extends Command
 				continue;
 			}
 
-			$gitUtil = new \pickles2\burdock\git($project);
+			$gitUtil = new \App\Helpers\git($project);
 			$default_branch_name = $gitUtil->get_branch_name();
 
 			$parameter = $indigoController->mk_indigo_options($project, $default_branch_name);

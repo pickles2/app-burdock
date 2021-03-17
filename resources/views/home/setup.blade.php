@@ -1,5 +1,5 @@
 @php
-	$gitUtil = new \pickles2\burdock\git($project);
+	$gitUtil = new \App\Helpers\git($project);
     $title = $project->project_name;
 @endphp
 @extends('layouts.default')
