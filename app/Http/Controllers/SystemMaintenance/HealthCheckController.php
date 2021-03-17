@@ -48,13 +48,23 @@ class HealthCheckController extends \App\Http\Controllers\Controller
 
 		switch( $cmd ){
 			case 'broadcast':
-				$rtn['result'] = true;
-				$rtn['message'] = 'OK';
+				// ブロードキャストメッセージを送信する
 				$broadcastData = array(
 					'result' => true,
-					'message' => 'Broadcast Message Recieved!',
+					'message' => '[SUCCESS] Broadcast is working!',
 				);
-				broadcast(new \App\Events\SystemMaintenanceEvent($broadcastData));
+				broadcast(new \App\Events\SystemMaintenanceHealthCheckEvent($broadcastData));
+
+				$rtn['result'] = true;
+				$rtn['message'] = 'Broadcast request recieved.';
+				break;
+
+			case 'queue':
+				// テストキューを発行する
+				\App\Jobs\SystemMaintenanceHealthCheckJob::dispatch();
+
+				$rtn['result'] = true;
+				$rtn['message'] = 'Queue request recieved.';
 				break;
 		}
 
