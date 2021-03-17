@@ -77,9 +77,11 @@
 
 
 <div class="cont-top-footer">
+	@if ( env('APP_DEBUG') )
 	<ul class="px2-horizontal-list px2-horizontal-list--center">
 		<li><a href="/system-maintenance" class="px2-a">システムメンテナンス</a></li>
 	</ul>
+	@endif
 	<p>(C)Pickles 2 Project.</p>
 </div>
 

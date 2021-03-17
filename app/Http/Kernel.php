@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 		'boot' => \App\Http\Middleware\boot::class, // Burdock Custom Middleware
 		'project' => \App\Http\Middleware\project::class, // Burdock Custom Middleware
+		'isDebugMode' => \App\Http\Middleware\isDebugMode::class, // Burdock Custom Middleware
     ];
 }
