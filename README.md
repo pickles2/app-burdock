@@ -161,8 +161,8 @@ BROADCAST_DRIVER=redis
 ```
 redis-server --daemonize yes;
 pm2 start laravel-echo-server-pm2.json;
-php artisan queue:work --timeout=30000;
-node node/watcher.js;
+nohup php artisan queue:work --timeout=30000 > /dev/null 2>&1 &;
+forever start node/watcher.js;
 ```
 
 

@@ -16,6 +16,7 @@ Thumbs.db
 /.idea
 /.vscode
 /.vagrant
+/nohup.out
 Homestead.json
 Homestead.yaml
 npm-debug.log
