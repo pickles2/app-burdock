@@ -7,7 +7,7 @@ module.exports = class{
 	/**
 	 * コマンドを実行する
 	 */
-	execute(projectCode, branchName, userId, fileJson, fileInfo, callback){
+	execute(fileJson, fileInfo, callback){
 		callback = callback || function(){};
 
 		const px2proj = require('px2agent').createProject(fileJson.entry_script);

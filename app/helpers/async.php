@@ -49,11 +49,14 @@ class async{
 		}
 
 		$watchDir = env('BD_DATA_DIR').'/watcher/pxcmd/';
-		if(!is_dir($watchDir.$this->project_code.'/'.$this->branch_name.'/'.$user_id.'/')){
-			$fs->mkdir_r($watchDir.$this->project_code.'/'.$this->branch_name.'/'.$user_id.'/');
+		if(!is_dir($watchDir)){
+			$fs->mkdir_r($watchDir);
 		}
 
 		$json = new \stdClass();
+		$json->user_id = $user_id;
+		$json->project_code = $this->project_code;
+		$json->branch_name = $this->branch_name;
 		$json->entry_script = $realpath_entry_script;
 		$json->path = '/';
 		$json->pxcommand = $pxcommand;
@@ -68,7 +71,7 @@ class async{
 		// 一時ファイル名を作成
 		$tmpFileName = '__tmp_'.md5($timeWithMillisec).'_data.json';
 		// 一時ファイルを保存
-		$realpath_dir = $watchDir.$this->project_code.'/'.$this->branch_name.'/'.$user_id.'/';
+		$realpath_dir = $watchDir;
 		$file = $realpath_dir.$tmpFileName;
 		file_put_contents($file, json_encode($json));
 

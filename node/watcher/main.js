@@ -74,16 +74,12 @@ module.exports = class{
 			var fileBin = _this.fs.readFileSync(fileInfo.realpath).toString();
 			var fileJson = JSON.parse(fileBin);
 
-			if( filename.match(/^pxcmd[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([\s\S]+\.json)$/) ){
+			if( filename.match(/^pxcmd[\/\\]([\s\S]+\.json)$/) ){
 				// --------------------------------------
 				// PX Commands
 
-				var projectCode = RegExp.$1;
-				var branchName = RegExp.$2;
-				var userId = RegExp.$3;
-
 				let pxcmdWatcher = new _this.pxcmdWatcher(_this);
-				pxcmdWatcher.execute(projectCode, branchName, userId, fileJson, fileInfo, function(){
+				pxcmdWatcher.execute(fileJson, fileInfo, function(){
 					console.log('pxcmd: done.');
 					_this.fsEx.removeSync(fileInfo.realpath);
 				});
