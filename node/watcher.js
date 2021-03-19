@@ -1,4 +1,4 @@
 console.log('----- Starting CCE Watcher');
-const CceWatcher = require('./cce/CceWatcher.js');
-const cceWatcher = new CceWatcher();
-cceWatcher.start();
+const Watcher = require('./watcher/main.js');
+const watcher = new Watcher();
+watcher.start();
