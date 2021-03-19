@@ -5,7 +5,7 @@ module.exports = class{
 	}
 
 	/**
-	 * コマンドを実行する
+	 * PXコマンドを実行する
 	 */
 	execute(fileJson, fileInfo, callback){
 		callback = callback || function(){};

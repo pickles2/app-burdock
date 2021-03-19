@@ -9,6 +9,8 @@ module.exports = class{
 		this.chokidar = require('chokidar');
 		this.cceWatcher = require('./CceWatcher.js');
 		this.pxcmdWatcher = require('./PxcmdWatcher.js');
+		this.artisanWatcher = require('./ArtisanWatcher.js');
+		this.cmdWatcher = require('./CmdWatcher.js');
 	}
 
 	/**
@@ -81,6 +83,30 @@ module.exports = class{
 				let pxcmdWatcher = new _this.pxcmdWatcher(_this);
 				pxcmdWatcher.execute(fileJson, fileInfo, function(){
 					console.log('pxcmd: done.');
+					_this.fsEx.removeSync(fileInfo.realpath);
+				});
+
+				return;
+
+			}else if( filename.match(/^artisan[\/\\]([\s\S]+\.json)$/) ){
+				// --------------------------------------
+				// Artisan Commands
+
+				let artisanWatcher = new _this.artisanWatcher(_this);
+				artisanWatcher.execute(fileJson, fileInfo, function(){
+					console.log('artisan: done.');
+					_this.fsEx.removeSync(fileInfo.realpath);
+				});
+
+				return;
+
+			}else if( filename.match(/^cmd[\/\\]([\s\S]+\.json)$/) ){
+				// --------------------------------------
+				// Commands
+
+				let cmdWatcher = new _this.cmdWatcher(_this);
+				cmdWatcher.execute(fileJson, fileInfo, function(){
+					console.log('cmd: done.');
 					_this.fsEx.removeSync(fileInfo.realpath);
 				});
 
