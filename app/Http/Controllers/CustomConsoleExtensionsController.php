@@ -77,7 +77,7 @@ class CustomConsoleExtensionsController extends Controller
 		);
 		$current = json_decode($current);
 
-		$watchDir = env('BD_DATA_DIR').'/customConsoleExtensions/watcher/';
+		$watchDir = env('BD_DATA_DIR').'/watcher/cce/';
 		if(!is_dir($watchDir.'async/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/'.$user_id.'/')){
 			$fs->mkdir_r($watchDir.'async/'.$project->project_code.'/'.$branch_name.'/'.$cce_id.'/'.$user_id.'/');
 		}

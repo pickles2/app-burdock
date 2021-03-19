@@ -14,7 +14,7 @@ module.exports = class{
 	 */
 	getWatchDir(){
 		const path = require('path');
-		let pathAppDataDir = path.resolve(this.env.BD_DATA_DIR)+'/customConsoleExtensions/watcher/';
+		let pathAppDataDir = path.resolve(this.env.BD_DATA_DIR)+'/watcher/cce/';
 		return path.resolve(pathAppDataDir)+'/';
 	}
 
@@ -29,19 +29,19 @@ module.exports = class{
 
 		var pathAppDataDir = require('path').resolve(this.env.BD_DATA_DIR)+'/';
 		// console.log(pathAppDataDir);
-		this.fsEx.removeSync(pathAppDataDir + '/customConsoleExtensions/');
-		// console.log(pathAppDataDir + '/customConsoleExtensions/');
+		this.fsEx.removeSync(pathAppDataDir + '/watcher/');
+		// console.log(pathAppDataDir + '/watcher/');
 		var tmpDirs = [
-			'/customConsoleExtensions/',
-			'/customConsoleExtensions/watcher/',
-			'/customConsoleExtensions/watcher/async/',
-			'/customConsoleExtensions/watcher/broadcast/',
+			'/watcher/',
+			'/watcher/cce/',
+			'/watcher/cce/async/',
+			'/watcher/cce/broadcast/',
 		];
 		for(var idx in tmpDirs){
 			this.fsEx.mkdirSync(pathAppDataDir + tmpDirs[idx]);
 		}
 
-		_targetPath = require('path').resolve(pathAppDataDir + '/customConsoleExtensions/watcher/')+'/';
+		_targetPath = require('path').resolve(pathAppDataDir + '/watcher/cce/')+'/';
 		console.log('WatchDir:', _targetPath);
 
 		if( !_this.utils79.is_dir( _targetPath ) ){
