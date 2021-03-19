@@ -6,6 +6,7 @@ module.exports = class{
 		this.fsEx = require('fs-extra');
 		this.utils79 = require('utils79');
 		this.px2agent = require('px2agent');
+		this.chokidar = require('chokidar');
 	}
 
 	/**
@@ -49,40 +50,41 @@ module.exports = class{
 			return;
 		}
 
-		this._watcher = this.fs.watch(
-			_targetPath,
-			{
-				"recursive": true
-			},
-			function(event, filename) {
-				// console.log('=-=-=-=-=', event, filename);
-				if( !filename.match(/^(async|broadcast)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([\s\S]+\.json)$/) ){
-					return;
-				}
-				var eventType = RegExp.$1;
-				var projectCode = RegExp.$2;
-				var branchName = RegExp.$3;
-				var cceId = RegExp.$4;
-				var userId = RegExp.$5;
-				// console.log('* ', eventType, projectCode, branchName, cceId, userId, event);
+		this._watcher = this.chokidar.watch('glob', {
+			ignored: /(^|[\/\\])\../, // ignore dotfiles
+			persistent: true
+		});
+		this._watcher.add(_targetPath+'**/*');
 
-				var fileInfo = {};
-				fileInfo.realpath = require('path').resolve(_targetPath+'/'+filename);
-				// console.log(event + ' - ' + fileInfo.realpath);
-				if( !fileInfo.realpath || !_this.utils79.is_file(fileInfo.realpath) ){
-					return;
-				}
-
-				console.log('* ', eventType, projectCode, branchName);
-
-				var fileBin = _this.fs.readFileSync(fileInfo.realpath).toString();
-				var fileJson = JSON.parse(fileBin);
-
-				_this.recieveCceEvents(projectCode, branchName, cceId, userId, eventType, fileJson, fileInfo);
+		this._watcher.on('all',function(event, filename) {
+			// console.log('=-=-=-=-=', event, filename);
+			filename = filename.replace(_targetPath, '');
+			if( !filename.match(/^(async|broadcast)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([\s\S]+\.json)$/) ){
 				return;
-
 			}
-		);
+			var eventType = RegExp.$1;
+			var projectCode = RegExp.$2;
+			var branchName = RegExp.$3;
+			var cceId = RegExp.$4;
+			var userId = RegExp.$5;
+			console.log('* ', eventType, projectCode, branchName, cceId, userId, event);
+
+			var fileInfo = {};
+			fileInfo.realpath = require('path').resolve(_targetPath+'/'+filename);
+			// console.log(event + ' - ' + fileInfo.realpath);
+			if( !fileInfo.realpath || !_this.utils79.is_file(fileInfo.realpath) ){
+				return;
+			}
+
+			// console.log('* ', eventType, projectCode, branchName);
+
+			var fileBin = _this.fs.readFileSync(fileInfo.realpath).toString();
+			var fileJson = JSON.parse(fileBin);
+
+			_this.recieveCceEvents(projectCode, branchName, cceId, userId, eventType, fileJson, fileInfo);
+			return;
+
+		});
 
 		return;
 	}
