@@ -99,6 +99,18 @@ class PublishController extends Controller
 		$project_path = get_project_workingtree_dir($project_code, $branch_name);
 
 
+		$bdAsync = new \App\Helpers\async( $project, $branch_name );
+		$bdAsync->artisan(
+			'async:px2:publish',
+			array(
+				'publish_option' => $publish_option,
+				'paths_region' => $paths_region,
+				'paths_ignore' => $paths_ignore,
+				'keep_cache' => $keep_cache,
+			)
+		);
+
+		/*
 		// パブリッシュキューを発行する
 		\App\Jobs\PublishJob::dispatch(
 			$user_id,
@@ -111,6 +123,7 @@ class PublishController extends Controller
 				'keep_cache' => $keep_cache,
 			)
 		);
+		*/
 
 
 		$info = 'パブリッシュが完了しました。';
