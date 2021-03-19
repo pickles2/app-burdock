@@ -8,6 +8,7 @@ module.exports = class{
 		this.px2agent = require('px2agent');
 		this.chokidar = require('chokidar');
 		this.cceWatcher = require('./CceWatcher.js');
+		this.pxcmdWatcher = require('./PxcmdWatcher.js');
 	}
 
 	/**
@@ -50,7 +51,7 @@ module.exports = class{
 
 		if( !_this.utils79.is_dir( _targetPath ) ){
 			// ディレクトリが存在しないなら、監視は行わない。
-			console.error('CustomConsoleExtensions: 対象ディレクトリが存在しないため、 fs.watch を起動しません。', _targetPath);
+			console.error('Watcher: 対象ディレクトリが存在しないため、起動しません。', _targetPath);
 			return;
 		}
 
@@ -73,18 +74,37 @@ module.exports = class{
 			var fileBin = _this.fs.readFileSync(fileInfo.realpath).toString();
 			var fileJson = JSON.parse(fileBin);
 
-			if( filename.match(/^cce\/(async|broadcast)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([\s\S]+\.json)$/) ){
+			if( filename.match(/^pxcmd[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([\s\S]+\.json)$/) ){
+				// --------------------------------------
+				// PX Commands
+
+				var projectCode = RegExp.$1;
+				var branchName = RegExp.$2;
+				var userId = RegExp.$3;
+
+				let pxcmdWatcher = new _this.pxcmdWatcher(_this);
+				pxcmdWatcher.execute(projectCode, branchName, userId, fileJson, fileInfo, function(){
+					console.log('pxcmd: done.');
+					_this.fsEx.removeSync(fileInfo.realpath);
+				});
+
+				return;
+
+			}else if( filename.match(/^cce[\/\\](async|broadcast)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([a-zA-Z0-9\_\-]+)[\/\\]([\s\S]+\.json)$/) ){
+				// --------------------------------------
+				// Custom Console Extensions
+
 				var eventType = RegExp.$1;
 				var projectCode = RegExp.$2;
 				var branchName = RegExp.$3;
 				var cceId = RegExp.$4;
 				var userId = RegExp.$5;
-				console.log('* ', eventType, projectCode, branchName, cceId, userId, event);
 
 				let cceWatcher = new _this.cceWatcher(_this);
 				cceWatcher.execute(projectCode, branchName, cceId, userId, eventType, fileJson, fileInfo);
 
 				return;
+
 			}
 			return;
 
