@@ -33,6 +33,12 @@ Route::middleware(['boot'])
 
 	// Route::resource('users', 'UserController');
 
+
+	// --------------------------------------
+	// OAuth コールバック
+	Route::get('oauth/callback/wasabi', 'OauthCallbackController@wasabi_callback');
+
+
 	// --------------------------------------
 	// プロフィール
 	Route::get('mypage', 'MypageController@show');
