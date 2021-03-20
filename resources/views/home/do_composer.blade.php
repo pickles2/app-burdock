@@ -2,6 +2,12 @@
 	$title = $project->project_name;
 @endphp
 @extends('layouts.default')
+
+
+@section('head')
+<link href="{{ asset('/cont/home/style.css') }}" rel="stylesheet" />
+@endsection
+
 @section('content')
 <div class="container">
 	<h1 id="project-title" style="margin-bottom: 50px;">Project "{{ $title }}"</h1>

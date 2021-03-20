@@ -5,6 +5,11 @@
 @endphp
 @extends('layouts.default')
 
+
+@section('head')
+<link href="{{ asset('/cont/home/style.css') }}" rel="stylesheet" />
+@endsection
+
 @section('content')
 <div class="container">
 

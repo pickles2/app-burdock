@@ -14,10 +14,8 @@ class AlterAddMainBranchNameToProjectsTable20210320 extends Migration
     public function up()
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->string('git_main_branch_name');
+            $table->string('git_main_branch_name')->default('master');
         });
-        \App\Project::where('git_main_branch_name', '')
-            ->update(['git_main_branch_name' => 'master']);
     }
 
     /**
