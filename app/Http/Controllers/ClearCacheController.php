@@ -51,13 +51,18 @@ class ClearCacheController extends Controller
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
 		$project_branch = $burdockProjectManager->project($project->project_code)->branch($branch_name, 'preview');
 
-		$pageInfoAll = $project_branch->query(
-			'/?PX=clearcache'
+		$bdAsync = new \App\Helpers\async( $project, $branch_name );
+		$bdAsync->pxcmd(
+			'clearcache',
+			'/',
+			array()
 		);
 
-		$rtn = $pageInfoAll;
-		header('Content-type: application/json');
-		return json_encode($rtn);
+		return array(
+			'result'=>true,
+			'message'=>'OK',
+		);
+
 	}
 
 }

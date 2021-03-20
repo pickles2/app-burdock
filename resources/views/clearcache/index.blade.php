@@ -36,8 +36,8 @@ function contClearCache(params){
 		dataType: 'json',
 		data: JSON.stringify(params || {}),
 		success: function(data){
-			// console.log(data);
-			$preview.innerHTML += data;
+			console.log('clearcache request accepted:', data);
+			// $preview.innerHTML += data;
 		},
 		complete: function(){
 			btns.forEach(function(btn){
@@ -52,5 +52,16 @@ window.addEventListener('load', function(e){
 		contClearCache();
 	});
 });
+
+window.Echo.channel('{{ $project->project_code }}---{{ $branch_name }}___pxcmd-clearcache.{{ Auth::id() }}').listen('AsyncPxcmdEvent', (message) => {
+	console.log(message);
+	if(message.stdout){
+		$preview.innerHTML += message.stdout;
+	}
+	if(message.stderr){
+		$preview.innerHTML += message.stderr;
+	}
+});
+
 </script>
 @endsection

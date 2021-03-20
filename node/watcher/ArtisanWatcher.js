@@ -10,7 +10,6 @@ module.exports = class{
 	execute(fileJson, fileInfo, callback){
 		callback = callback || function(){};
 
-		// 開発中
 		const childProc = require('child_process');
 		childProc.exec(
 			'php ./artisan ' + JSON.stringify(fileJson.artisan_cmd) + ' ' + JSON.stringify(fileInfo.realpath) + '',

@@ -10,15 +10,16 @@ module.exports = class{
 	execute(fileJson, fileInfo, callback){
 		callback = callback || function(){};
 
-		const px2proj = require('px2agent').createProject(fileJson.entry_script);
-		px2proj.px_command(
-			fileJson.pxcommand,
-			fileJson.path,
-			fileJson.params,
-			function(result){
+		const childProc = require('child_process');
+		childProc.exec(
+			'php ./artisan async:pxcmd ' + JSON.stringify(fileInfo.realpath) + '',
+			(err, stdout, stderr) => {
+				// console.log('------------------');
+				// console.log(err, stdout, stderr);
 				callback();
 			}
 		);
+
 		return;
 	}
 
