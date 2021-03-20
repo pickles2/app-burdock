@@ -12,7 +12,7 @@ module.exports = class{
 
 		const childProc = require('child_process');
 		childProc.exec(
-			'php ./artisan async:pxcmd ' + JSON.stringify(fileInfo.realpath) + '',
+			'php ./artisan bd:pxcmd ' + JSON.stringify(fileInfo.realpath) + '',
 			(err, stdout, stderr) => {
 				// console.log('------------------');
 				// console.log(err, stdout, stderr);

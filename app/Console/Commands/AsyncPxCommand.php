@@ -13,7 +13,7 @@ class AsyncPxCommand extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'async:pxcmd {path_json}';
+	protected $signature = 'bd:pxcmd {path_json}';
 
 	/**
 	 * The console command description.

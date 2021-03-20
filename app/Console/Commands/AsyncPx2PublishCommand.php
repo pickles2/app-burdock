@@ -13,7 +13,7 @@ class AsyncPx2PublishCommand extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'async:px2:publish {path_json}';
+	protected $signature = 'bd:px2:publish {path_json}';
 
 	/**
 	 * The console command description.

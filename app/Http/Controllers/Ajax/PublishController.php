@@ -101,7 +101,7 @@ class PublishController extends Controller
 
 		$bdAsync = new \App\Helpers\async( $project, $branch_name );
 		$bdAsync->artisan(
-			'async:px2:publish',
+			'bd:px2:publish',
 			array(
 				'publish_option' => $publish_option,
 				'paths_region' => $paths_region,
