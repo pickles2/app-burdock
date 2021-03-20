@@ -57,6 +57,16 @@
 		<div>変更する場合のみ入力してください。</div>
 		{{-- パスワードをクライアントへ送出しないようにする(セキュリティホールとなる危険性があるため) --}}
 	</div>
+	<div class="form-group">
+		<label for="git_main_branch_name">{{ __('Git Main Branch Name') }}</label>
+		<input id="git_main_branch_name" type="text" class="form-control @if ($errors->has('git_main_branch_name')) is-invalid @endif" name="git_main_branch_name" value="{{ old('git_main_branch_name', $project->git_main_branch_name) }}">
+			@if ($errors->has('git_main_branch_name'))
+				<span class="invalid-feedback" role="alert">
+					{{ $errors->first('git_main_branch_name') }}
+				</span>
+			@endif
+	</div>
+
 	<button type="submit" name="submit" class="btn btn-primary">{{ __('Submit') }}</button>
 </form>
 

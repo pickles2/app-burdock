@@ -32,6 +32,9 @@ class HomeController extends Controller
 	{
 
 		if( !strlen($branch_name) ){
+			$branch_name = $project->git_main_branch_name;
+		}
+		if( !strlen($branch_name) ){
 			$branch_name = 'master';
 		}
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );

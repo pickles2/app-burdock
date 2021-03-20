@@ -119,6 +119,7 @@ class ProjectController extends Controller
 			// 入力があった場合だけ上書き
 			$project->git_password = \Crypt::encryptString( $request->git_password );
 		}
+		$project->git_main_branch_name = $request->git_main_branch_name;
 		$project->save();
 
 		return redirect('home/' . urlencode($project->project_code))->with('bd_flash_message', __('Updated a Project.'));
