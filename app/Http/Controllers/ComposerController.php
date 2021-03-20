@@ -27,7 +27,7 @@ class ComposerController extends Controller
 	 */
 	public function index(Request $request, Project $project, $branch_name){
 		if( !strlen($branch_name) ){
-			$gitUtil = new \pickles2\burdock\git($project);
+			$gitUtil = new \App\Helpers\git($project);
 			$branch_name = $gitUtil->get_branch_name();
 		}
 
@@ -48,7 +48,7 @@ class ComposerController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function install(Request $request, Project $project, $branch_name){
-		$composer = new \pickles2\burdock\composer($project->id, $branch_name);
+		$composer = new \App\Helpers\composer($project->id, $branch_name);
 		$rtn = array();
 		array_push($rtn, $composer->composer('install'));
 		header('Content-type: application/json');
@@ -61,7 +61,7 @@ class ComposerController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, Project $project, $branch_name){
-		$composer = new \pickles2\burdock\composer($project->id, $branch_name);
+		$composer = new \App\Helpers\composer($project->id, $branch_name);
 		$rtn = array();
 		array_push($rtn, $composer->composer('update'));
 		header('Content-type: application/json');

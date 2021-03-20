@@ -8,14 +8,15 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
-use App\Publish;
-
-class PublishEvent implements ShouldBroadcast
+class PublishEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+	public $user_id;
+	public $project_code;
+	public $branch_name;
 	public $parse;
 	public $judge;
 	public $queue_count;
@@ -28,9 +29,11 @@ class PublishEvent implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($parse, $judge, $queue_count, $publish_file, $end_publish, $process, $pipes)
+    public function __construct($user_id, $project_code, $branch_name, $parse, $judge, $queue_count, $publish_file, $end_publish, $process, $pipes)
     {
-        //
+		$this->user_id = $user_id;
+		$this->project_code = $project_code;
+		$this->branch_name = $branch_name;
 		$this->parse = $parse;
 		$this->judge = $judge;
 		$this->queue_count = $queue_count;
@@ -47,7 +50,7 @@ class PublishEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('publish-event');
+        return new Channel($this->project_code.'---'.$this->branch_name.'___publish'.'.'.$this->user_id);
     }
 
 	public function broadcastWith()

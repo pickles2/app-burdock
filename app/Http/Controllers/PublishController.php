@@ -23,25 +23,25 @@ class PublishController extends Controller
 
 	public function index(Request $request, Project $project, $branch_name)
 	{
-		//
+
 		$page_param = $request->page_path;
 		$page_id = $request->page_id;
 
 		$fs = new \tomk79\filesystem;
 		$project_name = $project->project_code;
 
-		$bd_object = px2query(
+		$px2all = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
 		);
-		$bd_object = json_decode($bd_object);
+		$px2all = json_decode($px2all);
 
-		$publish_log_file = $bd_object->realpath_homedir.'_sys/ram/publish/publish_log.csv';
-		$alert_log_file = $bd_object->realpath_homedir.'_sys/ram/publish/alert_log.csv';
-		$applock_file = $bd_object->realpath_homedir.'_sys/ram/publish/applock.txt';
+		$publish_log_file = $px2all->realpath_homedir.'_sys/ram/publish/publish_log.csv';
+		$alert_log_file = $px2all->realpath_homedir.'_sys/ram/publish/alert_log.csv';
+		$applock_file = $px2all->realpath_homedir.'_sys/ram/publish/applock.txt';
 
-		$publish_patterns = $bd_object->config->plugins->px2dt->publish_patterns;
+		$publish_patterns = $px2all->config->plugins->px2dt->publish_patterns;
 
 		if(\File::exists($publish_log_file)) {
 			$exists_publish_log = true;
@@ -94,9 +94,10 @@ class PublishController extends Controller
 		);
 	}
 
-	//
+
 	public function publish(Request $request, Project $project, $branch_name)
 	{
+
 		$result = px2query(
 			$project->project_code,
 			$branch_name,
@@ -115,14 +116,14 @@ class PublishController extends Controller
 	{
 		$project_code = $project->project_code;
 
-		$bd_object = px2query(
+		$px2all = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
 		);
-		$bd_object = json_decode($bd_object);
+		$px2all = json_decode($px2all);
 
-		$applock_file = $bd_object->realpath_homedir.'_sys/ram/publish/applock.txt';
+		$applock_file = $px2all->realpath_homedir.'_sys/ram/publish/applock.txt';
 		\File::delete($applock_file);
 
 		if(\File::exists($applock_file)) {
@@ -140,15 +141,15 @@ class PublishController extends Controller
 
 	public function publishFileDownload(Request $request, Project $project, $branch_name)
 	{
-		$bd_object = px2query(
+		$px2all = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
 		);
-		$bd_object = json_decode($bd_object);
+		$px2all = json_decode($px2all);
 
 		$project_path = get_project_workingtree_dir($project->project_code, $branch_name);
-		$publish_dir_path = $project_path.$bd_object->config->path_publish_dir;
+		$publish_dir_path = $project_path.$px2all->config->path_publish_dir;
 
 		if(\File::exists($publish_dir_path.'publish.zip')) {
 			\File::delete($publish_dir_path.'publish.zip');
@@ -161,14 +162,14 @@ class PublishController extends Controller
 
 	public function publishReportDownload(Request $request, Project $project, $branch_name)
 	{
-		$bd_object = px2query(
+		$px2all = px2query(
 			$project->project_code,
 			$branch_name,
 			'/?PX=px2dthelper.get.all'
 		);
-		$bd_object = json_decode($bd_object);
+		$px2all = json_decode($px2all);
 
-		$publish_reports_path = $bd_object->realpath_homedir.'_sys/ram/publish/';
+		$publish_reports_path = $px2all->realpath_homedir.'_sys/ram/publish/';
 		if(\File::exists($publish_reports_path.'publish_reports.zip')) {
 			\File::delete($publish_reports_path.'publish_reports.zip');
 		}

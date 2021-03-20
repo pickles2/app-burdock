@@ -30,9 +30,9 @@ class FilesAndFoldersController extends Controller
 		return view(
 			'files_and_folders.index',
 			[
-				'bootstrap' => 4,
 				'project' => $project,
-				'branch_name' => $branch_name
+				'branch_name' => $branch_name,
+				'filename' => $request->filename
 			]
 		);
 	}
@@ -73,7 +73,6 @@ class FilesAndFoldersController extends Controller
 		return view(
 			'files_and_folders.common_file_editor',
 			[
-				'bootstrap' => 4,
 				'project' => $project,
 				'branch_name' => $branch_name,
 				'filename' => $filename

@@ -29,19 +29,25 @@ class GitController extends Controller
 		$user = Auth::user();
 
 		if( !strlen($branch_name) ){
-			$gitUtil = new \pickles2\burdock\git($project);
+			$gitUtil = new \App\Helpers\git($project);
 			$branch_name = $gitUtil->get_branch_name();
 		}
 
 		$realpath_pj_git_root = \get_project_workingtree_dir($project->project_code, $branch_name);
+		$error_message = false;
+		if( !is_dir($realpath_pj_git_root) ){
+			$error_message = 'Project root directory is not exists.';
+		}elseif( !is_dir($realpath_pj_git_root.'.git/') ){
+			$error_message = 'Git is not initialized.';
+		}
 
 		return view(
 			'git.index',
 			[
-				'bootstrap' => 4,
 				'project' => $project,
 				'branch_name' => $branch_name,
 				'user' => $user,
+				'error_message' => $error_message,
 			]
 		);
 	}
@@ -52,7 +58,7 @@ class GitController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function gitCommand(Request $request, Project $project, $branch_name){
-		$gitUtil = new \pickles2\burdock\git($project, $branch_name);
+		$gitUtil = new \App\Helpers\git($project, $branch_name);
 		$rtn = array();
 		$git_command_array = $request->command_ary;
 

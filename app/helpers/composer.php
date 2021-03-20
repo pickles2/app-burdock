@@ -1,5 +1,5 @@
 <?php
-namespace pickles2\burdock;
+namespace App\Helpers;
 
 use App\Project;
 
@@ -26,7 +26,7 @@ class composer{
 		}
 
 		if( !strlen($branch_name) ){
-			$gitUtil = new \pickles2\burdock\git($this->project);
+			$gitUtil = new \App\Helpers\git($this->project);
 			$branch_name = $gitUtil->get_branch_name();
 		}
 		$this->branch_name = $branch_name;

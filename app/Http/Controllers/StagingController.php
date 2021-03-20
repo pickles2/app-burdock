@@ -45,7 +45,7 @@ class StagingController extends Controller
 	 */
 	public function gpi(Request $request, Project $project, $branch_name){
 
-		$gitUtil = new \pickles2\burdock\git($project);
+		$gitUtil = new \App\Helpers\git($project);
 		$default_branch_name = $gitUtil->get_branch_name();
 
 		$fs = new \tomk79\filesystem();

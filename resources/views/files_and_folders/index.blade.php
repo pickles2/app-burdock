@@ -1,29 +1,27 @@
 @php
 	$title = __('Files And Folders');
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.default')
 
 @section('content')
-<div class="container">
-	<h1>{{ __('Files And Folders') }}</h1>
-	<div class="contents">
-		<div id="cont-finder"></div>
-	</div>
-</div>
+
+<div id="cont-finder"></div>
+
 @endsection
 
-@section('stylesheet')
+@section('head')
 <link rel="stylesheet" href="/common/remote-finder/dist/remote-finder.css" />
 <link rel="stylesheet" href="{{ asset('/cont/files_and_folders/style.css') }}" type="text/css" />
 @endsection
 
-@section('script')
+@section('foot')
 <script>
 window.contRemoteFinderGpiEndpoint = "/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/gpi";
 window.contCommonFileEditorEndpoint = '/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/common-file-editor';
 window.contCommonFileEditorGpiEndpoint = '/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/common-file-editor/gpi';
 window.contContentsEditorEndpoint = '/contentsEditor/{{ $project->project_code }}/{{ $branch_name }}';
 window.contApiParsePx2FilePathEndpoint = '/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/api/parsePx2FilePath';
+window.filename = <?= json_encode( $filename, JSON_UNESCAPED_SLASHES ) ?>;
 </script>
 <script src="/common/remote-finder/dist/remote-finder.js"></script>
 <script src="{{ asset('/cont/files_and_folders/script.js') }}"></script>

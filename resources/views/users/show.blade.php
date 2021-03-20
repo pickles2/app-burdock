@@ -1,7 +1,7 @@
 @php
     $title = __('User') . ': ' . $user->name;
 @endphp
-@extends('layouts.preview')
+@extends('layouts.default')
 @section('content')
 <div class="container">
     <h1>{{ $title }}</h1>
@@ -50,7 +50,7 @@
             <tbody>
                 @foreach ($user->projects as $project)
 @php
-	$gitUtil = new \pickles2\burdock\git($project);
+	$gitUtil = new \App\Helpers\git($project);
 @endphp
                     <tr>
                         <td>

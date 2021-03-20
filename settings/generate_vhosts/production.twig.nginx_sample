@@ -1,0 +1,9 @@
+server {
+	# Production ({{ project_code }})
+    listen 443 ssl;
+    server_name {{ domain }};
+    root {{ document_root }};
+
+    ssl_certificate /path/to/localhost.crt;
+    ssl_certificate_key /path/to/localhost.key;
+}

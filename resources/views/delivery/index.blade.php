@@ -1,18 +1,17 @@
 @php
 	$title = __('Delivery');
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.default')
 
 @section('content')
-<div class="container">
-	<h1>配信管理</h1>
-	<div class="contents">
-		{!! $indigo_std_out !!}
-	</div>
+
+<div class="contents">
+	{!! $indigo_std_out !!}
 </div>
+
 @endsection
 
-@section('stylesheet')
+@section('head')
 <!-- datepicker -->
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" />
 
@@ -22,7 +21,7 @@
 @endsection
 
 
-@section('script')
+@section('foot')
 <!-- jquery -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 

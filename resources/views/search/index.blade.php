@@ -1,21 +1,18 @@
 @php
 	$title = __('Search');
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.default')
 
 @section('content')
-<div class="container">
-	<h1>検索</h1>
-	<div class="contents">
-		<div id="cont-pickles2-code-search"></div>
-	</div>
-</div>
+
+<div id="cont-pickles2-code-search"></div>
+
 @endsection
 
-@section('stylesheet')
+@section('head')
 <link rel="stylesheet" href="/common/pickles2-code-search/dist/pickles2-code-search.css" />
 @endsection
-@section('script')
+@section('foot')
 <script>
 window.contRemoteFinderGpiEndpoint = "/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/gpi";
 window.contCommonFileEditorEndpoint = '/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/common-file-editor';

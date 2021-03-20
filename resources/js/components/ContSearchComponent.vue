@@ -10,10 +10,10 @@
 		</form>
 		<div class="btn-group btn-group-justified" data-toggle="buttons">
 			<label class="btn px2-btn active" v-on:click="changeTitleClass">
-				<input type="radio" name="list-label" value="title" checked="checked">title
+				<input type="radio" name="list-label" value="title" checked="checked" />title
 			</label>
 			<label class="btn px2-btn" v-on:click="changePathClass">
-				<input type="radio" name="list-label" value="path">path
+				<input type="radio" name="list-label" value="path" />path
 			</label>
 		</div>
 		<div id="cont_sitemap_search_title" class="cont_sitemap_search" v-bind:style="[isTitle === true && isResult === true ? {'display':'block'} : {'display':'none'}]">

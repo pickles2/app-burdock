@@ -1,13 +1,23 @@
 @php
-	$title = __('Theme');
+	$title = __('Themes');
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.default')
 
 @section('content')
-<div class="container">
-	<h1>Theme</h1>
-	<div class="contents">
-		<p>開発中の機能です。</p>
-	</div>
+
+<div class="cont-main">
 </div>
+
+@endsection
+
+@section('head')
+<link rel="stylesheet" href="{{ asset('/cont/theme/style.css') }}" type="text/css" />
+@endsection
+
+@section('foot')
+<script>
+var project_code = <?php echo json_encode($project->project_code); ?>;
+var branch_name = <?php echo json_encode($branch_name); ?>;
+</script>
+<script src="{{ asset('/cont/theme/script.js') }}"></script>
 @endsection

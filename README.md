@@ -8,10 +8,10 @@ Pickles Framework 2 に特化した CMSライクなテキストエディタ "Pic
 ### 1. app-burdock の依存ライブラリをインストールする
 
 ```
-$ git clone https://github.com/pickles2/app-burdock.git
-$ cd app-burdock
-$ composer install
-$ npm install
+git clone https://github.com/pickles2/app-burdock.git;
+cd app-burdock;
+composer install;
+npm install;
 ```
 
 ### 2. `.env` ファイルを作成、設定する
@@ -19,13 +19,13 @@ $ npm install
 サンプルの設定ファイル `.env.example` から `.env` という名前で複製します。
 
 ```
-$ cp .env.example .env
+cp .env.example .env;
 ```
 
 この設定ファイルに、適宜必要な設定を更新してください。
 
 ```
-$ vi .env
+vi .env;
 ```
 
 #### アプリケーションの基本情報の設定
@@ -42,7 +42,7 @@ APP_DEBUG=true
 アプリケーションキーは次のコマンドで再生成してください。
 
 ```
-$ php artisan key:generate
+$ php artisan key:generate;
 Application key set successfully.
 ```
 
@@ -88,7 +88,7 @@ BD_DATA_DIR=/Users/hoge/fuga/path_to_project_dir
 ### 4. データベースを初期化する
 
 ```
-$ php artisan migrate --seed
+php artisan migrate --seed;
 ```
 
 #### データベースシステム に sqlite を利用する場合の注意点
@@ -101,10 +101,10 @@ SQLite を使用する場合は、先に 空白のデータベースファイル
 `DB_DATABASE` の値を `public/` 起点の相対パスに設定して、 publicディレクトリ で migrate を実行します。
 
 ```
-$ cd public/;
-$ touch ../bd_data/database.sqlite;
-$ php ../artisan migrate --seed;
-$ cd ..;
+cd public/;
+touch ../bd_data/database.sqlite;
+php ../artisan migrate --seed;
+cd ..;
 ```
 
 ### サーバーを起動して確認する
@@ -113,7 +113,7 @@ $ cd ..;
 次のコマンドを実行してサーバーを起動し、確認してみることができます。
 
 ```
-$ php artisan serve
+php artisan serve;
 ```
 
 正常に起動したら、 `http://127.0.0.1:8000` でアクセスできます。
@@ -136,15 +136,15 @@ WebSocket環境を利用すると、サーバーとの間で非同期に対話�
 Redis と Laravel Echo Server がインストールされている必要があります。
 
 ```
-$ brew install redis
-$ npm install -g laravel-echo-server
+brew install redis;
+npm install -g laravel-echo-server;
 ```
 
 Laravel Echo Server をセットアップします。
 次のコマンドで質問に答えていくと、 `laravel-echo-server.json` が作成されます。
 
 ```
-$ laravel-echo-server init
+laravel-echo-server init;
 ```
 
 `.env` ファイルを開き、 `BROADCAST_DRIVER` を `redis` に設定します。
@@ -154,11 +154,15 @@ BROADCAST_DRIVER=redis
 ```
 
 
-次のコマンドで Redis と Laravel Echo Server を起動します。
+## 起動する
+
+次のコマンドで Redis と Laravel Echo Server、 Laravel Queue を起動します。
 
 ```
-$ redis-server --daemonize yes;
-$ pm2 start laravel-echo-server-pm2.json;
+redis-server --daemonize yes;
+pm2 start laravel-echo-server-pm2.json;
+nohup php artisan queue:work --timeout=30000 > /dev/null 2>&1 &;
+forever start node/watcher.js;
 ```
 
 
@@ -227,6 +231,7 @@ Apache 用の Virtual Hosts の設定ファイルを出力します。
 ## ライセンス - License
 
 MIT License
+
 
 ## 開発者向け情報 - for Developer
 

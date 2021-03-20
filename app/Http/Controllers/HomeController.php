@@ -32,6 +32,9 @@ class HomeController extends Controller
 	{
 
 		if( !strlen($branch_name) ){
+			$branch_name = $project->git_main_branch_name;
+		}
+		if( !strlen($branch_name) ){
 			$branch_name = 'master';
 		}
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
@@ -41,13 +44,14 @@ class HomeController extends Controller
 		if( $project_status->pathExists && $project_status->isPxStandby ){
 			// --------------------------------------
 			// セットアップは正常に完了しているとき
-			$bd_object = $project_branch->get_project_info();
+			$project_branch_info = $project_branch->get_project_info();
 
 			return view('home.index', [
 				'project' => $project,
 				'branch_name' => $branch_name,
 				'project_status' => $project_status,
-			], compact('bd_object'));
+				'project_branch_info' => $project_branch_info,
+			]);
 
 		}elseif( $project_status->pathExists && $project_status->composerJsonExists && !$project_status->vendorDirExists ){
 			// --------------------------------------

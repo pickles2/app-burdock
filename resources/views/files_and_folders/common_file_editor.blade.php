@@ -1,22 +1,19 @@
 @php
 	$title = __('Files And Folders: File Editor');
 @endphp
-@extends('layouts.px2_plain')
+@extends('layouts.plain')
 
 @section('content')
-<div class="container">
-	<h1>{{ __('File Editor') }}</h1>
-	<div class="contents">
-		<div id="cont-editor"></div>
-	</div>
-</div>
+
+<div id="cont-editor"></div>
+
 @endsection
 
-@section('stylesheet')
+@section('head')
 <link rel="stylesheet" href="/common/common-file-editor/dist/common-file-editor.css">
 @endsection
 
-@section('script')
+@section('foot')
 <script src="/common/common-file-editor/dist/common-file-editor.js"></script>
 
 <script>

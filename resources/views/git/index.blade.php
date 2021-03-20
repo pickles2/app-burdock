@@ -1,20 +1,26 @@
 @php
 	$title = __('Git');
 @endphp
-@extends('layouts.px2_project')
+@extends('layouts.default')
 
 @section('content')
-<div class="container">
-	<h1>Git</h1>
-	<div class="contents"></div>
+@if ($error_message)
+<div>
+	<p>{{ $error_message }}</p>
 </div>
+@else
+<div class="cont-git"></div>
+@endif
 @endsection
 
-@section('stylesheet')
+@section('head')
 <link rel="stylesheet" href="/common/gitui79/dist/gitui79.min.css">
 @endsection
 
-@section('script')
+@section('foot')
+
+@if (!$error_message)
+
 <script src="/common/gitparse79/dist/gitParse79.min.js"></script>
 <script src="/common/gitui79/dist/gitui79.min.js"></script>
 
@@ -27,9 +33,9 @@ window.contApp = new (function(){
 	 * initialize
 	 */
 	function init(){
-		$cont = $('.contents').html('');
+		$cont = $('.cont-git').html('');
 
-		var $elm = document.querySelector('.contents');
+		var $elm = document.querySelector('.cont-git');
 		var gitUi79 = new GitUi79( $elm, function( cmdAry, callback ){
 			var method = 'post';
 			var result = [];
@@ -103,4 +109,8 @@ window.contApp = new (function(){
 })();
 
 </script>
+
+@else
+@endif
+
 @endsection
