@@ -40,6 +40,8 @@ $(window).on('load', function(){
 
 {{-- モーダルウィンドウ --}}
 <script id="template-{{ $id_attr }}" type="text/template">
+    @csrf
+    @method('DELETE')
     <p>{{ __('Are you sure to delete?') }}</p>
     <p><strong>{{ $name }}</strong></p>
 </script>
