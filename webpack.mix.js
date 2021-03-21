@@ -49,6 +49,7 @@ mix
 	.sass('resources/cont/theme/style.scss', 'public/cont/theme/style.css')
 
 	// publish
+	.js('resources/cont/publish/script.js', 'public/cont/publish/script.js')
 	.sass('resources/cont/publish/style.scss', 'public/cont/publish/style.css')
 
 	// Files and Folders

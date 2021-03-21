@@ -11,6 +11,7 @@
     "/cont/publish/style.css": "/cont/publish/style.css",
     "/cont/files_and_folders/style.css": "/cont/files_and_folders/style.css",
     "/cont/custom_console_extensions/style.css": "/cont/custom_console_extensions/style.css",
+    "/cont/publish/script.js": "/cont/publish/script.js",
     "/cont/files_and_folders/script.js": "/cont/files_and_folders/script.js",
     "/cont/dashboard/script.js": "/cont/dashboard/script.js"
 }

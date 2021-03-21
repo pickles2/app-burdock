@@ -86,55 +86,29 @@
 				</div>
 			</div>
 		</div>
-		<div class="contents" tabindex="-1" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 10000;" v-bind:class="classModal">
-			<div style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; overflow: hidden; background: rgb(0, 0, 0); opacity: 0.5;">
+
+		<script type="text/tenpmate" id="cont-template-publish-option-dialog">
+			<!-- TODO: パブリッシュオプションのプリセット選択が未実装 -->
+			<!-- <div class="cont_form_pattern" style="margin: 1em auto;">
+				<select name="cont_form_pattern">
+					<option value="">select pattern...</option>
+				</select>
+			</div> -->
+			<div class="form-group">
+				<label for="path_region">パブリッシュ対象範囲</label>
+				<textarea class="form-control" placeholder="/" rows="5" name="pathsRegion"></textarea>
+				<span class="help-block">パブリッシュ対象のディレクトリパスを指定してください。スラッシュから始まるパスで指定します。1行1ディレクトリで複数件指定できます。</span>
+
+				<label for="paths_ignore">パブリッシュ対象外範囲</label>
+				<textarea class="form-control" placeholder="/path/ignore/1/
+/path/ignore/2/" rows="5" name="pathsIgnore"></textarea>
+				<span class="help-block">パブリッシュ対象外にするディレクトリパスを指定してください。スラッシュから始まるパスで指定します。1行1ディレクトリで複数件指定できます。</span>
+
+				<label><input type="checkbox" name="keepCache" /> キャッシュを消去しない</label>
 			</div>
-			<div style="position: absolute; left: 0px; top: 0px; padding-top: 4em; overflow: auto; width: 100%; height: 100%;">
-				<div class="dialog_box" style="width: 80%; margin: 3em auto;">
-					<h1>パブリッシュ</h1>
-					<div>
-						<div>
-						<!-- <h2>パブリッシュ対象範囲</h2> -->
-							<div class="cont_form_pattern" style="margin: 1em auto;">
-								<select name="cont_form_pattern" v-model="isPublishOption">
-									<option value="">select pattern...</option>
-									<option v-for="(item, key) in isPublishPatterns" v-bind:value="key">{{ item.label }}</option>
-								</select>
-							</div>
-							<div class="form-group" v-if="isPublishOption === ''">
-								<label for="path_region">パブリッシュ対象範囲</label>
-								<textarea class="form-control" placeholder="/" rows="5" v-model="classPathsRegion">{{ classPathsRegion }}</textarea>
-								<span class="help-block">パブリッシュ対象のディレクトリパスを指定してください。スラッシュから始まるパスで指定します。1行1ディレクトリで複数件指定できます。</span>
-
-								<label for="paths_ignore">パブリッシュ対象外範囲</label>
-								<textarea class="form-control" placeholder="/path/ignore/1/
-/path/ignore/2/" rows="5" v-model="classPathsIgnore">{{ classPathsIgnore }}</textarea>
-								<span class="help-block">パブリッシュ対象外にするディレクトリパスを指定してください。スラッシュから始まるパスで指定します。1行1ディレクトリで複数件指定できます。</span>
-
-								<label><input type="checkbox" v-model="classKeepCache" v-bind:value="classKeepCache"> キャッシュを消去しない</label>
-							</div>
-							<div class="form-group" v-else>
-								<label for="path_region">パブリッシュ対象範囲</label>
-								<textarea class="form-control" placeholder="/" rows="5" v-model="classPathsRegion">{{ classPathsRegion }}</textarea>
-								<span class="help-block">パブリッシュ対象のディレクトリパスを指定してください。スラッシュから始まるパスで指定します。1行1ディレクトリで複数件指定できます。</span>
-
-								<label for="paths_ignore">パブリッシュ対象外範囲</label>
-								<textarea class="form-control" placeholder="/path/ignore/1/
-/path/ignore/2/" rows="5" v-model="classPathsIgnore">{{ classPathsIgnore }}</textarea>
-								<span class="help-block">パブリッシュ対象外にするディレクトリパスを指定してください。スラッシュから始まるパスで指定します。1行1ディレクトリで複数件指定できます。</span>
-
-								<label><input type="checkbox" v-model="classKeepCache" v-bind:value="classKeepCache"> キャッシュを消去しない</label>
-							</div>
-						</div>
-					</div>
-					<div class="dialog-buttons px2-text-align-center">
-						<button type="submit" class="px2-btn px2-btn--primary" v-on:click="publish">パブリッシュを実行する</button>
-						<button class="px2-btn" v-on:click="cancel">キャンセル</button>
-					</div>
-				</div>
-			</div>
-		</div>
+		</script>
 	</div>
+
 </template>
 
 <script>
@@ -227,11 +201,41 @@ export default {
  	},
 	// (読み込み時に)実行するメソッド
     methods: {
-		publish_option(reset) {
-			if(reset === 1) {
-				this.isPublishRestart = true;
-			}
-			this.publishStatus = 1;
+		publish_option() {
+			const _this = this;
+			let $body = $('<div>').append( $('#cont-template-publish-option-dialog').html() );
+			$body.find('[name=pathsRegion]').val( this.pathsRegion );
+			$body.find('[name=pathsIgnore]').val( this.pathsIgnore );
+			$body.find('[name=keepCache]').prop('checked', !!this.keepCache);
+
+
+			px2style.modal({
+				"title": "パブリッシュ",
+				"body": $body,
+				"buttons": [
+					$('<button>')
+						.text('パブリッシュを実行する')
+						.addClass('px2-btn')
+						.addClass('px2-btn--primary')
+						.on('click', function(){
+							_this.pathsRegion = $body.find('[name=pathsRegion]').val();
+							_this.pathsIgnore = $body.find('[name=pathsIgnore]').val();
+							_this.keepCache = $body.find('[name=keepCache]').prop('checked');
+							px2style.closeModal();
+							_this.publish();
+						})
+				],
+				"buttonsSecondary": [
+					$('<button>')
+						.text('キャンセル')
+						.addClass('px2-btn')
+						.on('click', function(){
+							px2style.closeModal();
+						})
+				],
+				"width": 1024,
+			});
+
 		},
 
 		publish() {
@@ -247,7 +251,7 @@ export default {
 				this.keepCache = false;
 			}
 			this.publishStatus = 999;
-			//
+
 			if(this.classPathsRegion) {
 				if(Array.isArray(this.pathsRegion) === false) {
 					var text = this.classPathsRegion.replace(/\r\n|\r/g, "\n");
@@ -263,7 +267,7 @@ export default {
 					this.pathsRegion = outArray;
 				}
 			}
-			//
+
 			if(this.classPathsIgnore) {
 				if(Array.isArray(this.pathsIgnore) === false) {
 					var text = this.classPathsIgnore.replace(/\r\n|\r/g, "\n");
@@ -279,19 +283,20 @@ export default {
 					this.pathsIgnore = outArray;
 				}
 			}
-			//
+
 			if(this.classKeepCache) {
 				if(this.keepCache !== this.classKeepCache) {
 					this.keepCache = this.classKeepCache;
 				}
 			}
-			//
+
 			var data = {
 				'publish_option': this.isPublishOption,
 				'paths_region': this.pathsRegion,
 				'paths_ignore': this.pathsIgnore,
 				'keep_cache': this.keepCache
 			}
+
 			// AjaxでAjax\PublishController@publishAjaxにpost処理
 			axios.post('/publish/'+this.projectCode+'/'+this.branchName+'/publishAjax',data).then(res => {
 				console.log('--- Publish request sent;', res);
@@ -385,13 +390,7 @@ export default {
 				hidden: this.publishStatus !== 0
 			}
 		},
-		//
-		classModal: function () {
-			return {
-				show: this.publishStatus === 1,
-				hidden: this.publishStatus !== 1
-			}
-		},
+
 		// パブリッシュ中のプログレスバーの表示・非表示
 		classPublishProgress: function () {
 			return {
@@ -399,6 +398,7 @@ export default {
 				hidden: this.publishStatus !== 2
 			}
 		},
+
 		// パブリッシュ後のログ情報の表示・非表示
 		classPublishLog: function () {
 			return {
@@ -406,6 +406,7 @@ export default {
 				hidden: this.publishStatus !== 3
 			}
 		},
+
 		// アラート情報の表示・非表示
 		classAlertLog: function () {
 			return {
@@ -413,6 +414,7 @@ export default {
 				hidden: this.isExistsAlertLog === '' || this.isExistsAlertLog === false
 			}
 		},
+
 		// パブリッシュ中のWAIT画面の表示・非表示
 		classPublishWait: function () {
 			return {
