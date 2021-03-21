@@ -3,37 +3,43 @@
 @endphp
 
 {{-- 削除ボタン --}}
-<button class="px2-btn px2-btn--danger col-md-12" data-toggle="modal" data-target="#{{ $id_attr }}" style="margin-bottom: 16px;">このプロジェクトを削除</button>
+<button class="px2-btn px2-btn--danger" id="btn-{{ $id_attr }}" style="margin-bottom: 16px;">このプロジェクトを削除</button>
+
+<script>
+$(window).on('load', function(){
+    $('#btn-{{ $id_attr }}').on('click', function(){
+        var $body = $('<div>').append( $('#template-{{ $id_attr }}').html() );
+        px2style.modal({
+            'title': "{{ __('Confirm delete') }}",
+            'body': $body,
+            'form': {
+                'action': "{{ url($controller.'/'.$code) }}",
+                'method': 'post',
+                'submit': function(){}
+            },
+            'buttons': [
+                $('<button>')
+                    .text("{{ __('Delete') }}")
+                    .addClass('px2-btn')
+                    .addClass('px2-btn--danger')
+                    .attr({"type":"submit"})
+            ],
+            'buttonsSecondary': [
+                $('<button>')
+                    .text("{{ __('Cancel') }}")
+                    .addClass('px2-btn')
+                    .on('click', function(){
+                        px2style.closeModal();
+                    })
+            ]
+        });
+    });
+});
+</script>
+
 
 {{-- モーダルウィンドウ --}}
-<div class="modal fade" id="{{ $id_attr }}" tabindex="-1" role="dialog" aria-labelledby="{{ $id_attr }}-label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="{{ $id_attr }}-label">
-                    {{ __('Confirm delete') }}
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>{{ __('Are you sure to delete?') }}</p>
-                <p><strong>{{ $name }}</strong></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                    {{ __('Cancel') }}
-                </button>
-                {{-- 削除用のアクションを実行させるフォーム --}}
-                <form action="{{ url($controller.'/'.$code) }}" method="post">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">
-                        {{ __('Delete') }}
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<script id="template-{{ $id_attr }}" type="text/template">
+    <p>{{ __('Are you sure to delete?') }}</p>
+    <p><strong>{{ $name }}</strong></p>
+</script>
