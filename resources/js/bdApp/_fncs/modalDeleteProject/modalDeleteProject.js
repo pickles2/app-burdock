@@ -2,6 +2,10 @@ module.exports = function(){
     let templates = {
         "main": require('./templates/main.twig'),
     };
+
+    /**
+     * プロジェクト削除モーダルダイアログを開く
+     */
     this.modalDeleteProject = function( projectCode ){
         if( !projectCode ){
             alert('projectCode required.');

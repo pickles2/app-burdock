@@ -3,33 +3,37 @@
 @section('content')
 
 <h2>ディレクトリ情報</h2>
-<table class="px2-table">
-	<tbody>
-		<tr>
-			<th>Project Code</th>
-			<td>{{ $project_code }}</td>
-		</tr>
-	</tbody>
-</table>
+<div class="px2-p">
+	<table class="px2-table">
+		<tbody>
+			<tr>
+				<th>Project Code</th>
+				<td>{{ $project_code }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
 
 <h2>データベース情報</h2>
 @if ($project_obj)
-<table class="px2-table">
-	<tbody>
-		<tr>
-			<th>Project ID</th>
-			<td>{{ $project_obj->id }}</td>
-		</tr>
-		<tr>
-			<th>Project Name</th>
-			<td>{{ $project_obj->project_name }}</td>
-		</tr>
-		<tr>
-			<th>Project Code</th>
-			<td>{{ $project_obj->project_code }}</td>
-		</tr>
-	</tbody>
-</table>
+<div class="px2-p">
+	<table class="px2-table">
+		<tbody>
+			<tr>
+				<th>Project ID</th>
+				<td>{{ $project_obj->id }}</td>
+			</tr>
+			<tr>
+				<th>Project Name</th>
+				<td>{{ $project_obj->project_name }}</td>
+			</tr>
+			<tr>
+				<th>Project Code</th>
+				<td>{{ $project_obj->project_code }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
 @else
 <p>データベースに該当レコードはありません。</p>
 @endif
