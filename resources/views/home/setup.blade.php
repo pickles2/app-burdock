@@ -28,15 +28,7 @@
 	</div>
 	<div class="contents">
 		<p>
-			<div>
-				@component('components.btn-del-project')
-					@slot('controller', 'projects')
-					@slot('id', $project->id)
-					@slot('code', $project->project_code)
-					@slot('name', $project->project_name)
-					@slot('branch', $gitUtil->get_remote_default_branch_name())
-				@endcomponent
-			</div>
+			<button class="px2-btn px2-btn--danger px2-btn--block" onclick="window.bdApp.modalDeleteProject('{{ $project->project_code }}');">このプロジェクトを削除</button>
 		</p>
 		<address class="px2-text-align-center">(C)Pickles 2 Project.</address>
 	</div>

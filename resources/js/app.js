@@ -24,3 +24,5 @@ Vue.component('setup-component', require('./components/SetupComponent.vue'));
 const app = new Vue({
     el: '#app'
 });
+
+window.bdApp = new (require('./bdApp/bdApp.js'))();

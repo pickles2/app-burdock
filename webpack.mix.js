@@ -12,6 +12,17 @@ const mix = require('laravel-mix');
  */
 
 mix
+	.webpackConfig({
+		module: {
+			rules:[
+				{
+					test:/\.twig$/,
+					use:['twig-loader']
+				}
+			]
+		}
+	})
+
 	// --------------------------------------
 	// Project Common Scripts
 	.js('resources/js/app.js', 'public/js')
