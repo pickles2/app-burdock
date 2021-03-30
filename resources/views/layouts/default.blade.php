@@ -29,51 +29,53 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 
 		@include("layouts.inc.header")
 
+		<div class="theme-frame">
 
-		@hasSection('first-view')
-		@yield('first-view')
-		@else
-		<div class="theme-h1-container">
-			<div class="theme-h1-container__heading">
-				@if (isset($title))
-				@guest
-				<h1>{{ $title }}</h1>
-				@else
-				@if ( Request::is('') )
-				@else
-				<h1>{{ $title }}</h1>
-				@endif
-				@endguest
-				@endif
+			@hasSection('first-view')
+			@yield('first-view')
+			@else
+			<div class="theme-h1-container">
+				<div class="theme-h1-container__heading">
+					@if (isset($title))
+					@guest
+					<h1>{{ $title }}</h1>
+					@else
+					@if ( Request::is('') )
+					@else
+					<h1>{{ $title }}</h1>
+					@endif
+					@endguest
+					@endif
 
-				@hasSection('title')
-				{{-- TODO: `@yield` する↓こちらのほうが正しい？ --}}
-				<h1>@yield('title')</h1>
-				@endif
-			</div>
-		</div>
-		@endif
-
-		<div class="theme-main-container">
-			<div class="theme-main-container__header-info">
-				{{-- フラッシュ・メッセージ --}}
-				@if (session('bd_flash_message'))
-					@component('components.flash_message')
-					@endcomponent
-				@endif
-				{{-- Ajax用のフラッシュ・メッセージ --}}
-				@component('components.ajax_flash_message')
-				@endcomponent
-
-				@if (session('flash_message'))
-				<div class="alert alert-success" role="alert">
-					{{ session('flash_message') }}
+					@hasSection('title')
+					{{-- TODO: `@yield` する↓こちらのほうが正しい？ --}}
+					<h1>@yield('title')</h1>
+					@endif
 				</div>
-				@endif
 			</div>
+			@endif
 
-			<div class="contents">
-				@yield('content')
+			<div class="theme-main-container">
+				<div class="theme-main-container__header-info">
+					{{-- フラッシュ・メッセージ --}}
+					@if (session('bd_flash_message'))
+						@component('components.flash_message')
+						@endcomponent
+					@endif
+					{{-- Ajax用のフラッシュ・メッセージ --}}
+					@component('components.ajax_flash_message')
+					@endcomponent
+
+					@if (session('flash_message'))
+					<div class="alert alert-success" role="alert">
+						{{ session('flash_message') }}
+					</div>
+					@endif
+				</div>
+
+				<div class="contents">
+					@yield('content')
+				</div>
 			</div>
 		</div>
 

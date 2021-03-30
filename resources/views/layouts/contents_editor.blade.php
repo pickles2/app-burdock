@@ -34,7 +34,7 @@
 				flex-direction: column;
 
 			}
-			.theme-wrap .theme-main{
+			.theme-wrap .contents{
 				flex-grow: 100;
 				height: 100%;
 				overflow: auto;
@@ -71,7 +71,7 @@
 				@component('components.flash_message')
 				@endcomponent
 			@endif
-			<div class="theme-main">
+			<div class="contents">
 				@yield('content')
 			</div>
 		</div>
