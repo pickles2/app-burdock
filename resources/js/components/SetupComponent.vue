@@ -158,21 +158,21 @@
 												<label><input type="checkbox" v-model="isCheckedInit"> Gitリポジトリを初期化する</label>
 											</p>
 											<div v-bind:class="classCheckedInit">
-												<p>コミットするGitリポジトリの情報を入力してください。</p>
-												<p>Repository <span class="must">Required</span></p>
-												<p class="text-danger">{{ errorRepository }}{{ repositoryConfirm }}</p>
+												<p>接続するGitリモートリポジトリの情報を入力してください。</p>
+												<p>Repository</p>
+												<p class="text-danger" v-if="errorRepository||repositoryConfirm">{{ errorRepository }}{{ repositoryConfirm }}</p>
 												<p>
-													<input type="text" class="form-control" v-model="repository" placeholder="https://github.com/pickles2/preset-get-start-pickles2.git">
+													<input type="text" class="form-control" v-model="repository" placeholder="https://github.com/pickles2/preset-get-start-pickles2.git" />
 												</p>
-												<p>UserName <span class="must">Required</span></p>
-												<p class="text-danger">{{ errorUserName }}{{ userNameConfirm }}</p>
+												<p>UserName</p>
+												<p class="text-danger" v-if="errorUserName||userNameConfirm">{{ errorUserName }}{{ userNameConfirm }}</p>
 												<p>
-													<input type="text" class="form-control" v-model="userName" placeholder="リモートリポジトリのユーザー名">
+													<input type="text" class="form-control" v-model="userName" placeholder="リモートリポジトリのユーザー名" />
 												</p>
-												<p>Password <span class="must">Required</span></p>
-												<p class="text-danger">{{ errorPassword }}{{ passwordConfirm }}</p>
+												<p>Password</p>
+												<p class="text-danger" v-if="errorPassword||passwordConfirm">{{ errorPassword }}{{ passwordConfirm }}</p>
 												<p>
-													<input type="password" class="form-control" v-model="password" placeholder="リモートリポジトリのパスワード">
+													<input type="password" class="form-control" v-model="password" placeholder="リモートリポジトリのパスワード" />
 												</p>
 											</div>
 										</div>
@@ -190,35 +190,35 @@
 											<div v-bind:class="classCheckedOriginalRepository">
 												<p>クローン元のGitリポジトリの情報を入力してください。</p>
 												<p>Original Repository <span class="must">Required</span></p>
-												<p class="text-danger">{{ errorRepository }}{{ repositoryConfirm }}</p>
+												<p class="text-danger" v-if="errorRepository||repositoryConfirm">{{ errorRepository }}{{ repositoryConfirm }}</p>
 												<p>
 													<input type="text" class="form-control" v-model="cloneRepository" placeholder="https://github.com/pickles2/preset-get-start-pickles2.git">
 												</p>
-												<p>Original UserName <span class="must">Required</span></p>
-												<p class="text-danger">{{ errorUserName }}{{ userNameConfirm }}</p>
+												<p>Original UserName</p>
+												<p class="text-danger" v-if="errorUserName||userNameConfirm">{{ errorUserName }}{{ userNameConfirm }}</p>
 												<p>
 													<input type="text" class="form-control" v-model="cloneUserName" placeholder="リモートリポジトリのユーザー名">
 												</p>
-												<p>Original Password <span class="must">Required</span></p>
-												<p class="text-danger">{{ errorPassword }}{{ passwordConfirm }}</p>
+												<p>Original Password</p>
+												<p class="text-danger" v-if="errorPassword||passwordConfirm">{{ errorPassword }}{{ passwordConfirm }}</p>
 												<p>
 													<input type="password" class="form-control" v-model="clonePassword" placeholder="リモートリポジトリのパスワード">
 												</p>
 											</div>
 											<div v-bind:class="classCheckedNewRepository">
 												<p>新規作成するGitリポジトリの情報を入力してください。</p>
-												<p>New Repository <span class="must">Required</span></p>
-												<p class="text-danger">{{ errorRepository }}{{ repositoryConfirm }}</p>
+												<p>New Repository</p>
+												<p class="text-danger" v-if="errorRepository||repositoryConfirm">{{ errorRepository }}{{ repositoryConfirm }}</p>
 												<p>
 													<input type="text" class="form-control" v-model="cloneNewRepository" placeholder="https://github.com/pickles2/preset-get-start-pickles2.git">
 												</p>
-												<p>New UserName <span class="must">Required</span></p>
-												<p class="text-danger">{{ errorUserName }}{{ userNameConfirm }}</p>
+												<p>New UserName</p>
+												<p class="text-danger" v-if="errorUserName||userNameConfirm">{{ errorUserName }}{{ userNameConfirm }}</p>
 												<p>
 													<input type="text" class="form-control" v-model="cloneNewUserName" placeholder="リモートリポジトリのユーザー名">
 												</p>
-												<p>New Password <span class="must">Required</span></p>
-												<p class="text-danger">{{ errorPassword }}{{ passwordConfirm }}</p>
+												<p>New Password</p>
+												<p class="text-danger" v-if="errorPassword||passwordConfirm">{{ errorPassword }}{{ passwordConfirm }}</p>
 												<p>
 													<input type="password" class="form-control" v-model="cloneNewPassword" placeholder="リモートリポジトリのパスワード">
 												</p>
@@ -491,24 +491,25 @@ export default {
 			this.info = 'Pickles 2 プロジェクトをセットアップしています。この処理はしばらく時間がかかります。';
 
 			// AjaxでAjax\SetupController@setupAjaxにpost処理
-			axios.post('/setup/'+this.projectCode+'/'+this.branchName+'/setupAjax', data).then(res => {
-				//
-				if(/Generating autoload files/.test(this.stdout) && res.data.info === true) {
-					this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
-					this.isSetupDuringButton = false;
-					this.isSetupAfterButton = true;
-					// this.next();
-				} else if(/Receiving objects: 100%/.test(this.stdout) && res.data.info === true) {
-					this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
-					this.isSetupDuringButton = false;
-					this.isSetupAfterButton = true;
-					// this.next();
-				} else {
-					this.info = 'Pickles 2 プロジェクトのセットアップができませんでした。もう一度やり直してください。';
-					this.isSetupDuringButton = false;
-					this.isSetupRestartButton = true;
-				}
-			})
+			axios.post('/setup/'+this.projectCode+'/'+this.branchName+'/setupAjax', data)
+				.then(res => {
+					//
+					if(/Generating autoload files/.test(this.stdout) && res.data.is_entry_script_exists === true) {
+						this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
+						this.isSetupDuringButton = false;
+						this.isSetupAfterButton = true;
+						// this.next();
+					} else if(/Receiving objects: 100%/.test(this.stdout) && res.data.is_entry_script_exists === true) {
+						this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
+						this.isSetupDuringButton = false;
+						this.isSetupAfterButton = true;
+						// this.next();
+					} else {
+						this.info = 'Pickles 2 プロジェクトのセットアップができませんでした。もう一度やり直してください。';
+						this.isSetupDuringButton = false;
+						this.isSetupRestartButton = true;
+					}
+				})
 		},
 
 		next(reset) {
@@ -541,17 +542,17 @@ export default {
 
 			// AjaxでAjax\SetupController@setupOptionAjaxにpost処理
 			axios.post('/setup/'+this.projectCode+'/'+this.branchName+'/setupOptionAjax', data).then(res => {
-				if(this.rate === 100 && res.data.info === true) {
+				if(this.rate === 100 && res.data.is_entry_script_exists === true) {
 					location.href = '/home/'+this.projectCode+'/'+this.branchName;
-				} else if(res.data.checked_option === 'pickles2' && res.data.checked_init === false && res.data.info === true) {
+				} else if(res.data.checked_option === 'pickles2' && res.data.checked_init === false && res.data.is_entry_script_exists === true) {
 					this.rate = 100;
 					this.fraction = '100 / 100';
 					location.href = '/home/'+this.projectCode+'/'+this.branchName;
-				} else if(res.data.checked_option === 'git' && res.data.checked_repository === 'none' && res.data.info === true) {
+				} else if(res.data.checked_option === 'git' && res.data.checked_repository === 'none' && res.data.is_entry_script_exists === true) {
 					this.rate = 100;
 					this.fraction = '100 / 100';
 					location.href = '/home/'+this.projectCode+'/'+this.branchName;
-				} else if(res.data.checked_option === 'git' && res.data.checked_repository === 'original' && res.data.info === true) {
+				} else if(res.data.checked_option === 'git' && res.data.checked_repository === 'original' && res.data.is_entry_script_exists === true) {
 					this.rate = 100;
 					this.fraction = '100 / 100';
 					location.href = '/home/'+this.projectCode+'/'+this.branchName;
@@ -572,6 +573,7 @@ export default {
 	},
 
 	computed: {
+
 		// setup_status
 		setupStatus: {
 			get: function () {
@@ -606,6 +608,7 @@ export default {
 				}
 			}
 		},
+
 		//
 		classModal: function () {
 			return {
@@ -613,6 +616,7 @@ export default {
 				hidden: this.setup_status === 1 || this.setup_status === 5
 			}
 		},
+
 		//
 		classSetup: function () {
 			return {
@@ -620,6 +624,7 @@ export default {
 				hidden: this.setup_status !== 2
 			}
 		},
+
 		//
 		classOption: function () {
 			return {
@@ -627,6 +632,7 @@ export default {
 				hidden: this.setup_status !== 3
 			}
 		},
+
 		//
 		classOptionPickles2: function () {
 			return {
@@ -634,6 +640,7 @@ export default {
 				hidden: this.isCheckedOption !== 'pickles2'
 			}
 		},
+
 		//
 		classOptionGit: function () {
 			return {
@@ -641,6 +648,7 @@ export default {
 				hidden: this.isCheckedOption !== 'git'
 			}
 		},
+
 		//
 		classProgress: function () {
 			return {
@@ -648,6 +656,7 @@ export default {
 				hidden: this.setup_status !== 4
 			}
 		},
+
 		//
 		classCheckedOption: function () {
 			return {
@@ -655,6 +664,7 @@ export default {
 				hidden: this.isCheckedOption !== 'git'
 			}
 		},
+
 		// Gitリポジトリを初期化するのチェックで処理分け
 		classCheckedInit: function () {
 			return {
@@ -662,6 +672,7 @@ export default {
 				hidden: this.isCheckedInit !== true
 			}
 		},
+
 		//
 		classCheckedOriginalRepository: function () {
 			return {
@@ -669,6 +680,7 @@ export default {
 				hidden: this.isCheckedRepository !== 'original'
 			}
 		},
+
 		//
 		classCheckedNewRepository: function () {
 			return {
@@ -676,23 +688,22 @@ export default {
 				hidden: this.isCheckedRepository !== 'new'
 			}
 		},
+
 		// クローン用リポジトリのバリデーション
 		errorCloneRepository: {
 			get: function () {
 				var result = '';
+				this.isCloneRepositoryEnable = false;
 				if(this.isCheckedOption === 'git') {
-					if(this.cloneRepository === '') {
-						result = 'リポジトリが未入力です。';
+					if( !this.cloneRepository.length ) {
 						this.isCloneRepositoryEnable = false;
 					} else if(/^https(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/.test(this.cloneRepository) === false) {
 						result = 'リポジトリはhttps形式で入力してください。';
 						this.isCloneRepositoryEnable = false;
 					} else {
-						result = '';
 						this.isCloneRepositoryEnable = true;
 					}
 				} else {
-					result = '';
 					this.isCloneRepositoryEnable = true;
 				}
 				return result;
@@ -710,6 +721,7 @@ export default {
 				}
 			}
 		},
+
 		// クローン用ユーザー名のバリデーション
 		errorCloneUserName: {
 			get: function () {
@@ -726,6 +738,7 @@ export default {
 				}
 			}
 		},
+
 		// クローン用パスワードのバリデーション
 		errorClonePassword: {
 			get: function () {
@@ -742,6 +755,7 @@ export default {
 				}
 			}
 		},
+
 		// ベンダー名のバリデーション
 		errorVendorName: function () {
 			var result = '';
@@ -754,6 +768,7 @@ export default {
 			}
 			return result;
 		},
+
 		// プロジェクト名のバリデーション
 		errorProjectName: function () {
 			var result = '';
@@ -766,52 +781,36 @@ export default {
 			}
 			return result;
 		},
-		// リポジトリのバリデーション
+
+		// GitリモートリポジトリURL のバリデーション
 		errorRepository: {
 			get: function () {
 				var result = '';
+				this.isRepositoryEnable = true;
 				if(this.isCheckedOption === 'pickles2') {
 					if(this.isCheckedInit === true) {
-						if(this.repository === '') {
-							result = 'リポジトリが未入力です。';
-							this.isRepositoryEnable = false;
+						if( !this.repository.length ) {
+							this.isRepositoryEnable = true;
 						} else if(/^https(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/.test(this.repository) === false) {
 							result = 'リポジトリはhttps形式で入力してください。';
 							this.isRepositoryEnable = false;
-						} else {
-							result = '';
-							this.isRepositoryEnable = true;
 						}
-					} else {
-						result = '';
-						this.isRepositoryEnable = true;
 					}
 				} else if(this.isCheckedOption === 'git') {
 					if(this.isCheckedRepository === 'original') {
-						if(this.cloneRepository === '') {
-							result = 'リポジトリが未入力です。';
-							this.isRepositoryEnable = false;
+						if( !this.cloneRepository.length ) {
+							this.isRepositoryEnable = true;
 						} else if(/^https(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/.test(this.cloneRepository) === false) {
 							result = 'リポジトリはhttps形式で入力してください。';
 							this.isRepositoryEnable = false;
-						} else {
-							result = '';
-							this.isRepositoryEnable = true;
 						}
 					} else if(this.isCheckedRepository === 'new') {
-						if(this.cloneNewRepository === '') {
-							result = 'リポジトリが未入力です。';
-							this.isRepositoryEnable = false;
+						if( !this.cloneNewRepository.length ) {
+							this.isRepositoryEnable = true;
 						} else if(/^https(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/.test(this.cloneNewRepository) === false) {
 							result = 'リポジトリはhttps形式で入力してください。';
 							this.isRepositoryEnable = false;
-						} else {
-							result = '';
-							this.isRepositoryEnable = true;
 						}
-					} else {
-						result = '';
-						this.isRepositoryEnable = true;
 					}
 				}
 				return result;
@@ -831,45 +830,28 @@ export default {
 			}
 		},
 
-		// ユーザー名のバリデーション
+		// Gitリモートユーザー名のバリデーション
 		errorUserName: {
 			get: function () {
 				var result = '';
-				if(this.isCheckedOption === 'pickles2') {
-					if(this.isCheckedInit === true) {
-						if(this.userName === '') {
-							result = 'ユーザー名が未入力です。';
-							this.isUserNameEnable = false;
-						} else {
-							result = '';
-							this.isUserNameEnable = true;
-						}
-					} else {
-						result = '';
-						this.isUserNameEnable = true;
-					}
-				} else if(this.isCheckedOption === 'git') {
-					if(this.isCheckedRepository === 'original') {
-						if(this.cloneUserName === '') {
-							result = 'ユーザー名が未入力です。';
-							this.isUserNameEnable = false;
-						} else {
-							result = '';
-							this.isUserNameEnable = true;
-						}
-					} else if(this.isCheckedRepository === 'new') {
-						if(this.cloneNewUserName === '') {
-							result = 'ユーザー名が未入力です。';
-							this.isUserNameEnable = false;
-						} else {
-							result = '';
-							this.isUserNameEnable = true;
-						}
-					} else {
-						result = '';
-						this.isUserNameEnable = true;
-					}
-				}
+				this.isUserNameEnable = true;
+				// if(this.isCheckedOption === 'pickles2') {
+				// 	if( this.userName.length ) {
+				// 		this.isUserNameEnable = true;
+				// 	}
+				// } else if(this.isCheckedOption === 'git') {
+				// 	if( this.isCheckedRepository === 'original' ) {
+				// 		if( this.cloneUserName.length ) {
+				// 			this.isUserNameEnable = true;
+				// 		}
+				// 	} else if( this.isCheckedRepository === 'new' ) {
+				// 		if( this.cloneNewUserName.length ) {
+				// 			this.isUserNameEnable = true;
+				// 		}
+				// 	} else {
+				// 		this.isUserNameEnable = true;
+				// 	}
+				// }
 				return result;
 			},
 
@@ -880,45 +862,29 @@ export default {
 				}
 			}
 		},
-		// パスワードのバリデーション
+
+		// Gitリモートパスワードのバリデーション
 		errorPassword: {
 			get: function () {
 				var result = '';
-				if(this.isCheckedOption === 'pickles2') {
-					if(this.isCheckedInit === true) {
-						if(this.password === '') {
-							result = 'パスワードが未入力です。';
-							this.isPasswordEnable = false;
-						} else {
-							result = '';
-							this.isPasswordEnable = true;
-						}
-					} else {
-						result = '';
-						this.isPasswordEnable = true;
-					}
-				} else if(this.isCheckedOption === 'git') {
-					if(this.isCheckedRepository === 'original') {
-						if(this.clonePassword === '') {
-							result = 'パスワードが未入力です。';
-							this.isPasswordEnable = false;
-						} else {
-							result = '';
-							this.isPasswordEnable = true;
-						}
-					} else if(this.isCheckedRepository === 'new') {
-						if(this.cloneNewPassword === '') {
-							result = 'パスワードが未入力です。';
-							this.isPasswordEnable = false;
-						} else {
-							result = '';
-							this.isPasswordEnable = true;
-						}
-					} else {
-						result = '';
-						this.isPasswordEnable = true;
-					}
-				}
+				this.isPasswordEnable = true;
+				// if( this.isCheckedOption === 'pickles2' ) {
+				// 	if( this.password.length ) {
+				// 		this.isPasswordEnable = true;
+				// 	}
+				// } else if(this.isCheckedOption === 'git') {
+				// 	if( this.isCheckedRepository === 'original' ) {
+				// 		if( this.clonePassword.length ) {
+				// 			this.isPasswordEnable = true;
+				// 		}
+				// 	} else if(this.isCheckedRepository === 'new') {
+				// 		if( this.cloneNewPassword.length ) {
+				// 			this.isPasswordEnable = true;
+				// 		}
+				// 	} else {
+				// 		this.isPasswordEnable = true;
+				// 	}
+				// }
 				return result;
 			},
 
@@ -929,6 +895,7 @@ export default {
 				}
 			}
 		},
+
 		// プロジェクトをセットアップするボタンのON/OFF
 		classSetupStartEnable: function () {
 			return {
@@ -936,6 +903,7 @@ export default {
 				hidden: this.isCloneRepositoryEnable === false || this.isCloneUserNameEnable === false || this.isClonePasswordEnable === false
 			}
 		},
+
 		// OK DisabledボタンのON/OFF
 		classSetupStartDisable: function () {
 			return {
@@ -943,6 +911,7 @@ export default {
 				show: this.isCloneRepositoryEnable === false || this.isCloneUserNameEnable === false || this.isClonePasswordEnable === false
 			}
 		},
+
 		// OKボタンのON/OFF
 		classSetupEnable: function () {
 			return {
@@ -950,6 +919,7 @@ export default {
 				hidden: this.isVendorNameEnable === false || this.isProjectNameEnable === false || this.isRepositoryEnable === false || this.isUserNameEnable === false || this.isPasswordEnable === false
 			}
 		},
+
 		// OK DisabledボタンのON/OFF
 		classSetupDisable: function () {
 			return {

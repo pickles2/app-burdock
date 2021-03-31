@@ -164,10 +164,11 @@ class SetupController extends Controller
 
 		// --------------------------------------
 		// .px_execute.php の存在確認
+		$is_entry_script_exists = false;
 		if(\File::exists($project_workingtree_path.'/'.get_px_execute_path($project_code, $branch_name))) {
-			$info = true;
+			$is_entry_script_exists = true;
 		} else {
-			$info = false;
+			$is_entry_script_exists = false;
 		}
 
 		// $initializing_request = $pjManager->get_initializing_request();
@@ -178,7 +179,7 @@ class SetupController extends Controller
 		clearstatcache();
 
 		$data = array(
-			"info" => $info,
+			"is_entry_script_exists" => $is_entry_script_exists,
 			"checked_option" => $checked_option,
 		);
 		return $data;
@@ -414,7 +415,15 @@ class SetupController extends Controller
 				proc_close($proc);
 			}
 		}
-		$info = true;
+
+		// --------------------------------------
+		// .px_execute.php の存在確認
+		$is_entry_script_exists = false;
+		if(\File::exists($project_workingtree_path.'/'.get_px_execute_path($project_code, $branch_name))) {
+			$is_entry_script_exists = true;
+		} else {
+			$is_entry_script_exists = false;
+		}
 
 		// $initializing_request = $pjManager->get_initializing_request();
 		// $pjManager->save_initializing_request($initializing_request);
@@ -431,7 +440,7 @@ class SetupController extends Controller
 		chdir($path_current_dir); // 元いたディレクトリへ戻る
 
 		$data = array(
-			"info" => $info,
+			"is_entry_script_exists" => $is_entry_script_exists,
 			"checked_option" => $checked_option,
 			"checked_init" => $checked_init,
 			"checked_repository" => $checked_repository,
