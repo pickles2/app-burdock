@@ -517,6 +517,7 @@ export default {
 		},
 
 		option(reset) {
+			const _this = this;
 			this.message = '';
 			this.repositoryConfirm = '';
 			this.userNameConfirm = '';
@@ -542,6 +543,7 @@ export default {
 
 			// AjaxでAjax\SetupController@setupOptionAjaxにpost処理
 			axios.post('/setup/'+this.projectCode+'/'+this.branchName+'/setupOptionAjax', data).then(res => {
+
 				if(this.rate === 100 && res.data.is_entry_script_exists === true) {
 					location.href = '/home/'+this.projectCode+'/'+this.branchName;
 				} else if(res.data.checked_option === 'pickles2' && res.data.checked_init === false && res.data.is_entry_script_exists === true) {
@@ -560,7 +562,7 @@ export default {
 					console.error('Burdock: Unknown Pattern');
 					this.rate = 100;
 					this.fraction = 'Unknown Pattern';
-					setTimeout(function(){
+					setTimeout(() => {
 						location.href = '/home/'+this.projectCode+'/'+this.branchName;
 					}, 5000);
 				}

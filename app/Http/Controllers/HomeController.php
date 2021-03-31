@@ -37,6 +37,7 @@ class HomeController extends Controller
 		if( !strlen($branch_name) ){
 			$branch_name = 'master';
 		}
+
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
 		$project_branch = $burdockProjectManager->project($project->project_code)->branch($branch_name, 'preview');
 		$project_status = $project_branch->status();
@@ -75,6 +76,14 @@ class HomeController extends Controller
 	 */
 	private function setup(Project $project, $branch_name)
 	{
+
+		if( !strlen($branch_name) ){
+			$branch_name = $project->git_main_branch_name;
+		}
+		if( !strlen($branch_name) ){
+			$branch_name = 'master';
+		}
+
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
 		$pjManager = $burdockProjectManager->project($project->project_code);
 		$initializing_request = $pjManager->get_initializing_request();
