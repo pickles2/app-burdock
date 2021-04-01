@@ -14,9 +14,17 @@ class GitInit
 
 
 		// Gitローカルリポジトリを初期化
-		$result = $gitUtil->git(array('init'));
+		$result = $gitUtil->git(array(
+			'init',
+		));
+		$stdout .= $result['stdout'];
 
-
+		// 最初のブランチを作成する
+		$result = $gitUtil->git(array(
+			'checkout',
+			'-b', $gitUtil->get_branch_name(),
+		));
+		$stdout .= $result['stdout'];
 
 
 
