@@ -23,13 +23,15 @@
 @endsection
 
 @section('head')
-<link rel="stylesheet" href="/common/gitui79/dist/gitui79.min.css">
+<link rel="stylesheet" href="/common/gitui79/dist/gitui79.min.css" />
+<link rel="stylesheet" href="{{ asset('/cont/git/style.css') }}" type="text/css" />
 @endsection
 
 @section('foot')
 
 <script src="/common/gitparse79/dist/gitParse79.min.js"></script>
 <script src="/common/gitui79/dist/gitui79.min.js"></script>
+<script src="{{ asset('/cont/git/script.js') }}"></script>
 
 <script>
 window.contApp = new (function(){

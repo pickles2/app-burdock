@@ -8,6 +8,30 @@ body {
 	cursor: default;
 	color: #333; }
 
+/**
+ * Bootstrap nav
+ */
+.nav-tabs>li>.nav-link {
+	color: #333;
+	background-color: transparent;
+	&:focus,
+	&:hover {
+		color: #333;
+		background-color: transparent;
+	}
+}
+.nav-tabs>li>.nav-link.active {
+	color: #333;
+	background-color: transparent;
+	border-bottom-color: #f9f9f9;
+	&:focus,
+	&:hover {
+		color: #333;
+		background-color: transparent;
+		border-bottom-color: #f9f9f9;
+	}
+}
+
 *:focus {
 	outline: none; }
 
