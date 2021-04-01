@@ -84,14 +84,6 @@ class git{
 	public function git( $git_sub_command ){
 		$realpath_pj_git_root = \get_project_workingtree_dir($this->project->project_code, $this->get_branch_name());
 		$error_message = false;
-		if( !is_dir($realpath_pj_git_root) || !is_dir($realpath_pj_git_root.'.git/') ){
-			// .git がなければ実行させない。
-			return array(
-				'stdout' => '',
-				'stderr' => 'Git is not initialized.',
-				'return' => 1,
-			);
-		}
 
 		if( !is_array($git_sub_command) ){
 			return array(
@@ -108,6 +100,18 @@ class git{
 				'return' => 1,
 			);
 		}
+
+		if( !is_dir($realpath_pj_git_root) || !is_dir($realpath_pj_git_root.'.git/') ){
+			if( $git_sub_command[0] !== 'init' ){
+				// .git がなければ実行させない。
+				return array(
+					'stdout' => '',
+					'stderr' => 'Git is not initialized.',
+					'return' => 1,
+				);
+			}
+		}
+
 
 		foreach($git_sub_command as $idx=>$git_sub_command_row){
 			$git_sub_command[$idx] = escapeshellarg($git_sub_command_row);
@@ -155,6 +159,7 @@ class git{
 
 		// 許可されたコマンド
 		switch( $git_sub_command[0] ){
+			case 'init':
 			case 'clone':
 			case 'config':
 			case 'status':

@@ -4,10 +4,19 @@
 @extends('layouts.default')
 
 @section('content')
-@if ($error_message)
-<div>
-	<p>{{ $error_message }}</p>
-</div>
+@if ($error)
+	<div class="px2-text-align-center">
+	@if ($error == 'dotgit_dir_not_exists')
+		<p>このプロジェクトは、Gitを使用する準備ができていません。</p>
+		<p>Git は、作業の履歴を管理するために有用なバージョン管理ツールです。</p>
+		<p>Git の使用を開始するには、 Git リポジトリを初期化してください。</p>
+		<div class="px2-p">
+			<p><button class="px2-btn cont-btn-git-init">Gitを初期化する</button></p>
+		</div>
+	@else
+		<p>{{ $error_message }}</p>
+	@endif
+	</div>
 @else
 <div class="cont-git"></div>
 @endif
@@ -18,8 +27,6 @@
 @endsection
 
 @section('foot')
-
-@if (!$error_message)
 
 <script src="/common/gitparse79/dist/gitParse79.min.js"></script>
 <script src="/common/gitui79/dist/gitui79.min.js"></script>
@@ -34,12 +41,17 @@ window.contApp = new (function(){
 	 */
 	function init(){
 		$cont = $('.cont-git').html('');
+		var method = 'post';
+		var apiUrl = "/git/{{ $project->project_code }}/{{ $branch_name }}/git";
 
+		@if (!$error)
+
+		// --------------------------------------
+		// gitui79 をセットアップ
 		var $elm = document.querySelector('.cont-git');
+
 		var gitUi79 = new GitUi79( $elm, function( cmdAry, callback ){
-			var method = 'post';
 			var result = [];
-			var apiUrl = "/git/{{ $project->project_code }}/{{ $branch_name }}/git";
 
 			if( cmdAry.length == 2 && cmdAry[0] == 'checkout' ){
 				// `git checkout branchname` のフェイク
@@ -97,6 +109,40 @@ window.contApp = new (function(){
 			console.log('gitUi79: Standby.');
 		});
 
+		@else
+
+		// --------------------------------------
+		// Gitの初期化ボタンアクションを登録
+		$('.cont-btn-git-init').on('click', function(){
+			$(this).attr({'disabled': true});
+			var result = [];
+
+			$.ajax({
+				type : method,
+				url : apiUrl,
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				contentType: 'application/json',
+				dataType: 'json',
+				data: JSON.stringify({
+					command_ary: ['init']
+				}),
+				error: function(data){
+					result = result.concat(data);
+					console.error('error', data);
+				},
+				success: function(data){
+					result = result.concat(data);
+				},
+				complete: function(){
+					console.log('complete', result);
+					window.location.href = "/git/{{ $project->project_code }}/{{ $branch_name }}";
+				}
+			});
+		});
+
+		@endif
 	}
 
 	/**
@@ -109,8 +155,5 @@ window.contApp = new (function(){
 })();
 
 </script>
-
-@else
-@endif
 
 @endsection

@@ -34,10 +34,13 @@ class GitController extends Controller
 		}
 
 		$realpath_pj_git_root = \get_project_workingtree_dir($project->project_code, $branch_name);
-		$error_message = false;
+		$error = null;
+		$error_message = null;
 		if( !is_dir($realpath_pj_git_root) ){
+			$error = 'root_dir_not_exists';
 			$error_message = 'Project root directory is not exists.';
 		}elseif( !is_dir($realpath_pj_git_root.'.git/') ){
+			$error = 'dotgit_dir_not_exists';
 			$error_message = 'Git is not initialized.';
 		}
 
@@ -47,6 +50,7 @@ class GitController extends Controller
 				'project' => $project,
 				'branch_name' => $branch_name,
 				'user' => $user,
+				'error' => $error,
 				'error_message' => $error_message,
 			]
 		);
@@ -61,6 +65,14 @@ class GitController extends Controller
 		$gitUtil = new \App\Helpers\git($project, $branch_name);
 		$rtn = array();
 		$git_command_array = $request->command_ary;
+
+		if( count($git_command_array) == 1 && $git_command_array[0] == 'init' ){
+			// `git init` のフェイク
+			// この時点で .git がないので、まだ remote をセットできない。
+			array_push( $rtn, GitControllerHelpers\GitInit::execute($gitUtil, $git_command_array) );
+			header('Content-type: application/json');
+			return json_encode($rtn);
+		}
 
 		$gitUtil->set_remote_origin();
 		$gitUtil->git( ['fetch'] );
