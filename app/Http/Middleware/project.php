@@ -25,6 +25,7 @@ class project
 		$global->px2all = null;
 		$global->cce = null;
 		$global->project = null;
+		$global->project_status = null;
 
 		$request_path = $request->path();
 
@@ -55,15 +56,14 @@ class project
 
 
 		if( strlen($global->project_code) && strlen($global->branch_name) ){
-			$global->px2all = px2query(
-				$global->project_code,
-				$global->branch_name,
-				'/?PX=px2dthelper.get.all',
-				array(
-					'output' => 'json',
-				)
-			);
+			$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
+			$project_branch = $burdockProjectManager->project($global->project_code)->branch($global->branch_name, 'preview');
+			$global->project_status = $project_branch->status();
+			if( $global->project_status->isPxStandby ){
+				$global->px2all = $project_branch->get_project_info();
+			}
 		}
+
 		if( is_object($global->px2all) && property_exists($global->px2all, 'px2dtconfig') && property_exists($global->px2all->px2dtconfig, 'custom_console_extensions') ){
 			$cceResult = px2query(
 				$global->project_code,

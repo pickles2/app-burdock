@@ -82,6 +82,20 @@ class ProjectController extends Controller
 	 */
 	public function update(StoreProject $request, Project $project)
 	{
+
+		$project->project_code = $request->project_code;
+		$project->project_name = $request->project_name;
+		$project->git_url = $request->git_url;
+		$project->git_username = \Crypt::encryptString($request->git_username);
+		if( is_object($request) && strlen($request->git_password) ){
+			// 入力があった場合だけ上書き
+			$project->git_password = \Crypt::encryptString( $request->git_password );
+		}
+		$project->git_main_branch_name = $request->git_main_branch_name;
+		$project->save();
+
+
+		// ディレクトリの処理
 		$bd_data_dir = env('BD_DATA_DIR');
 
 		if( is_dir($bd_data_dir.'/projects/'.urlencode($project->project_code)) ){
@@ -110,17 +124,6 @@ class ProjectController extends Controller
 				}
 			}
 		}
-
-		$project->project_code = $request->project_code;
-		$project->project_name = $request->project_name;
-		$project->git_url = $request->git_url;
-		$project->git_username = \Crypt::encryptString($request->git_username);
-		if( is_object($request) && strlen($request->git_password) ){
-			// 入力があった場合だけ上書き
-			$project->git_password = \Crypt::encryptString( $request->git_password );
-		}
-		$project->git_main_branch_name = $request->git_main_branch_name;
-		$project->save();
 
 		return redirect('home/' . urlencode($project->project_code))->with('bd_flash_message', __('Updated a Project.'));
 	}

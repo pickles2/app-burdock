@@ -7,9 +7,8 @@
 <form action="{{ url('projects/'.urlencode($project->project_code).'/edit') }}" method="post">
 	@csrf
 	@method('PUT')
-	<div class="form-group">
-		<input type="hidden" name="project_id" value="{{ $project->id }}">
-	</div>
+	<input type="hidden" name="id" value="{{ $project->id }}">
+
 	<div class="form-group">
 		<label for="project_name">{{ __('Project Name') }}</label>
 		<input id="project_name" type="text" class="form-control @if ($errors->has('project_name')) is-invalid @endif" name="project_name" value="{{ old('project_name', $project->project_name) }}">
