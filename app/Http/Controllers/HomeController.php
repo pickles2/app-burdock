@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Project;
@@ -39,7 +40,9 @@ class HomeController extends Controller
 		}
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
 		$project_branch = $burdockProjectManager->project($project->project_code)->branch($branch_name, 'preview');
-		$project_status = $project_branch->status();
+
+		$global = View::shared('global');
+		$project_status = $global->project_status;
 
 		if( $project_status->pathExists && $project_status->isPxStandby ){
 			// --------------------------------------
