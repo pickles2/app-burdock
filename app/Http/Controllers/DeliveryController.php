@@ -28,6 +28,19 @@ class DeliveryController extends Controller
 	 */
 	public function index(Request $request, Project $project, $branch_name){
 
+		if( !strlen($project->git_url) ){
+			return view(
+				'delivery.index',
+				[
+					'error' => 'git_remot_not_set',
+					'error_message' => 'Gitリモートが設定されていません。',
+					'project' => $project,
+					'branch_name' => $branch_name,
+					'indigo_std_out' => '',
+				]
+			);
+		}
+
 		// parameter.phpのmk_indigo_optionsメソッド
 		$parameter = $this->mk_indigo_options( $project, $branch_name );
 
@@ -53,6 +66,14 @@ class DeliveryController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function indigoAjaxAPI(Request $request, Project $project, $branch_name){
+
+		if( !strlen($project->git_url) ){
+			return [
+				'result' => false,
+				'error' => 'git_remot_not_set',
+				'error_message' => 'Gitリモートが設定されていません。',
+			];
+		}
 
 		// parameter.phpのmk_indigo_optionsメソッド
 		$parameter = $this->mk_indigo_options( $project, $branch_name );

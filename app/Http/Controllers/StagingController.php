@@ -28,6 +28,18 @@ class StagingController extends Controller
 	 */
 	public function index(Request $request, Project $project, $branch_name){
 
+		if( !strlen($project->git_url) ){
+			return view(
+				'staging.index',
+				[
+					'error' => 'git_remot_not_set',
+					'error_message' => 'Gitリモートが設定されていません。',
+					'project' => $project,
+					'branch_name' => $branch_name,
+				]
+			);
+		}
+
 		return view(
 			'staging.index',
 			[
@@ -44,6 +56,15 @@ class StagingController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function gpi(Request $request, Project $project, $branch_name){
+
+		if( !strlen($project->git_url) ){
+			return [
+				'result' => false,
+				'error' => 'git_remot_not_set',
+				'error_message' => 'Gitリモートが設定されていません。',
+			];
+		}
+
 
 		$gitUtil = new \App\Helpers\git($project);
 		$default_branch_name = $gitUtil->get_branch_name();
