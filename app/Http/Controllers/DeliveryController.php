@@ -52,6 +52,8 @@ class DeliveryController extends Controller
 		return view(
 			'delivery.index',
 			[
+				'error' => null,
+				'error_message' => null,
 				'project' => $project,
 				'branch_name' => $branch_name,
 				'indigo_std_out' => $indigo_std_out,

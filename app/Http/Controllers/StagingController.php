@@ -43,6 +43,8 @@ class StagingController extends Controller
 		return view(
 			'staging.index',
 			[
+				'error' => null,
+				'error_message' => null,
 				'project' => $project,
 				'branch_name' => $branch_name,
 			]
