@@ -66,10 +66,10 @@ mix
 
 	// --------------------------------------
 	// Static Frontend Libraries
-	.copyDirectory('vendor/pickles2/px2style/dist', 'public/common/px2style/dist')
 	.copyDirectory('vendor/pickles2/lib-plum/dist', 'public/common/lib-plum/dist')
 	.copyDirectory('vendor/pickles2/lib-indigo/res', 'public/common/lib-indigo/res')
 	.copyDirectory('vendor/tomk79/remote-finder/dist', 'public/common/remote-finder/dist')
+	.copyDirectory('submodules/px2style/dist', 'public/common/px2style/dist')
 	.copyDirectory('submodules/gitui79.js/dist', 'public/common/gitui79/dist')
 	.copyDirectory('submodules/node-git-parser/dist', 'public/common/gitparse79/dist')
 	.copyDirectory('submodules/common-file-editor/dist', 'public/common/common-file-editor/dist')
