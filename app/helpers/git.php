@@ -199,6 +199,9 @@ class git{
 	 */
 	public function set_remote_origin(){
 		$git_remote = $this->url_bind_confidentials();
+		if( !strlen($git_remote) ){
+			return true;
+		}
 		$this->git(array('remote', 'add', 'origin', $git_remote));
 		$this->git(array('remote', 'set-url', 'origin', $git_remote));
 		return true;
