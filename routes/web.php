@@ -38,6 +38,10 @@ Route::middleware(['boot'])
 	Route::get('mypage', 'MypageController@show');
 	Route::get('mypage/edit', 'MypageController@edit');
 	Route::put('mypage', 'MypageController@update');
+	Route::get('mypage/edit_email', 'MypageController@edit_email');
+	Route::post('mypage/edit_email', 'MypageController@update_email');
+	Route::get('mypage/edit_email_mailsent', 'MypageController@update_email_mailsent');
+	Route::get('mypage/edit_email_update', 'MypageController@update_email_update');
 	Route::delete('mypage', 'MypageController@destroy');
 
 

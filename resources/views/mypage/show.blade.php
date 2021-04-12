@@ -30,7 +30,7 @@
 		</tr>
 		<tr>
 			<th>{{ __('E-Mail Address') }}</th>
-			<td>{{ $user->email }}</td>
+			<td>{{ $user->email }} <a href="{{ url('mypage/edit_email') }}" class="px2-btn px2-btn--primary">変更する</a></td>
 		</tr>
 	</table>
 </div>

@@ -18,12 +18,7 @@
 	</div>
 	<div class="form-group">
 		<label for="email">{{ __('Email') }}</label>
-		<input id="email" type="text" class="form-control @if ($errors->has('email')) is-invalid @endif" name="email" value="{{ old('email', $user->email) }}" required autofocus>
-			@if ($errors->has('email'))
-				<span class="invalid-feedback" role="alert">
-					{{ $errors->first('email') }}
-				</span>
-			@endif
+		{{ $user->email }}
 	</div>
 	<div class="form-group">
 		<label for="password">{{ __('Password') }}</label>
