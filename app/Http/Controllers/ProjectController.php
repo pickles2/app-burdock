@@ -60,15 +60,25 @@ class ProjectController extends Controller
 	/**
 	 * Show the form for editing the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param  Project $project
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit(Project $project)
 	{
+
+		$basicauth_user_name = null;
+		$realpath_preview_htpasswd = env('BD_DATA_DIR').'/projects/'.$project->project_code.'/preview.htpasswd';
+		if( is_file($realpath_preview_htpasswd) ){
+			$bin = file_get_contents($realpath_preview_htpasswd);
+			$htpasswd_ary = explode(':', $bin, 2);
+			$basicauth_user_name = $htpasswd_ary[0];
+		}
+
 		return view(
 			'projects.edit',
 			[
 				'project' => $project,
+				'basicauth_user_name' => $basicauth_user_name,
 			]
 		);
 	}
@@ -93,6 +103,35 @@ class ProjectController extends Controller
 		}
 		$project->git_main_branch_name = $request->git_main_branch_name;
 		$project->save();
+
+
+		$realpath_preview_htpasswd = env('BD_DATA_DIR').'/projects/'.$project->project_code.'/preview.htpasswd';
+		if( strlen($request->basicauth_user_name) ){
+			// --------------------------------------
+			// パスワードを保存する
+			$basicauth_password = $request->basicauth_password;
+			$hashed_passwd = password_hash($basicauth_password, PASSWORD_BCRYPT);
+			if( !strlen($basicauth_password) ){
+				if( is_file($realpath_preview_htpasswd) ){
+					$bin = file_get_contents($realpath_preview_htpasswd);
+					$htpasswd_ary = explode(':', $bin, 2);
+					$hashed_passwd = $htpasswd_ary[1];
+				}
+			}
+
+			$src = '';
+			$src .= trim($request->basicauth_user_name).':'.$hashed_passwd."\n";
+			if( !file_put_contents($realpath_preview_htpasswd, $src) ){
+				// TODO: エラー処理
+			}
+
+		}else{
+			// --------------------------------------
+			// パスワードを解除する
+			if( is_file($realpath_preview_htpasswd) && !unlink($realpath_preview_htpasswd) ){
+				// TODO: エラー処理
+			}
+		}
 
 
 		// ディレクトリの処理
