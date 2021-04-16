@@ -235,6 +235,7 @@ class GenerateVirtualHostsCommand extends Command
 			'domain' => $domain,
 			'project_code' => $project->project_code,
 			'document_root' => $this->fs->normalize_path($this->fs->get_realpath( env('BD_DATA_DIR').'/projects/'.$project->project_code.'/indigo/production/'.$relpath_docroot_dist )),
+			'path_htpasswd' => false,
 		];
 		if( !strlen($domain) ){
 			$src_vhosts .= '# NO DOMAIN'."\n";
@@ -264,6 +265,7 @@ class GenerateVirtualHostsCommand extends Command
 				'project_code' => $project->project_code,
 				'document_root' => $this->fs->normalize_path($this->fs->get_realpath( env('BD_DATA_DIR').'/repositories/'.$project->project_code.'---'.$branch_name.'/'.$relpath_docroot_preview )),
 				'branch_name' => $branch_name,
+				'path_htpasswd' => false,
 			];
 			$src_vhosts = '';
 			if( is_file( $realpath_template_root_dir.'preview.twig' ) ){
@@ -293,7 +295,11 @@ class GenerateVirtualHostsCommand extends Command
 				'project_code' => $project->project_code,
 				'document_root' => $this->fs->normalize_path($this->fs->get_realpath( env('BD_DATA_DIR').'/stagings/'.$project->project_code.'---stg'.($i+1).'/'.$relpath_docroot_dist )),
 				'staging_index' => $i+1,
+				'path_htpasswd' => false,
 			];
+			if( $this->fs->is_file($this->fs->get_realpath( env('BD_DATA_DIR').'/projects/'.$project->project_code.'/plum_data_dir/htpasswds/stg'.($i).'.htpasswd' )) ){
+				$tpl_vars['path_htpasswd'] = $this->fs->get_realpath( env('BD_DATA_DIR').'/projects/'.$project->project_code.'/plum_data_dir/htpasswds/stg'.($i).'.htpasswd' );
+			}
 
 			$src_vhosts = '';
 			if( is_file( $realpath_template_root_dir.'staging.twig' ) ){
@@ -303,7 +309,13 @@ class GenerateVirtualHostsCommand extends Command
 				$src_vhosts .= '<VirtualHost '.$tpl_vars['domain'].':80>'."\n";
 				$src_vhosts .= '	# Staging '.$tpl_vars['staging_index'].' ('.$tpl_vars['project_code'].')'."\n";
 				$src_vhosts .= '	ServerName '.$tpl_vars['domain'].''."\n";
-				$src_vhosts .= '	DocumentRoot '.$tpl_vars['document_root']."\n";
+				$src_vhosts .= '	DocumentRoot '.$tpl_vars['document_root'].''."\n";
+				if( $tpl_vars['path_htpasswd'] ){
+					$src_vhosts .= '	Require valid-user'."\n";
+					$src_vhosts .= '	AuthType Basic'."\n";
+					$src_vhosts .= '	AuthName "Please enter your ID and password"'."\n";
+					$src_vhosts .= '	AuthUserFile '.$tpl_vars['path_htpasswd']."\n";
+				}
 				$src_vhosts .= '</VirtualHost>'."\n";
 			}
 

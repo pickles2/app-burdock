@@ -73,14 +73,14 @@ class StagingController extends Controller
 
 		$fs = new \tomk79\filesystem();
 
-		$realpath_pj_git_root = env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/plum_temporary_data_dir/';
+		$realpath_pj_git_root = env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/plum_data_dir/';
 		$fs->mkdir_r($realpath_pj_git_root);
 		$fs->mkdir_r(env('BD_DATA_DIR').'/stagings/');
 
 		$staging_server = array();
 		for( $i = 1; $i <= 10; $i ++ ){
 			array_push($staging_server, array(
-				'name' => 'stg'.$i.'',
+				'name' => 'Staging No.'.$i.'',
 				'path' => env('BD_DATA_DIR').'/stagings/'.urlencode($project->project_code).'---stg'.$i.'/',
 				'url' => 'http'.($_SERVER["HTTPS"] ? 's' : '').'://'.urlencode($project->project_code).'---stg'.$i.'.'.env('BD_PLUM_STAGING_DOMAIN').'/',
 			));
@@ -98,7 +98,7 @@ class StagingController extends Controller
 
 		$plum = new \hk\plum\main(
 			array(
-				'temporary_data_dir' => $realpath_pj_git_root,
+				'data_dir' => $realpath_pj_git_root,
 				'staging_server' => $staging_server,
 				'git' => array(
 					'url' => $project->git_url,
