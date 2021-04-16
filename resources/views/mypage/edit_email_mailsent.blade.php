@@ -7,9 +7,9 @@
 	<p>メールアドレスの変更はまだ完了していません。</p>
 	<p>新しいメールアドレス宛にメールをお送りしました。</p>
 	<p>メールに記載されているリンクへアクセスして、メールアドレス変更を完了してください。</p>
-	<hr />
-	<p>
-		<a href="{{ url('/mypage/') }}" class="btn btn-primary">戻る</a>
+
+	<p class="px2-text-align-center">
+		<a href="{{ url('/mypage/') }}" class="px2-btn">戻る</a>
 	</p>
 
 </div>

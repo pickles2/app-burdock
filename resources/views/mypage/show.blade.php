@@ -8,13 +8,44 @@
 @can('edit', $user)
 	<div class="px2-p">
 		<a href="{{ url('mypage/edit') }}" class="px2-btn px2-btn--primary">プロフィールを編集する</a>
-		{{-- 削除ボタンは後で正式なものに置き換えます --}}
-		@component('components.btn-user-del')
-			@slot('controller', 'mypage')
-			@slot('id', $user->id)
-			@slot('name', $user->project_name)
-		@endcomponent
+		<button type="button" class="px2-btn px2-btn--danger" data-cont-method="withdraw">退会する</button>
+		<form action="{{ url('mypage/') }}" method="post" id="form-withdraw" style="display: none;">
+			@csrf
+			@method('DELETE')
+		</form>
 	</div>
+	<script type="text/template" id="template-form-withdraw">
+		<p>{{ __('Are you sure to delete?') }}</p>
+	</script>
+	<script>
+	$(window).on('load', function(){
+		$('[data-cont-method=withdraw]').on('click', function(){
+			var $body = $('<div>' + $('#template-form-withdraw').html() + '</div>');
+			px2style.modal({
+				"title": "{{ __('Confirm delete') }}",
+				"body": $body,
+				"buttons": [
+					$('<button>')
+						.text('退会する')
+						.addClass('px2-btn')
+						.addClass('px2-btn--danger')
+						.on('click', function(){
+							px2style.loading();
+							$('#form-withdraw').submit();
+						})
+				],
+				"buttonsSecondary": [
+					$('<button>')
+						.text('キャンセル')
+						.addClass('px2-btn')
+						.on('click', function(){
+							px2style.closeModal();
+						})
+				]
+			});
+		});
+	});
+	</script>
 @endcan
 
 {{-- ユーザー1件の情報 --}}
