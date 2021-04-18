@@ -5,13 +5,15 @@ use App\Project;
 
 class plumHelper{
 	private $project;
+	private $user_id;
 	private $fs;
 
 	/**
 	 * Constructor
 	 */
-	public function __construct( $project = null ){
+	public function __construct( $project = null, $user_id = null ){
 		$this->project = $project;
+		$this->user_id = $user_id;
 		$this->fs = new \tomk79\filesystem();
 	}
 
@@ -63,7 +65,15 @@ class plumHelper{
 				$asyncHelper->artisan('bd:plum:async', $params);
 			},
 			'broadcast' => function( $message ){
-				// TODO: 非同期メッセージをブラウザに届ける
+
+				// ブロードキャスト
+				broadcast(
+					new \App\Events\AsyncPlumEvent(
+						$this->user_id,
+						$this->project->project_code,
+						$message
+					)
+				);
 			}
 		));
 

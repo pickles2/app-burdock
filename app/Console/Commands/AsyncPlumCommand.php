@@ -62,7 +62,7 @@ class AsyncPlumCommand extends Command
 
 		$project = Project::where('project_code', $project_code)->first();
 
-		$plumHelper = new \App\Helpers\plumHelper($project);
+		$plumHelper = new \App\Helpers\plumHelper($project, $user_id);
 		$plum = $plumHelper->create_plum();
 		$plum->async( $params );
 

@@ -58,6 +58,7 @@ class StagingController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function gpi(Request $request, Project $project, $branch_name){
+		$user = Auth::user();
 
 		if( !strlen($project->git_url) ){
 			return [
@@ -67,7 +68,7 @@ class StagingController extends Controller
 			];
 		}
 
-		$plumHelper = new \App\Helpers\plumHelper($project);
+		$plumHelper = new \App\Helpers\plumHelper($project, $user->id);
 		$plum = $plumHelper->create_plum();
 
 		$json = $plum->gpi( $_POST['data'] );
