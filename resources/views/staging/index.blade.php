@@ -60,6 +60,13 @@ var plum = new Plum(
 	}
 );
 plum.init();
+
+window.Echo.channel('{{ $project->project_code }}___plum-message.{{ Auth::id() }}').listen('AsyncPxcmdEvent', (message) => {
+	// TODO: 非同期メッセージを受け取る
+	console.log(message);
+	plum.broadcastMessage(message);
+});
+
 </script>
 
 

@@ -80,15 +80,6 @@ class async{
         $user_id = Auth::id();
 		$fs = new \tomk79\filesystem();
 
-		$project_path = get_project_workingtree_dir($this->project_code, $this->branch_name);
-		if( !is_dir($project_path) ){
-			return false;
-		}
-		$realpath_entry_script = $project_path.'/'.get_px_execute_path($this->project_code, $this->branch_name);
-		if(!\File::exists($realpath_entry_script)) {
-			return false;
-		}
-
 		$watchDir = env('BD_DATA_DIR').'/watcher/artisan/';
 		if(!is_dir($watchDir)){
 			$fs->mkdir_r($watchDir);

@@ -15,6 +15,7 @@ module.exports = class{
 		switch( fileJson.artisan_cmd ){
 			case 'bd:pxcmd':
 			case 'bd:px2:publish':
+			case 'bd:plum:async':
 			case 'bd:custom_console_extensions_broadcast':
 			case 'bd:generate_vhosts':
 				break;

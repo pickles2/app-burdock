@@ -5,27 +5,35 @@ use App\Project;
 
 class plumHelper{
 	private $project;
-    private $fs;
+	private $fs;
 
 	/**
 	 * Constructor
 	 */
 	public function __construct( $project = null ){
-        $this->project = $project;
+		$this->project = $project;
 		$this->fs = new \tomk79\filesystem();
 	}
 
-    public function create_plum(){
+	/**
+	 * Plumを生成する
+	 */
+	public function create_plum(){
 		$realpath_pj_git_root = env('BD_DATA_DIR').'/projects/'.urlencode($this->project->project_code).'/plum_data_dir/';
 		$this->fs->mkdir_r($realpath_pj_git_root);
 		$this->fs->mkdir_r(env('BD_DATA_DIR').'/stagings/');
+
+		$s = 's';
+		if( is_array($_SERVER) && array_key_exists("HTTPS", $_SERVER) ){
+			$s = ($_SERVER["HTTPS"] ? 's' : '');
+		}
 
 		$staging_server = array();
 		for( $i = 1; $i <= 10; $i ++ ){
 			array_push($staging_server, array(
 				'name' => 'Staging No.'.$i.'',
 				'path' => env('BD_DATA_DIR').'/stagings/'.urlencode($this->project->project_code).'---stg'.$i.'/',
-				'url' => 'http'.($_SERVER["HTTPS"] ? 's' : '').'://'.urlencode($this->project->project_code).'---stg'.$i.'.'.env('BD_PLUM_STAGING_DOMAIN').'/',
+				'url' => 'http'.$s.'://'.urlencode($this->project->project_code).'---stg'.$i.'.'.env('BD_PLUM_STAGING_DOMAIN').'/',
 			));
 		}
 
@@ -49,8 +57,17 @@ class plumHelper{
 				)
 			)
 		);
+		$plum->set_async_callbacks(array(
+			'async' => function( $params ){
+				$asyncHelper = new \App\Helpers\async( $this->project );
+				$asyncHelper->artisan('bd:plum:async', $params);
+			},
+			'broadcast' => function( $message ){
+				// TODO: 非同期メッセージをブラウザに届ける
+			}
+		));
 
-        return $plum;
-    }
+		return $plum;
+	}
 
 }
