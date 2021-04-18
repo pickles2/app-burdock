@@ -67,46 +67,8 @@ class StagingController extends Controller
 			];
 		}
 
-
-		$gitUtil = new \App\Helpers\git($project);
-		$default_branch_name = $gitUtil->get_branch_name();
-
-		$fs = new \tomk79\filesystem();
-
-		$realpath_pj_git_root = env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/plum_data_dir/';
-		$fs->mkdir_r($realpath_pj_git_root);
-		$fs->mkdir_r(env('BD_DATA_DIR').'/stagings/');
-
-		$staging_server = array();
-		for( $i = 1; $i <= 10; $i ++ ){
-			array_push($staging_server, array(
-				'name' => 'Staging No.'.$i.'',
-				'path' => env('BD_DATA_DIR').'/stagings/'.urlencode($project->project_code).'---stg'.$i.'/',
-				'url' => 'http'.($_SERVER["HTTPS"] ? 's' : '').'://'.urlencode($project->project_code).'---stg'.$i.'.'.env('BD_PLUM_STAGING_DOMAIN').'/',
-			));
-		}
-
-		$git_username = null;
-		if( strlen($project->git_username) ){
-			$git_username = \Crypt::decryptString( $project->git_username );
-		}
-		$git_password = null;
-		if( strlen($project->git_password) ){
-			$git_password = \Crypt::decryptString( $project->git_password );
-		}
-
-
-		$plum = new \hk\plum\main(
-			array(
-				'data_dir' => $realpath_pj_git_root,
-				'staging_server' => $staging_server,
-				'git' => array(
-					'url' => $project->git_url,
-					'username' => $git_username,
-					'password' => $git_password,
-				)
-			)
-		);
+		$plumHelper = new \App\Helpers\plumHelper($project);
+		$plum = $plumHelper->create_plum();
 
 		$json = $plum->gpi( $_POST['data'] );
 
