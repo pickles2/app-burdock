@@ -242,6 +242,9 @@ class GenerateVirtualHostsCommand extends Command
 		}elseif( is_file( $realpath_template_root_dir.'production.twig' ) ){
 			$template = $twig->load('production.twig');
 			$src_vhosts .= $template->render($tpl_vars);
+		}elseif( is_file( $realpath_template_root_dir.'production-'.env('BD_WEBSERVER').'.twig' ) ){
+			$template = $twig->load('production-'.env('BD_WEBSERVER').'.twig');
+			$src_vhosts .= $template->render($tpl_vars);
 		}else{
 			$src_vhosts .= '<VirtualHost '.$tpl_vars['domain'].':80>'."\n";
 			$src_vhosts .= '	# Production ('.$tpl_vars['project_code'].')'."\n";
@@ -273,6 +276,9 @@ class GenerateVirtualHostsCommand extends Command
 			$src_vhosts = '';
 			if( is_file( $realpath_template_root_dir.'preview.twig' ) ){
 				$template = $twig->load('preview.twig');
+				$src_vhosts .= $template->render($tpl_vars);
+			}elseif( is_file( $realpath_template_root_dir.'preview-'.env('BD_WEBSERVER').'.twig' ) ){
+				$template = $twig->load('preview-'.env('BD_WEBSERVER').'.twig');
 				$src_vhosts .= $template->render($tpl_vars);
 			}else{
 				$src_vhosts .= '<VirtualHost '.$tpl_vars['domain'].':80>'."\n";
@@ -315,6 +321,9 @@ class GenerateVirtualHostsCommand extends Command
 			$src_vhosts = '';
 			if( is_file( $realpath_template_root_dir.'staging.twig' ) ){
 				$template = $twig->load('staging.twig');
+				$src_vhosts .= $template->render($tpl_vars);
+			}elseif( is_file( $realpath_template_root_dir.'staging-'.env('BD_WEBSERVER').'.twig' ) ){
+				$template = $twig->load('staging-'.env('BD_WEBSERVER').'.twig');
 				$src_vhosts .= $template->render($tpl_vars);
 			}else{
 				$src_vhosts .= '<VirtualHost '.$tpl_vars['domain'].':80>'."\n";
