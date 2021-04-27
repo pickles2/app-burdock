@@ -13,7 +13,7 @@
         "fzaninotto/faker": "^1.8",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
-        "pickles2/lib-indigo": "~0.1",
+        "pickles2/lib-indigo": "~0.3",
         "pickles2/lib-plum": "~0.2",
         "pickles2/px2agent": "~0.0",
         "pickles2/px2style": "~2.0",

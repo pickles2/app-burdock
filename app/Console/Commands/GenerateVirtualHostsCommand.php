@@ -19,7 +19,7 @@ class GenerateVirtualHostsCommand extends Command
 	 *
 	 * @var string
 	 */
-	protected $description = '本番配信ツール indigo が、配信予約に従って配信を実行する。';
+	protected $description = 'プレビュー、ステージング、本番環境のためのバーチャルホスト設定を生成します。';
 
 	/** BD_DATA_DIR */
 	private $realpath_vhosts_dir;

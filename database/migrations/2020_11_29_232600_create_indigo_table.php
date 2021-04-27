@@ -5,9 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 // Indigo
-use indigo\db\tsReserve as tsReserve;
-use indigo\db\tsOutput as tsOutput;
-use indigo\db\tsBackup as tsBackup;
+use pickles2\indigo\db\tsReserve as tsReserve;
+use pickles2\indigo\db\tsOutput as tsOutput;
+use pickles2\indigo\db\tsBackup as tsBackup;
 
 class CreateIndigoTable extends Migration
 {
