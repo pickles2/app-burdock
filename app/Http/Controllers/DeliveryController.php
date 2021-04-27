@@ -45,7 +45,7 @@ class DeliveryController extends Controller
 		$parameter = $this->mk_indigo_options( $project, $branch_name );
 
 		// load indigo\main
-		$indigo = new \indigo\main($parameter);
+		$indigo = new \pickles2\indigo\main($parameter);
 		$indigo_std_out = $indigo->run();
 
 
@@ -81,7 +81,7 @@ class DeliveryController extends Controller
 		$parameter = $this->mk_indigo_options( $project, $branch_name );
 
 		// load indigo\main
-		$indigo = new \indigo\main($parameter);
+		$indigo = new \pickles2\indigo\main($parameter);
 		$indigo_std_out = $indigo->ajax_run();
 
 		return $indigo_std_out;

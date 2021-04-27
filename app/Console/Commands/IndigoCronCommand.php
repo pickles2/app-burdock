@@ -83,7 +83,7 @@ class IndigoCronCommand extends Command
 			$parameter = $indigoController->mk_indigo_options($project, $default_branch_name);
 
 			// load indigo\main
-			$indigo = new \indigo\main($parameter);
+			$indigo = new \pickles2\indigo\main($parameter);
 
 			// 実行する
 			$result = $indigo->cron_run();
