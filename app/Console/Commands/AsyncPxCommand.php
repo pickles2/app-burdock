@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Http\Controllers\DeliveryController;
 use App\Project;
+use \App\Events\AsyncGeneralProgressEvent;
 
 class AsyncPxCommand extends Command
 {
@@ -61,6 +62,7 @@ class AsyncPxCommand extends Command
 		$branch_name = $json->branch_name;
 		$entry_script = $json->entry_script;
 		$pxcommand = $json->pxcommand;
+		$channel_name = $json->channel_name;
 		$path = $json->path;
 		$params = $json->params;
 
@@ -93,23 +95,50 @@ class AsyncPxCommand extends Command
 			$stdout = fgets($pipes[1]);
 			$stderr = fgets($pipes[2]);
 
-			// ブロードキャスト
 			broadcast(
-				new \App\Events\AsyncPxcmdEvent(
+				new AsyncGeneralProgressEvent(
 					$user_id,
 					$project_code,
 					$branch_name,
+					'progress',
+					null,
 					$stdout,
 					$stderr,
-					$pxcommand
+					$channel_name
 				)
 			);
 		}
+
+
+		$stat = array();
+		do {
+			$stat = proc_get_status($proc);
+			// waiting
+			usleep(1);
+		} while( $stat['running'] );
+
+
+
+		broadcast(
+			new AsyncGeneralProgressEvent(
+				$user_id,
+				$project_code,
+				$branch_name,
+				'exit',
+				$stat['exitcode'],
+				null,
+				null,
+				$channel_name
+			)
+		);
+
+
 
 		fclose($pipes[1]);
 		fclose($pipes[2]);
 		proc_close($proc);
 		chdir($path_current_dir); // 元いたディレクトリへ戻る
+
 
 
 		$this->line(' finished!');

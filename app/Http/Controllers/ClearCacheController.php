@@ -48,10 +48,12 @@ class ClearCacheController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function clearcache(Request $request, Project $project, $branch_name){
+		$user_id = Auth::id();
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
 		$project_branch = $burdockProjectManager->project($project->project_code)->branch($branch_name, 'preview');
 
 		$bdAsync = new \App\Helpers\async( $project, $branch_name );
+		$bdAsync->set_channel_name( $project->project_code.'---'.$branch_name.'___pxcmd-clearcache.'.$user_id );
 		$bdAsync->pxcmd(
 			'clearcache',
 			'/',

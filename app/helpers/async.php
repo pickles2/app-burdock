@@ -9,6 +9,7 @@ class async{
 	private $project_id;
 	private $project_code;
 	private $branch_name;
+	private $channel_name;
 
 	/**
 	 * Constructor
@@ -30,6 +31,14 @@ class async{
 		}
 
 		$this->branch_name = $branch_name;
+	}
+
+
+	/**
+	 * ブロードキャストチャンネル名をセットする
+	 */
+	public function set_channel_name( $channel_name ){
+		$this->channel_name = $channel_name;
 	}
 
 	/**
@@ -57,6 +66,7 @@ class async{
 		$json->user_id = $user_id;
 		$json->project_code = $this->project_code;
 		$json->branch_name = $this->branch_name;
+		$json->channel_name = $this->channel_name;
 		$json->entry_script = $realpath_entry_script;
 		$json->path = $path;
 		$json->command = $command;
@@ -89,6 +99,7 @@ class async{
 		$json->user_id = $user_id;
 		$json->project_code = $this->project_code;
 		$json->branch_name = $this->branch_name;
+		$json->channel_name = $this->channel_name;
 		$json->artisan_cmd = $artisan_cmd;
 		$json->params = $params;
 
@@ -128,6 +139,7 @@ class async{
 		$json->user_id = $user_id;
 		$json->project_code = $this->project_code;
 		$json->branch_name = $this->branch_name;
+		$json->channel_name = $this->channel_name;
 		$json->entry_script = $realpath_entry_script;
 		$json->path = $path;
 		$json->pxcommand = $pxcommand;
