@@ -14,6 +14,7 @@ module.exports = class{
 		// ホワイトリスト管理する
 		switch( fileJson.artisan_cmd ){
 			case 'bd:pxcmd':
+			case 'bd:cmd':
 			case 'bd:px2:publish':
 			case 'bd:plum:async':
 			case 'bd:custom_console_extensions_broadcast':
