@@ -59,6 +59,18 @@ class HealthCheckController extends \App\Http\Controllers\Controller
 				$rtn['message'] = 'Broadcast request recieved.';
 				break;
 
+			case 'async':
+				// 非同期処理をテストする
+				$bdAsync = new \App\Helpers\async();
+				$bdAsync->set_channel_name( 'system-mentenance___async.broadcast' );
+				$bdAsync->cmd(
+					array('ls', '-la')
+				);
+
+				$rtn['result'] = true;
+				$rtn['message'] = 'Async request recieved.';
+				break;
+
 			case 'queue':
 				// テストキューを発行する
 				\App\Jobs\SystemMaintenanceHealthCheckJob::dispatch();

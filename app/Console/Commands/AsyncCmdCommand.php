@@ -7,7 +7,7 @@ use App\Http\Controllers\DeliveryController;
 use App\Project;
 use \App\Events\AsyncGeneralProgressEvent;
 
-class AsyncCommand extends Command
+class AsyncCmdCommand extends Command
 {
 	/**
 	 * The name and signature of the console command.
@@ -21,7 +21,7 @@ class AsyncCommand extends Command
 	 *
 	 * @var string
 	 */
-	protected $description = 'PXコマンドを非同期で実行する。';
+	protected $description = 'コマンドを非同期で実行する。';
 
 	/** $fs */
 	private $fs;
@@ -56,36 +56,47 @@ class AsyncCommand extends Command
 		if( is_file($path_json) ){
 			$json = json_decode( file_get_contents($path_json) );
 		}
+		if( !$json ){
+			$this->line(' Nothing to do.');
+			$this->line( '' );
+			$this->line('Local Time: '.date('Y-m-d H:i:s'));
+			$this->line('GMT: '.gmdate('Y-m-d H:i:s'));
+			$this->comment('------------ '.$this->signature.' successful ------------');
+			$this->line( '' );
+
+			return 0; // 終了コード
+		}
 
 		$user_id = $json->user_id;
 		$project_code = $json->project_code;
 		$branch_name = $json->branch_name;
 		$channel_name = $json->channel_name;
 
-		$entry_script = $json->entry_script;
-		$pxcommand = $json->pxcommand;
-		$path = $json->path;
-		$params = $json->params;
+		$ary_command = $json->ary_command;
+		$options = $json->options;
 
-		$query = $path.'?PX='.$pxcommand.'&'.http_build_query($params);
-
-
-		$project_path = \get_project_workingtree_dir($project_code, $branch_name);
+		$project_path = realpath('.');
+		if( strlen($project_code) && strlen($branch_name) ){
+			$project_path = \get_project_workingtree_dir($project_code, $branch_name);
+		}
 		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
 
 		set_time_limit(60);
 
 		chdir($project_path);
-		// proc_openでパブリッシュ
+
+		// proc_open
 		$desc = array(
 			1 => array('pipe', 'w'),
 			2 => array('pipe', 'w'),
 		);
 
 
-		$cmd = '';
-		$cmd .= 'php '.$entry_script.' ';
-		$cmd .= '"'.$query.'"';
+		foreach( $ary_command as $idx=>$row ){
+			$ary_command[$idx] = escapeshellarg($row);
+		}
+
+		$cmd = implode(' ', $ary_command);
 
 		$proc = proc_open($cmd, $desc, $pipes);
 		stream_set_blocking($pipes[1], 0);
@@ -103,8 +114,8 @@ class AsyncCommand extends Command
 					$branch_name,
 					'progress',
 					null,
-					$stdout,
-					$stderr,
+					($stdout!==false ? $stdout : ''),
+					($stderr!==false ? $stderr : ''),
 					$channel_name
 				)
 			);
@@ -135,10 +146,12 @@ class AsyncCommand extends Command
 
 
 
+
 		fclose($pipes[1]);
 		fclose($pipes[2]);
 		proc_close($proc);
 		chdir($path_current_dir); // 元いたディレクトリへ戻る
+
 
 
 

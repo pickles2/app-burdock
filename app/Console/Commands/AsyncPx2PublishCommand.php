@@ -55,6 +55,16 @@ class AsyncPx2PublishCommand extends Command
 		if( is_file($path_json) ){
 			$json = json_decode( file_get_contents($path_json) );
 		}
+		if( !$json ){
+			$this->line(' Nothing to do.');
+			$this->line( '' );
+			$this->line('Local Time: '.date('Y-m-d H:i:s'));
+			$this->line('GMT: '.gmdate('Y-m-d H:i:s'));
+			$this->comment('------------ '.$this->signature.' successful ------------');
+			$this->line( '' );
+
+			return 0; // 終了コード
+		}
 
 		$user_id = $json->user_id;
 		$project_code = $json->project_code;
@@ -72,7 +82,8 @@ class AsyncPx2PublishCommand extends Command
 		set_time_limit(60);
 
 		chdir($project_path);
-		// proc_openでパブリッシュ
+
+		// proc_open
 		$desc = array(
 			1 => array('pipe', 'w'),
 			2 => array('pipe', 'w'),

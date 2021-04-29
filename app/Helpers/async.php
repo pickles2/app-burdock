@@ -15,7 +15,7 @@ class async{
 	 * Constructor
 	 */
 	public function __construct( $project = null, $branch_name = null ){
-		if(is_null($project)){
+		if( is_null($project) ){
 			// Project情報に関連付けないで利用する場合
 			return;
 		}else if(is_object($project)){
@@ -44,21 +44,19 @@ class async{
 	/**
 	 * Command を非同期に実行する
 	 */
-	public function cmd( $command, $options = array() ){
+	public function cmd( $commandAry, $options = array() ){
         $user_id = Auth::id();
 		$fs = new \tomk79\filesystem();
 
-		$project_path = get_project_workingtree_dir($this->project_code, $this->branch_name);
-		if( !is_dir($project_path) ){
-			return false;
-		}
-		$realpath_entry_script = $project_path.'/'.get_px_execute_path($this->project_code, $this->branch_name);
-		if(!\File::exists($realpath_entry_script)) {
-			return false;
+		if( strlen($this->project_code) && strlen($this->branch_name) ){
+			$project_path = get_project_workingtree_dir($this->project_code, $this->branch_name);
+			if( !is_dir($project_path) ){
+				return false;
+			}
 		}
 
 		$watchDir = env('BD_DATA_DIR').'/watcher/cmd/';
-		if(!is_dir($watchDir)){
+		if( !is_dir($watchDir) ){
 			$fs->mkdir_r($watchDir);
 		}
 
@@ -67,10 +65,10 @@ class async{
 		$json->project_code = $this->project_code;
 		$json->branch_name = $this->branch_name;
 		$json->channel_name = $this->channel_name;
-		$json->entry_script = $realpath_entry_script;
-		$json->path = $path;
-		$json->command = $command;
+
+		$json->ary_command = $commandAry;
 		$json->options = $options;
+
 
 		// 一時ファイル名を作成
 		$tmpFileName = $this->generate_filename();

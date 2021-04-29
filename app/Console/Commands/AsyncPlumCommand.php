@@ -54,6 +54,16 @@ class AsyncPlumCommand extends Command
 		if( is_file($path_json) ){
 			$json = json_decode( file_get_contents($path_json) );
 		}
+		if( !$json ){
+			$this->line(' Nothing to do.');
+			$this->line( '' );
+			$this->line('Local Time: '.date('Y-m-d H:i:s'));
+			$this->line('GMT: '.gmdate('Y-m-d H:i:s'));
+			$this->comment('------------ '.$this->signature.' successful ------------');
+			$this->line( '' );
+
+			return 0; // 終了コード
+		}
 
 		$user_id = $json->user_id;
 		$project_code = $json->project_code;
