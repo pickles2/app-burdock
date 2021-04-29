@@ -60,9 +60,10 @@ class AsyncPxCommand extends Command
 		$user_id = $json->user_id;
 		$project_code = $json->project_code;
 		$branch_name = $json->branch_name;
+		$channel_name = $json->channel_name;
+
 		$entry_script = $json->entry_script;
 		$pxcommand = $json->pxcommand;
-		$channel_name = $json->channel_name;
 		$path = $json->path;
 		$params = $json->params;
 

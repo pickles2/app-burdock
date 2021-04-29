@@ -59,6 +59,7 @@ class AsyncPx2PublishCommand extends Command
 		$user_id = $json->user_id;
 		$project_code = $json->project_code;
 		$branch_name = $json->branch_name;
+		$channel_name = $json->channel_name;
 
 		$publish_option = $json->params->publish_option;
 		$paths_region = $json->params->paths_region;
@@ -194,7 +195,19 @@ class AsyncPx2PublishCommand extends Command
 			$process = proc_get_status($proc);
 
 			// ブロードキャストイベントに標準出力、標準エラー出力、パース結果を渡す、判定変数、キュー数、アラート配列、経過時間配列、パブリッシュファイルを渡す
-			broadcast(new \App\Events\PublishEvent($user_id, $project_code, $branch_name, $parse, $judge, $queue_count, $publish_file, $end_publish, $process, $pipes));
+			broadcast(new \App\Events\PublishEvent(
+				$user_id,
+				$project_code,
+				$branch_name,
+				$parse,
+				$judge,
+				$queue_count,
+				$publish_file,
+				$end_publish,
+				$process,
+				$pipes,
+				$channel_name
+			));
 		}
 
 		fclose($pipes[1]);
