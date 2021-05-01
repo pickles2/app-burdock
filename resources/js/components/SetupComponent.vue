@@ -370,14 +370,17 @@ export default {
 	mounted() {
 		this.connectChannel();
  	},
+
 	// (読み込み時に)実行するメソッド
     methods: {
+
 		// 購読するチャンネルの設定
 		connectChannel() {
+
 			// Ajax\SetupController@setupAjaxの返り値
 			window.Echo.channel('setup-event').listen('SetupEvent', (e) => {
-				//
 				console.log(e);
+
 				this.isCheckedOption === e.checked_option;
 				this.i++;
 				this.isSetupBefore = false;
@@ -428,11 +431,10 @@ export default {
 			})
 
 			window.Echo.channel('setup-option-event').listen('SetupOptionEvent', (e) => {
-				//
 				this.i++;
 
 				if(e.std_array[0] === 'Writing' && e.std_array[1] === 'objects:') {
-					if(/Writing objects: 100%/.test(e.stdout)) {
+					if(/Writing\ objects\:\ 100\%/.test(e.stdout)) {
 						this.fraction = e.denominator + ' / ' + e.denominator;
 						this.rate = 100;
 					} else if(e.rate !== '') {
@@ -441,7 +443,7 @@ export default {
 					}
 				}
 
-				if(/remote: Repository not found/.test(e.stdout)) {
+				if(/remote\:\ Repository\ not\ found/.test(e.stdout)) {
 					// リモートリポジトリが存在しない場合
 					this.errorRepository = 1;
 					this.setupStatus = 3;
@@ -449,18 +451,18 @@ export default {
 					// リモートリポジトリから拒否された場合
 					this.errorRepository = 2;
 					this.setupStatus = 3;
-				} else if(/unable to access/.test(e.stdout)) {
+				} else if(/unable\ to\ access/.test(e.stdout)) {
 					// リモートリポジトリにアクセスできない場合
 					this.errorRepository = 3;
 					this.setupStatus = 3;
-				} else if(/Invalid username or password/.test(e.stdout)) {
+				} else if(/Invalid\ username\ or\ password/.test(e.stdout)) {
 					// ユーザー名またはパスワードが違う場合
 					this.errorUserName = 1;
 					this.errorPassword = 1;
 					this.setupStatus = 3;
-				} else if(/new branch/.test(e.stdout)) {
+				} else if(/new\ branch/.test(e.stdout)) {
 					// location.href = '/home/'+this.projectCode+'/'+this.branchName;
-				} else if(/could not read Username/.test(e.stdout)) {
+				} else if(/could\ not\ read\ Username/.test(e.stdout)) {
 					// ユーザー名が見つからないと言われた場合
 					this.errorUserName = 1;
 					this.errorPassword = 1;
@@ -489,7 +491,7 @@ export default {
 			this.info = 'Pickles 2 プロジェクトをセットアップしています。この処理はしばらく時間がかかります。';
 
 			// AjaxでAjax\SetupController@setupAjaxにpost処理
-			axios.post('/setup/'+this.projectCode+'/'+this.branchName+'/setupAjax', data)
+			axios.post('/home/'+this.projectCode+'/'+this.branchName+'/setupAjax', data)
 				.then(res => {
 
 					if(/Generating\ autoload\ files/.test(this.stdout) && res.data.is_entry_script_exists === true) {
@@ -541,7 +543,7 @@ export default {
             }
 
 			// AjaxでAjax\SetupController@setupOptionAjaxにpost処理
-			axios.post('/setup/'+this.projectCode+'/'+this.branchName+'/setupOptionAjax', data).then(res => {
+			axios.post('/home/'+this.projectCode+'/'+this.branchName+'/setupOptionAjax', data).then(res => {
 
 				if(this.rate === 100 && res.data.is_entry_script_exists === true) {
 					location.href = '/home/'+this.projectCode+'/'+this.branchName;

@@ -59,6 +59,9 @@ Route::middleware(['boot'])
 		// --------------------------------------
 		// プロジェクト Home
 		Route::get('home/{project}/{branch_name?}', 'HomeController@index');
+		Route::post('home/{project}/{branch_name}/setupAjax', 'HomeController@setupAjax');
+		Route::post('home/{project}/{branch_name}/setupOptionAjax', 'HomeController@setupOptionAjax');
+
 
 		// --------------------------------------
 		// プロジェクト管理
@@ -68,12 +71,6 @@ Route::middleware(['boot'])
 		Route::put('projects/{project}/edit', 'ProjectController@update');
 		Route::delete('projects/{project}', 'ProjectController@destroy');
 
-
-
-		// --------------------------------------
-		// セットアップ
-		Route::post('setup/{project}/{branch_name}/setupAjax', 'Ajax\SetupController@setupAjax');
-		Route::post('setup/{project}/{branch_name}/setupOptionAjax', 'Ajax\SetupController@setupOptionAjax');
 
 		// --------------------------------------
 		// サイトマップ
