@@ -375,10 +375,6 @@ export default {
 			} else if(this.existsPublishLog === '1') {
 				this.publishStatus = 3;
 			}
-		},
-
-		prepare() {
-			alert('準備中の機能です。');
 		}
 	},
 

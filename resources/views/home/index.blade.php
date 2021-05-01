@@ -11,7 +11,6 @@
 
 @section('content')
 
-<div class="cont_info"></div>
 <div class="cont_maintask_ui">
 
 	<h2>基本的な手順</h2>
@@ -76,8 +75,8 @@
 
 	</div>
 </div><!-- /.row -->
-<div class="px2-p">
-	<button class="px2-btn px2-btn--danger px2-btn--block" onclick="window.bdApp.modalDeleteProject('{{ $project->project_code }}');">このプロジェクトを削除</button>
+<div class="px2-p px2-text-align-center">
+	<button class="px2-btn px2-btn--danger" onclick="window.bdApp.modalDeleteProject('{{ $project->project_code }}');">このプロジェクトを削除</button>
 </div>
 <hr>
 <address class="px2-text-align-center">(C)Pickles 2 Project.</address>

@@ -1,82 +1,80 @@
 <template>
 	<div>
-		<div class="contents">
-			<div class="cont_info"></div>
-			<div class="cont_maintask_ui">
-				<div class="px2-text-align-center" style="margin-top: 70px;">
-					<h2>プロジェクトに Pickles 2 をセットアップします</h2>
-					<div class="cont_setup_options px2-text-align-left">
-						<h3>セットアップオプション</h3>
-						<ul>
-							<li>
-								<label><input type="radio" value="pickles2" v-model="isCheckedOption"> Packagist から Pickles 2 プロジェクトテンプレート をセットアップ</label>
-							</li>
-							<li>
-								<label><input type="radio" value="git" v-model="isCheckedOption"> Gitリポジトリ から クローン</label>
-								<div v-bind:class="classCheckedOption">
-									<div class="form-group row" style="margin-top: 20px;">
-										<div class="col-md-12">
-											<div class="col-md-3"></div>
-											<div class="col-md-6 text-danger">{{ errorCloneRepository }}{{ cloneRepositoryConfirm }}</div>
+		<div class="cont_maintask_ui">
+			<div class="px2-text-align-center" style="margin-top: 70px;">
+				<h2>プロジェクトに Pickles 2 をセットアップします</h2>
+				<div class="cont_setup_options px2-text-align-left">
+					<h3>セットアップオプション</h3>
+					<ul>
+						<li>
+							<label><input type="radio" value="pickles2" v-model="isCheckedOption"> Packagist から Pickles 2 プロジェクトテンプレート をセットアップ</label>
+						</li>
+						<li>
+							<label><input type="radio" value="git" v-model="isCheckedOption"> Gitリポジトリ から クローン</label>
+							<div v-bind:class="classCheckedOption">
+								<div class="form-group row" style="margin-top: 20px;">
+									<div class="col-md-12">
+										<div class="col-md-3"></div>
+										<div class="col-md-6 text-danger">{{ errorCloneRepository }}{{ cloneRepositoryConfirm }}</div>
+									</div>
+									<div class="col-md-12">
+										<label class="col-md-3" style="font-weight: normal;">Repository URL: <span class="must">Required</span></label>
+										<div class="col-md-6">
+											<input type="text" class="form-control" v-model="cloneRepository" placeholder="https://github.com/pickles2/preset-get-start-pickles2.git">
 										</div>
-										<div class="col-md-12">
-			                            	<label class="col-md-3" style="font-weight: normal;">Repository URL: <span class="must">Required</span></label>
-				                            <div class="col-md-6">
-				                                <input type="text" class="form-control" v-model="cloneRepository" placeholder="https://github.com/pickles2/preset-get-start-pickles2.git">
-				                            </div>
-										</div>
-			                        </div>
-									<div class="form-group row">
-										<div class="col-md-12">
-											<div class="col-md-3"></div>
-											<div class="col-md-6 text-danger">{{ errorCloneUserName }}{{ cloneUserNameConfirm }}</div>
-										</div>
-										<div class="col-md-12">
-				                            <label class="col-md-3" style="font-weight: normal;">User name: </label>
-				                            <div class="col-md-6">
-				                                <input type="text" class="form-control" v-model="cloneUserName" placeholder="（任意）クローンするリモートリポジトリのユーザー名">
-				                            </div>
-										</div>
-			                        </div>
-									<div class="form-group row">
-										<div class="col-md-12">
-											<div class="col-md-3"></div>
-											<div class="col-md-6 text-danger">{{ errorClonePassword }}{{ clonePasswordConfirm }}</div>
-										</div>
-										<div class="col-md-12">
-				                            <label class="col-md-3" style="font-weight: normal;">Password: </label>
-				                            <div class="col-md-6">
-				                                <input type="password" class="form-control" v-model="clonePassword" placeholder="（任意）クローンするリモートリポジトリのパスワード">
-				                            </div>
-										</div>
-			                        </div>
+									</div>
 								</div>
-							</li>
-						</ul>
-					</div>
-					<div class="cont_setup_description">
-						<p>
-							<img src="/common/images/install_image_clip.png" alt="Composer ☓ Packagist ☓ Pickles 2">
-						</p>
-						<p>
-							Pickles 2 の プロジェクトテンプレート を Packagest から自動的に取得し、セットアップを完了します。<br>
-						</p>
-					</div>
+								<div class="form-group row">
+									<div class="col-md-12">
+										<div class="col-md-3"></div>
+										<div class="col-md-6 text-danger">{{ errorCloneUserName }}{{ cloneUserNameConfirm }}</div>
+									</div>
+									<div class="col-md-12">
+										<label class="col-md-3" style="font-weight: normal;">User name: </label>
+										<div class="col-md-6">
+											<input type="text" class="form-control" v-model="cloneUserName" placeholder="（任意）クローンするリモートリポジトリのユーザー名">
+										</div>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-md-12">
+										<div class="col-md-3"></div>
+										<div class="col-md-6 text-danger">{{ errorClonePassword }}{{ clonePasswordConfirm }}</div>
+									</div>
+									<div class="col-md-12">
+										<label class="col-md-3" style="font-weight: normal;">Password: </label>
+										<div class="col-md-6">
+											<input type="password" class="form-control" v-model="clonePassword" placeholder="（任意）クローンするリモートリポジトリのパスワード">
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="cont_setup_description">
 					<p>
-						次のボタンを押して、セットアップを続けてください。<br>
+						<img src="/common/images/install_image_clip.png" alt="Composer ☓ Packagist ☓ Pickles 2">
 					</p>
 					<p>
-						<div v-bind:class="classSetupStartEnable">
-							<button class="px2-btn px2-btn--primary col-md-12" v-on:click="setup" style="margin-bottom: 16px;">プロジェクトをセットアップする</button>
-						</div>
-						<div v-bind:class="classSetupStartDisable">
-							<button class="px2-btn px2-btn--primary col-md-12" disabled="disabled" style="margin-bottom: 16px;">プロジェクトをセットアップする</button>
-						</div>
+						Pickles 2 の プロジェクトテンプレート を Packagest から自動的に取得し、セットアップを完了します。<br>
 					</p>
+				</div>
+				<p>
+					次のボタンを押して、セットアップを続けてください。<br>
+				</p>
+				<div class="px2-p">
+					<div v-bind:class="classSetupStartEnable">
+						<button class="px2-btn px2-btn--primary" v-on:click="setup" style="margin-bottom: 16px;">プロジェクトをセットアップする</button>
+					</div>
+					<div v-bind:class="classSetupStartDisable">
+						<button class="px2-btn px2-btn--primary" disabled="disabled" style="margin-bottom: 16px;">プロジェクトをセットアップする</button>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="contents" tabindex="-1" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 10000;" v-bind:class="classModal">
+
+		<div v-bind:class="classModal" tabindex="-1" style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 10000;">
 			<div style="position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; overflow: hidden; background: rgb(0, 0, 0); opacity: 0.5;"></div>
 			<div style="position: absolute; left: 0px; top: 0px; padding-top: 4em; overflow: auto; width: 100%; height: 100%;">
 				<div class="dialog_box" style="width: 80%; margin: 3em auto;" v-bind:class="classSetup">
@@ -493,13 +491,13 @@ export default {
 			// AjaxでAjax\SetupController@setupAjaxにpost処理
 			axios.post('/setup/'+this.projectCode+'/'+this.branchName+'/setupAjax', data)
 				.then(res => {
-					//
-					if(/Generating autoload files/.test(this.stdout) && res.data.is_entry_script_exists === true) {
+
+					if(/Generating\ autoload\ files/.test(this.stdout) && res.data.is_entry_script_exists === true) {
 						this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
 						this.isSetupDuringButton = false;
 						this.isSetupAfterButton = true;
 						// this.next();
-					} else if(/Receiving objects: 100%/.test(this.stdout) && res.data.is_entry_script_exists === true) {
+					} else if(/Receiving\ objects\:\ 100\%/.test(this.stdout) && res.data.is_entry_script_exists === true) {
 						this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
 						this.isSetupDuringButton = false;
 						this.isSetupAfterButton = true;
@@ -509,7 +507,8 @@ export default {
 						this.isSetupDuringButton = false;
 						this.isSetupRestartButton = true;
 					}
-				})
+
+				});
 		},
 
 		next(reset) {
@@ -567,10 +566,6 @@ export default {
 					}, 5000);
 				}
 			})
-		},
-
-		prepare() {
-			alert('準備中の機能です。');
 		}
 	},
 
