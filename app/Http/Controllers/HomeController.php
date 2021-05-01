@@ -67,27 +67,10 @@ class HomeController extends Controller
 				'project_status' => $project_status,
 			]);
 
-		}else{
-			// --------------------------------------
-			// セットアップされていないとき
-			return $this->setup($project, $branch_name);
-		}
-	}
-
-	/**
-	 * プロジェクトの初期セットアップを実行する
-	 */
-	private function setup(Project $project, $branch_name)
-	{
-
-		if( !strlen($branch_name) ){
-			$branch_name = $project->git_main_branch_name;
-		}
-		if( !strlen($branch_name) ){
-			$branch_name = 'master';
 		}
 
-		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
+		// --------------------------------------
+		// セットアップされていないとき
 		$pjManager = $burdockProjectManager->project($project->project_code);
 		$initializing_request = $pjManager->get_initializing_request();
 		if( !$initializing_request ){
