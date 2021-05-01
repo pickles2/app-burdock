@@ -193,8 +193,22 @@ class AsyncSetupCommand extends Command
 				}
 			}
 			$process = proc_get_status($proc);
+
 			// ブロードキャストイベントに標準出力、標準エラー出力、パース結果を渡す、判定変数、キュー数、アラート配列、経過時間配列、パブリッシュファイルを渡す
-			broadcast(new \App\Events\SetupEvent($stdout, $stderr, $path_composer, $std_parse, $std_array, $numerator, $denominator, $rate, $checked_option));
+			broadcast(new \App\Events\SetupEvent(
+				'progress',
+				null,
+				null,
+				$stdout,
+				$stderr,
+				$path_composer,
+				$std_parse,
+				$std_array,
+				$numerator,
+				$denominator,
+				$rate,
+				$checked_option
+			));
 		}
 
 		fclose($pipes[1]);
@@ -228,12 +242,28 @@ class AsyncSetupCommand extends Command
 
 		clearstatcache();
 
+
 		$data = array(
 			"is_entry_script_exists" => $is_entry_script_exists,
 			"checked_option" => $checked_option,
 		);
-		// return $data;
 
+		// --------------------------------------
+		// 処理の完了をブラウザに伝える
+		broadcast(new \App\Events\SetupEvent(
+			'exit',
+			0,
+			$data,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null
+		));
 
 
 

@@ -295,8 +295,21 @@ class AsyncSetupOptionsCommand extends Command
 						}
 					}
 					$process = proc_get_status($proc);
+
 					// ブロードキャストイベントに標準出力、標準エラー出力、パース結果、アラート配列、分子変数、分母変数、レート変数を渡す
-					broadcast(new \App\Events\SetupOptionEvent($stdout, $stderr, $std_parse, $std_array, $numerator, $denominator, $rate, $checked_option));
+					broadcast(new \App\Events\SetupOptionEvent(
+						'progress',
+						null,
+						null,
+						$stdout,
+						$stderr,
+						$std_parse,
+						$std_array,
+						$numerator,
+						$denominator,
+						$rate,
+						$checked_option
+					));
 				}
 				fclose($pipes[1]);
 				fclose($pipes[2]);
@@ -327,6 +340,7 @@ class AsyncSetupOptionsCommand extends Command
 
 		chdir($path_current_dir); // 元いたディレクトリへ戻る
 
+
 		$data = array(
 			"is_entry_script_exists" => $is_entry_script_exists,
 			"checked_option" => $checked_option,
@@ -337,7 +351,22 @@ class AsyncSetupOptionsCommand extends Command
 			"repository" => $repository,
 			"user_name" => $user_name,
 		);
-		// return $data;
+
+		// --------------------------------------
+		// 処理の完了をブラウザに伝える
+		broadcast(new \App\Events\SetupOptionEvent(
+			'exit',
+			0,
+			$data,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null
+		));
 
 
 

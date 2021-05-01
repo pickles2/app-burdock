@@ -381,6 +381,25 @@ export default {
 			window.Echo.channel('setup-event').listen('SetupEvent', (e) => {
 				console.log(e);
 
+				if( e.status == 'exit' ){
+					if(/Generating\ autoload\ files/.test(this.stdout) && e.result.is_entry_script_exists === true) {
+						this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
+						this.isSetupDuringButton = false;
+						this.isSetupAfterButton = true;
+						// this.next();
+					} else if(/Receiving\ objects\:\ 100\%/.test(this.stdout) && e.result.is_entry_script_exists === true) {
+						this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
+						this.isSetupDuringButton = false;
+						this.isSetupAfterButton = true;
+						// this.next();
+					} else {
+						this.info = 'Pickles 2 プロジェクトのセットアップができませんでした。もう一度やり直してください。';
+						this.isSetupDuringButton = false;
+						this.isSetupRestartButton = true;
+					}
+					return;
+				}
+
 				this.isCheckedOption === e.checked_option;
 				this.i++;
 				this.isSetupBefore = false;
@@ -430,28 +449,37 @@ export default {
 				}
 				return;
 
-				// TODO: ↓このブロックは、もともとAjaxリクエストのレスポンスに対する処理だった記述
-				if(/Generating\ autoload\ files/.test(this.stdout) && res.data.is_entry_script_exists === true) {
-					this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
-					this.isSetupDuringButton = false;
-					this.isSetupAfterButton = true;
-					// this.next();
-				} else if(/Receiving\ objects\:\ 100\%/.test(this.stdout) && res.data.is_entry_script_exists === true) {
-					this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
-					this.isSetupDuringButton = false;
-					this.isSetupAfterButton = true;
-					// this.next();
-				} else {
-					this.info = 'Pickles 2 プロジェクトのセットアップができませんでした。もう一度やり直してください。';
-					this.isSetupDuringButton = false;
-					this.isSetupRestartButton = true;
-				}
-				return;
-
 			});
 
 			window.Echo.channel('setup-option-event').listen('SetupOptionEvent', (e) => {
 				this.i++;
+
+				if( e.status == 'exit' ){
+					// TODO: ↓このブロックは、もともとAjaxリクエストのレスポンスに対する処理だった記述
+					if(this.rate === 100 && e.result.is_entry_script_exists === true) {
+						location.href = '/home/'+this.projectCode+'/'+this.branchName;
+					} else if(e.result.checked_option === 'pickles2' && e.result.checked_init === false && e.result.is_entry_script_exists === true) {
+						this.rate = 100;
+						this.fraction = '100 / 100';
+						location.href = '/home/'+this.projectCode+'/'+this.branchName;
+					} else if(e.result.checked_option === 'git' && e.result.checked_repository === 'none' && e.result.is_entry_script_exists === true) {
+						this.rate = 100;
+						this.fraction = '100 / 100';
+						location.href = '/home/'+this.projectCode+'/'+this.branchName;
+					} else if(e.result.checked_option === 'git' && e.result.checked_repository === 'original' && e.result.is_entry_script_exists === true) {
+						this.rate = 100;
+						this.fraction = '100 / 100';
+						location.href = '/home/'+this.projectCode+'/'+this.branchName;
+					} else {
+						console.error('Burdock: Unknown Pattern');
+						this.rate = 100;
+						this.fraction = 'Unknown Pattern';
+						setTimeout(() => {
+							location.href = '/home/'+this.projectCode+'/'+this.branchName;
+						}, 5000);
+					}
+					return;
+				}
 
 				if(e.std_array[0] === 'Writing' && e.std_array[1] === 'objects:') {
 					if(/Writing\ objects\:\ 100\%/.test(e.stdout)) {
@@ -490,32 +518,6 @@ export default {
 				}
 
 				return;
-
-				// TODO: ↓このブロックは、もともとAjaxリクエストのレスポンスに対する処理だった記述
-				if(this.rate === 100 && res.data.is_entry_script_exists === true) {
-					location.href = '/home/'+this.projectCode+'/'+this.branchName;
-				} else if(res.data.checked_option === 'pickles2' && res.data.checked_init === false && res.data.is_entry_script_exists === true) {
-					this.rate = 100;
-					this.fraction = '100 / 100';
-					location.href = '/home/'+this.projectCode+'/'+this.branchName;
-				} else if(res.data.checked_option === 'git' && res.data.checked_repository === 'none' && res.data.is_entry_script_exists === true) {
-					this.rate = 100;
-					this.fraction = '100 / 100';
-					location.href = '/home/'+this.projectCode+'/'+this.branchName;
-				} else if(res.data.checked_option === 'git' && res.data.checked_repository === 'original' && res.data.is_entry_script_exists === true) {
-					this.rate = 100;
-					this.fraction = '100 / 100';
-					location.href = '/home/'+this.projectCode+'/'+this.branchName;
-				} else {
-					console.error('Burdock: Unknown Pattern');
-					this.rate = 100;
-					this.fraction = 'Unknown Pattern';
-					setTimeout(() => {
-						location.href = '/home/'+this.projectCode+'/'+this.branchName;
-					}, 5000);
-				}
-				return;
-
 			});
 		},
 
