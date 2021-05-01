@@ -101,7 +101,7 @@ class HomeController extends Controller
 		$params['setup_status'] = $request->setup_status;
 		$params['restart'] = $request->restart;
 
-		$bdAsync = new \App\Helpers\async();
+		$bdAsync = new \App\Helpers\async($project, $branch_name);
 		$bdAsync->set_channel_name( 'setup-event' );
 		$bdAsync->artisan(
 			'bd:setup',
@@ -143,7 +143,7 @@ class HomeController extends Controller
 
 
 
-		$bdAsync = new \App\Helpers\async();
+		$bdAsync = new \App\Helpers\async($project, $branch_name);
 		$bdAsync->set_channel_name( 'setup-option-event' );
 		$bdAsync->artisan(
 			'bd:setup_options',

@@ -19,6 +19,8 @@ module.exports = class{
 			case 'bd:plum:async':
 			case 'bd:custom_console_extensions_broadcast':
 			case 'bd:generate_vhosts':
+			case 'bd:setup':
+			case 'bd:setup_options':
 				break;
 			default:
 				console.error('"'+fileJson.artisan_cmd+'" is disallow command.');
