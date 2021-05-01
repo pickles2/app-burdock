@@ -42,6 +42,8 @@ Route::middleware(['boot'])
 	->group(function(){
 		Route::get('system-maintenance', 'SystemMaintenance\IndexController@index');
 		Route::get('system-maintenance/phpinfo', 'SystemMaintenance\IndexController@phpinfo');
+		Route::get('system-maintenance/generate_vhosts', 'SystemMaintenance\GenerateVhostsController@index');
+		Route::post('system-maintenance/generate_vhosts/ajax_generate_vhosts', 'SystemMaintenance\GenerateVhostsController@ajaxGenerateVhosts');
 		Route::get('system-maintenance/ajax/checkCommand', 'SystemMaintenance\IndexController@ajaxCheckCommand');
 		Route::get('system-maintenance/project-dirs', 'SystemMaintenance\ProjectDirsController@index');
 		Route::get('system-maintenance/project-dirs/{project}', 'SystemMaintenance\ProjectDirsController@show');

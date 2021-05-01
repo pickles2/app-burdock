@@ -3,10 +3,13 @@
 @section('content')
 
 <h2>メンテナンスメニュー</h2>
-<ul class="px2-vertical-list">
-	<li><a href="/system-maintenance/project-dirs" class="px2-a">プロジェクトディレクトリ</a></li>
-	<li><a href="/system-maintenance/healthcheck" class="px2-a">インストール状態のチェック</a></li>
-</ul>
+<div class="px2-p">
+	<ul class="px2-vertical-list">
+		<li><a href="/system-maintenance/project-dirs" class="px2-a">プロジェクトディレクトリ</a></li>
+		<li><a href="/system-maintenance/healthcheck" class="px2-a">インストール状態のチェック</a></li>
+		<li><a href="/system-maintenance/generate_vhosts" class="px2-a">バーチャルホストの再生成</a></li>
+	</ul>
+</div>
 
 <h2>実行環境</h2>
 <dl>

@@ -21,14 +21,28 @@ module.exports = class{
 			case 'bd:generate_vhosts':
 				break;
 			default:
+				console.error('"'+fileJson.artisan_cmd+'" is disallow command.');
 				callback();
 				return;
 				break;
 		}
 
+		var cmd = '';
+		if( fileJson.options && fileJson.options.length ){
+			for(var idx = 0; idx < fileJson.options.length; idx ++ ){
+				cmd += ' ' + fileJson.options[idx];
+			}
+		}
+
+		if( fileJson.params && typeof(fileJson.params) == typeof({}) ){
+			// パラメータが渡される場合は、 JSON のパスとして渡す。
+			// 受け取った側で JSON をデコードして取り出す。
+			cmd += ' ' + JSON.stringify(fileInfo.realpath) + '';
+		}
+
 		const childProc = require('child_process');
 		childProc.exec(
-			'php ./artisan ' + JSON.stringify(fileJson.artisan_cmd) + ' ' + JSON.stringify(fileInfo.realpath) + '',
+			'php ./artisan ' + JSON.stringify(fileJson.artisan_cmd) + cmd,
 			(err, stdout, stderr) => {
 				// console.log('------------------');
 				// console.log(err, stdout, stderr);

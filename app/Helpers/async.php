@@ -84,7 +84,7 @@ class async{
 	/**
 	 * Artisan Command を非同期に実行する
 	 */
-	public function artisan( $artisan_cmd, $params = array() ){
+	public function artisan( $artisan_cmd, $options = array(), $params = null ){
         $user_id = Auth::id();
 		$fs = new \tomk79\filesystem();
 
@@ -99,6 +99,7 @@ class async{
 		$json->branch_name = $this->branch_name;
 		$json->channel_name = $this->channel_name;
 		$json->artisan_cmd = $artisan_cmd;
+		$json->options = $options;
 		$json->params = $params;
 
 		// 一時ファイル名を作成

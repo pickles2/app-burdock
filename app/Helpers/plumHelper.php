@@ -62,7 +62,7 @@ class plumHelper{
 		$plum->set_async_callbacks(array(
 			'async' => function( $params ){
 				$asyncHelper = new \App\Helpers\async( $this->project );
-				$asyncHelper->artisan('bd:plum:async', $params);
+				$asyncHelper->artisan('bd:plum:async', array(), $params);
 			},
 			'broadcast' => function( $message ){
 

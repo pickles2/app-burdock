@@ -103,6 +103,7 @@ class PublishController extends Controller
 		$bdAsync->set_channel_name( $project->project_code.'---'.$branch_name.'___publish.'.$user_id );
 		$bdAsync->artisan(
 			'bd:px2:publish',
+			array(),
 			array(
 				'publish_option' => $publish_option,
 				'paths_region' => $paths_region,
