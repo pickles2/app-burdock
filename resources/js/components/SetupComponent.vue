@@ -387,12 +387,12 @@ export default {
 				this.isSetupDuring = true;
 				if(e.stdout) {
 					this.message = this.message+e.stdout;
-					if(/Generating autoload files/.test(e.stdout)) {
+					if(/Generating\ autoload\ files/.test(e.stdout)) {
 						this.stdout = e.stdout;
 					}
 				}
 				if(e.std_array[0] === 'Receiving' && e.std_array[1] === 'objects:') {
-					if(/Receiving objects: 100%/.test(e.stdout)) {
+					if(/Receiving\ objects\:\ 100\%/.test(e.stdout)) {
 						this.stdout = e.stdout;
 						this.fraction = e.denominator + ' / ' + e.denominator;
 						this.rate = 100;
@@ -401,7 +401,7 @@ export default {
 						this.rate = e.rate;
 					}
 				}
-				if(/remote: Not Found/.test(e.stdout)) {
+				if(/remote\:\ Not\ Found/.test(e.stdout)) {
 					// リモートリポジトリが存在しない場合
 					this.errorCloneRepository = 1;
 					this.setupStatus = 1;
@@ -409,26 +409,46 @@ export default {
 					// リモートリポジトリから拒否された場合
 					this.errorCloneRepository = 2;
 					this.setupStatus = 1;
-				} else if(/unable to access/.test(e.stdout)) {
+				} else if(/unable\ to\ access/.test(e.stdout)) {
 					// リモートリポジトリにアクセスできない場合
 					this.errorCloneRepository = 3;
 					this.setupStatus = 1;
-				} else if(/could not read Username/.test(e.stdout)) {
+				} else if(/could\ not\ read\ Username/.test(e.stdout)) {
 					// ユーザー名が見つからないと言われた場合
 					this.errorCloneUserName = 1;
 					this.errorClonePassword = 1;
 					this.setupStatus = 1;
-				} else if(/Authentication failed/.test(e.stdout)) {
+				} else if(/Authentication\ failed/.test(e.stdout)) {
 					// 認証に失敗した場合
 					this.errorCloneUserName = 2;
 					this.errorClonePassword = 2;
 					this.setupStatus = 1;
-				} else if (/early EOF/.test(e.stdout)) {
+				} else if (/early\ EOF/.test(e.stdout)) {
 					// 早期EOFエラーが発生した場合
 					this.errorCloneRepository = 4;
 					this.setupStatus = 1;
 				}
-			})
+				return;
+
+				// TODO: ↓このブロックは、もともとAjaxリクエストのレスポンスに対する処理だった記述
+				if(/Generating\ autoload\ files/.test(this.stdout) && res.data.is_entry_script_exists === true) {
+					this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
+					this.isSetupDuringButton = false;
+					this.isSetupAfterButton = true;
+					// this.next();
+				} else if(/Receiving\ objects\:\ 100\%/.test(this.stdout) && res.data.is_entry_script_exists === true) {
+					this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
+					this.isSetupDuringButton = false;
+					this.isSetupAfterButton = true;
+					// this.next();
+				} else {
+					this.info = 'Pickles 2 プロジェクトのセットアップができませんでした。もう一度やり直してください。';
+					this.isSetupDuringButton = false;
+					this.isSetupRestartButton = true;
+				}
+				return;
+
+			});
 
 			window.Echo.channel('setup-option-event').listen('SetupOptionEvent', (e) => {
 				this.i++;
@@ -468,7 +488,35 @@ export default {
 					this.errorPassword = 1;
 					this.setupStatus = 3;
 				}
-			})
+
+				return;
+
+				// TODO: ↓このブロックは、もともとAjaxリクエストのレスポンスに対する処理だった記述
+				if(this.rate === 100 && res.data.is_entry_script_exists === true) {
+					location.href = '/home/'+this.projectCode+'/'+this.branchName;
+				} else if(res.data.checked_option === 'pickles2' && res.data.checked_init === false && res.data.is_entry_script_exists === true) {
+					this.rate = 100;
+					this.fraction = '100 / 100';
+					location.href = '/home/'+this.projectCode+'/'+this.branchName;
+				} else if(res.data.checked_option === 'git' && res.data.checked_repository === 'none' && res.data.is_entry_script_exists === true) {
+					this.rate = 100;
+					this.fraction = '100 / 100';
+					location.href = '/home/'+this.projectCode+'/'+this.branchName;
+				} else if(res.data.checked_option === 'git' && res.data.checked_repository === 'original' && res.data.is_entry_script_exists === true) {
+					this.rate = 100;
+					this.fraction = '100 / 100';
+					location.href = '/home/'+this.projectCode+'/'+this.branchName;
+				} else {
+					console.error('Burdock: Unknown Pattern');
+					this.rate = 100;
+					this.fraction = 'Unknown Pattern';
+					setTimeout(() => {
+						location.href = '/home/'+this.projectCode+'/'+this.branchName;
+					}, 5000);
+				}
+				return;
+
+			});
 		},
 
 		setup(reset) {
@@ -493,23 +541,7 @@ export default {
 			// AjaxでAjax\SetupController@setupAjaxにpost処理
 			axios.post('/home/'+this.projectCode+'/'+this.branchName+'/setupAjax', data)
 				.then(res => {
-
-					if(/Generating\ autoload\ files/.test(this.stdout) && res.data.is_entry_script_exists === true) {
-						this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
-						this.isSetupDuringButton = false;
-						this.isSetupAfterButton = true;
-						// this.next();
-					} else if(/Receiving\ objects\:\ 100\%/.test(this.stdout) && res.data.is_entry_script_exists === true) {
-						this.info = 'Pickles 2 プロジェクトのセットアップが完了しました。';
-						this.isSetupDuringButton = false;
-						this.isSetupAfterButton = true;
-						// this.next();
-					} else {
-						this.info = 'Pickles 2 プロジェクトのセットアップができませんでした。もう一度やり直してください。';
-						this.isSetupDuringButton = false;
-						this.isSetupRestartButton = true;
-					}
-
+					console.log('=-=-=-=-=', res);
 				});
 		},
 
@@ -543,31 +575,10 @@ export default {
             }
 
 			// AjaxでAjax\SetupController@setupOptionAjaxにpost処理
-			axios.post('/home/'+this.projectCode+'/'+this.branchName+'/setupOptionAjax', data).then(res => {
-
-				if(this.rate === 100 && res.data.is_entry_script_exists === true) {
-					location.href = '/home/'+this.projectCode+'/'+this.branchName;
-				} else if(res.data.checked_option === 'pickles2' && res.data.checked_init === false && res.data.is_entry_script_exists === true) {
-					this.rate = 100;
-					this.fraction = '100 / 100';
-					location.href = '/home/'+this.projectCode+'/'+this.branchName;
-				} else if(res.data.checked_option === 'git' && res.data.checked_repository === 'none' && res.data.is_entry_script_exists === true) {
-					this.rate = 100;
-					this.fraction = '100 / 100';
-					location.href = '/home/'+this.projectCode+'/'+this.branchName;
-				} else if(res.data.checked_option === 'git' && res.data.checked_repository === 'original' && res.data.is_entry_script_exists === true) {
-					this.rate = 100;
-					this.fraction = '100 / 100';
-					location.href = '/home/'+this.projectCode+'/'+this.branchName;
-				} else {
-					console.error('Burdock: Unknown Pattern');
-					this.rate = 100;
-					this.fraction = 'Unknown Pattern';
-					setTimeout(() => {
-						location.href = '/home/'+this.projectCode+'/'+this.branchName;
-					}, 5000);
-				}
-			})
+			axios.post('/home/'+this.projectCode+'/'+this.branchName+'/setupOptionAjax', data)
+				.then(res => {
+					console.log('=-=-=-=-=', res);
+				})
 		}
 	},
 

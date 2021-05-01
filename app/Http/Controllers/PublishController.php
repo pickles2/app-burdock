@@ -28,7 +28,6 @@ class PublishController extends Controller
 		$page_id = $request->page_id;
 
 		$fs = new \tomk79\filesystem;
-		$project_name = $project->project_code;
 
 		$px2all = px2query(
 			$project->project_code,
