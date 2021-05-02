@@ -4,7 +4,7 @@
 @extends('layouts.default')
 @section('content')
 
-<form action="{{ url('projects/'.urlencode($project->project_code).'/edit') }}" method="post">
+<form action="{{ url('projects/'.urlencode($project->project_code).'/edit') }}" method="post" autocomplete="off">
 	@csrf
 	@method('PUT')
 	<input type="hidden" name="id" value="{{ $project->id }}">
@@ -57,7 +57,7 @@
 			<li class="px2-form-input-list__li">
 				<div class="px2-form-input-list__label"><label for="git_username">{{ __('Git Username') }}</label></div>
 				<div class="px2-form-input-list__input">
-					<input id="git_username" type="text" class="px2-input px2-input--block @if ($errors->has('git_username')) is-invalid @endif" name="git_username" @if(isset($project->git_username))value="{{ old('git_username', \Crypt::decryptString($project->git_username)) }}"@else value="{{ old('git_username') }}"@endif>
+					<input id="git_username" type="text" class="px2-input px2-input--block @if ($errors->has('git_username')) is-invalid @endif" name="git_username" @if(isset($project->git_username))value="{{ old('git_username', \Crypt::decryptString($project->git_username)) }}"@else value="{{ old('git_username') }}"@endif />
 						@if ($errors->has('git_username'))
 							<span class="invalid-feedback" role="alert">
 								{{ $errors->first('git_username') }}
@@ -104,7 +104,7 @@
 			<li class="px2-form-input-list__li">
 				<div class="px2-form-input-list__label"><label for="basicauth_user_name">ユーザー名</label></div>
 				<div class="px2-form-input-list__input">
-					<input id="basicauth_user_name" type="text" class="px2-input px2-input--block @if ($errors->has('basicauth_user_name')) is-invalid @endif" name="basicauth_user_name" value="{{ old('basicauth_user_name', $basicauth_user_name) }}">
+					<input id="basicauth_user_name" type="text" class="px2-input px2-input--block @if ($errors->has('basicauth_user_name')) is-invalid @endif" name="basicauth_user_name" value="{{ old('basicauth_user_name', $basicauth_user_name) }}" />
 						@if ($errors->has('basicauth_user_name'))
 							<span class="invalid-feedback" role="alert">
 								{{ $errors->first('basicauth_user_name') }}
@@ -118,7 +118,7 @@
 			<li class="px2-form-input-list__li">
 				<div class="px2-form-input-list__label"><label for="basicauth_password">パスワード</label></div>
 				<div class="px2-form-input-list__input">
-					<input id="basicauth_password" type="password" class="px2-input px2-input--block @if ($errors->has('basicauth_password')) is-invalid @endif" name="basicauth_password" value="">
+					<input id="basicauth_password" type="password" class="px2-input px2-input--block @if ($errors->has('basicauth_password')) is-invalid @endif" name="basicauth_password" value="" />
 						@if ($errors->has('basicauth_password'))
 							<span class="invalid-feedback" role="alert">
 								{{ $errors->first('basicauth_password') }}

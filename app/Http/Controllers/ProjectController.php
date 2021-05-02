@@ -19,17 +19,6 @@ class ProjectController extends Controller
 	}
 
 	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create()
-	{
-		//
-		return view('projects.create');
-	}
-
-	/**
 	 * Store a newly created resource in storage.
 	 * 新しい記事を保存する
 	 * @param  \App\Http\Requests\StoreProject $request

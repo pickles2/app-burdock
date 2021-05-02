@@ -65,7 +65,6 @@ Route::middleware(['boot'])
 
 		// --------------------------------------
 		// プロジェクト管理
-		Route::get('projects/create', 'ProjectController@create');
 		Route::post('projects', 'ProjectController@store');
 		Route::get('projects/{project}/edit', 'ProjectController@edit');
 		Route::put('projects/{project}/edit', 'ProjectController@update');
