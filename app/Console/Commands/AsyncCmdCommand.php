@@ -84,16 +84,35 @@ class AsyncCmdCommand extends Command
 
 		chdir($project_path);
 
+
+		// コマンドを補正する
+		if( $ary_command[0] == 'composer' ){
+			// Composer コマンド
+
+			$path_composer = realpath(__DIR__.'/../../common/composer/composer.phar');
+			$path_composer_home = realpath(dirname($path_composer).'/home');
+
+
+			$ary_command[0] = $path_composer;
+
+			$path_php = env('BD_COMMAND_PHP');
+			if( !strlen($path_php) ){
+				$path_php = 'php';
+			}
+			array_unshift($ary_command, $path_php);
+			unset($path_composer, $path_composer_home, $path_php);
+		}
+
 		// proc_open
 		$desc = array(
 			1 => array('pipe', 'w'),
 			2 => array('pipe', 'w'),
 		);
 
-
 		foreach( $ary_command as $idx=>$row ){
 			$ary_command[$idx] = escapeshellarg($row);
 		}
+
 
 		$cmd = implode(' ', $ary_command);
 

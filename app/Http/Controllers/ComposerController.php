@@ -48,11 +48,18 @@ class ComposerController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function install(Request $request, Project $project, $branch_name){
-		$composer = new \App\Helpers\composer($project->id, $branch_name);
-		$rtn = array();
-		array_push($rtn, $composer->composer('install'));
-		header('Content-type: application/json');
-		return json_encode($rtn);
+		$user_id = Auth::id();
+
+		$bdAsync = new \App\Helpers\async( $project, $branch_name );
+		$bdAsync->set_channel_name( $project->project_code.'---'.$branch_name.'___composer.'.$user_id );
+		$bdAsync->cmd(
+			array('composer', 'install'),
+			array()
+		);
+		return array(
+			'result'=>true,
+			'message'=>'OK',
+		);
 	}
 
 	/**
@@ -61,11 +68,18 @@ class ComposerController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, Project $project, $branch_name){
-		$composer = new \App\Helpers\composer($project->id, $branch_name);
-		$rtn = array();
-		array_push($rtn, $composer->composer('update'));
-		header('Content-type: application/json');
-		return json_encode($rtn);
+		$user_id = Auth::id();
+
+		$bdAsync = new \App\Helpers\async( $project, $branch_name );
+		$bdAsync->set_channel_name( $project->project_code.'---'.$branch_name.'___composer.'.$user_id );
+		$bdAsync->cmd(
+			array('composer', 'install'),
+			array()
+		);
+		return array(
+			'result'=>true,
+			'message'=>'OK',
+		);
 	}
 
 }
