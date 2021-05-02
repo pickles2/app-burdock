@@ -37,6 +37,8 @@
 window.contApp = new (function(){
 	var _this = this;
 	var $cont;
+	var last_cmdAry,
+		last_callback;
 
 	/**
 	 * initialize
@@ -61,6 +63,9 @@ window.contApp = new (function(){
 				return;
 			}
 
+			last_cmdAry = cmdAry;
+			last_callback = callback;
+
 			$.ajax({
 				type : method,
 				url : apiUrl,
@@ -73,31 +78,31 @@ window.contApp = new (function(){
 					command_ary: cmdAry
 				}),
 				error: function(data){
-					result = result.concat(data);
+					result = data;
 					console.error('error', data);
 				},
 				success: function(data){
-					result = result.concat(data);
+					result = data;
 				},
 				complete: function(){
 					console.log('complete', result);
-					if( cmdAry[0] == 'checkout' && cmdAry[1] == '-b' && cmdAry.length >= 3 && cmdAry.length <= 4 ){
-						// `git checkout -b branchname` のフェイク および
-						// `git checkout -b localBranchname remoteBranch` のフェイク
-						if( result[0].return ){
-							alert('Error: ' + result[0].stderr);
-						}else{
-							window.location.href = "/git/{{ $project->project_code }}/"+cmdAry[2];
-							return;
-						}
-					}
+					// if( cmdAry[0] == 'checkout' && cmdAry[1] == '-b' && cmdAry.length >= 3 && cmdAry.length <= 4 ){
+					// 	// `git checkout -b branchname` のフェイク および
+					// 	// `git checkout -b localBranchname remoteBranch` のフェイク
+					// 	if( result.return ){
+					// 		alert('Error: ' + result.stderr);
+					// 	}else{
+					// 		window.location.href = "/git/{{ $project->project_code }}/"+cmdAry[2];
+					// 		return;
+					// 	}
+					// }
 
-					try{
-						callback(result[0].return, result[0].stdout+result[0].stderr);
-					}catch(e){
-						console.error(e);
-						alert('Failed');
-					}
+					// try{
+					// 	callback(result.return, result.stdout+result.stderr);
+					// }catch(e){
+					// 	console.error(e);
+					// 	alert('Failed');
+					// }
 				}
 			});
 
@@ -152,6 +157,36 @@ window.contApp = new (function(){
 	 */
 	window.addEventListener('load', function(e){
 		init();
+
+		window.Echo.channel('{{ $project->project_code }}---{{ $branch_name }}___git.{{ Auth::id() }}').listen('AsyncGeneralProgressEvent', (message) => {
+			if( message.status == 'exit' ){
+				console.log(message);
+
+				if( last_cmdAry[0] == 'checkout' && last_cmdAry[1] == '-b' && last_cmdAry.length >= 3 && last_cmdAry.length <= 4 ){
+					// `git checkout -b branchname` のフェイク および
+					// `git checkout -b localBranchname remoteBranch` のフェイク
+					if( message.return ){
+						alert('Error: ' + message.stderr);
+					}else{
+						window.location.href = "/git/{{ $project->project_code }}/"+last_cmdAry[2];
+						return;
+					}
+				}
+
+				try{
+					last_callback(message.return, message.stdout+message.stderr);
+					last_callback = undefined;
+				}catch(e){
+					console.error(e);
+					alert('Failed');
+				}
+
+				return;
+			}
+
+			console.log(message);
+
+		});
 	});
 
 })();

@@ -71,8 +71,10 @@ class AsyncGitCommand extends Command
 		$branch_name = $json->branch_name;
 		$channel_name = $json->channel_name;
 
-		$ary_command = $json->ary_command;
+		$git_command_array = $json->ary_command;
 		$options = $json->options;
+
+		$project = \App\Project::where('project_code', $project_code)->first();
 
 		$project_path = realpath('.');
 		if( strlen($project_code) && strlen($branch_name) ){
@@ -85,54 +87,44 @@ class AsyncGitCommand extends Command
 		chdir($project_path);
 
 
-		// コマンドを補正する
-		array_unshift($ary_command, 'git');
 
 
-		// proc_open
-		$desc = array(
-			1 => array('pipe', 'w'),
-			2 => array('pipe', 'w'),
-		);
+		// --------------------------------------
 
-		foreach( $ary_command as $idx=>$row ){
-			$ary_command[$idx] = escapeshellarg($row);
+
+
+		$gitUtil = new \App\Helpers\git($project, $branch_name);
+		$gitUtil->set_remote_origin();
+
+		if( count($git_command_array) == 2 && $git_command_array[0] == 'branch' && $git_command_array[1] == '-a' ){
+			// `git branch -a` のフェイク
+			// ブランチの一覧を取得する
+			$rtn = \App\Helpers\GitHelpers\GitBranch::execute($gitUtil, $git_command_array);
+		}elseif( count($git_command_array) == 3 && $git_command_array[0] == 'checkout' && $git_command_array[1] == '-b' ){
+			// `git checkout -b branchname` のフェイク
+			// カレントブランチから新しいブランチを作成する
+			$rtn = \App\Helpers\GitHelpers\GitCheckoutNewBranch::execute($gitUtil, $git_command_array);
+		}elseif( count($git_command_array) == 4 && $git_command_array[0] == 'checkout' && $git_command_array[1] == '-b' ){
+			// `git checkout -b localBranchname remoteBranch` のフェイク
+			// リモートブランチをチェックアウトする
+			$rtn = \App\Helpers\GitHelpers\GitCheckoutRemoteBranch::execute($gitUtil, $git_command_array);
+		}elseif( count($git_command_array) == 2 && $git_command_array[0] == 'merge' && !preg_match('/^remotes\//', $git_command_array[1]) ){
+			// `git merge branchname` のフェイク
+			// マージする
+			// ただし、ここを通過するのはマージ元がローカルブランチの場合のみ。リモートブランチからのマージする場合はフェイクは要らない。
+			$rtn = \App\Helpers\GitHelpers\GitMerge::execute($gitUtil, $git_command_array);
+		}elseif( count($git_command_array) == 3 && $git_command_array[0] == 'branch' && $git_command_array[1] == '--delete' ){
+			// `git branch --delete branchname` のフェイク
+			// ブランチを削除する
+			$rtn = \App\Helpers\GitHelpers\GitBranchDelete::execute($gitUtil, $git_command_array);
+		}else{
+			$rtn = $gitUtil->git( $git_command_array );
 		}
 
-
-		$cmd = implode(' ', $ary_command);
-
-		$proc = proc_open($cmd, $desc, $pipes);
-		stream_set_blocking($pipes[1], 0);
-		stream_set_blocking($pipes[2], 0);
-
-		while (feof($pipes[1]) === false || feof($pipes[2]) === false) {
-			set_time_limit(60);
-			$stdout = fgets($pipes[1]);
-			$stderr = fgets($pipes[2]);
-
-			broadcast(
-				new AsyncGeneralProgressEvent(
-					$user_id,
-					$project_code,
-					$branch_name,
-					'progress',
-					null,
-					($stdout!==false ? $stdout : ''),
-					($stderr!==false ? $stderr : ''),
-					$channel_name
-				)
-			);
-		}
+		$gitUtil->clear_remote_origin();
 
 
-		$stat = array();
-		do {
-			$stat = proc_get_status($proc);
-			// waiting
-			usleep(1);
-		} while( $stat['running'] );
-
+		// / --------------------------------------
 
 
 		broadcast(
@@ -141,22 +133,12 @@ class AsyncGitCommand extends Command
 				$project_code,
 				$branch_name,
 				'exit',
-				$stat['exitcode'],
-				null,
-				null,
+				$rtn['return'],
+				($rtn['stdout']!==false ? $rtn['stdout'] : ''),
+				($rtn['stderr']!==false ? $rtn['stderr'] : ''),
 				$channel_name
 			)
 		);
-
-
-
-
-		fclose($pipes[1]);
-		fclose($pipes[2]);
-		proc_close($proc);
-		chdir($path_current_dir); // 元いたディレクトリへ戻る
-
-
 
 
 		$this->line(' finished!');
