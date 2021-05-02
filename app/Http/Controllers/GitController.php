@@ -69,7 +69,7 @@ class GitController extends Controller
 		if( count($git_command_array) == 1 && $git_command_array[0] == 'init' ){
 			// `git init` のフェイク
 			// この時点で .git がないので、まだ remote をセットできない。
-			array_push( $rtn, GitControllerHelpers\GitInit::execute($gitUtil, $git_command_array) );
+			array_push( $rtn, \App\Helpers\GitHelpers\GitInit::execute($gitUtil, $git_command_array) );
 			header('Content-type: application/json');
 			return json_encode($rtn);
 		}
@@ -80,24 +80,24 @@ class GitController extends Controller
 		if( count($git_command_array) == 2 && $git_command_array[0] == 'branch' && $git_command_array[1] == '-a' ){
 			// `git branch -a` のフェイク
 			// ブランチの一覧を取得する
-			array_push( $rtn, GitControllerHelpers\GitBranch::execute($gitUtil, $git_command_array) );
+			array_push( $rtn, \App\Helpers\GitHelpers\GitBranch::execute($gitUtil, $git_command_array) );
 		}elseif( count($git_command_array) == 3 && $git_command_array[0] == 'checkout' && $git_command_array[1] == '-b' ){
 			// `git checkout -b branchname` のフェイク
 			// カレントブランチから新しいブランチを作成する
-			array_push( $rtn, GitControllerHelpers\GitCheckoutNewBranch::execute($gitUtil, $git_command_array) );
+			array_push( $rtn, \App\Helpers\GitHelpers\GitCheckoutNewBranch::execute($gitUtil, $git_command_array) );
 		}elseif( count($git_command_array) == 4 && $git_command_array[0] == 'checkout' && $git_command_array[1] == '-b' ){
 			// `git checkout -b localBranchname remoteBranch` のフェイク
 			// リモートブランチをチェックアウトする
-			array_push( $rtn, GitControllerHelpers\GitCheckoutRemoteBranch::execute($gitUtil, $git_command_array) );
+			array_push( $rtn, \App\Helpers\GitHelpers\GitCheckoutRemoteBranch::execute($gitUtil, $git_command_array) );
 		}elseif( count($git_command_array) == 2 && $git_command_array[0] == 'merge' && !preg_match('/^remotes\//', $git_command_array[1]) ){
 			// `git merge branchname` のフェイク
 			// マージする
 			// ただし、ここを通過するのはマージ元がローカルブランチの場合のみ。リモートブランチからのマージする場合はフェイクは要らない。
-			array_push( $rtn, GitControllerHelpers\GitMerge::execute($gitUtil, $git_command_array) );
+			array_push( $rtn, \App\Helpers\GitHelpers\GitMerge::execute($gitUtil, $git_command_array) );
 		}elseif( count($git_command_array) == 3 && $git_command_array[0] == 'branch' && $git_command_array[1] == '--delete' ){
 			// `git branch --delete branchname` のフェイク
 			// ブランチを削除する
-			array_push( $rtn, GitControllerHelpers\GitBranchDelete::execute($gitUtil, $git_command_array) );
+			array_push( $rtn, \App\Helpers\GitHelpers\GitBranchDelete::execute($gitUtil, $git_command_array) );
 		}else{
 			array_push( $rtn, $gitUtil->git( $git_command_array ) );
 		}

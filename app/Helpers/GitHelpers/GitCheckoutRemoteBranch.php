@@ -1,10 +1,10 @@
 <?php
-namespace App\Http\Controllers\GitControllerHelpers;
-class GitCheckoutNewBranch
+namespace App\Helpers\GitHelpers;
+class GitCheckoutRemoteBranch
 {
 
 	/**
-	 * `git checkout -b branchname` のフェイク処理
+	 * `git checkout -b localBranchname remoteBranchname` のフェイク処理
 	 */
 	public static function execute($gitUtil, $git_command_array){
 		$fs = new \tomk79\filesystem();
@@ -23,13 +23,20 @@ class GitCheckoutNewBranch
 		$realpath_pj_git_root = $fs->get_realpath( \get_project_workingtree_dir($gitUtil->get_project_code(), $current_branch_name) );
 		$realpath_pj_git_new_branch_root = $fs->get_realpath( \get_project_workingtree_dir($gitUtil->get_project_code(), $new_branch_name) );
 
-		// ひとまず複製
-		$fs->copy_r($realpath_pj_git_root, $realpath_pj_git_new_branch_root);
+		// ひとまず空のディレクトリを作成
+		$fs->mkdir_r($realpath_pj_git_new_branch_root);
 
-		$newGitUtil = new \App\Helpers\git($gitUtil->get_project_id(), $new_branch_name);
-		$result = $newGitUtil->git(['checkout', 'HEAD', '--', './']);
-		$result = $newGitUtil->git(['checkout', '-b', $new_branch_name]);
-		$result = $newGitUtil->git(['branch', '--delete', $current_branch_name]);
+
+		// ブランチ名指定でcloneする
+		$newGitUtil = new \App\Helpers\git( $gitUtil->get_project_id(), $new_branch_name );
+		$git_remote = $newGitUtil->url_bind_confidentials();
+		$result = $newGitUtil->git(['clone', '-b', $new_branch_name, $git_remote, './']);
+		$newGitUtil->clear_remote_origin();
+
+
+		$newComposer = new \App\Helpers\composer( $gitUtil->get_project_id(), $new_branch_name );
+		$newComposer->composer(['install']);
+
 
 		$cmd_result = array(
 			'stdout' => 'Switched to a new branch \''.$new_branch_name.'\''."\n",

@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\GitControllerHelpers;
+namespace App\Helpers\GitHelpers;
 class GitBranchDelete
 {
 
