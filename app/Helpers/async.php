@@ -82,6 +82,46 @@ class async{
 	}
 
 	/**
+	 * Git を非同期に実行する
+	 */
+	public function git( $commandAry, $options = array() ){
+        $user_id = Auth::id();
+		$fs = new \tomk79\filesystem();
+
+		if( strlen($this->project_code) && strlen($this->branch_name) ){
+			$project_path = get_project_workingtree_dir($this->project_code, $this->branch_name);
+			if( !is_dir($project_path) ){
+				return false;
+			}
+		}
+
+		$watchDir = env('BD_DATA_DIR').'/watcher/git/';
+		if( !is_dir($watchDir) ){
+			$fs->mkdir_r($watchDir);
+		}
+
+		$json = new \stdClass();
+		$json->user_id = $user_id;
+		$json->project_code = $this->project_code;
+		$json->branch_name = $this->branch_name;
+		$json->channel_name = $this->channel_name;
+
+		$json->ary_command = $commandAry;
+		$json->options = $options;
+
+
+		// 一時ファイル名を作成
+		$tmpFileName = $this->generate_filename();
+
+		// 一時ファイルを保存
+		$realpath_dir = $watchDir;
+		$realpath_jsonfile = $realpath_dir.$tmpFileName;
+		file_put_contents($realpath_jsonfile, json_encode($json));
+
+		return;
+	}
+
+	/**
 	 * Artisan Command を非同期に実行する
 	 */
 	public function artisan( $artisan_cmd, $options = array(), $params = null ){
