@@ -36,9 +36,6 @@ class MypageController extends Controller
     public function show(User $user)
     {
         $user = Auth::user();
-
-        // ページネーション（1ページに5件表示）
-        $user->projects = $user->projects()->paginate(5);
         return view('mypage.show', ['user' => $user]);
     }
 
