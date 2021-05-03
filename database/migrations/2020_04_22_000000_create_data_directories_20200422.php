@@ -46,6 +46,10 @@ class CreateDataDirectories20200422 extends Migration
 		if( !is_dir($realpath_root.'/logs/') ){
 			mkdir($realpath_root.'/logs/');
 		}
+
+		if( !is_dir($realpath_root.'/watcher/') ){
+			mkdir($realpath_root.'/watcher/');
+		}
 	}
 
 	/**
