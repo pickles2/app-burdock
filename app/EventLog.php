@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Ramsey\Uuid\Uuid;
 
-class EventLogs extends Model
+class EventLog extends Model
 {
 
 	use SoftDeletes;

@@ -5,7 +5,8 @@
 <h2>メンテナンスメニュー</h2>
 <div class="px2-p">
 	<ul class="px2-vertical-list">
-		<li><a href="/system-maintenance/project-dirs" class="px2-a">プロジェクトディレクトリ</a></li>
+		<li><a href="/system-maintenance/event-logs" class="px2-a">イベントログ</a></li>
+		<li><a href="/system-maintenance/project-dirs" class="px2-a">プロジェクトディレクトリ一覧</a></li>
 		<li><a href="/system-maintenance/healthcheck" class="px2-a">インストール状態のチェック</a></li>
 		<li><a href="/system-maintenance/generate_vhosts" class="px2-a">バーチャルホストの再生成</a></li>
 	</ul>

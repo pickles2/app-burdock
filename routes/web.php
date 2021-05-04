@@ -41,6 +41,7 @@ Route::middleware(['boot'])
 	Route::middleware(['isDebugMode'])
 	->group(function(){
 		Route::get('system-maintenance', 'SystemMaintenance\IndexController@index');
+		Route::get('system-maintenance/event-logs', 'SystemMaintenance\EventLogController@index');
 		Route::get('system-maintenance/phpinfo', 'SystemMaintenance\IndexController@phpinfo');
 		Route::get('system-maintenance/generate_vhosts', 'SystemMaintenance\GenerateVhostsController@index');
 		Route::post('system-maintenance/generate_vhosts/ajax_generate_vhosts', 'SystemMaintenance\GenerateVhostsController@ajaxGenerateVhosts');
