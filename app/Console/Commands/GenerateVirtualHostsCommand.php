@@ -45,6 +45,8 @@ class GenerateVirtualHostsCommand extends Command
 	{
 		parent::__construct();
 
+		$this->fs = new \tomk79\filesystem();
+
 		$this->realpath_vhosts_dir = env('BD_DATA_DIR').'/vhosts/';
 		$this->vhosts_tmp_filename = 'vhosts.conf.tmp.'.microtime(true);
 	}
@@ -67,6 +69,10 @@ class GenerateVirtualHostsCommand extends Command
 		$applock = new applock('generate_vhosts', null, null, null);
 		if( !$applock->lock() ){
 			$this->error('generate_vhosts is now progress.');
+			$encore_request = '';
+			$encore_request .= 'ProcessID='.getmypid()."\r\n";
+			$encore_request .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
+			$this->fs->save_file( $this->realpath_vhosts_dir.'encore_request.txt', $encore_request );
 			return 0;
 		}
 
@@ -86,7 +92,6 @@ class GenerateVirtualHostsCommand extends Command
 		}
 		touch($this->realpath_vhosts_dir.$this->vhosts_tmp_filename);
 
-		$this->fs = new \tomk79\filesystem();
 		$prevew_dirs = $this->fs->ls( env('BD_DATA_DIR').'/repositories/' );
 		foreach( $prevew_dirs as $prevew_dir ){
 			if( preg_match( '/^(.*?)\-\-\-(.*)$/', $prevew_dir, $matched ) ){
@@ -134,6 +139,27 @@ class GenerateVirtualHostsCommand extends Command
 		$this->line( '' );
 
 		$applock->unlock();
+
+		clearstatcache();
+		if( $this->fs->is_file( $this->realpath_vhosts_dir.'encore_request.txt' ) ){
+			if( $this->fs->rm( $this->realpath_vhosts_dir.'encore_request.txt' ) ){
+				// --------------------------------------
+				// vhosts.conf を更新する
+				$bdAsync = new \App\Helpers\async();
+				$bdAsync->set_channel_name( 'system-mentenance___generate_vhosts' );
+				$bdAsync->artisan(
+					'bd:generate_vhosts'
+				);
+				$this->line( 'Encore was accepted!' );
+				$this->line( '' );
+			}else{
+				$this->error( 'Encore was rejected!' );
+				$this->error( 'Failed to delete Encore file.' );
+				$this->line( '' );
+			}
+
+		}
+
 
 		$this->line('Local Time: '.date('Y-m-d H:i:s'));
 		$this->line('GMT: '.gmdate('Y-m-d H:i:s'));
