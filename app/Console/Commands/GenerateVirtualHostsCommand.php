@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Project;
+use App\Helpers\applock;
 
 class GenerateVirtualHostsCommand extends Command
 {
@@ -43,6 +44,8 @@ class GenerateVirtualHostsCommand extends Command
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->realpath_vhosts_dir = env('BD_DATA_DIR').'/vhosts/';
 		$this->vhosts_tmp_filename = 'vhosts.conf.tmp.'.microtime(true);
 	}
 
@@ -61,13 +64,20 @@ class GenerateVirtualHostsCommand extends Command
 		$this->info('----------------------------------------------------------------');
 		$this->line( '' );
 
+		$applock = new applock('generate_vhosts', null, null, null);
+		if( !$applock->lock() ){
+			$this->error('generate_vhosts is now progress.');
+			return 0;
+		}
+
+
 		$projects = Project::all();
 		if( !$projects ){
 			$this->error('Failed to load Project list.');
+			$applock->unlock();
 			return 1;
 		}
 
-		$this->realpath_vhosts_dir = env('BD_DATA_DIR').'/vhosts/';
 		if( !is_dir($this->realpath_vhosts_dir) ){
 			mkdir($this->realpath_vhosts_dir);
 		}
@@ -122,6 +132,8 @@ class GenerateVirtualHostsCommand extends Command
 			$this->line( 'Failed...!' );
 		}
 		$this->line( '' );
+
+		$applock->unlock();
 
 		$this->line('Local Time: '.date('Y-m-d H:i:s'));
 		$this->line('GMT: '.gmdate('Y-m-d H:i:s'));

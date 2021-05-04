@@ -6,6 +6,7 @@ use App\Project;
 class applock{
 	private $project;
 	private $project_id;
+	private $project_code;
 	private $branch_name;
 
 	private $app_name;
@@ -20,26 +21,31 @@ class applock{
 	/**
 	 * Constructor
 	 */
-	public function __construct( $app_name, $expire = 3600, $project = null, $branch_name = null ){
+	public function __construct( $app_name, $project = null, $branch_name = null, $expire = 3600 ){
 		$this->app_name = $app_name;
-		if( strlen($expire) ){
-			$this->expire = intval($expire);
-		}
 
-		if(is_null($project)){
+		if( is_null($project) ){
 			// Project情報に関連付けないで利用する場合
-			return;
+			$this->project = null;
+			$this->project_id = null;
+			$this->project_code = null;
 		}else if(is_object($project)){
 			// Projectモデル を受け取った場合
 			$this->project = $project;
 			$this->project_id = $project->id;
+			$this->project_code = $project->project_code;
 		}else{
 			// Project ID を受け取った場合
 			$this->project_id = $project;
 			$this->project = Project::find($project);
+			$this->project_code = $project->project_code;
 		}
 
 		$this->branch_name = $branch_name;
+
+		if( strlen($expire) ){
+			$this->expire = intval($expire);
+		}
 
 		$this->fs = new \tomk79\filesystem();
 
@@ -61,7 +67,7 @@ class applock{
 		$timeout_limit = 5;
 
 		if( !is_dir( dirname( $lockfilepath ) ) ){
-			$this->fs()->mkdir_r( dirname( $lockfilepath ) );
+			$this->fs->mkdir_r( dirname( $lockfilepath ) );
 		}
 
 		// PHPのFileStatusCacheをクリア
@@ -82,7 +88,7 @@ class applock{
 		$src = '';
 		$src .= 'ProcessID='.getmypid()."\r\n";
 		$src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
-		$RTN = $this->fs()->save_file( $lockfilepath , $src );
+		$RTN = $this->fs->save_file( $lockfilepath , $src );
 		return	$RTN;
 	} // lock()
 
@@ -98,7 +104,7 @@ class applock{
 		// PHPのFileStatusCacheをクリア
 		clearstatcache();
 
-		if( $this->fs()->is_file($lockfilepath) ){
+		if( $this->fs->is_file($lockfilepath) ){
 			if( ( time() - filemtime($lockfilepath) ) > $lockfile_expire ){
 				// 有効期限を過ぎていたら、ロックは成立する。
 				return false;

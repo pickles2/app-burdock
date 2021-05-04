@@ -17,7 +17,9 @@ class async{
 	public function __construct( $project = null, $branch_name = null ){
 		if( is_null($project) ){
 			// Project情報に関連付けないで利用する場合
-			return;
+			$this->project = null;
+			$this->project_id = null;
+			$this->project_code = null;
 		}else if(is_object($project)){
 			// Projectモデル を受け取った場合
 			$this->project = $project;
