@@ -31,6 +31,10 @@ class GenerateVirtualHostsCommand extends Command
 	/** preview dir list */
 	private $list_preview_dirs = array();
 
+
+	/** 一時ファイルのファイル名 */
+	private $vhosts_tmp_filename;
+
 	/**
 	 * Create a new command instance.
 	 *
@@ -39,6 +43,7 @@ class GenerateVirtualHostsCommand extends Command
 	public function __construct()
 	{
 		parent::__construct();
+		$this->vhosts_tmp_filename = 'vhosts.conf.tmp.'.microtime(true);
 	}
 
 	/**
@@ -66,10 +71,10 @@ class GenerateVirtualHostsCommand extends Command
 		if( !is_dir($this->realpath_vhosts_dir) ){
 			mkdir($this->realpath_vhosts_dir);
 		}
-		if( is_file( $this->realpath_vhosts_dir.'vhosts.conf.tmp' ) ){
-			unlink( $this->realpath_vhosts_dir.'vhosts.conf.tmp' );
+		if( is_file( $this->realpath_vhosts_dir.$this->vhosts_tmp_filename ) ){
+			unlink( $this->realpath_vhosts_dir.$this->vhosts_tmp_filename );
 		}
-		touch($this->realpath_vhosts_dir.'vhosts.conf.tmp');
+		touch($this->realpath_vhosts_dir.$this->vhosts_tmp_filename);
 
 		$this->fs = new \tomk79\filesystem();
 		$prevew_dirs = $this->fs->ls( env('BD_DATA_DIR').'/repositories/' );
@@ -101,11 +106,11 @@ class GenerateVirtualHostsCommand extends Command
 			sleep(1);
 		}
 
-		if( !is_file($this->realpath_vhosts_dir.'vhosts.conf') || md5_file($this->realpath_vhosts_dir.'vhosts.conf') != md5_file($this->realpath_vhosts_dir.'vhosts.conf.tmp') ){
+		if( !is_file($this->realpath_vhosts_dir.'vhosts.conf') || md5_file($this->realpath_vhosts_dir.'vhosts.conf') != md5_file($this->realpath_vhosts_dir.$this->vhosts_tmp_filename) ){
 			// 前回の結果との差分があったら置き換える
-			copy( $this->realpath_vhosts_dir.'vhosts.conf.tmp', $this->realpath_vhosts_dir.'vhosts.conf' );
+			copy( $this->realpath_vhosts_dir.$this->vhosts_tmp_filename, $this->realpath_vhosts_dir.'vhosts.conf' );
 		}
-		$this->fs->rm( $this->realpath_vhosts_dir.'vhosts.conf.tmp' );
+		$this->fs->rm( $this->realpath_vhosts_dir.$this->vhosts_tmp_filename );
 
 		$this->line(' finished!');
 		$this->line( '' );
@@ -370,7 +375,7 @@ class GenerateVirtualHostsCommand extends Command
 	 * 一時ファイルにテキストを出力
 	 */
 	private function put_tmp_contents($src){
-		file_put_contents( $this->realpath_vhosts_dir.'vhosts.conf.tmp', $src, FILE_APPEND );
+		file_put_contents( $this->realpath_vhosts_dir.$this->vhosts_tmp_filename, $src, FILE_APPEND );
 		return true;
 	}
 }
