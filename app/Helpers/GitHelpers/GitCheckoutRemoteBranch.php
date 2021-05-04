@@ -38,6 +38,17 @@ class GitCheckoutRemoteBranch
 		$newComposer->composer(['install']);
 
 
+
+		// --------------------------------------
+		// vhosts.conf を更新する
+		$bdAsync = new \App\Helpers\async();
+		$bdAsync->set_channel_name( 'system-mentenance___generate_vhosts' );
+		$bdAsync->artisan(
+			'bd:generate_vhosts'
+		);
+
+
+
 		$cmd_result = array(
 			'stdout' => 'Switched to a new branch \''.$new_branch_name.'\''."\n",
 			'stderr' => '',
