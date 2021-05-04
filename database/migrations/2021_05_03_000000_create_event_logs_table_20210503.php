@@ -18,7 +18,11 @@ class CreateEventLogsTable20210503 extends Migration
 			$table->softDeletes();
 
 			$table->uuid('user_id', 36)->nullable();
+			$table->string('user_name')->nullable();
+			$table->string('user_email')->nullable();
 			$table->uuid('project_id', 36)->nullable();
+			$table->string('project_name')->nullable();
+			$table->string('project_code')->nullable();
 			$table->string('branch_name')->nullable();
 			$table->string('pid')->nullable(); // プロセスID
 

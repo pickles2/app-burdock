@@ -430,9 +430,6 @@ class GenerateVirtualHostsCommand extends Command
 	private function event_log( $progress, $message ){
 		// イベントログを記録する
 		$eventLog = new EventLog;
-		$eventLog->user_id = null;
-		$eventLog->project_id = null;
-		$eventLog->branch_name = null;
 		$eventLog->pid = getmypid();
 		$eventLog->function_name = 'generate_vhosts';
 		$eventLog->event_name = 'generate';
