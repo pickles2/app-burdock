@@ -73,6 +73,18 @@ class StagingController extends Controller
 
 		$json = $plum->gpi( $_POST['data'] );
 
+
+
+		// --------------------------------------
+		// vhosts.conf を更新する
+		$bdAsync = new \App\Helpers\async();
+		$bdAsync->set_channel_name( 'system-mentenance___generate_vhosts' );
+		$bdAsync->artisan(
+			'bd:generate_vhosts'
+		);
+
+
+
 		header('Content-type: application/json');
 		return json_encode( $json );
 	}

@@ -153,6 +153,18 @@ class ProjectController extends Controller
 			}
 		}
 
+
+
+		// --------------------------------------
+		// vhosts.conf を更新する
+		$bdAsync = new \App\Helpers\async();
+		$bdAsync->set_channel_name( 'system-mentenance___generate_vhosts' );
+		$bdAsync->artisan(
+			'bd:generate_vhosts'
+		);
+
+
+
 		return redirect('home/' . urlencode($project->project_code))->with('bd_flash_message', __('Updated a Project.'));
 	}
 

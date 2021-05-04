@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Project;
+use App\Helpers\applock;
 
 class GenerateVirtualHostsCommand extends Command
 {
@@ -31,6 +32,10 @@ class GenerateVirtualHostsCommand extends Command
 	/** preview dir list */
 	private $list_preview_dirs = array();
 
+
+	/** 一時ファイルのファイル名 */
+	private $vhosts_tmp_filename;
+
 	/**
 	 * Create a new command instance.
 	 *
@@ -39,6 +44,11 @@ class GenerateVirtualHostsCommand extends Command
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->fs = new \tomk79\filesystem();
+
+		$this->realpath_vhosts_dir = env('BD_DATA_DIR').'/vhosts/';
+		$this->vhosts_tmp_filename = 'vhosts.conf.tmp.'.microtime(true);
 	}
 
 	/**
@@ -56,22 +66,32 @@ class GenerateVirtualHostsCommand extends Command
 		$this->info('----------------------------------------------------------------');
 		$this->line( '' );
 
+		$applock = new applock('generate_vhosts', null, null, null);
+		if( !$applock->lock() ){
+			$this->error('generate_vhosts is now progress.');
+			$encore_request = '';
+			$encore_request .= 'ProcessID='.getmypid()."\r\n";
+			$encore_request .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
+			$this->fs->save_file( $this->realpath_vhosts_dir.'encore_request.txt', $encore_request );
+			return 0;
+		}
+
+
 		$projects = Project::all();
 		if( !$projects ){
 			$this->error('Failed to load Project list.');
+			$applock->unlock();
 			return 1;
 		}
 
-		$this->realpath_vhosts_dir = env('BD_DATA_DIR').'/vhosts/';
 		if( !is_dir($this->realpath_vhosts_dir) ){
 			mkdir($this->realpath_vhosts_dir);
 		}
-		if( is_file( $this->realpath_vhosts_dir.'vhosts.conf.tmp' ) ){
-			unlink( $this->realpath_vhosts_dir.'vhosts.conf.tmp' );
+		if( is_file( $this->realpath_vhosts_dir.$this->vhosts_tmp_filename ) ){
+			unlink( $this->realpath_vhosts_dir.$this->vhosts_tmp_filename );
 		}
-		touch($this->realpath_vhosts_dir.'vhosts.conf.tmp');
+		touch($this->realpath_vhosts_dir.$this->vhosts_tmp_filename);
 
-		$this->fs = new \tomk79\filesystem();
 		$prevew_dirs = $this->fs->ls( env('BD_DATA_DIR').'/repositories/' );
 		foreach( $prevew_dirs as $prevew_dir ){
 			if( preg_match( '/^(.*?)\-\-\-(.*)$/', $prevew_dir, $matched ) ){
@@ -101,11 +121,11 @@ class GenerateVirtualHostsCommand extends Command
 			sleep(1);
 		}
 
-		if( !is_file($this->realpath_vhosts_dir.'vhosts.conf') || md5_file($this->realpath_vhosts_dir.'vhosts.conf') != md5_file($this->realpath_vhosts_dir.'vhosts.conf.tmp') ){
+		if( !is_file($this->realpath_vhosts_dir.'vhosts.conf') || md5_file($this->realpath_vhosts_dir.'vhosts.conf') != md5_file($this->realpath_vhosts_dir.$this->vhosts_tmp_filename) ){
 			// 前回の結果との差分があったら置き換える
-			copy( $this->realpath_vhosts_dir.'vhosts.conf.tmp', $this->realpath_vhosts_dir.'vhosts.conf' );
+			copy( $this->realpath_vhosts_dir.$this->vhosts_tmp_filename, $this->realpath_vhosts_dir.'vhosts.conf' );
 		}
-		$this->fs->rm( $this->realpath_vhosts_dir.'vhosts.conf.tmp' );
+		$this->fs->rm( $this->realpath_vhosts_dir.$this->vhosts_tmp_filename );
 
 		$this->line(' finished!');
 		$this->line( '' );
@@ -117,6 +137,29 @@ class GenerateVirtualHostsCommand extends Command
 			$this->line( 'Failed...!' );
 		}
 		$this->line( '' );
+
+		$applock->unlock();
+
+		clearstatcache();
+		if( $this->fs->is_file( $this->realpath_vhosts_dir.'encore_request.txt' ) ){
+			if( $this->fs->rm( $this->realpath_vhosts_dir.'encore_request.txt' ) ){
+				// --------------------------------------
+				// vhosts.conf を更新する
+				$bdAsync = new \App\Helpers\async();
+				$bdAsync->set_channel_name( 'system-mentenance___generate_vhosts' );
+				$bdAsync->artisan(
+					'bd:generate_vhosts'
+				);
+				$this->line( 'Encore was accepted!' );
+				$this->line( '' );
+			}else{
+				$this->error( 'Encore was rejected!' );
+				$this->error( 'Failed to delete Encore file.' );
+				$this->line( '' );
+			}
+
+		}
+
 
 		$this->line('Local Time: '.date('Y-m-d H:i:s'));
 		$this->line('GMT: '.gmdate('Y-m-d H:i:s'));
@@ -370,7 +413,7 @@ class GenerateVirtualHostsCommand extends Command
 	 * 一時ファイルにテキストを出力
 	 */
 	private function put_tmp_contents($src){
-		file_put_contents( $this->realpath_vhosts_dir.'vhosts.conf.tmp', $src, FILE_APPEND );
+		file_put_contents( $this->realpath_vhosts_dir.$this->vhosts_tmp_filename, $src, FILE_APPEND );
 		return true;
 	}
 }

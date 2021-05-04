@@ -75,8 +75,6 @@ class AsyncSetupCommand extends Command
 		// $project_path = \get_project_workingtree_dir($project_code, $branch_name);
 
 
-		// --------------------------------------
-
 
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
 		$pjManager = $burdockProjectManager->project($project->project_code);
@@ -266,8 +264,6 @@ class AsyncSetupCommand extends Command
 		));
 
 
-
-		// / --------------------------------------
 
 		$this->line(' finished!');
 		$this->line( '' );

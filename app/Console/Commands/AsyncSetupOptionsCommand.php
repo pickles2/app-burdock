@@ -75,9 +75,6 @@ class AsyncSetupOptionsCommand extends Command
 		// $project_path = \get_project_workingtree_dir($project_code, $branch_name);
 
 
-		// --------------------------------------
-
-
 
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
 		$pjManager = $burdockProjectManager->project($project->project_code);
@@ -370,7 +367,15 @@ class AsyncSetupOptionsCommand extends Command
 
 
 
-		// / --------------------------------------
+		// --------------------------------------
+		// vhosts.conf を更新する
+		$bdAsync = new \App\Helpers\async();
+		$bdAsync->set_channel_name( 'system-mentenance___generate_vhosts' );
+		$bdAsync->artisan(
+			'bd:generate_vhosts'
+		);
+
+
 
 		$this->line(' finished!');
 		$this->line( '' );

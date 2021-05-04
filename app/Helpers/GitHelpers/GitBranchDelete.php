@@ -20,6 +20,18 @@ class GitBranchDelete
 		// ディレクトリごと削除
 		$result = $fs->rm($realpath_pj_git_target_branch_root);
 
+
+
+		// --------------------------------------
+		// vhosts.conf を更新する
+		$bdAsync = new \App\Helpers\async();
+		$bdAsync->set_channel_name( 'system-mentenance___generate_vhosts' );
+		$bdAsync->artisan(
+			'bd:generate_vhosts'
+		);
+
+
+
 		$cmd_result = array(
 			'stdout' => 'Deleted branch '.$target_branch_name.' (was 0000000).'."\n",
 			'stderr' => '',
