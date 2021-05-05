@@ -5,16 +5,32 @@
 
 @section('content')
 
+@if ( $error )
+<div>
+	<p>{{ $error_message }}</p>
+</div>
+@else
 <div id="cont-plum-area"></div>
+@endif
 
 @endsection
+
+
 
 @section('head')
+@if ( $error )
+@else
 <!-- plum -->
 <link rel="stylesheet" href="/common/lib-plum/dist/plum.css" />
+@endif
 @endsection
 
+
+
 @section('foot')
+
+@if ( $error )
+@else
 <!-- plum -->
 <script src="/common/lib-plum/dist/plum.js"></script>
 
@@ -44,7 +60,14 @@ var plum = new Plum(
 	}
 );
 plum.init();
+
+window.Echo.channel('{{ $project->project_code }}___plum-message.{{ Auth::id() }}').listen('AsyncPlumEvent', (message) => {
+	console.log('------ Broadcast message received:', message);
+	plum.broadcastMessage(message.message);
+});
+
 </script>
 
 
+@endif
 @endsection

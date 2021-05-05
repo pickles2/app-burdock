@@ -10,26 +10,6 @@
 		<button class="px2-btn cont-btn-broadcast-open-endpoint" type="button">WebSocketエンドポイントを開く</button>
 	</p>
 </div>
-
-<h2>Queueのテスト</h2>
-<div class="cont-btn-queue">
-	<p>
-		<button class="px2-btn cont-btn-queue-test" type="button">Queueをテスト</button>
-	</p>
-</div>
-
-<hr />
-<div class="cont-console">
-	<pre style="max-height: 200px;"><code></code></pre>
-</div>
-<hr />
-<p>
-	<a href="{{ url('/system-maintenance') }}" class="px2-btn">戻る</a>
-</p>
-
-@endsection
-
-@section('foot')
 <script>
 $(window).on('load', function(){
 	$('.cont-btn-broadcast-test').on('click', function(){
@@ -61,7 +41,66 @@ $(window).on('load', function(){
 		console.log(broadcast_endpoint_url);
 		window.open( broadcast_endpoint_url );
 	});
+	window.Echo.channel('system-mentenance___broadcast').listen('SystemMaintenanceHealthCheckEvent', (e) => {
+		console.info(e);
+		let $code = $('.cont-console pre code');
+		$code.append(e.data.message + "\n");
+	});
+});
+</script>
 
+<h2>Asyncのテスト</h2>
+<div class="cont-btn-broadcast">
+	<p>
+		<button class="px2-btn cont-btn-async-test" type="button">Asyncをテスト</button>
+	</p>
+</div>
+<script>
+$(window).on('load', function(){
+	$('.cont-btn-async-test').on('click', function(){
+		let $code = $('.cont-console pre code');
+		$code.append('Sending async request...'+"\n");
+		$.ajax({
+			"url": '/system-maintenance/healthcheck/ajax',
+			"headers": {
+				'X-CSRF-TOKEN': '{{ csrf_token() }}'
+			},
+			"type": 'post',
+			"data": {
+				"cmd": "async",
+			},
+			"success": function(data){
+				console.log('--- async request response:', data);
+				$code.append(data.message+"\n");
+			},
+			"error": function(error){
+				console.error('*** async request ERROR:', error);
+				$code.append('Error:'+error+"\n");
+			},
+			"complete": function(){
+			}
+		});
+	});
+	window.Echo.channel('system-mentenance___async.broadcast').listen('AsyncGeneralProgressEvent', (e) => {
+		console.info(e);
+		let $code = $('.cont-console pre code');
+		if(e.status == 'exit'){
+			$code.append('exit with ' + e.exitcode + ';' + "\n");
+		}else{
+			$code.append(e.stdout + e.stderr);
+		}
+	});
+});
+</script>
+
+<h2>Queueのテスト</h2>
+<div class="cont-btn-queue">
+	<p>
+		<button class="px2-btn cont-btn-queue-test" type="button">Queueをテスト</button>
+	</p>
+</div>
+<script>
+$(window).on('load', function(){
 	$('.cont-btn-queue-test').on('click', function(){
 		let $code = $('.cont-console pre code');
 		$code.append('Sending queue request...'+"\n");
@@ -86,13 +125,23 @@ $(window).on('load', function(){
 			}
 		});
 	});
+});
+</script>
 
-	window.Echo.channel('system-mentenance___broadcast').listen('SystemMaintenanceHealthCheckEvent', (e) => {
-		console.info(e);
-		let $code = $('.cont-console pre code');
-		$code.append(e.data.message + "\n");
-	});
+<hr />
+<div class="cont-console">
+	<pre style="max-height: 200px;"><code></code></pre>
+</div>
+<hr />
+<p>
+	<a href="{{ url('/system-maintenance') }}" class="px2-btn">戻る</a>
+</p>
 
+@endsection
+
+@section('foot')
+<script>
+$(window).on('load', function(){
 })
 </script>
 @endsection

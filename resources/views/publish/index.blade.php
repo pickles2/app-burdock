@@ -5,6 +5,7 @@
 @extends('layouts.default')
 
 @section('head')
+	<script src="{{ asset('/cont/publish/script.js') }}"></script>
 	<link rel="stylesheet" href="{{ asset('/cont/publish/style.css') }}" type="text/css">
 @endsection
 

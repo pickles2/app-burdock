@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Project;
 use App\Http\Requests\StoreUser;
-use App\Setup;
-use App\Http\Requests\StoreSetup;
 
 class HomeController extends Controller
 {
@@ -37,9 +36,12 @@ class HomeController extends Controller
 		if( !strlen($branch_name) ){
 			$branch_name = 'master';
 		}
+
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
 		$project_branch = $burdockProjectManager->project($project->project_code)->branch($branch_name, 'preview');
-		$project_status = $project_branch->status();
+
+		$global = View::shared('global');
+		$project_status = $global->project_status;
 
 		if( $project_status->pathExists && $project_status->isPxStandby ){
 			// --------------------------------------
@@ -63,19 +65,10 @@ class HomeController extends Controller
 				'project_status' => $project_status,
 			]);
 
-		}else{
-			// --------------------------------------
-			// セットアップされていないとき
-			return $this->setup($project, $branch_name);
 		}
-	}
 
-	/**
-	 * プロジェクトの初期セットアップを実行する
-	 */
-	private function setup(Project $project, $branch_name)
-	{
-		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
+		// --------------------------------------
+		// セットアップされていないとき
 		$pjManager = $burdockProjectManager->project($project->project_code);
 		$initializing_request = $pjManager->get_initializing_request();
 		if( !$initializing_request ){
@@ -89,6 +82,78 @@ class HomeController extends Controller
 				'branch_name' => $branch_name,
 				'initializing_request' => $initializing_request,
 			]
+		);
+	}
+
+
+	/**
+	 * プロジェクトテンプレートのセットアップオプションに対する処理
+	 */
+    public function setupAjax(Request $request, Project $project, $branch_name)
+    {
+		$params = array();
+
+		$params['checked_option'] = $request->checked_option;
+		$params['checked_init'] = $request->checked_init;
+		$params['clone_repository'] = $request->clone_repository;
+		$params['clone_user_name'] = $request->clone_user_name;
+		$params['clone_password'] = $request->clone_password;
+		$params['setup_status'] = $request->setup_status;
+		$params['restart'] = $request->restart;
+
+		$bdAsync = new \App\Helpers\async($project, $branch_name);
+		$bdAsync->set_channel_name( 'setup-event' );
+		$bdAsync->artisan(
+			'bd:setup',
+			array(),
+			$params
+		);
+
+		return array(
+			'result' => true,
+			'message' => 'OK',
+		);
+    }
+
+	/**
+	 * プロジェクトの初期化オプションに対する処理
+	 */
+	public function setupOptionAjax(Request $request, Project $project, $branch_name)
+	{
+		$params = array();
+
+		$params['checked_option'] = $request->checked_option;
+		$params['checked_init'] = $request->checked_init;
+		$params['setup_status'] = $request->setup_status;
+		$params['checked_repository'] = $request->checked_repository;
+		$params['vendor_name'] = $request->vendor_name;
+		$params['project_name'] = $request->project_name;
+
+		$params['repository'] = $request->repository;
+		$params['user_name'] = $request->user_name;
+		$params['password'] = $request->password;
+
+		$params['clone_repository'] = $request->clone_repository;
+		$params['clone_user_name'] = $request->clone_user_name;
+		$params['clone_password'] = $request->clone_password;
+
+		$params['clone_new_repository'] = $request->clone_new_repository;
+		$params['clone_new_user_name'] = $request->clone_new_user_name;
+		$params['clone_new_password'] = $request->clone_new_password;
+
+
+
+		$bdAsync = new \App\Helpers\async($project, $branch_name);
+		$bdAsync->set_channel_name( 'setup-option-event' );
+		$bdAsync->artisan(
+			'bd:setup_options',
+			array(),
+			$params
+		);
+
+		return array(
+			'result' => true,
+			'message' => 'OK',
 		);
 	}
 

@@ -9,6 +9,8 @@ module.exports = class{
 		this.chokidar = require('chokidar');
 		this.cceWatcher = require('./CceWatcher.js');
 		this.pxcmdWatcher = require('./PxcmdWatcher.js');
+		this.cmdWatcher = require('./CmdWatcher.js');
+		this.gitWatcher = require('./GitWatcher.js');
 		this.artisanWatcher = require('./ArtisanWatcher.js');
 	}
 
@@ -38,6 +40,7 @@ module.exports = class{
 			'/watcher/',
 			'/watcher/artisan/',
 			'/watcher/cmd/',
+			'/watcher/git/',
 			'/watcher/pxcmd/',
 			'/watcher/cce/',
 			'/watcher/cce/async/',
@@ -82,6 +85,30 @@ module.exports = class{
 				let pxcmdWatcher = new _this.pxcmdWatcher(_this);
 				pxcmdWatcher.execute(fileJson, fileInfo, function(){
 					console.log('pxcmd: done.');
+					_this.fsEx.removeSync(fileInfo.realpath);
+				});
+
+				return;
+
+			}else if( filename.match(/^cmd[\/\\]([\s\S]+\.json)$/) ){
+				// --------------------------------------
+				// Commands
+
+				let cmdWatcher = new _this.cmdWatcher(_this);
+				cmdWatcher.execute(fileJson, fileInfo, function(){
+					console.log('cmd: done.');
+					_this.fsEx.removeSync(fileInfo.realpath);
+				});
+
+				return;
+
+			}else if( filename.match(/^git[\/\\]([\s\S]+\.json)$/) ){
+				// --------------------------------------
+				// Git
+
+				let gitWatcher = new _this.gitWatcher(_this);
+				gitWatcher.execute(fileJson, fileInfo, function(){
+					console.log('git: done.');
 					_this.fsEx.removeSync(fileInfo.realpath);
 				});
 

@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Http\Controllers\DeliveryController;
 use App\Project;
 
 class AsyncPx2PublishCommand extends Command
@@ -55,10 +54,21 @@ class AsyncPx2PublishCommand extends Command
 		if( is_file($path_json) ){
 			$json = json_decode( file_get_contents($path_json) );
 		}
+		if( !$json ){
+			$this->line(' Nothing to do.');
+			$this->line( '' );
+			$this->line('Local Time: '.date('Y-m-d H:i:s'));
+			$this->line('GMT: '.gmdate('Y-m-d H:i:s'));
+			$this->comment('------------ '.$this->signature.' successful ------------');
+			$this->line( '' );
+
+			return 0; // 終了コード
+		}
 
 		$user_id = $json->user_id;
 		$project_code = $json->project_code;
 		$branch_name = $json->branch_name;
+		$channel_name = $json->channel_name;
 
 		$publish_option = $json->params->publish_option;
 		$paths_region = $json->params->paths_region;
@@ -71,7 +81,8 @@ class AsyncPx2PublishCommand extends Command
 		set_time_limit(60);
 
 		chdir($project_path);
-		// proc_openでパブリッシュ
+
+		// proc_open
 		$desc = array(
 			1 => array('pipe', 'w'),
 			2 => array('pipe', 'w'),
@@ -194,7 +205,19 @@ class AsyncPx2PublishCommand extends Command
 			$process = proc_get_status($proc);
 
 			// ブロードキャストイベントに標準出力、標準エラー出力、パース結果を渡す、判定変数、キュー数、アラート配列、経過時間配列、パブリッシュファイルを渡す
-			broadcast(new \App\Events\PublishEvent($user_id, $project_code, $branch_name, $parse, $judge, $queue_count, $publish_file, $end_publish, $process, $pipes));
+			broadcast(new \App\Events\PublishEvent(
+				$user_id,
+				$project_code,
+				$branch_name,
+				$parse,
+				$judge,
+				$queue_count,
+				$publish_file,
+				$end_publish,
+				$process,
+				$pipes,
+				$channel_name
+			));
 		}
 
 		fclose($pipes[1]);

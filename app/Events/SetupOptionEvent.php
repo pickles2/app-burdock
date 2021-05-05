@@ -16,6 +16,9 @@ class SetupOptionEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+	public $status;
+	public $exitcode;
+	public $result;
 	public $stdout;
 	public $stderr;
 	public $std_parse;
@@ -29,9 +32,12 @@ class SetupOptionEvent implements ShouldBroadcastNow
      *
      * @return void
      */
-    public function __construct($stdout, $stderr, $std_parse, $std_array, $numerator, $denominator, $rate, $checked_option)
+    public function __construct($status, $exitcode, $result, $stdout, $stderr, $std_parse, $std_array, $numerator, $denominator, $rate, $checked_option)
     {
-        //
+
+		$this->status = $status;
+		$this->exitcode = $exitcode;
+		$this->result = $result;
 		$this->stdout = $stdout;
 		$this->stderr = $stderr;
 		$this->std_parse = $std_parse;
@@ -55,6 +61,9 @@ class SetupOptionEvent implements ShouldBroadcastNow
 	public function broadcastWith()
 	{
 		return [
+			'status' => $this->status,
+			'exitcode' => $this->exitcode,
+			'result' => $this->result,
 			'stdout' => $this->stdout,
 			'stderr' => $this->stderr,
 			'std_parse' => $this->std_parse,

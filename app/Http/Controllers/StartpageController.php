@@ -31,6 +31,9 @@ class StartpageController extends Controller
 		if( !$user ){
 			return view('startpage.index');
 		}
+		if( !$user->email_verified_at ){
+			return view('auth.verify');
+		}
 
 		//全プロジェクトが見えるように一時的に変更
 		$projects = Project::latest()->paginate();

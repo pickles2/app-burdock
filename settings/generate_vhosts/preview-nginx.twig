@@ -1,0 +1,43 @@
+server {
+	# Preview {{ branch_name }} ({{ project_code }})
+	listen 443 ssl;
+	server_name {{ domain }};
+	root {{ document_root }};
+
+	ssl_certificate /path/to/localhost.crt;
+	ssl_certificate_key /path/to/localhost.key;
+
+	# --------------------------------------
+	# Pickles 2
+
+	# Pickles Framework へ転送
+	location ~ ^(?!/\.px_execute\.php/).*?(/|\.(html|htm|css|js))$ {
+		rewrite ^/(.*)$ /.px_execute.php/$1 last;
+	}
+	# 除外ファイルへのアクセスを拒否
+	location ~ ^/(?!\.px_execute\.php/).*?\.(?:ignore)([\.\/].*)?$ {
+		rewrite ^/(.*)$ /.px_execute.php/.ignore.html last;
+	}
+	# / Pickles 2
+	# --------------------------------------
+
+	# --------------------------------------
+	# Fast−CGI - PHP
+	location ~ \.php/ {
+		try_files $uri $uri/ @php-fpm;
+	}
+	location @php-fpm {
+		fastcgi_split_path_info ^(.+\.php)(/.*)$;
+		fastcgi_pass   unix:/path/to/nginxFastCGI.sock;
+		fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+		include fastcgi_params;
+		fastcgi_param PATH_INFO $fastcgi_path_info;
+	}
+	# / Fast−CGI - PHP
+	# --------------------------------------
+
+	{% if path_htpasswd %}
+		auth_basic "Please enter your ID and password";
+		auth_basic_user_file {{ path_htpasswd }};
+	{% endif %}
+}

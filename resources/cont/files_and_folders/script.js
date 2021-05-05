@@ -5,7 +5,7 @@ $(window).on('load', function(){
 		document.getElementById('cont-finder'),
 		{
 			"gpiBridge": function(input, callback){ // required
-				px2style.loading();
+				// px2style.loading();
 				$.ajax({
 					type : 'post',
 					url : window.contRemoteFinderGpiEndpoint,
@@ -18,7 +18,7 @@ $(window).on('load', function(){
 						'data': JSON.stringify(input)
 					}),
 					success: function(data){
-						px2style.closeLoading();
+						// px2style.closeLoading();
 						callback(data);
 					}
 				});

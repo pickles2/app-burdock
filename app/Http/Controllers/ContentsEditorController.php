@@ -95,6 +95,8 @@ class ContentsEditorController extends Controller
 		// 作成した一時ファイルを削除
 		unlink($file);
 
-		return $result;
+		header('Content-type: application/json');
+		echo json_encode($result);
+		return '';
 	}
 }

@@ -81,7 +81,7 @@ foreach($px2ce_client_resources->js as $value) {
 					return;
 				},
 				'complete': function(){
-					window.open('about:blank','_self').close();
+					window.open('about:blank', '_self').close();
 				},
 				'onClickContentsLink': function( uri, data ){
 					// TODO: 編集リンクを生成する
@@ -101,7 +101,7 @@ foreach($px2ce_client_resources->js as $value) {
 			}
 		);
 
-		$(window).resize(function(){
+		$(window).on('resize', function(){
 			clearTimeout(resizeTimer);
 			resizeTimer = setTimeout(function(){
 				if(pickles2ContentsEditor.redraw){

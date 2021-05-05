@@ -23,15 +23,6 @@ Route::middleware(['boot'])
 
 	Auth::routes(['verify' => true]);
 
-	// Route::get('users', 'UserController@index');
-	// Route::get('users/create', 'UserController@create');
-	// Route::post('users', 'UserController@store');
-	// Route::get('users/{user}', 'UserController@show');
-	// Route::get('users/{user}/edit', 'UserController@edit');
-	// Route::put('users/{user}', 'UserController@update');
-	// Route::delete('users/{user}', 'UserController@destroy');
-
-	// Route::resource('users', 'UserController');
 
 
 	// --------------------------------------
@@ -44,6 +35,10 @@ Route::middleware(['boot'])
 	Route::get('mypage', 'MypageController@show');
 	Route::get('mypage/edit', 'MypageController@edit');
 	Route::put('mypage', 'MypageController@update');
+	Route::get('mypage/edit_email', 'MypageController@edit_email');
+	Route::post('mypage/edit_email', 'MypageController@update_email');
+	Route::get('mypage/edit_email_mailsent', 'MypageController@update_email_mailsent');
+	Route::get('mypage/edit_email_update', 'MypageController@update_email_update');
 	Route::delete('mypage', 'MypageController@destroy');
 
 
@@ -52,7 +47,10 @@ Route::middleware(['boot'])
 	Route::middleware(['isDebugMode'])
 	->group(function(){
 		Route::get('system-maintenance', 'SystemMaintenance\IndexController@index');
+		Route::get('system-maintenance/event-logs', 'SystemMaintenance\EventLogController@index');
 		Route::get('system-maintenance/phpinfo', 'SystemMaintenance\IndexController@phpinfo');
+		Route::get('system-maintenance/generate_vhosts', 'SystemMaintenance\GenerateVhostsController@index');
+		Route::post('system-maintenance/generate_vhosts/ajax_generate_vhosts', 'SystemMaintenance\GenerateVhostsController@ajaxGenerateVhosts');
 		Route::get('system-maintenance/ajax/checkCommand', 'SystemMaintenance\IndexController@ajaxCheckCommand');
 		Route::get('system-maintenance/project-dirs', 'SystemMaintenance\ProjectDirsController@index');
 		Route::get('system-maintenance/project-dirs/{project}', 'SystemMaintenance\ProjectDirsController@show');
@@ -68,21 +66,17 @@ Route::middleware(['boot'])
 		// --------------------------------------
 		// プロジェクト Home
 		Route::get('home/{project}/{branch_name?}', 'HomeController@index');
+		Route::post('home/{project}/{branch_name}/setupAjax', 'HomeController@setupAjax');
+		Route::post('home/{project}/{branch_name}/setupOptionAjax', 'HomeController@setupOptionAjax');
+
 
 		// --------------------------------------
 		// プロジェクト管理
-		Route::get('projects/create', 'ProjectController@create');
 		Route::post('projects', 'ProjectController@store');
 		Route::get('projects/{project}/edit', 'ProjectController@edit');
 		Route::put('projects/{project}/edit', 'ProjectController@update');
 		Route::delete('projects/{project}', 'ProjectController@destroy');
 
-
-
-		// --------------------------------------
-		// セットアップ
-		Route::post('setup/{project}/{branch_name}/setupAjax', 'Ajax\SetupController@setupAjax');
-		Route::post('setup/{project}/{branch_name}/setupOptionAjax', 'Ajax\SetupController@setupOptionAjax');
 
 		// --------------------------------------
 		// サイトマップ

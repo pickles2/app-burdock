@@ -16,6 +16,9 @@ class SetupEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+	public $status;
+	public $exitcode;
+	public $result;
 	public $stdout;
 	public $stderr;
 	public $path_composer;
@@ -29,9 +32,12 @@ class SetupEvent implements ShouldBroadcastNow
      *
      * @return void
      */
-    public function __construct($stdout, $stderr, $path_composer, $std_parse, $std_array, $numerator, $denominator, $rate)
+    public function __construct($status, $exitcode, $result, $stdout, $stderr, $path_composer, $std_parse, $std_array, $numerator, $denominator, $rate)
     {
         //
+		$this->status = $status;
+		$this->exitcode = $exitcode;
+		$this->result = $result;
 		$this->stdout = $stdout;
 		$this->stderr = $stderr;
 		$this->path_composer = $path_composer;
@@ -55,6 +61,9 @@ class SetupEvent implements ShouldBroadcastNow
 	public function broadcastWith()
 	{
 		return [
+			'status' => $this->status,
+			'exitcode' => $this->exitcode,
+			'result' => $this->result,
 			'stdout' => $this->stdout,
 			'stderr' => $this->stderr,
 			'path_composer'=> $this->path_composer,

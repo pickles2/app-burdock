@@ -19,17 +19,6 @@ class ProjectController extends Controller
 	}
 
 	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create()
-	{
-		//
-		return view('projects.create');
-	}
-
-	/**
 	 * Store a newly created resource in storage.
 	 * 新しい記事を保存する
 	 * @param  \App\Http\Requests\StoreProject $request
@@ -60,15 +49,25 @@ class ProjectController extends Controller
 	/**
 	 * Show the form for editing the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param  Project $project
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit(Project $project)
 	{
+
+		$basicauth_user_name = null;
+		$realpath_preview_htpasswd = env('BD_DATA_DIR').'/projects/'.$project->project_code.'/preview.htpasswd';
+		if( is_file($realpath_preview_htpasswd) ){
+			$bin = file_get_contents($realpath_preview_htpasswd);
+			$htpasswd_ary = explode(':', $bin, 2);
+			$basicauth_user_name = $htpasswd_ary[0];
+		}
+
 		return view(
 			'projects.edit',
 			[
 				'project' => $project,
+				'basicauth_user_name' => $basicauth_user_name,
 			]
 		);
 	}
@@ -82,6 +81,49 @@ class ProjectController extends Controller
 	 */
 	public function update(StoreProject $request, Project $project)
 	{
+
+		$project->project_code = $request->project_code;
+		$project->project_name = $request->project_name;
+		$project->git_url = $request->git_url;
+		$project->git_username = \Crypt::encryptString($request->git_username);
+		if( is_object($request) && strlen($request->git_password) ){
+			// 入力があった場合だけ上書き
+			$project->git_password = \Crypt::encryptString( $request->git_password );
+		}
+		$project->git_main_branch_name = $request->git_main_branch_name;
+		$project->save();
+
+
+		$realpath_preview_htpasswd = env('BD_DATA_DIR').'/projects/'.$project->project_code.'/preview.htpasswd';
+		if( strlen($request->basicauth_user_name) ){
+			// --------------------------------------
+			// パスワードを保存する
+			$basicauth_password = $request->basicauth_password;
+			$hashed_passwd = password_hash($basicauth_password, PASSWORD_BCRYPT);
+			if( !strlen($basicauth_password) ){
+				if( is_file($realpath_preview_htpasswd) ){
+					$bin = file_get_contents($realpath_preview_htpasswd);
+					$htpasswd_ary = explode(':', $bin, 2);
+					$hashed_passwd = $htpasswd_ary[1];
+				}
+			}
+
+			$src = '';
+			$src .= trim($request->basicauth_user_name).':'.$hashed_passwd."\n";
+			if( !file_put_contents($realpath_preview_htpasswd, $src) ){
+				// TODO: エラー処理
+			}
+
+		}else{
+			// --------------------------------------
+			// パスワードを解除する
+			if( is_file($realpath_preview_htpasswd) && !unlink($realpath_preview_htpasswd) ){
+				// TODO: エラー処理
+			}
+		}
+
+
+		// ディレクトリの処理
 		$bd_data_dir = env('BD_DATA_DIR');
 
 		if( is_dir($bd_data_dir.'/projects/'.urlencode($project->project_code)) ){
@@ -111,16 +153,17 @@ class ProjectController extends Controller
 			}
 		}
 
-		$project->project_code = $request->project_code;
-		$project->project_name = $request->project_name;
-		$project->git_url = $request->git_url;
-		$project->git_username = \Crypt::encryptString($request->git_username);
-		if( is_object($request) && strlen($request->git_password) ){
-			// 入力があった場合だけ上書き
-			$project->git_password = \Crypt::encryptString( $request->git_password );
-		}
-		$project->git_main_branch_name = $request->git_main_branch_name;
-		$project->save();
+
+
+		// --------------------------------------
+		// vhosts.conf を更新する
+		$bdAsync = new \App\Helpers\async();
+		$bdAsync->set_channel_name( 'system-mentenance___generate_vhosts' );
+		$bdAsync->artisan(
+			'bd:generate_vhosts'
+		);
+
+
 
 		return redirect('home/' . urlencode($project->project_code))->with('bd_flash_message', __('Updated a Project.'));
 	}

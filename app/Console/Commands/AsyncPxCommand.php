@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Http\Controllers\DeliveryController;
 use App\Project;
+use App\Events\AsyncGeneralProgressEvent;
 
 class AsyncPxCommand extends Command
 {
@@ -55,10 +55,22 @@ class AsyncPxCommand extends Command
 		if( is_file($path_json) ){
 			$json = json_decode( file_get_contents($path_json) );
 		}
+		if( !$json ){
+			$this->line(' Nothing to do.');
+			$this->line( '' );
+			$this->line('Local Time: '.date('Y-m-d H:i:s'));
+			$this->line('GMT: '.gmdate('Y-m-d H:i:s'));
+			$this->comment('------------ '.$this->signature.' successful ------------');
+			$this->line( '' );
+
+			return 0; // 終了コード
+		}
 
 		$user_id = $json->user_id;
 		$project_code = $json->project_code;
 		$branch_name = $json->branch_name;
+		$channel_name = $json->channel_name;
+
 		$entry_script = $json->entry_script;
 		$pxcommand = $json->pxcommand;
 		$path = $json->path;
@@ -73,7 +85,8 @@ class AsyncPxCommand extends Command
 		set_time_limit(60);
 
 		chdir($project_path);
-		// proc_openでパブリッシュ
+
+		// proc_open
 		$desc = array(
 			1 => array('pipe', 'w'),
 			2 => array('pipe', 'w'),
@@ -93,23 +106,50 @@ class AsyncPxCommand extends Command
 			$stdout = fgets($pipes[1]);
 			$stderr = fgets($pipes[2]);
 
-			// ブロードキャスト
 			broadcast(
-				new \App\Events\AsyncPxcmdEvent(
+				new AsyncGeneralProgressEvent(
 					$user_id,
 					$project_code,
 					$branch_name,
-					$stdout,
-					$stderr,
-					$pxcommand
+					'progress',
+					null,
+					($stdout!==false ? $stdout : ''),
+					($stderr!==false ? $stderr : ''),
+					$channel_name
 				)
 			);
 		}
+
+
+		$stat = array();
+		do {
+			$stat = proc_get_status($proc);
+			// waiting
+			usleep(1);
+		} while( $stat['running'] );
+
+
+
+		broadcast(
+			new AsyncGeneralProgressEvent(
+				$user_id,
+				$project_code,
+				$branch_name,
+				'exit',
+				$stat['exitcode'],
+				null,
+				null,
+				$channel_name
+			)
+		);
+
+
 
 		fclose($pipes[1]);
 		fclose($pipes[2]);
 		proc_close($proc);
 		chdir($path_current_dir); // 元いたディレクトリへ戻る
+
 
 
 		$this->line(' finished!');

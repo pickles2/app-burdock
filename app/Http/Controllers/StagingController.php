@@ -28,9 +28,23 @@ class StagingController extends Controller
 	 */
 	public function index(Request $request, Project $project, $branch_name){
 
+		if( !strlen($project->git_url) ){
+			return view(
+				'staging.index',
+				[
+					'error' => 'git_remot_not_set',
+					'error_message' => 'Gitリモートが設定されていません。',
+					'project' => $project,
+					'branch_name' => $branch_name,
+				]
+			);
+		}
+
 		return view(
 			'staging.index',
 			[
+				'error' => null,
+				'error_message' => null,
 				'project' => $project,
 				'branch_name' => $branch_name,
 			]
@@ -44,48 +58,32 @@ class StagingController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function gpi(Request $request, Project $project, $branch_name){
+		$user = Auth::user();
 
-		$gitUtil = new \App\Helpers\git($project);
-		$default_branch_name = $gitUtil->get_branch_name();
-
-		$fs = new \tomk79\filesystem();
-
-		$realpath_pj_git_root = env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/plum_temporary_data_dir/';
-		$fs->mkdir_r($realpath_pj_git_root);
-		$fs->mkdir_r(env('BD_DATA_DIR').'/stagings/');
-
-		$staging_server = array();
-		for( $i = 1; $i <= 10; $i ++ ){
-			array_push($staging_server, array(
-				'name' => 'stg'.$i.'',
-				'path' => env('BD_DATA_DIR').'/stagings/'.urlencode($project->project_code).'---stg'.$i.'/',
-				'url' => 'http'.($_SERVER["HTTPS"] ? 's' : '').'://'.urlencode($project->project_code).'---stg'.$i.'.'.env('BD_PLUM_STAGING_DOMAIN').'/',
-			));
+		if( !strlen($project->git_url) ){
+			return [
+				'result' => false,
+				'error' => 'git_remot_not_set',
+				'error_message' => 'Gitリモートが設定されていません。',
+			];
 		}
 
-		$git_username = null;
-		if( strlen($project->git_username) ){
-			$git_username = \Crypt::decryptString( $project->git_username );
-		}
-		$git_password = null;
-		if( strlen($project->git_password) ){
-			$git_password = \Crypt::decryptString( $project->git_password );
-		}
-
-
-		$plum = new \hk\plum\main(
-			array(
-				'temporary_data_dir' => $realpath_pj_git_root,
-				'staging_server' => $staging_server,
-				'git' => array(
-					'url' => $project->git_url,
-					'username' => $git_username,
-					'password' => $git_password,
-				)
-			)
-		);
+		$plumHelper = new \App\Helpers\plumHelper($project, $user->id);
+		$plum = $plumHelper->create_plum();
 
 		$json = $plum->gpi( $_POST['data'] );
+
+
+
+		// --------------------------------------
+		// vhosts.conf を更新する
+		$bdAsync = new \App\Helpers\async();
+		$bdAsync->set_channel_name( 'system-mentenance___generate_vhosts' );
+		$bdAsync->artisan(
+			'bd:generate_vhosts'
+		);
+
+
 
 		header('Content-type: application/json');
 		return json_encode( $json );

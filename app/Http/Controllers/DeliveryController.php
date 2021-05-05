@@ -28,17 +28,32 @@ class DeliveryController extends Controller
 	 */
 	public function index(Request $request, Project $project, $branch_name){
 
+		if( !strlen($project->git_url) ){
+			return view(
+				'delivery.index',
+				[
+					'error' => 'git_remot_not_set',
+					'error_message' => 'Gitリモートが設定されていません。',
+					'project' => $project,
+					'branch_name' => $branch_name,
+					'indigo_std_out' => '',
+				]
+			);
+		}
+
 		// parameter.phpのmk_indigo_optionsメソッド
 		$parameter = $this->mk_indigo_options( $project, $branch_name );
 
 		// load indigo\main
-		$indigo = new \indigo\main($parameter);
+		$indigo = new \pickles2\indigo\main($parameter);
 		$indigo_std_out = $indigo->run();
 
 
 		return view(
 			'delivery.index',
 			[
+				'error' => null,
+				'error_message' => null,
 				'project' => $project,
 				'branch_name' => $branch_name,
 				'indigo_std_out' => $indigo_std_out,
@@ -54,11 +69,19 @@ class DeliveryController extends Controller
 	 */
 	public function indigoAjaxAPI(Request $request, Project $project, $branch_name){
 
+		if( !strlen($project->git_url) ){
+			return [
+				'result' => false,
+				'error' => 'git_remot_not_set',
+				'error_message' => 'Gitリモートが設定されていません。',
+			];
+		}
+
 		// parameter.phpのmk_indigo_optionsメソッド
 		$parameter = $this->mk_indigo_options( $project, $branch_name );
 
 		// load indigo\main
-		$indigo = new \indigo\main($parameter);
+		$indigo = new \pickles2\indigo\main($parameter);
 		$indigo_std_out = $indigo->ajax_run();
 
 		return $indigo_std_out;

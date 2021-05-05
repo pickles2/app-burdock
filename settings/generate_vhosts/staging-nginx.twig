@@ -1,0 +1,14 @@
+server {
+	# Staging {{ staging_index }} ({{ project_code }})
+	listen 443 ssl;
+	server_name {{ domain }};
+	root {{ document_root }};
+
+	ssl_certificate /path/to/localhost.crt;
+	ssl_certificate_key /path/to/localhost.key;
+
+	{% if path_htpasswd %}
+		auth_basic "Please enter your ID and password";
+		auth_basic_user_file {{ path_htpasswd }};
+	{% endif %}
+}

@@ -5,23 +5,38 @@
 
 @section('content')
 
+@if ( $error )
+<div>
+	<p>{{ $error_message }}</p>
+</div>
+@else
 <div class="contents">
 	{!! $indigo_std_out !!}
 </div>
+@endif
 
 @endsection
 
+
+
+
 @section('head')
+@if ( $error )
+@else
 <!-- datepicker -->
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" />
 
 <!-- indigo -->
 <link rel="stylesheet" href="/common/lib-indigo/res/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/common/lib-indigo/res/styles/common.css">
+@endif
 @endsection
 
 
+
 @section('foot')
+@if ( $error )
+@else
 <!-- jquery -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
@@ -70,4 +85,5 @@
 		indigo.init();
 	});
 </script>
+@endif
 @endsection
