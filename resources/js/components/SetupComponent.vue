@@ -54,10 +54,10 @@
 				</div>
 				<div class="cont_setup_description">
 					<p>
-						<img src="/common/images/install_image_clip.png" alt="Composer ☓ Packagist ☓ Pickles 2">
+						<img src="/common/images/install_image_clip.png" alt="Composer ☓ Packagist ☓ Pickles 2" />
 					</p>
 					<p>
-						Pickles 2 の プロジェクトテンプレート を Packagest から自動的に取得し、セットアップを完了します。<br>
+						Pickles 2 の プロジェクトテンプレート を Packagest から自動的に取得し、セットアップを完了します。<br />
 					</p>
 				</div>
 				<p>
@@ -65,10 +65,10 @@
 				</p>
 				<div class="px2-p">
 					<div v-bind:class="classSetupStartEnable">
-						<button class="px2-btn px2-btn--primary" v-on:click="setup" style="margin-bottom: 16px;">プロジェクトをセットアップする</button>
+						<button class="px2-btn px2-btn--primary" data-btn="project-setup" v-on:click="setup">プロジェクトをセットアップする</button>
 					</div>
 					<div v-bind:class="classSetupStartDisable">
-						<button class="px2-btn px2-btn--primary" disabled="disabled" style="margin-bottom: 16px;">プロジェクトをセットアップする</button>
+						<button class="px2-btn px2-btn--primary" disabled="disabled">プロジェクトをセットアップする</button>
 					</div>
 				</div>
 			</div>
@@ -455,7 +455,6 @@ export default {
 				this.i++;
 
 				if( e.status == 'exit' ){
-					// TODO: ↓このブロックは、もともとAjaxリクエストのレスポンスに対する処理だった記述
 					if(this.rate === 100 && e.result.is_entry_script_exists === true) {
 						location.href = '/home/'+this.projectCode+'/'+this.branchName;
 					} else if(e.result.checked_option === 'pickles2' && e.result.checked_init === false && e.result.is_entry_script_exists === true) {
@@ -539,6 +538,9 @@ export default {
 				'restart': this.restart
             }
 			this.info = 'Pickles 2 プロジェクトをセットアップしています。この処理はしばらく時間がかかります。';
+
+			$('.contents button[data-btn="project-setup"], .contents button[data-btn="project-delete"]')
+				.attr('disabled', true);
 
 			// AjaxでAjax\SetupController@setupAjaxにpost処理
 			axios.post('/home/'+this.projectCode+'/'+this.branchName+'/setupAjax', data)

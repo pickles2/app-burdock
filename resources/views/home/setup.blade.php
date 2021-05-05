@@ -25,8 +25,9 @@
 </div>
 
 <p class="px2-text-align-center">
-	<button class="px2-btn px2-btn--danger" onclick="window.bdApp.modalDeleteProject('{{ $project->project_code }}');">このプロジェクトを削除</button>
+	<button class="px2-btn px2-btn--danger" data-btn="project-delete" onclick="window.bdApp.modalDeleteProject('{{ $project->project_code }}');">このプロジェクトを削除</button>
 </p>
+
 <address class="px2-text-align-center">(C)Pickles 2 Project.</address>
 
 @endsection
