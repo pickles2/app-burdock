@@ -48,7 +48,7 @@ class GenerateVirtualHostsCommand extends Command
 
 		$this->fs = new \tomk79\filesystem();
 
-		$this->realpath_vhosts_dir = env('BD_DATA_DIR').'/vhosts/';
+		$this->realpath_vhosts_dir = config('burdock.data_dir').'/vhosts/';
 		$this->vhosts_tmp_filename = 'vhosts.conf.tmp.'.microtime(true);
 	}
 
@@ -97,7 +97,7 @@ class GenerateVirtualHostsCommand extends Command
 		}
 		touch($this->realpath_vhosts_dir.$this->vhosts_tmp_filename);
 
-		$prevew_dirs = $this->fs->ls( env('BD_DATA_DIR').'/repositories/' );
+		$prevew_dirs = $this->fs->ls( config('burdock.data_dir').'/repositories/' );
 		foreach( $prevew_dirs as $prevew_dir ){
 			if( preg_match( '/^(.*?)\-\-\-(.*)$/', $prevew_dir, $matched ) ){
 				$tmp_project_code = $matched[1];
@@ -284,7 +284,7 @@ class GenerateVirtualHostsCommand extends Command
 		$tpl_vars = [
 			'domain' => $domain,
 			'project_code' => $project->project_code,
-			'document_root' => $this->fs->normalize_path($this->fs->get_realpath( env('BD_DATA_DIR').'/projects/'.$project->project_code.'/indigo/production/'.$relpath_docroot_dist )),
+			'document_root' => $this->fs->normalize_path($this->fs->get_realpath( config('burdock.data_dir').'/projects/'.$project->project_code.'/indigo/production/'.$relpath_docroot_dist )),
 			'path_htpasswd' => false,
 		];
 		if( !strlen($domain) ){
@@ -316,12 +316,12 @@ class GenerateVirtualHostsCommand extends Command
 			$tpl_vars = [
 				'domain' => $project->project_code.'---'.$branch_name.'.'.env('BD_PREVIEW_DOMAIN'),
 				'project_code' => $project->project_code,
-				'document_root' => $this->fs->get_realpath( env('BD_DATA_DIR').'/repositories/'.$project->project_code.'---'.$branch_name.'/'.$relpath_docroot_preview ),
+				'document_root' => $this->fs->get_realpath( config('burdock.data_dir').'/repositories/'.$project->project_code.'---'.$branch_name.'/'.$relpath_docroot_preview ),
 				'branch_name' => $branch_name,
 				'path_htpasswd' => false,
 			];
-			if( $this->fs->is_file( env('BD_DATA_DIR').'/projects/'.$project->project_code.'/preview.htpasswd' ) ){
-				$tpl_vars['path_htpasswd'] = $this->fs->get_realpath( env('BD_DATA_DIR').'/projects/'.$project->project_code.'/preview.htpasswd' );
+			if( $this->fs->is_file( config('burdock.data_dir').'/projects/'.$project->project_code.'/preview.htpasswd' ) ){
+				$tpl_vars['path_htpasswd'] = $this->fs->get_realpath( config('burdock.data_dir').'/projects/'.$project->project_code.'/preview.htpasswd' );
 			}
 			$src_vhosts = '';
 			if( is_file( $realpath_template_root_dir.'preview.twig' ) ){
@@ -360,12 +360,12 @@ class GenerateVirtualHostsCommand extends Command
 			$tpl_vars = [
 				'domain' => $project->project_code.'---stg'.($i+1).'.'.env('BD_PLUM_STAGING_DOMAIN'),
 				'project_code' => $project->project_code,
-				'document_root' => $this->fs->get_realpath( env('BD_DATA_DIR').'/stagings/'.$project->project_code.'---stg'.($i+1).'/'.$relpath_docroot_dist ),
+				'document_root' => $this->fs->get_realpath( config('burdock.data_dir').'/stagings/'.$project->project_code.'---stg'.($i+1).'/'.$relpath_docroot_dist ),
 				'staging_index' => $i+1,
 				'path_htpasswd' => false,
 			];
-			if( $this->fs->is_file( env('BD_DATA_DIR').'/projects/'.$project->project_code.'/plum_data_dir/htpasswds/stg'.($i).'.htpasswd' ) ){
-				$tpl_vars['path_htpasswd'] = $this->fs->get_realpath( env('BD_DATA_DIR').'/projects/'.$project->project_code.'/plum_data_dir/htpasswds/stg'.($i).'.htpasswd' );
+			if( $this->fs->is_file( config('burdock.data_dir').'/projects/'.$project->project_code.'/plum_data_dir/htpasswds/stg'.($i).'.htpasswd' ) ){
+				$tpl_vars['path_htpasswd'] = $this->fs->get_realpath( config('burdock.data_dir').'/projects/'.$project->project_code.'/plum_data_dir/htpasswds/stg'.($i).'.htpasswd' );
 			}
 
 			$src_vhosts = '';

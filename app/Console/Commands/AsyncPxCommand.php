@@ -94,7 +94,7 @@ class AsyncPxCommand extends Command
 
 
 		$cmd = '';
-		$cmd .= 'php '.$entry_script.' ';
+		$cmd .= config('burdock.command_path.php').' '.$entry_script.' ';
 		$cmd .= '"'.$query.'"';
 
 		$proc = proc_open($cmd, $desc, $pipes);

@@ -37,7 +37,7 @@ class HomeController extends Controller
 			$branch_name = 'master';
 		}
 
-		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( config('burdock.data_dir') );
 		$project_branch = $burdockProjectManager->project($project->project_code)->branch($branch_name, 'preview');
 
 		$global = View::shared('global');

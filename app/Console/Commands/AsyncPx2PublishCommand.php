@@ -89,7 +89,7 @@ class AsyncPx2PublishCommand extends Command
 		);
 
 		$cmd = '';
-		$cmd .= 'php '.get_px_execute_path($project_code, $branch_name).' ';
+		$cmd .= config('burdock.command_path.php').' '.get_px_execute_path($project_code, $branch_name).' ';
 		$cmd .= '"';
 		$cmd .= '/?PX=publish.run';
 		if(is_array($paths_region)) {

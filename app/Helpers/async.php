@@ -57,7 +57,7 @@ class async{
 			}
 		}
 
-		$watchDir = env('BD_DATA_DIR').'/watcher/cmd/';
+		$watchDir = config('burdock.data_dir').'/watcher/cmd/';
 		if( !is_dir($watchDir) ){
 			$fs->mkdir_r($watchDir);
 		}
@@ -97,7 +97,7 @@ class async{
 			}
 		}
 
-		$watchDir = env('BD_DATA_DIR').'/watcher/git/';
+		$watchDir = config('burdock.data_dir').'/watcher/git/';
 		if( !is_dir($watchDir) ){
 			$fs->mkdir_r($watchDir);
 		}
@@ -130,7 +130,7 @@ class async{
         $user_id = Auth::id();
 		$fs = new \tomk79\filesystem();
 
-		$watchDir = env('BD_DATA_DIR').'/watcher/artisan/';
+		$watchDir = config('burdock.data_dir').'/watcher/artisan/';
 		if(!is_dir($watchDir)){
 			$fs->mkdir_r($watchDir);
 		}
@@ -171,7 +171,7 @@ class async{
 			return false;
 		}
 
-		$watchDir = env('BD_DATA_DIR').'/watcher/pxcmd/';
+		$watchDir = config('burdock.data_dir').'/watcher/pxcmd/';
 		if(!is_dir($watchDir)){
 			$fs->mkdir_r($watchDir);
 		}

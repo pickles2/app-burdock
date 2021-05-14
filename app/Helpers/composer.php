@@ -47,7 +47,7 @@ class composer{
 		$cd = realpath('.');
 		chdir($realpath_pj_git_root);
 
-		$path_php = env('BD_COMMAND_PHP');
+		$path_php = config('burdock.command_path.php');
 		if(!strlen($path_php)){
 			$path_php = 'php';
 		}

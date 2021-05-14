@@ -27,7 +27,7 @@ class ProjectController extends Controller
 	public function store(StoreProject $request)
 	{
 
-		$bd_data_dir = env('BD_DATA_DIR');
+		$bd_data_dir = config('burdock.data_dir');
 		$branch_name = 'master';
 
 		// 記事作成時に著者のIDを保存する
@@ -56,7 +56,7 @@ class ProjectController extends Controller
 	{
 
 		$basicauth_user_name = null;
-		$realpath_preview_htpasswd = env('BD_DATA_DIR').'/projects/'.$project->project_code.'/preview.htpasswd';
+		$realpath_preview_htpasswd = config('burdock.data_dir').'/projects/'.$project->project_code.'/preview.htpasswd';
 		if( is_file($realpath_preview_htpasswd) ){
 			$bin = file_get_contents($realpath_preview_htpasswd);
 			$htpasswd_ary = explode(':', $bin, 2);
@@ -94,7 +94,7 @@ class ProjectController extends Controller
 		$project->save();
 
 
-		$realpath_preview_htpasswd = env('BD_DATA_DIR').'/projects/'.$project->project_code.'/preview.htpasswd';
+		$realpath_preview_htpasswd = config('burdock.data_dir').'/projects/'.$project->project_code.'/preview.htpasswd';
 		if( strlen($request->basicauth_user_name) ){
 			// --------------------------------------
 			// パスワードを保存する
@@ -124,7 +124,7 @@ class ProjectController extends Controller
 
 
 		// ディレクトリの処理
-		$bd_data_dir = env('BD_DATA_DIR');
+		$bd_data_dir = config('burdock.data_dir');
 
 		if( is_dir($bd_data_dir.'/projects/'.urlencode($project->project_code)) ){
 			rename(
@@ -176,7 +176,7 @@ class ProjectController extends Controller
 	 */
 	public function destroy(Request $request, Project $project)
 	{
-		$bd_data_dir = env('BD_DATA_DIR');
+		$bd_data_dir = config('burdock.data_dir');
 
 		$page_param = $request->page_path;
 		$page_id = $request->page_id;
@@ -184,7 +184,7 @@ class ProjectController extends Controller
 		$project_code = $project->project_code;
 
 		// // プロジェクトフォルダが存在していれば削除 <- ※softDeleteに変更したため、ここでは削除しない
-		// $burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
+		// $burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( config('burdock.data_dir') );
 		// $pj = $burdockProjectManager->project($project->project_code);
 		// $result = $pj->delete();
 

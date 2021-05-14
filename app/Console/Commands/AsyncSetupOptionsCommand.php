@@ -76,7 +76,7 @@ class AsyncSetupOptionsCommand extends Command
 
 
 
-		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( env('BD_DATA_DIR') );
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( config('burdock.data_dir') );
 		$pjManager = $burdockProjectManager->project($project->project_code);
 
 		$gitUtil = new \App\Helpers\git();

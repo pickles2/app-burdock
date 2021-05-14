@@ -45,10 +45,10 @@ class IndexController extends \App\Http\Controllers\Controller
 		);
 		$cmd = $request->cmd;
 
-		$path_php = env('BD_COMMAND_PHP');
-		if(!strlen($path_php)){ $path_php = 'php'; }
-		$path_git = env('BD_COMMAND_GIT');
-		if(!strlen($path_git)){ $path_git = 'git'; }
+		$path_php = config('burdock.command_path.php');
+		if( !strlen($path_php) ){ $path_php = 'php'; }
+		$path_git = config('burdock.command_path.git');
+		if( !strlen($path_git) ){ $path_git = 'git'; }
 
 		switch( $cmd ){
 			case 'php':

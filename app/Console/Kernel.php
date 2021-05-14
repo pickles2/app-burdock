@@ -33,7 +33,7 @@ class Kernel extends ConsoleKernel
 		$fs = new \tomk79\filesystem();
 		$current_dir = realpath('.');
 		chdir( __DIR__.'/../../public/' );
-		$realpath_log = $fs->get_realpath(env('BD_DATA_DIR').'/logs/'.gmdate('Ym').'/'.gmdate('d').'/cron-schedule-'.gmdate('Ymd-His').'.log');
+		$realpath_log = $fs->get_realpath(config('burdock.data_dir').'/logs/'.gmdate('Ym').'/'.gmdate('d').'/cron-schedule-'.gmdate('Ymd-His').'.log');
 		chdir( $current_dir );
 
 		$fs->mkdir_r( dirname($realpath_log) );

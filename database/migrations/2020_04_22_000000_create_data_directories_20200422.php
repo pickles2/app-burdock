@@ -15,7 +15,7 @@ class CreateDataDirectories20200422 extends Migration
 	{
 
 		// データディレクトリを作成しておく。
-		$realpath_root = env('BD_DATA_DIR');
+		$realpath_root = config('burdock.data_dir');
 		clearstatcache();
 		if( !strlen($realpath_root) ){
 			trigger_error('BD_DATA_DIR is not set.');

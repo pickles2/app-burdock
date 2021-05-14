@@ -21,9 +21,9 @@ class plumHelper{
 	 * Plumを生成する
 	 */
 	public function create_plum(){
-		$realpath_pj_git_root = env('BD_DATA_DIR').'/projects/'.urlencode($this->project->project_code).'/plum_data_dir/';
+		$realpath_pj_git_root = config('burdock.data_dir').'/projects/'.urlencode($this->project->project_code).'/plum_data_dir/';
 		$this->fs->mkdir_r($realpath_pj_git_root);
-		$this->fs->mkdir_r(env('BD_DATA_DIR').'/stagings/');
+		$this->fs->mkdir_r(config('burdock.data_dir').'/stagings/');
 
 		$s = 's';
 		if( is_array($_SERVER) && array_key_exists("HTTPS", $_SERVER) ){
@@ -34,7 +34,7 @@ class plumHelper{
 		for( $i = 1; $i <= 10; $i ++ ){
 			array_push($staging_server, array(
 				'name' => 'Staging No.'.$i.'',
-				'path' => env('BD_DATA_DIR').'/stagings/'.urlencode($this->project->project_code).'---stg'.$i.'/',
+				'path' => config('burdock.data_dir').'/stagings/'.urlencode($this->project->project_code).'---stg'.$i.'/',
 				'url' => 'http'.$s.'://'.urlencode($this->project->project_code).'---stg'.$i.'.'.env('BD_PLUM_STAGING_DOMAIN').'/',
 			));
 		}

@@ -49,7 +49,7 @@ class applock{
 
 		$this->fs = new \tomk79\filesystem();
 
-		$this->realpath_lockdir = env('BD_DATA_DIR').'/applock/';
+		$this->realpath_lockdir = config('burdock.data_dir').'/applock/';
 		if( !$this->fs->is_dir($this->realpath_lockdir) ){
 			$this->fs->mkdir($this->realpath_lockdir);
 		}

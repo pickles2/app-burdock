@@ -97,12 +97,12 @@ class DeliveryController extends Controller
 
 		$gitUtil = new \App\Helpers\git($project);
 		$default_branch_name = $gitUtil->get_branch_name();
-		$realpath_pj_git_root = env('BD_DATA_DIR').'/repositories/'.urlencode($project->project_code).'---'.urlencode($default_branch_name).'/';
-		$realpath_workdir = env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/indigo/workdir/';
+		$realpath_pj_git_root = config('burdock.data_dir').'/repositories/'.urlencode($project->project_code).'---'.urlencode($default_branch_name).'/';
+		$realpath_workdir = config('burdock.data_dir').'/projects/'.urlencode($project->project_code).'/indigo/workdir/';
 
 		$fs = new \tomk79\filesystem();
 		$fs->mkdir_r($realpath_workdir);
-		$fs->mkdir_r(env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/indigo/production/');
+		$fs->mkdir_r(config('burdock.data_dir').'/projects/'.urlencode($project->project_code).'/indigo/production/');
 
 		$git_username = null;
 		if( strlen($project->git_username) ){
@@ -167,7 +167,7 @@ class DeliveryController extends Controller
 					// 任意の名前
 					'name' => 'www1',
 					// 同期先
-					'dist' => env('BD_DATA_DIR').'/projects/'.urlencode($project->project_code).'/indigo/production/',
+					'dist' => config('burdock.data_dir').'/projects/'.urlencode($project->project_code).'/indigo/production/',
 				),
 			),
 

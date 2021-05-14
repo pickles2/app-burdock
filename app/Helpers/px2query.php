@@ -21,17 +21,18 @@ function px2query($project_code, $branch_name, $query, $px2agentOptions = array(
 		return false;
 	}
 	$realpath_entry_script = $project_path.'/'.get_px_execute_path($project_code, $branch_name);
-	if(!\File::exists($realpath_entry_script)) {
+	if( !\File::exists($realpath_entry_script) ){
 		return false;
 	}
 
 	$init_options = array(
-		'bin' => env('BD_COMMAND_PHP'),
-		'ini' => env('BD_COMMAND_PHP_INI'),
-		'extension_dir' => env('BD_COMMAND_PHP_EXTENSION_DIR'),
+		'bin' => config('burdock.command_path.php'),
+		'ini' => config('burdock.command_path.php_ini'),
+		'extension_dir' => config('burdock.command_path.php_extension_dir'),
 	);
 
 	$px2agent = new \picklesFramework2\px2agent\px2agent($init_options);
 	$px2proj = $px2agent->createProject($realpath_entry_script);
+
 	return $px2proj->query($query, $px2agentOptions);
 }
