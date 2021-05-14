@@ -80,6 +80,9 @@
 		{{-- <script src="{{ asset('js/app.js') }}"></script> --}}
 		{{-- <script src="{{ asset('js/custom.js') }}"></script> --}}
 
+		<!-- Pickles 2 Style -->
+		<script src="/common/px2style/dist/px2style.js" charset="utf-8"></script>
+
 		@yield('foot')
 	</body>
 </html>
