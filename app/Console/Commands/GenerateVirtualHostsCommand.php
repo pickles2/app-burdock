@@ -292,8 +292,8 @@ class GenerateVirtualHostsCommand extends Command
 		}elseif( is_file( $realpath_template_root_dir.'production.twig' ) ){
 			$template = $twig->load('production.twig');
 			$src_vhosts .= $template->render($tpl_vars);
-		}elseif( is_file( $realpath_template_root_dir.'production-'.env('BD_WEBSERVER').'.twig' ) ){
-			$template = $twig->load('production-'.env('BD_WEBSERVER').'.twig');
+		}elseif( is_file( $realpath_template_root_dir.'production-'.config('burdock.webserver').'.twig' ) ){
+			$template = $twig->load('production-'.config('burdock.webserver').'.twig');
 			$src_vhosts .= $template->render($tpl_vars);
 		}else{
 			$src_vhosts .= '<VirtualHost '.$tpl_vars['domain'].':80>'."\n";
@@ -327,8 +327,8 @@ class GenerateVirtualHostsCommand extends Command
 			if( is_file( $realpath_template_root_dir.'preview.twig' ) ){
 				$template = $twig->load('preview.twig');
 				$src_vhosts .= $template->render($tpl_vars);
-			}elseif( is_file( $realpath_template_root_dir.'preview-'.env('BD_WEBSERVER').'.twig' ) ){
-				$template = $twig->load('preview-'.env('BD_WEBSERVER').'.twig');
+			}elseif( is_file( $realpath_template_root_dir.'preview-'.config('burdock.webserver').'.twig' ) ){
+				$template = $twig->load('preview-'.config('burdock.webserver').'.twig');
 				$src_vhosts .= $template->render($tpl_vars);
 			}else{
 				$src_vhosts .= '<VirtualHost '.$tpl_vars['domain'].':80>'."\n";
@@ -372,8 +372,8 @@ class GenerateVirtualHostsCommand extends Command
 			if( is_file( $realpath_template_root_dir.'staging.twig' ) ){
 				$template = $twig->load('staging.twig');
 				$src_vhosts .= $template->render($tpl_vars);
-			}elseif( is_file( $realpath_template_root_dir.'staging-'.env('BD_WEBSERVER').'.twig' ) ){
-				$template = $twig->load('staging-'.env('BD_WEBSERVER').'.twig');
+			}elseif( is_file( $realpath_template_root_dir.'staging-'.config('burdock.webserver').'.twig' ) ){
+				$template = $twig->load('staging-'.config('burdock.webserver').'.twig');
 				$src_vhosts .= $template->render($tpl_vars);
 			}else{
 				$src_vhosts .= '<VirtualHost '.$tpl_vars['domain'].':80>'."\n";
@@ -405,9 +405,9 @@ class GenerateVirtualHostsCommand extends Command
 	 * ウェブサーバーの設定を再読み込みする
 	 */
 	private function reload_webserver_config(){
-		$command = env('BD_COMMAND_RELOAD_WEBSERVER_CONFIG');
+		$command = config('burdock.command_reload_webserver_config');
 		if( !$command ){
-			$this->line( 'env "BD_COMMAND_RELOAD_WEBSERVER_CONFIG" is not set.' );
+			$this->line( 'config "burdock.command_reload_webserver_config" (or env "BD_COMMAND_RELOAD_WEBSERVER_CONFIG") is not set.' );
 			return false;
 		}
 
