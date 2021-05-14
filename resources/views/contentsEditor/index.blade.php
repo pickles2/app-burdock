@@ -65,7 +65,7 @@ foreach($px2ce_client_resources->js as $value) {
 				},
 				'lang': 'ja', // language
 				'gpiBridge': function(input, callback){
-					console.log(input);
+					console.log('====== GPI Request:', input);
 					$.ajax({
 						"url": '/contentsEditor/'+project_code+'/'+branch_name+'/px2ceGpi?page_path='+page_path+'&target_mode='+target_mode, // ←呼び出し元が決める
 						"method": 'post',
@@ -74,8 +74,15 @@ foreach($px2ce_client_resources->js as $value) {
 							_token: '{{ csrf_token() }}'
 						},
 						"success": function(data){
+							console.log('------ GPI Response:', typeof(data), data);
+							// TODO: 返ってくる `data` の型が、 String の場合と Object の場合があり安定しない。
+							//       (※ Object で来た場合は、次の `JSON.parse()` は失敗する)
+							//       失敗したら catch されて `data` には変更ないまま進むので、ひとまずは問題ないが、
+							//       そもそも安定した型を返す方法を追って探す。
+							try{
+								data = JSON.parse(data);
+							}catch(e){}
 							callback(data);
-							console.log(data);
 						}
 					});
 					return;
