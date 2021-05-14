@@ -124,7 +124,7 @@
 				<div class="preview_window_frame--inner">
 					<script>
 					// .envよりプレビューサーバーのURLを取得
-					var preview_url = '{{ 'https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN') }}';
+					var preview_url = '{{ 'https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.config('burdock.preview_domain') }}';
 					// iframe内のプレビューサイトに送るAPP_URLとスクリプトをbase64でエンコード
 					var jsBase64 = '{{ base64_encode("var parent_url = '".env('APP_URL')."';".file_get_contents('../resources/views/contents/js/iframe_preview_script.js')) }}';
 

@@ -35,7 +35,7 @@ class plumHelper{
 			array_push($staging_server, array(
 				'name' => 'Staging No.'.$i.'',
 				'path' => config('burdock.data_dir').'/stagings/'.urlencode($this->project->project_code).'---stg'.$i.'/',
-				'url' => 'http'.$s.'://'.urlencode($this->project->project_code).'---stg'.$i.'.'.env('BD_PLUM_STAGING_DOMAIN').'/',
+				'url' => 'http'.$s.'://'.urlencode($this->project->project_code).'---stg'.$i.'.'.config('burdock.staging_domain').'/',
 			));
 		}
 

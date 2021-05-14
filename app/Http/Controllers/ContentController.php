@@ -48,7 +48,7 @@ class ContentController extends Controller
 		}
 		$page_path = $current->page_info->path;
 
-		$preview_url = 'https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.env('BD_PREVIEW_DOMAIN');
+		$preview_url = 'https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.config('burdock.preview_domain');
 		$tmp_preview_path = $page_path;
 		if( property_exists( $current, 'config' ) && property_exists( $current->config, 'path_controot' ) ){
 			if( strlen( $current->config->path_controot ) ){

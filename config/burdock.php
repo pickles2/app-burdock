@@ -8,7 +8,6 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-
     'command_path' => [
         'php' => env('BD_COMMAND_PHP', 'php'),
         'php_ini' => env('BD_COMMAND_PHP_INI', null),
@@ -23,7 +22,6 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-
     'data_dir' => env('BD_DATA_DIR', __DIR__.'/../bd_data/'),
 
     /*
@@ -35,7 +33,6 @@ return [
     | 実際は、この前にサブドメインを1つ追加して使用されます。 (例: proj-code---master.preview.example.com)
     |
     */
-
     'preview_domain' => env('BD_PREVIEW_DOMAIN', 'preview.example.com'),
 
 
@@ -48,7 +45,6 @@ return [
     | 実際は、この前にサブドメインを1つ追加して使用されます。 (例: proj-code---stg1.staging.example.com)
     |
     */
-
     'staging_domain' => env('BD_STAGING_DOMAIN', 'staging.example.com'),
 
 ];

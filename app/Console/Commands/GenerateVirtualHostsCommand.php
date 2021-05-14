@@ -314,7 +314,7 @@ class GenerateVirtualHostsCommand extends Command
 		foreach($this->list_preview_dirs[$project->project_code] as $branch_name){
 
 			$tpl_vars = [
-				'domain' => $project->project_code.'---'.$branch_name.'.'.env('BD_PREVIEW_DOMAIN'),
+				'domain' => $project->project_code.'---'.$branch_name.'.'.config('burdock.preview_domain'),
 				'project_code' => $project->project_code,
 				'document_root' => $this->fs->get_realpath( config('burdock.data_dir').'/repositories/'.$project->project_code.'---'.$branch_name.'/'.$relpath_docroot_preview ),
 				'branch_name' => $branch_name,
@@ -358,7 +358,7 @@ class GenerateVirtualHostsCommand extends Command
 		for( $i = 0; $i < 10; $i ++ ){
 
 			$tpl_vars = [
-				'domain' => $project->project_code.'---stg'.($i+1).'.'.env('BD_PLUM_STAGING_DOMAIN'),
+				'domain' => $project->project_code.'---stg'.($i+1).'.'.config('burdock.staging_domain'),
 				'project_code' => $project->project_code,
 				'document_root' => $this->fs->get_realpath( config('burdock.data_dir').'/stagings/'.$project->project_code.'---stg'.($i+1).'/'.$relpath_docroot_dist ),
 				'staging_index' => $i+1,

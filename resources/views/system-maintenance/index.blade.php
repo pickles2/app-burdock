@@ -13,47 +13,70 @@
 </div>
 
 <h2>実行環境</h2>
-<dl>
-	<dt>Platform</dt>
-		<dd><pre><code><?= htmlspecialchars( php_uname() ); ?></code></pre></dd>
-	<dt>PHP Version</dt>
-		<dd><pre><code><?= htmlspecialchars( phpversion() ); ?></code></pre></dd>
-	<dt>phpinfo</dt>
-		<dd>
-			<p><a href="/system-maintenance/phpinfo" class="px2-a" target="_blank">新しいウィンドウで表示</a></p>
-		</dd>
-	<dt>UserName</dt>
-		<?php
-		$userName = '';
-		if( is_callable('posix_getpwuid') && is_callable('posix_geteuid') ){
-			$userName = posix_getpwuid(posix_geteuid());
-			$userName = $userName['name'];
-		}
-		?>
-		<dd><pre><code><?= htmlspecialchars( ($userName ? $userName : '---') ); ?></code></pre></dd>
-</dl>
+<div class="px2-p">
+	<table class="px2-table" style="width: 100%;">
+		<tr>
+			<th>Platform</th>
+			<td><code><?= htmlspecialchars( php_uname() ); ?></code></td>
+		</tr>
+		<tr>
+			<th>PHP Version</th>
+			<td><pre><code><?= htmlspecialchars( phpversion() ); ?></code></pre></td>
+		</tr>
+		<tr>
+			<th>phpinfo</th>
+			<td>
+				<p><a href="/system-maintenance/phpinfo" class="px2-a" target="_blank">新しいウィンドウで表示</a></p>
+			</td>
+		</tr>
+		<tr>
+			<th>UserName</th>
+			<?php
+			$userName = '';
+			if( is_callable('posix_getpwuid') && is_callable('posix_geteuid') ){
+				$userName = posix_getpwuid(posix_geteuid());
+				$userName = $userName['name'];
+			}
+			?>
+			<td><pre><code><?= htmlspecialchars( ($userName ? $userName : '---') ); ?></code></pre></td>
+		</tr>
+	</table>
+</div>
 
 <h2>コマンド</h2>
-<dl>
-	<dt>PHP</dt>
-		<dd>
-			<div class="cont-checkcommand-php">
-				<pre><code></code></pre>
-			</div>
-		</dd>
-	<dt>Composer</dt>
-		<dd>
-			<div class="cont-checkcommand-composer">
-				<pre><code></code></pre>
-			</div>
-		</dd>
-	<dt>Git</dt>
-		<dd>
-			<div class="cont-checkcommand-git">
-				<pre><code></code></pre>
-			</div>
-		</dd>
-</dl>
+
+<div class="px2-p">
+	<table class="px2-table" style="width: 100%;">
+		<tr>
+			<th>PHP</th>
+			<td>
+				<div class="cont-checkcommand-php">
+					<pre><code></code></pre>
+					<p><code><?= config('burdock.command_path.php') ?></code></p>
+					<p><code><?= config('burdock.command_path.php_ini') ?></code></p>
+					<p><code><?= config('burdock.command_path.php_extension_dir') ?></code></p>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th>Composer</th>
+			<td>
+				<div class="cont-checkcommand-composer">
+					<pre><code></code></pre>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th>Git</th>
+			<td>
+				<div class="cont-checkcommand-git">
+					<pre><code></code></pre>
+					<p><code><?= config('burdock.command_path.git') ?></code></p>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>
 
 <script>
 function contCheckingCommands(param){
