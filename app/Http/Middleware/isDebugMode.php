@@ -16,7 +16,7 @@ class isDebugMode
 	 */
 	public function handle($request, Closure $next)
 	{
-		if( !env('APP_DEBUG') ){
+		if( !config('app.debug') ){
 			return redirect('/');
 		}
 		return $next($request);

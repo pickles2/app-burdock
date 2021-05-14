@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
 		// `asset()` などに影響します。
 		// デフォルトは環境変数から自動的にセットされますが、
 		// ↓この行を書くことで強制的に HTTPS 環境として認識させます。
-		if (env('APP_ENV') === 'production'){
+		if (config('app.env') === 'production'){
 			// ローカルの開発環境では、 https ではないほうがよい場合が多いので、
 			// 本番(production)環境でのみ強制設定する。
 			\URL::forceScheme('https');

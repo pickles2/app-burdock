@@ -1,5 +1,5 @@
 @extends('layouts.default')
-@section('title', env('APP_NAME'))
+@section('title', config('app.name'))
 
 @section('first-view')
 <div class="cont-top-jumbotron">
@@ -77,7 +77,7 @@
 
 
 <div class="cont-top-footer">
-	@if ( env('APP_DEBUG') )
+	@if ( config('app.debug') )
 	<ul class="px2-horizontal-list px2-horizontal-list--center">
 		<li><a href="/system-maintenance" class="px2-a">システムメンテナンス</a></li>
 	</ul>

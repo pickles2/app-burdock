@@ -1,5 +1,5 @@
 @extends('layouts.default')
-@section('title') {{ env('APP_NAME') }} @endsection
+@section('title') {{ config('app.name') }} @endsection
 
 @section('content')
 

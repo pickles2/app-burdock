@@ -1,7 +1,7 @@
 <header class="px2-header">
 	<div class="px2-header__inner">
 		<div class="px2-header__px2logo">
-			<a href="{{ url('/') }}"><img src="/common/images/logo.svg" alt="{{ env('APP_NAME') }}" /></a>
+			<a href="{{ url('/') }}"><img src="/common/images/logo.svg" alt="{{ config('app.name') }}" /></a>
 		</div>
 		<div class="px2-header__block">
 			<div class="px2-header__id">

@@ -113,6 +113,8 @@ class DeliveryController extends Controller
 			$git_password = \Crypt::decryptString( $project->git_password );
 		}
 
+		$conf_connection = config('database.connections')[config('database.default')];
+
 		$parameter = array(
 
 			// 追加するパラメータ
@@ -146,13 +148,13 @@ class DeliveryController extends Controller
 			// DB設定
 			'db' => array(
 				// 'mysql' or null (nullの場合はSQLite3を使用)
-				'dbms' => env('DB_CONNECTION'),
-				'prefix' => env('DB_PREFIX'),
-				'database' => env('DB_DATABASE'),
-				'host' => env('DB_HOST'),
-				'port' => env('DB_PORT'),
-				'username' => env('DB_USERNAME'),
-				'password' => env('DB_PASSWORD'),
+				'dbms' => $conf_connection['driver'],
+				'prefix' => $conf_connection['prefix'],
+				'database' => $conf_connection['database'],
+				'host' => $conf_connection['host'],
+				'port' => $conf_connection['port'],
+				'username' => $conf_connection['username'],
+				'password' => $conf_connection['password'],
 			),
 
 			// 予約最大件数

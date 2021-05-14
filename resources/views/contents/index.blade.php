@@ -126,7 +126,7 @@
 					// .envよりプレビューサーバーのURLを取得
 					var preview_url = '{{ 'https://'.urlencode($project->project_code).'---'.urlencode($branch_name).'.'.config('burdock.preview_domain') }}';
 					// iframe内のプレビューサイトに送るAPP_URLとスクリプトをbase64でエンコード
-					var jsBase64 = '{{ base64_encode("var parent_url = '".env('APP_URL')."';".file_get_contents('../resources/views/contents/js/iframe_preview_script.js')) }}';
+					var jsBase64 = '{{ base64_encode("var parent_url = '".config('app.url')."';".file_get_contents('../resources/views/contents/js/iframe_preview_script.js')) }}';
 
 					// windowロードイベント
 					window.onload = function() {

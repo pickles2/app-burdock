@@ -11,9 +11,9 @@
 		<meta name="login-user-id" content="{{ Auth::id() }}">
 
 		@hasSection('title')
-		<title>@yield('title') | {{ env('APP_NAME') }}</title>
+		<title>@yield('title') | {{ config('app.name') }}</title>
 		@else
-		<title>@if (! Request::is('/')){{ $title }} | @endif{{ env('APP_NAME') }}</title>
+		<title>@if (! Request::is('/')){{ $title }} | @endif{{ config('app.name') }}</title>
 		@endif
 
 		@include("layouts.inc.head")
