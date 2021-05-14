@@ -124,7 +124,7 @@ class AsyncSetupCommand extends Command
 		// プロジェクトを配置する
 		if($checked_option === 'pickles2') {
 			// composer-packagist から
-			$cmd = 'export COMPOSER_HOME='.$path_composer_home.'; php '.escapeshellarg($path_composer).' create-project pickles2/preset-get-start-pickles2 ./';
+			$cmd = config('burdock.command_path.php').' '.escapeshellarg($path_composer).' create-project pickles2/preset-get-start-pickles2 ./';
 		} else {
 			// 任意の gitリポジトリから
 			$git_url_plus_auth = $repository;
@@ -220,7 +220,7 @@ class AsyncSetupCommand extends Command
 			// gitリポジトリからロードした場合、
 			// composer のセットアップ処理が追加で必要。
 			// Packagist からセットアップした場合は同時に処理されるので不要。
-			shell_exec('export COMPOSER_HOME='.$path_composer_home.'; php '.escapeshellarg($path_composer).' install');
+			shell_exec( config('burdock.command_path.php').' '.escapeshellarg($path_composer).' install' );
 		}
 
 
