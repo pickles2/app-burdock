@@ -83,6 +83,24 @@ foreach($px2ce_client_resources->js as $value) {
 				'complete': function(){
 					window.open('about:blank', '_self').close();
 				},
+				'clipboard': {
+					'set': function( data, type, event, callback ){
+						// console.log(data, type, event, callback);
+						localStorage.setItem('app-burdock-virtualClipBoard', data);
+						if( callback ){
+							callback();
+						}
+					},
+					'get': function( type, event, callback ){
+						var rtn = localStorage.getItem('app-burdock-virtualClipBoard');
+						// console.log(rtn);
+						if( callback ){
+							callback(rtn);
+							return false;
+						}
+						return rtn;
+					}
+				},
 				'onClickContentsLink': function( uri, data ){
 					// TODO: 編集リンクを生成する
 					// alert('編集: ' + uri);
