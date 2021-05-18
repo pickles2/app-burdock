@@ -1,4 +1,4 @@
-<VirtualHost {{ domain }}:80>
+<VirtualHost {{ domain }}:{{ port }}>
 	# Preview {{ branch_name }} ({{ project_code }})
 	ServerName {{ domain }}
 	DocumentRoot {{ document_root }}

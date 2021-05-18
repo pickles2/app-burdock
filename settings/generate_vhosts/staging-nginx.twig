@@ -1,6 +1,6 @@
 server {
 	# Staging {{ staging_index }} ({{ project_code }})
-	listen 80;
+	listen {{ port }}{% if port == 443 %} ssl{% endif %};
 	server_name {{ domain }};
 	root {{ document_root }};
 
