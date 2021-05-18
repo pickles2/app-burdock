@@ -33,11 +33,11 @@
     },
     "autoload": {
         "files": [
-            "app/helpers/locale_url.php",
-            "app/helpers/get_project_dir.php",
-            "app/helpers/get_project_workingtree_dir.php",
-			"app/helpers/px2query.php",
-			"app/helpers/get_px_execute_path.php"
+            "app/Helpers/locale_url.php",
+            "app/Helpers/get_project_dir.php",
+            "app/Helpers/get_project_workingtree_dir.php",
+			"app/Helpers/px2query.php",
+			"app/Helpers/get_px_execute_path.php"
         ],
         "classmap": [
             "database/seeds",
