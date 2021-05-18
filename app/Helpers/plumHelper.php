@@ -25,17 +25,12 @@ class plumHelper{
 		$this->fs->mkdir_r($realpath_pj_git_root);
 		$this->fs->mkdir_r(config('burdock.data_dir').'/stagings/');
 
-		$s = 's';
-		if( is_array($_SERVER) && array_key_exists("HTTPS", $_SERVER) ){
-			$s = ($_SERVER["HTTPS"] ? 's' : '');
-		}
-
 		$staging_server = array();
 		for( $i = 1; $i <= 10; $i ++ ){
 			array_push($staging_server, array(
 				'name' => 'Staging No.'.$i.'',
 				'path' => config('burdock.data_dir').'/stagings/'.urlencode($this->project->project_code).'---stg'.$i.'/',
-				'url' => 'http'.$s.'://'.urlencode($this->project->project_code).'---stg'.$i.'.'.config('burdock.staging_domain').'/',
+				'url' => '//'.urlencode($this->project->project_code).'---stg'.$i.'.'.config('burdock.staging_domain').'/',
 			));
 		}
 
