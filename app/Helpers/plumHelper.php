@@ -51,7 +51,8 @@ class plumHelper{
 					'url' => $this->project->git_url,
 					'username' => $git_username,
 					'password' => $git_password,
-				)
+				),
+				'htpasswd_hash_algorithm' => config('burdock.htpasswd_hash_algorithm'),
 			)
 		);
 		$plum->set_async_callbacks(array(
