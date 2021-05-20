@@ -99,8 +99,36 @@ class ProjectController extends Controller
 			// --------------------------------------
 			// パスワードを保存する
 			$basicauth_password = $request->basicauth_password;
-			$hashed_passwd = password_hash($basicauth_password, PASSWORD_BCRYPT);
+
+			// パスワードハッシュを生成する
+			$hashed_passwd = $basicauth_password;
+			$hash_algorithm = config('burdock.htpasswd_hash_algorithm');
+			switch( $hash_algorithm ){
+				case 'bcrypt':
+					$hashed_passwd = password_hash($basicauth_password, PASSWORD_BCRYPT);
+					break;
+
+				case 'md5':
+					$hashed_passwd = md5($basicauth_password);
+					break;
+
+				case 'sha1':
+					$hashed_passwd = sha1($basicauth_password);
+					break;
+
+				case 'crypt':
+					$hashed_passwd = crypt($basicauth_password, substr(crypt( trim($request->basicauth_user_name) ), -2));
+					break;
+
+				case 'plain':
+				default:
+					$hashed_passwd = $basicauth_password;
+					break;
+			}
+
 			if( !strlen($basicauth_password) ){
+				// パスワードが入力されていなければ、
+				// 元のパスワードから変更しない。
 				if( is_file($realpath_preview_htpasswd) ){
 					$bin = file_get_contents($realpath_preview_htpasswd);
 					$htpasswd_ary = explode(':', $bin, 2);

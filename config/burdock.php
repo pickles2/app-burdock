@@ -71,4 +71,16 @@ return [
     */
     'staging_domain' => env('BD_STAGING_DOMAIN', 'staging.example.com'),
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | htpasswd のパスワードハッシュ生成アルゴリズム名
+    |--------------------------------------------------------------------------
+    |
+    | 次のいずれかの値を設定します。
+    | bcrypt, md5, sha1, crypt, plain
+    |
+    */
+    'htpasswd_hash_algorithm' => env('BD_HTPASSWD_HASH_ALGORITHM', 'crypt'),
+
 ];
