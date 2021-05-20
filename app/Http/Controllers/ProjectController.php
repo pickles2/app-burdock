@@ -116,14 +116,15 @@ class ProjectController extends Controller
 					$hashed_passwd = sha1($basicauth_password);
 					break;
 
+				case 'plain':
+					$hashed_passwd = $basicauth_password;
+					break;
+
 				case 'crypt':
+				default:
 					$hashed_passwd = crypt($basicauth_password, substr(crypt( trim($request->basicauth_user_name) ), -2));
 					break;
 
-				case 'plain':
-				default:
-					$hashed_passwd = $basicauth_password;
-					break;
 			}
 
 			if( !strlen($basicauth_password) ){
