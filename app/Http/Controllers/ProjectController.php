@@ -122,7 +122,7 @@ class ProjectController extends Controller
 
 				case 'crypt':
 				default:
-					$hashed_passwd = crypt($basicauth_password, substr(crypt( trim($request->basicauth_user_name) ), -2));
+					$hashed_passwd = crypt($basicauth_password, substr(trim($request->basicauth_user_name), -2));
 					break;
 
 			}
