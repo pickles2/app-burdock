@@ -1,11 +1,12 @@
 server {
 	# Production ({{ project_code }})
-    listen {{ port }}{% if port == 443 %} ssl{% endif %};
-    server_name {{ domain }};
-    root {{ document_root }};
+	listen {{ port }}{% if port == 443 %} ssl{% endif %};
+	server_name {{ domain }};
+	root {{ document_root }};
 
 	# -- for SSL
-    # listen 443 ssl;
-    # ssl_certificate /path/to/localhost.crt;
-    # ssl_certificate_key /path/to/localhost.key;
+	# listen 443 ssl;
+	# ssl_certificate /path/to/localhost.crt;
+	# ssl_certificate_key /path/to/localhost.key;
+
 }

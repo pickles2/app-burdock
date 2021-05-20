@@ -9,6 +9,7 @@ server {
 	# ssl_certificate /path/to/localhost.crt;
 	# ssl_certificate_key /path/to/localhost.key;
 
+
 	# --------------------------------------
 	# Pickles 2
 
@@ -23,6 +24,7 @@ server {
 	# / Pickles 2
 	# --------------------------------------
 
+
 	# --------------------------------------
 	# Fast−CGI - PHP
 	location ~ \.php/ {
@@ -30,7 +32,7 @@ server {
 	}
 	location @php-fpm {
 		fastcgi_split_path_info ^(.+\.php)(/.*)$;
-		fastcgi_pass   unix:/path/to/nginxFastCGI.sock;
+		fastcgi_pass   unix:/var/run/php-fpm/php-fpm.sock;
 		fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
 		include fastcgi_params;
 		fastcgi_param PATH_INFO $fastcgi_path_info;
@@ -38,8 +40,10 @@ server {
 	# / Fast−CGI - PHP
 	# --------------------------------------
 
+
 	{% if path_htpasswd %}
 		auth_basic "Please enter your ID and password";
 		auth_basic_user_file {{ path_htpasswd }};
 	{% endif %}
+
 }
