@@ -82,6 +82,8 @@ class ProjectController extends Controller
 	public function update(StoreProject $request, Project $project)
 	{
 
+		$project_code_old = $project->project_code;
+
 		$project->project_code = $request->project_code;
 		$project->project_name = $request->project_name;
 		$project->git_url = $request->git_url;
@@ -94,7 +96,7 @@ class ProjectController extends Controller
 		$project->save();
 
 
-		$realpath_preview_htpasswd = config('burdock.data_dir').'/projects/'.$project->project_code.'/preview.htpasswd';
+		$realpath_preview_htpasswd = config('burdock.data_dir').'/projects/'.$project_code_old.'/preview.htpasswd';
 		if( strlen($request->basicauth_user_name) ){
 			// --------------------------------------
 			// パスワードを保存する
@@ -155,9 +157,9 @@ class ProjectController extends Controller
 		// ディレクトリの処理
 		$bd_data_dir = config('burdock.data_dir');
 
-		if( is_dir($bd_data_dir.'/projects/'.urlencode($project->project_code)) ){
+		if( is_dir($bd_data_dir.'/projects/'.urlencode($project_code_old)) ){
 			rename(
-				$bd_data_dir.'/projects/'.urlencode($project->project_code),
+				$bd_data_dir.'/projects/'.urlencode($project_code_old),
 				$bd_data_dir.'/projects/'.urlencode($request->project_code)
 			);
 		}
@@ -172,7 +174,7 @@ class ProjectController extends Controller
 				if(preg_match('/^(.*?)\-\-\-(.*)$/', $basename, $matched)){
 					$tmp_project_code = $matched[1];
 					$tmp_branch_name = $matched[2];
-					if( $tmp_project_code == $project->project_code ){
+					if( $tmp_project_code == $project_code_old ){
 						rename(
 							$bd_data_dir.'/'.$root_dir_name.'/'.$basename,
 							$bd_data_dir.'/'.$root_dir_name.'/'.$request->project_code.'---'.$tmp_branch_name

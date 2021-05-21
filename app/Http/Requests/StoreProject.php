@@ -48,7 +48,7 @@ class StoreProject extends FormRequest
 			$input_data = $this->all();
 
 			// 条件に合致したらエラーにする
-			if(!preg_match('/^[A-Za-z\d_-]+$/', $value)) {
+			if(!preg_match('/^[a-z\d_-]+$/', $value)) {
 				$fail('使用できない文字が含まれています。');
 			}
 		};
