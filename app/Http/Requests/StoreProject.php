@@ -48,8 +48,15 @@ class StoreProject extends FormRequest
 			$input_data = $this->all();
 
 			// 条件に合致したらエラーにする
+			$error_message = '';
 			if(!preg_match('/^[a-z\d_-]+$/', $value)) {
-				$fail('使用できない文字が含まれています。');
+				$error_message .= '使用できない文字が含まれています。';
+			}
+			if(preg_match('/[\-\_]{3,}/', $value)) {
+				$error_message .= '連続する3つ以上のハイフンまたはアンダースコアを含めることはできません。';
+			}
+			if( strlen($error_message) ){
+				$fail( $error_message );
 			}
 		};
 
