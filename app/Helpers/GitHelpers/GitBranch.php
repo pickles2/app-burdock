@@ -29,6 +29,7 @@ class GitBranch
 
 
 		// リモートのブランチを取得して補完
+		$gitUtil->git(array('fetch'));
 		$result = $gitUtil->git(array('branch', '-r'));
 		$lines = preg_split('/\r\n|\r|\n/', $result['stdout']);
 		$remote_branches = array();
