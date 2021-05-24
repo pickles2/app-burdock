@@ -102,8 +102,10 @@ class git{
 			);
 		}
 
+		clearstatcache();
+
 		if( !is_dir($realpath_pj_git_root) || !is_dir($realpath_pj_git_root.'.git/') ){
-			if( $git_sub_command[0] !== 'init' ){
+			if( $git_sub_command[0] !== 'init' && $git_sub_command[0] !== 'clone' ){
 				// .git がなければ実行させない。
 				return array(
 					'stdout' => '',
@@ -121,6 +123,7 @@ class git{
 
 		$cd = realpath('.');
 		chdir($realpath_pj_git_root);
+
 
 		ob_start();
 		$proc = proc_open('git '.$cmd, array(
