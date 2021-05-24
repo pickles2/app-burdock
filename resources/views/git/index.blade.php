@@ -56,15 +56,16 @@ window.contApp = new (function(){
 
 		var gitUi79 = new GitUi79( $elm, function( cmdAry, callback ){
 			var result = [];
+			console.log('=-=-=-=-=-=-= GPI Request:', cmdAry, callback);
+
+			last_cmdAry = cmdAry;
+			last_callback = callback;
 
 			if( cmdAry.length == 2 && cmdAry[0] == 'checkout' ){
 				// `git checkout branchname` のフェイク
 				window.location.href = "/git/{{ $project->project_code }}/"+cmdAry[1];
 				return;
 			}
-
-			last_cmdAry = cmdAry;
-			last_callback = callback;
 
 			$.ajax({
 				type : method,
@@ -86,23 +87,6 @@ window.contApp = new (function(){
 				},
 				complete: function(){
 					console.log('complete', result);
-					// if( cmdAry[0] == 'checkout' && cmdAry[1] == '-b' && cmdAry.length >= 3 && cmdAry.length <= 4 ){
-					// 	// `git checkout -b branchname` のフェイク および
-					// 	// `git checkout -b localBranchname remoteBranch` のフェイク
-					// 	if( result.return ){
-					// 		alert('Error: ' + result.stderr);
-					// 	}else{
-					// 		window.location.href = "/git/{{ $project->project_code }}/"+cmdAry[2];
-					// 		return;
-					// 	}
-					// }
-
-					// try{
-					// 	callback(result.return, result.stdout+result.stderr);
-					// }catch(e){
-					// 	console.error(e);
-					// 	alert('Failed');
-					// }
 				}
 			});
 
@@ -159,13 +143,13 @@ window.contApp = new (function(){
 		init();
 
 		window.Echo.channel('{{ $project->project_code }}---{{ $branch_name }}___git.{{ Auth::id() }}').listen('AsyncGeneralProgressEvent', (message) => {
+			console.log('--- broadcast response:', message);
 			if( message.status == 'exit' ){
-				console.log(message);
 
 				if( last_cmdAry[0] == 'checkout' && last_cmdAry[1] == '-b' && last_cmdAry.length >= 3 && last_cmdAry.length <= 4 ){
 					// `git checkout -b branchname` のフェイク および
 					// `git checkout -b localBranchname remoteBranch` のフェイク
-					if( message.return ){
+					if( message.exitcode ){
 						alert('Error: ' + message.stderr);
 					}else{
 						window.location.href = "/git/{{ $project->project_code }}/"+last_cmdAry[2];
@@ -174,8 +158,7 @@ window.contApp = new (function(){
 				}
 
 				try{
-					last_callback(message.return, message.stdout+message.stderr);
-					last_callback = undefined;
+					last_callback(message.exitcode, message.stdout+message.stderr);
 				}catch(e){
 					console.error(e);
 					alert('Failed');
@@ -183,9 +166,6 @@ window.contApp = new (function(){
 
 				return;
 			}
-
-			console.log(message);
-
 		});
 	});
 
