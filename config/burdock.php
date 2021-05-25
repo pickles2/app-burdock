@@ -83,4 +83,18 @@ return [
     */
     'htpasswd_hash_algorithm' => env('BD_HTPASSWD_HASH_ALGORITHM', 'crypt'),
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | ユーザー登録を許可するメールアドレスのパターン
+    |--------------------------------------------------------------------------
+    |
+    | アスタリスクでワイルドカードを表現できます。
+    | カンマ区切りで複数のパターンを指定できます。
+    | 例: *@example.com
+    | 例: *@example.com,*@example2.com,*@example3.com
+    |
+    */
+    'user_email_allowlist' => env('BD_USER_EMAIL_ALLOWLIST', ''),
+
 ];

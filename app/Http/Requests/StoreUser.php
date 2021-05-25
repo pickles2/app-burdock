@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\UsersEmailWhiteList;
+use App\Rules\UsersEmailAllowList;
 
 class StoreUser extends FormRequest
 {
@@ -32,7 +32,7 @@ class StoreUser extends FormRequest
 				'string',
 				'email',
 				'max:255',
-                new UsersEmailWhiteList,
+                new UsersEmailAllowList,
 			],
             // 'email' => 'unique:users',
             'password' => 'required|string|min:6|max:191|confirmed',

@@ -4,18 +4,18 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class UsersEmailWhiteList implements Rule
+class UsersEmailAllowList implements Rule
 {
 
 
 	/**
-	 * メールアドレスのホワイトリスト
+	 * メールアドレスの許可リスト
 	 *
 	 * アスタリスク `*` でワイルドカードを指定できます。
 	 * 許容するアドレスのパターンが複数ある場合は、配列要素に追加してください。
 	 * 配列が 0件 の場合は、すべてのアドレスを許容します。
 	 */
-	private $email_white_list = array(
+	private $user_email_allowlist = array(
 		// '*@example.com',
 	);
 
@@ -27,6 +27,15 @@ class UsersEmailWhiteList implements Rule
 	 */
 	public function __construct()
 	{
+		$user_email_allowlist = config('burdock.user_email_allowlist');
+		$user_email_allowlist_ary = explode(',', $user_email_allowlist);
+		foreach( $user_email_allowlist_ary as $email_pattern ){
+			$email_pattern = trim($email_pattern);
+			if( !strlen($email_pattern) ){
+				continue;
+			}
+			array_push($this->user_email_allowlist, $email_pattern);
+		}
 	}
 
 	/**
@@ -39,19 +48,19 @@ class UsersEmailWhiteList implements Rule
 	public function passes($attribute, $value)
 	{
 
-		$white_list = $this->email_white_list;
+		$allow_list = $this->user_email_allowlist;
 
-		if( is_array($white_list) && count($white_list) ){
-			$is_hit_white_list = false;
-			foreach( $white_list as $white_email_pattern ){
-				$preg_pattern = preg_quote($white_email_pattern, '/');
+		if( is_array($allow_list) && count($allow_list) ){
+			$is_hit_allow_list = false;
+			foreach( $allow_list as $allow_email_pattern ){
+				$preg_pattern = preg_quote($allow_email_pattern, '/');
 				$preg_pattern = preg_replace('/'.preg_quote(preg_quote('*','/'),'/').'/', '.*', $preg_pattern);
 				if( preg_match('/^'.$preg_pattern.'$/s', $value) ){
-					$is_hit_white_list = true;
+					$is_hit_allow_list = true;
 					break;
 				}
 			}
-			if(!$is_hit_white_list){
+			if(!$is_hit_allow_list){
 				return false;
 			}
 		}
