@@ -102,7 +102,7 @@ class MypageController extends Controller
 		$user = Auth::user();
 		$userStore = new StoreUser();
 		$request->validate([
-			'email' => $userStore->rules($user->id)['email']
+			'email' => $userStore->rules($user, $request->email)['email']
 		]);
 
 		// ランダムなトークンを生成
