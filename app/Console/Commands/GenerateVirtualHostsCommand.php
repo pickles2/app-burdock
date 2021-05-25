@@ -37,6 +37,9 @@ class GenerateVirtualHostsCommand extends Command
 	/** 一時ファイルのファイル名 */
 	private $vhosts_tmp_filename;
 
+	/** 基本認証のデフォルトパスワードファイル */
+	private $realpath_basicauth_default_htpasswd;
+
 	/**
 	 * Create a new command instance.
 	 *
@@ -49,6 +52,12 @@ class GenerateVirtualHostsCommand extends Command
 		$this->fs = new \tomk79\filesystem();
 
 		$this->realpath_vhosts_dir = config('burdock.data_dir').'/vhosts/';
+		$this->realpath_basicauth_default_htpasswd = $this->realpath_vhosts_dir.'default.htpasswd';
+		if( is_file($this->realpath_basicauth_default_htpasswd) ){
+			$this->realpath_basicauth_default_htpasswd = realpath($this->realpath_basicauth_default_htpasswd);
+		}else{
+			$this->realpath_basicauth_default_htpasswd = null;
+		}
 		$this->vhosts_tmp_filename = 'vhosts.conf.tmp.'.microtime(true);
 	}
 
@@ -64,6 +73,14 @@ class GenerateVirtualHostsCommand extends Command
 		$this->info('  Start '.$this->signature);
 		$this->info('    - Local Time: '.date('Y-m-d H:i:s'));
 		$this->info('    - GMT: '.gmdate('Y-m-d H:i:s'));
+		$this->info('----------------------------------------------------------------');
+
+		if( is_file( $this->realpath_basicauth_default_htpasswd ) ){
+			$this->info('BasicAuth default htpasswd file: '.$this->realpath_basicauth_default_htpasswd);
+		}else{
+			$this->info('BasicAuth default htpasswd file: (No Set)');
+		}
+
 		$this->info('----------------------------------------------------------------');
 		$this->line( '' );
 
@@ -341,6 +358,8 @@ class GenerateVirtualHostsCommand extends Command
 			];
 			if( $this->fs->is_file( config('burdock.data_dir').'/projects/'.$project->project_code.'/preview.htpasswd' ) ){
 				$tpl_vars['path_htpasswd'] = $this->fs->get_realpath( config('burdock.data_dir').'/projects/'.$project->project_code.'/preview.htpasswd' );
+			}elseif( $this->fs->is_file( $this->realpath_basicauth_default_htpasswd ) ){
+				$tpl_vars['path_htpasswd'] = $this->realpath_basicauth_default_htpasswd;
 			}
 			$src_vhosts = '';
 			if( is_file( $realpath_template_root_dir.'preview.twig' ) ){
@@ -393,6 +412,8 @@ class GenerateVirtualHostsCommand extends Command
 			];
 			if( $this->fs->is_file( config('burdock.data_dir').'/projects/'.$project->project_code.'/plum_data_dir/htpasswds/stg'.($i).'.htpasswd' ) ){
 				$tpl_vars['path_htpasswd'] = $this->fs->get_realpath( config('burdock.data_dir').'/projects/'.$project->project_code.'/plum_data_dir/htpasswds/stg'.($i).'.htpasswd' );
+			}elseif( $this->fs->is_file( $this->realpath_basicauth_default_htpasswd ) ){
+				$tpl_vars['path_htpasswd'] = $this->realpath_basicauth_default_htpasswd;
 			}
 
 			$src_vhosts = '';
