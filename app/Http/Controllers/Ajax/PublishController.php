@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Ajax;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\StorePublish;
 use App\Http\Controllers\Controller;
 use App\Project;
 use Carbon\Carbon;
