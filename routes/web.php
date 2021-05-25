@@ -49,6 +49,8 @@ Route::middleware(['boot'])
 		Route::get('system-maintenance/project-dirs', 'SystemMaintenance\ProjectDirsController@index');
 		Route::get('system-maintenance/project-dirs/{project}', 'SystemMaintenance\ProjectDirsController@show');
 		Route::get('system-maintenance/project-dirs/{project}/store', 'SystemMaintenance\ProjectDirsController@store');
+		Route::get('system-maintenance/basicauth-default-htpasswd', 'SystemMaintenance\BasicauthDefaultHtpasswdController@index');
+		Route::post('system-maintenance/basicauth-default-htpasswd/ajax', 'SystemMaintenance\BasicauthDefaultHtpasswdController@ajax');
 		Route::get('system-maintenance/healthcheck', 'SystemMaintenance\HealthCheckController@index');
 		Route::post('system-maintenance/healthcheck/ajax', 'SystemMaintenance\HealthCheckController@ajax');
 	});
