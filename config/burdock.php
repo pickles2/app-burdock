@@ -54,10 +54,12 @@ return [
     |--------------------------------------------------------------------------
     |
     | ポート番号を含む場合は、合わせて設定してください。 (例: preview.example.com:8080)
-    | 実際は、この前にサブドメインを1つ追加して使用されます。 (例: proj-code---master.preview.example.com)
+    | SSLが有効な環境である場合は、ポート番号 443 を設定してください。 (例: preview.example.com:443)
+    | ワイルドカード `*` を、サブドメイン名に置き換えて使用されます。 (例: *.preview.example.com → proj-code---master.preview.example.com)
+    | ワイルドーカードを含まない場合は、この前にサブドメインを1つ追加して使用されます。 (例: preview.example.com → proj-code---master.preview.example.com)
     |
     */
-    'preview_domain' => env('BD_PREVIEW_DOMAIN', 'preview.example.com'),
+    'preview_domain' => env('BD_PREVIEW_DOMAIN', ''),
 
 
     /*
@@ -66,10 +68,12 @@ return [
     |--------------------------------------------------------------------------
     |
     | ポート番号を含む場合は、合わせて設定してください。 (例: staging.example.com:8080)
-    | 実際は、この前にサブドメインを1つ追加して使用されます。 (例: proj-code---stg1.staging.example.com)
+    | SSLが有効な環境である場合は、ポート番号 443 を設定してください。 (例: staging.example.com:443)
+    | ワイルドカード `*` を、サブドメイン名に置き換えて使用されます。 (例: *.staging.example.com → proj-code---stg1.staging.example.com)
+    | ワイルドーカードを含まない場合は、この前にサブドメインを1つ追加して使用されます。 (例: staging.example.com → proj-code---stg1.staging.example.com)
     |
     */
-    'staging_domain' => env('BD_STAGING_DOMAIN', 'staging.example.com'),
+    'staging_domain' => env('BD_STAGING_DOMAIN', ''),
 
 
     /*

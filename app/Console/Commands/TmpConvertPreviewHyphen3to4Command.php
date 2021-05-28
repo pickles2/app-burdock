@@ -21,7 +21,7 @@ class TmpConvertPreviewHyphen3to4Command extends Command
 	 *
 	 * @var string
 	 */
-	protected $description = 'プレビュー環境の区切り文字 ハイフン3つ を 4つ に変更します。';
+	protected $description = 'プレビュー環境の区切り文字 ハイフン3つ を 4つ に変更します。 v0.0.x から v0.1.x にアップデートする際に 1度だけ実行します。';
 
 	/** BD_DATA_DIR */
 	private $realpath_repositories_dir;
