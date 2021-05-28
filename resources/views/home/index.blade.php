@@ -63,6 +63,6 @@
 	<button class="px2-btn px2-btn--danger" onclick="window.bdApp.modalDeleteProject('{{ $project->project_code }}');">このプロジェクトを削除</button>
 </div>
 <hr>
-<address class="px2-text-align-center">(C) {{ config('burdock.app_copyright') }}.</address>
+<address class="px2-text-align-center">&copy;  {{ config('burdock.app_copyright') }}.</address>
 
 @endsection

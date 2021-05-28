@@ -82,7 +82,7 @@
 		<li><a href="/system-maintenance" class="px2-a">システムメンテナンス</a></li>
 	</ul>
 	@endif
-	<p>(C)Pickles 2 Project.</p>
+	<p>&copy; {{ config('burdock.app_copyright') }}.</p>
 </div>
 
 @endsection

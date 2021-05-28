@@ -4,10 +4,10 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 }
 ?>
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html>
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 		@hasSection('title')
 		<title>@yield('title') | {{ config('app.name') }}</title>
@@ -17,8 +17,9 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 
 		<style>
 			html, body {
-				background-color: #f3f3f3;
+				background-color: #e9e9e9;
 				color: #333;
+				font-size: 16px;
 			}
 			.bd-theme-outline {
 				width: calc(100% - 20px);
@@ -30,9 +31,13 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 			/* Header */
 			.bd-theme-header {
 				padding: 1em;
-				background-color: #333;
+				background-color: #00a0e6;
 				color: #fff;
 				text-align: center;
+			}
+			.bd-theme-header__app-name {
+				font-size: 36px;
+				font-weight: bold;
 			}
 			.bd-theme-header a {
 				color: #fff;
@@ -50,6 +55,30 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 				background-color: #eee;
 				text-align: center;
 			}
+
+			/* Modules */
+			h1 {
+				font-size: 24px;
+				font-weight: bold;
+				margin: 1em 0 0.5em 0;
+			}
+			h2 {
+				font-size: 20px;
+				font-weight: bold;
+				margin: 1em 0 0.5em 0;
+			}
+			h3 {
+				font-size: 18px;
+				font-weight: bold;
+				margin: 0.5em 0 0.5em 0;
+			}
+			h4,
+			h5,
+			h6 {
+				font-size: 16px;
+				font-weight: bold;
+				margin: 0.5em 0 0.5em 0;
+			}
 		</style>
 
 @yield('head')
@@ -60,17 +89,24 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 			<div class="bd-theme-outline__inner">
 
 				<header class="bd-theme-header">
-					<h1><a href="{{ config('app.url') }}">{{ config('app.name') }}</a></h1>
+					<p class="bd-theme-header__app-name"><a href="{{ config('app.url') }}">{{ config('app.name') }}</a></p>
 				</header>
 
 				<div class="bd-theme-content">
+
+					@hasSection('title')
+					<h1>@yield('title')</h1>
+					@else
+					<h1>{{ $title }}</h1>
+					@endif
+
 					<div class="contents">
 						@yield('content')
 					</div>
 				</div>
 
 				<footer class="bd-theme-footer">
-					<p>{{ config('burdock.app_copyright') }}</p>
+					<p>&copy; {{ config('burdock.app_copyright') }}</p>
 				</footer>
 
 			</div>

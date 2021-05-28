@@ -1,5 +1,5 @@
 @php
-	$title = 'ユーザー登録を完了する';
+	$title = 'ユーザー登録を完了してください';
 @endphp
 @extends('emails.layouts.default')
 
@@ -7,14 +7,12 @@
 @section('content')
 
 
-<p>
-    {{ __('Please click the link below to verify your email address.') }}<br>
-    {{ __('If you did not create an account, no further action is required.') }}
-</p>
-<p>
-    <a href="{{ $actionUrl }}">{{ $actionText }}</a>
-</p>
 
+<h2>リンクをクリックして、ユーザー登録を完了します</h2>
+<p>ユーザー登録はまだ完了していません。</p>
+<p><a href="{{ $actionUrl }}">ここをクリック</a> するか、次のURLをコピーしてブラウザでアクセスし、ユーザー登録を完了してください。</p>
+
+<p><a href="{{ $actionUrl }}">{{ $actionUrl }}</a></p>
 
 
 @endsection
