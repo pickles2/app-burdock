@@ -17,7 +17,7 @@ class GitBranch
 		$filelist = $fs->ls($realpath_pj_git_root.'../');
 		foreach( $filelist as $filename ){
 			if( is_dir( $realpath_pj_git_root.'../'.$filename ) ){
-				if(preg_match('/^(.*?)\-\-\-(.*)$/', $filename, $matched)){
+				if(preg_match('/^(.*?)\-\-\-\-(.*)$/', $filename, $matched)){
 					$tmp_project_code = $matched[1];
 					$tmp_branch_name = $matched[2];
 					if($tmp_project_code == $gitUtil->get_project_code()){

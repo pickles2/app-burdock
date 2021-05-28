@@ -142,7 +142,7 @@ window.contApp = new (function(){
 	window.addEventListener('load', function(e){
 		init();
 
-		window.Echo.channel('{{ $project->project_code }}---{{ $branch_name }}___git.{{ Auth::id() }}').listen('AsyncGeneralProgressEvent', (message) => {
+		window.Echo.channel('{{ $project->project_code }}----{{ $branch_name }}___git.{{ Auth::id() }}').listen('AsyncGeneralProgressEvent', (message) => {
 			console.log('--- broadcast response:', message);
 			if( message.status == 'exit' ){
 
