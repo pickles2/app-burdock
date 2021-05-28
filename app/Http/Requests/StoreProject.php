@@ -49,7 +49,10 @@ class StoreProject extends FormRequest
 
 			// 条件に合致したらエラーにする
 			$error_message = '';
-			if(!preg_match('/^[a-z\d_-]+$/', $value)) {
+			if(!preg_match('/^[a-z]/', $value)) {
+				$error_message .= '先頭は半角英字で始まるようにしてください。';
+			}
+			if(!preg_match('/^[a-z\d\_\-]+$/', $value)) {
 				$error_message .= '使用できない文字が含まれています。';
 			}
 			if(preg_match('/[\-\_]{3,}/', $value)) {
