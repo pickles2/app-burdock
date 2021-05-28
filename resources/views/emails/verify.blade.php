@@ -1,5 +1,11 @@
-{{-- ユーザー登録確認メールのテンプレート --}}
-<h3><a href="{{ config('app.url') }}">{{ config('app.name') }}</a></h3>
+@php
+	$title = 'ユーザー登録を完了する';
+@endphp
+@extends('emails.layouts.default')
+
+
+@section('content')
+
 
 <p>
     {{ __('Please click the link below to verify your email address.') }}<br>
@@ -8,3 +14,7 @@
 <p>
     <a href="{{ $actionUrl }}">{{ $actionText }}</a>
 </p>
+
+
+
+@endsection

@@ -228,6 +228,7 @@ Apache 用の Virtual Hosts の設定ファイルを出力します。
 - プレビュー環境の区切り文字を ハイフン4つ に変更した。
 - `BD_PREVIEW_DOMAIN` と `BD_STAGING_DOMAIN` は、ワイルドーカードを使えるようになった。
 - Project Code は、先頭を半角英数字で始まらなければいけないようになった。
+- 新しい設定項目 `BD_APP_COPYRIGHT` を追加。
 
 ### Pickles 2 Burdock v0.0.1 (2021年5月25日)
 

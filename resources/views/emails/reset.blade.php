@@ -1,5 +1,10 @@
-{{-- パスワードリセット確認メールのテンプレート --}}
-<h3><a href="{{ config('app.url') }}">{{ config('app.name') }}</a></h3>
+@php
+	$title = 'パスワードをリセットする';
+@endphp
+@extends('emails.layouts.default')
+
+
+@section('content')
 
 <p>
     {{ __('Click link below and reset password.') }}<br>
@@ -9,3 +14,6 @@
 <p>
     {{ $actionText }}: <a href="{{ $actionUrl }}">{{ $actionUrl }}</a>
 </p>
+
+
+@endsection
