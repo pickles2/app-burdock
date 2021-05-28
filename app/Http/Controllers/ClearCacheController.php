@@ -53,7 +53,7 @@ class ClearCacheController extends Controller
 		$project_branch = $burdockProjectManager->project($project->project_code)->branch($branch_name, 'preview');
 
 		$bdAsync = new \App\Helpers\async( $project, $branch_name );
-		$bdAsync->set_channel_name( $project->project_code.'---'.$branch_name.'___pxcmd-clearcache.'.$user_id );
+		$bdAsync->set_channel_name( urlencode($project->project_code).'----'.urlencode($branch_name).'___pxcmd-clearcache.'.$user_id );
 		$bdAsync->pxcmd(
 			'clearcache',
 			'/',

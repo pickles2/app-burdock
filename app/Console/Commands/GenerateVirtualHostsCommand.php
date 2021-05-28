@@ -116,7 +116,7 @@ class GenerateVirtualHostsCommand extends Command
 
 		$prevew_dirs = $this->fs->ls( config('burdock.data_dir').'/repositories/' );
 		foreach( $prevew_dirs as $prevew_dir ){
-			if( preg_match( '/^(.*?)\-\-\-(.*)$/', $prevew_dir, $matched ) ){
+			if( preg_match( '/^(.*?)\-\-\-\-(.*)$/', $prevew_dir, $matched ) ){
 				$tmp_project_code = $matched[1];
 				$tmp_branch_name = $matched[2];
 				if( !array_key_exists($tmp_project_code, $this->list_preview_dirs) || !is_array( $this->list_preview_dirs[$tmp_project_code] ) ){
@@ -339,20 +339,20 @@ class GenerateVirtualHostsCommand extends Command
 		$src_vhosts .= '# Previews'."\n";
 		$this->put_tmp_contents( $src_vhosts );
 
-		$bd_config_preview_domain = config('burdock.preview_domain');
-		$bd_config_preview_port = 80;
-		if( strlen($bd_config_preview_domain) && preg_match('/^(.+)\:([0-9]+)$/', $bd_config_preview_domain, $matched) ){
-			$bd_config_preview_domain = $matched[1];
-			$bd_config_preview_port = $matched[2];
-		}
-
 		foreach($this->list_preview_dirs[$project->project_code] as $branch_name){
 
+			$bd_config_preview_domain = \App\Helpers\utils::preview_host_name($project->project_code, $branch_name);
+			$bd_config_preview_port = 80;
+			if( strlen($bd_config_preview_domain) && preg_match('/^(.+)\:([0-9]+)$/', $bd_config_preview_domain, $matched) ){
+				$bd_config_preview_domain = $matched[1];
+				$bd_config_preview_port = $matched[2];
+			}
+
 			$tpl_vars = [
-				'domain' => $project->project_code.'---'.$branch_name.'.'.$bd_config_preview_domain,
+				'domain' => $bd_config_preview_domain,
 				'port' => intval($bd_config_preview_port),
 				'project_code' => $project->project_code,
-				'document_root' => $this->fs->get_realpath( config('burdock.data_dir').'/repositories/'.$project->project_code.'---'.$branch_name.'/'.$relpath_docroot_preview ),
+				'document_root' => $this->fs->get_realpath( config('burdock.data_dir').'/repositories/'.urlencode($project->project_code).'----'.urlencode($branch_name).'/'.$relpath_docroot_preview ),
 				'branch_name' => $branch_name,
 				'path_htpasswd' => false,
 			];
@@ -393,20 +393,20 @@ class GenerateVirtualHostsCommand extends Command
 		$src_vhosts .= '# Stagings'."\n";
 		$this->put_tmp_contents( $src_vhosts );
 
-		$bd_config_staging_domain = config('burdock.staging_domain');
-		$bd_config_staging_port = 80;
-		if( strlen($bd_config_staging_domain) && preg_match('/^(.+)\:([0-9]+)$/', $bd_config_staging_domain, $matched) ){
-			$bd_config_staging_domain = $matched[1];
-			$bd_config_staging_port = $matched[2];
-		}
-
 		for( $i = 0; $i < 10; $i ++ ){
 
+			$bd_config_staging_domain = \App\Helpers\utils::staging_host_name($project->project_code, 'stg'.($i+1));
+			$bd_config_staging_port = 80;
+			if( strlen($bd_config_staging_domain) && preg_match('/^(.+)\:([0-9]+)$/', $bd_config_staging_domain, $matched) ){
+				$bd_config_staging_domain = $matched[1];
+				$bd_config_staging_port = $matched[2];
+			}
+
 			$tpl_vars = [
-				'domain' => $project->project_code.'---stg'.($i+1).'.'.$bd_config_staging_domain,
+				'domain' => $bd_config_staging_domain,
 				'port' => intval($bd_config_staging_port),
 				'project_code' => $project->project_code,
-				'document_root' => $this->fs->get_realpath( config('burdock.data_dir').'/stagings/'.$project->project_code.'---stg'.($i+1).'/'.$relpath_docroot_dist ),
+				'document_root' => $this->fs->get_realpath( config('burdock.data_dir').'/stagings/'.urlencode($project->project_code).'---stg'.($i+1).'/'.$relpath_docroot_dist ),
 				'staging_index' => $i+1,
 				'path_htpasswd' => false,
 			];

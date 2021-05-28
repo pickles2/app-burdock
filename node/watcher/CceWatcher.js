@@ -15,7 +15,7 @@ module.exports = class{
 	* プロジェクトのブランチ別ワーキングツリーのパスを取得する
 	*/
 	get_project_workingtree_dir($project_code, $branch_name) {
-		let $project_path = this.main.env['BD_DATA_DIR'] + '/repositories/' + $project_code + '---' + $branch_name + '/';
+		let $project_path = this.main.env['BD_DATA_DIR'] + '/repositories/' + $project_code + '----' + $branch_name + '/';
 		if( this.main.utils79.is_dir($project_path) ){
 			$project_path = require('path').resolve($project_path);
 		}

@@ -51,7 +51,7 @@ class ComposerController extends Controller
 		$user_id = Auth::id();
 
 		$bdAsync = new \App\Helpers\async( $project, $branch_name );
-		$bdAsync->set_channel_name( $project->project_code.'---'.$branch_name.'___composer.'.$user_id );
+		$bdAsync->set_channel_name( urlencode($project->project_code).'----'.urlencode($branch_name).'___composer.'.$user_id );
 		$bdAsync->cmd(
 			array('composer', 'install'),
 			array()
@@ -71,7 +71,7 @@ class ComposerController extends Controller
 		$user_id = Auth::id();
 
 		$bdAsync = new \App\Helpers\async( $project, $branch_name );
-		$bdAsync->set_channel_name( $project->project_code.'---'.$branch_name.'___composer.'.$user_id );
+		$bdAsync->set_channel_name( urlencode($project->project_code).'----'.urlencode($branch_name).'___composer.'.$user_id );
 		$bdAsync->cmd(
 			array('composer', 'install'),
 			array()

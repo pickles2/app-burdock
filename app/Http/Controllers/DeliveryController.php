@@ -97,7 +97,7 @@ class DeliveryController extends Controller
 
 		$gitUtil = new \App\Helpers\git($project);
 		$default_branch_name = $gitUtil->get_branch_name();
-		$realpath_pj_git_root = config('burdock.data_dir').'/repositories/'.urlencode($project->project_code).'---'.urlencode($default_branch_name).'/';
+		$realpath_pj_git_root = config('burdock.data_dir').'/repositories/'.urlencode($project->project_code).'----'.urlencode($default_branch_name).'/';
 		$realpath_workdir = config('burdock.data_dir').'/projects/'.urlencode($project->project_code).'/indigo/workdir/';
 
 		$fs = new \tomk79\filesystem();

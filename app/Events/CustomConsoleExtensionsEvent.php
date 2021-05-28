@@ -41,7 +41,7 @@ class CustomConsoleExtensionsEvent implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel($this->project_code.'---'.$this->branch_name.'___cce---'.$this->cce_id.'.'.$this->user_id);
+        return new Channel(urlencode($this->project_code).'----'.urlencode($this->branch_name).'___cce---'.$this->cce_id.'.'.$this->user_id);
     }
 
 	public function broadcastWith()

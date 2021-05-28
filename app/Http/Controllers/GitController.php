@@ -76,7 +76,7 @@ class GitController extends Controller
 		$user_id = Auth::id();
 
 		$bdAsync = new \App\Helpers\async( $project, $branch_name );
-		$bdAsync->set_channel_name( $project->project_code.'---'.$branch_name.'___git.'.$user_id );
+		$bdAsync->set_channel_name( urlencode($project->project_code).'----'.urlencode($branch_name).'___git.'.$user_id );
 		$bdAsync->git(
 			$git_command_array,
 			array()

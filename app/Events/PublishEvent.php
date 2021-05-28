@@ -55,7 +55,7 @@ class PublishEvent implements ShouldBroadcastNow
     {
 		$channel_name = $this->channel_name;
 		if( !strlen($channel_name) ){
-			$channel_name = $this->project_code.'---'.$this->branch_name.'___publish'.'.'.$this->user_id; // default
+			$channel_name = urlencode($this->project_code).'----'.urlencode($this->branch_name).'___publish'.'.'.$this->user_id; // default
 		}
         return new Channel($channel_name);
     }

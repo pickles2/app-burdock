@@ -177,7 +177,7 @@ class ProjectController extends Controller
 					if( $tmp_project_code == $project_code_old ){
 						rename(
 							$bd_data_dir.'/'.$root_dir_name.'/'.$basename,
-							$bd_data_dir.'/'.$root_dir_name.'/'.$request->project_code.'---'.$tmp_branch_name
+							$bd_data_dir.'/'.$root_dir_name.'/'.urlencode($request->project_code).'----'.urlencode($tmp_branch_name)
 						);
 					}
 				}
