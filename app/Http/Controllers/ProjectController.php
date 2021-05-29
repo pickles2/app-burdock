@@ -171,7 +171,7 @@ class ProjectController extends Controller
 				continue;
 			}
 			foreach( $ls as $basename ){
-				if(preg_match('/^(.*?)\-\-\-(.*)$/', $basename, $matched)){
+				if(preg_match('/^(.*?)\-\-\-\-(.*)$/', $basename, $matched)){
 					$tmp_project_code = $matched[1];
 					$tmp_branch_name = $matched[2];
 					if( $tmp_project_code == $project_code_old ){
