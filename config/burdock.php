@@ -9,7 +9,7 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    'app_copyright' => env('BD_APP_COPYRIGHT', null),
+    'app_copyright' => env('BD_APP_COPYRIGHT', 'Pickles Project'),
 
 
     /*
