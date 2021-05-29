@@ -53,7 +53,7 @@
 			composerCmd('update');
 		});
 
-		window.Echo.channel('{{ $project->project_code }}---{{ $branch_name }}___composer.{{ Auth::id() }}').listen('AsyncGeneralProgressEvent', (message) => {
+		window.Echo.channel('{{ $project->project_code }}----{{ $branch_name }}___composer.{{ Auth::id() }}').listen('AsyncGeneralProgressEvent', (message) => {
 			if( message.status == 'exit' ){
 				console.log(message);
 				btns.forEach(function(btn){

@@ -53,7 +53,7 @@ window.addEventListener('load', function(e){
 	});
 });
 
-window.Echo.channel('{{ $project->project_code }}---{{ $branch_name }}___pxcmd-clearcache.{{ Auth::id() }}').listen('AsyncGeneralProgressEvent', (message) => {
+window.Echo.channel('{{ $project->project_code }}----{{ $branch_name }}___pxcmd-clearcache.{{ Auth::id() }}').listen('AsyncGeneralProgressEvent', (message) => {
 	console.log(message);
 	if(message.stdout){
 		$preview.innerHTML += message.stdout;
