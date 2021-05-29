@@ -126,6 +126,9 @@ class GenerateVirtualHostsCommand extends Command
 			}
 		}
 
+
+		// --------------------------------------
+		// 各プロジェクトのバーチャルホスト生成処理
 		$count = count($projects);
 		$current = 0;
 
@@ -164,6 +167,9 @@ class GenerateVirtualHostsCommand extends Command
 		// イベントログを記録する
 		$this->event_log('exit', 'Finished Re-generate vhosts.conf');
 
+
+		// --------------------------------------
+		// アンコールリクエストがあったら再実行する
 		clearstatcache();
 		if( $this->fs->is_file( $this->realpath_vhosts_dir.'encore_request.txt' ) ){
 			if( $this->fs->rm( $this->realpath_vhosts_dir.'encore_request.txt' ) ){
@@ -301,7 +307,10 @@ class GenerateVirtualHostsCommand extends Command
 		$src_vhosts .= "\n";
 		$this->put_tmp_contents( $src_vhosts );
 
+
+		// --------------------------------------
 		// Production
+		// (Pickles 2 のコンフィグより)
 		$src_vhosts = '';
 		$src_vhosts .= "\n";
 		$src_vhosts .= '# Production'."\n";
@@ -333,6 +342,67 @@ class GenerateVirtualHostsCommand extends Command
 
 		$this->put_tmp_contents( $src_vhosts );
 
+
+		// --------------------------------------
+		// Production
+		// (Burdock固有の閲覧環境を提供する)
+		// vhostsテンプレートは Staging と同じものを利用する。
+		// ドメイン名生成設定は Staging と同じものを利用する。
+		// 基本認証設定は プレビューと同様、プロジェクトのデフォルトを使う。
+		$src_vhosts = '';
+		$src_vhosts .= "\n";
+		$src_vhosts .= '# Production'."\n";
+		$this->put_tmp_contents( $src_vhosts );
+
+
+		$bd_config_staging_domain = \App\Helpers\utils::staging_host_name($project->project_code, 'production');
+		$bd_config_staging_port = 80;
+		if( strlen($bd_config_staging_domain) && preg_match('/^(.+)\:([0-9]+)$/', $bd_config_staging_domain, $matched) ){
+			$bd_config_staging_domain = $matched[1];
+			$bd_config_staging_port = $matched[2];
+		}
+
+		$tpl_vars = [
+			'domain' => $bd_config_staging_domain,
+			'port' => intval($bd_config_staging_port),
+			'project_code' => $project->project_code,
+			'document_root' => $this->fs->normalize_path($this->fs->get_realpath( config('burdock.data_dir').'/projects/'.$project->project_code.'/indigo/production/'.$relpath_docroot_dist )),
+			'staging_index' => 'production',
+			'path_htpasswd' => false,
+		];
+		if( $this->fs->is_file( config('burdock.data_dir').'/projects/'.$project->project_code.'/preview.htpasswd' ) ){
+			$tpl_vars['path_htpasswd'] = $this->fs->get_realpath( config('burdock.data_dir').'/projects/'.$project->project_code.'/preview.htpasswd' );
+		}elseif( $this->fs->is_file( $this->realpath_basicauth_default_htpasswd ) ){
+			$tpl_vars['path_htpasswd'] = $this->realpath_basicauth_default_htpasswd;
+		}
+
+		$src_vhosts = '';
+		if( is_file( $realpath_template_root_dir.'staging.twig' ) ){
+			$template = $twig->load('staging.twig');
+			$src_vhosts .= $template->render($tpl_vars);
+		}elseif( is_file( $realpath_template_root_dir.'staging-'.config('burdock.webserver').'.twig' ) ){
+			$template = $twig->load('staging-'.config('burdock.webserver').'.twig');
+			$src_vhosts .= $template->render($tpl_vars);
+		}else{
+			$src_vhosts .= '<VirtualHost '.$tpl_vars['domain'].':80>'."\n";
+			$src_vhosts .= '	# Staging '.$tpl_vars['staging_index'].' ('.$tpl_vars['project_code'].')'."\n";
+			$src_vhosts .= '	ServerName '.$tpl_vars['domain'].''."\n";
+			$src_vhosts .= '	DocumentRoot '.$tpl_vars['document_root'].''."\n";
+			if( $tpl_vars['path_htpasswd'] ){
+				$src_vhosts .= '<Directory "'.$tpl_vars['document_root'].'">'."\n";
+				$src_vhosts .= '	Require valid-user'."\n";
+				$src_vhosts .= '	AuthType Basic'."\n";
+				$src_vhosts .= '	AuthName "Please enter your ID and password"'."\n";
+				$src_vhosts .= '	AuthUserFile '.$tpl_vars['path_htpasswd']."\n";
+				$src_vhosts .= '</Directory>'."\n";
+			}
+			$src_vhosts .= '</VirtualHost>'."\n";
+		}
+
+		$this->put_tmp_contents( $src_vhosts );
+
+
+		// --------------------------------------
 		// Preview dirs
 		$src_vhosts = '';
 		$src_vhosts .= "\n";
@@ -387,6 +457,8 @@ class GenerateVirtualHostsCommand extends Command
 			$this->put_tmp_contents( $src_vhosts );
 		}
 
+
+		// --------------------------------------
 		// Staging dirs
 		$src_vhosts = '';
 		$src_vhosts .= "\n";

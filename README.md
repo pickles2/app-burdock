@@ -226,6 +226,7 @@ Apache 用の Virtual Hosts の設定ファイルを出力します。
 ### Pickles 2 Burdock v0.1.1 (リリース日未定)
 
 - Git機能で、ステータス情報を表示できない不具合を修正。
+- 本番環境に、自動のホスト名 `{$project_code}---production` を発行するようになった。
 
 ### Pickles 2 Burdock v0.1.0 (2021年5月28日)
 
