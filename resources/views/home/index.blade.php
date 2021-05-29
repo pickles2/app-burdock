@@ -14,7 +14,7 @@
 <div class="cont_maintask_ui">
 
 	<h2>基本的な手順</h2>
-	<div class="row" style="margin-bottom: 100px;">
+	<div class="row">
 		<div class="col-sm-3">
 			<button type="button" onclick="window.location.href='{{ url('sitemaps'.'/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}';" class="px2-btn cont_mainmenu">{{ __('Edit Sitemap')}}</button>
 		</div>
@@ -28,9 +28,22 @@
 			<button type="button" onclick="window.location.href='{{ url('publish'.'/'.urlencode($project->project_code).'/'.urlencode($branch_name)) }}';" class="px2-btn cont_mainmenu">{{ __('To Publish')}}</button>
 		</div>
 	</div><!-- / .row -->
+
+	<ul class="px2-horizontal-list px2-horizontal-list--right">
+		<li><a href="{{ url('files-and-folders/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" class="px2-link px2-link--burette">フォルダを開く</a></li>
+		<li><a href="{{ '//'.\App\Helpers\utils::preview_host_name( $project->project_code, $branch_name ) }}" target="_blank" class="px2-link px2-link--burette">新規ウィンドウでプレビュー</a></li>
+		<!-- <li><a href="javascript:main.openAppInBrowser();" class="px2-link px2-link--burette">新規ウィンドウでパブリッシュプレビュー</a></li> -->
+		<li><a href="{{ url('git/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" class="px2-link px2-link--burette">Git を操作する</a></li>
+		<!-- <li><a href="javascript:main.openInTextEditor( contApp.pj.get('path') );" class="px2-link px2-link--burette">外部テキストエディタで開く</a></li> -->
+		<!-- <li><a href="javascript:main.openInGitClient( contApp.pj.get('path') );" class="px2-link px2-link--burette">外部Gitクライアントで開く</a></li> -->
+		<!-- <li><a href="javascript:main.openInTerminal( contApp.pj.get('path') );" class="px2-link px2-link--burette">コマンドラインで開く</a></li> -->
+		<li><a href="{{ url('composer/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" class="px2-link px2-link--burette">Composer を操作する</a></li>
+	</ul>
 </div>
 
-<div class="alert alert-info">Hint! : <span class="cont_hint">Burdock は Pickles 2 をウェブ上で操作するWebアプリケーションです。</span></div>
+<div class="px2-p" style="margin-top: 100px;">
+	<div class="alert alert-info">Hint! : <span class="cont_hint">Burdock は Pickles 2 をウェブ上で操作するWebアプリケーションです。</span></div>
+</div>
 
 <h2>Project Information</h2>
 <div class="px2-responsive">

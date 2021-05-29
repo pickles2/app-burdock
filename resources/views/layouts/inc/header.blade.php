@@ -67,19 +67,16 @@
 				</li>
 				@else
 					<li><a href="{{ url('/') }}">ダッシュボード</a></li>
-					<li>
-						<a href="javascript:void(0)">{{ __('locale.'.App::getLocale()) }}</a>
-						<ul>
-							@if (!App::isLocale('en'))
-								<li><a class="dropdown-item" href="{{ locale_url('en') }}">{{ __('locale.en') }}</a></li>
-							@endif
-							@if (!App::isLocale('ja'))
-								<li><a class="dropdown-item" href="{{ locale_url('ja') }}">{{ __('locale.ja') }}</a></li>
-							@endif
-						</ul>
-					</li>
 					@if( isset($project) && ! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
-						<li><a href="{{ url('projects/'.urlencode($project->project_code).'/edit') }}" data-name="projects">プロジェクト概要設定</a></li>
+						@if( $global->project_status->isPxStandby )
+							<li><a href="{{ '//'.\App\Helpers\utils::preview_host_name( $project->project_code, $branch_name ) }}" target="_blank">新規ウィンドウでプレビュー</a></li>
+						@endif
+						<li>
+							<a href="javascript:void(0)">設定</a>
+							<ul>
+								<li><a href="{{ url('projects/'.urlencode($project->project_code).'/edit') }}" data-name="projects">プロジェクト環境設定</a></li>
+							</ul>
+						</li>
 						@if( $global->project_status->composerJsonExists )
 							<li><a href="{{ url('composer/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="composer">Composerを操作する</a></li>
 						@endif
@@ -109,10 +106,21 @@
 							<li><a href="{{ url('files-and-folders/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="files-and-folders">ファイルとフォルダ</a></li>
 						@endif
 					@endif
-				<li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
-					<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-						@csrf
-					</form></li>
+					<li>
+						<a href="javascript:void(0)">{{ __('locale.'.App::getLocale()) }}</a>
+						<ul>
+							@if (!App::isLocale('en'))
+								<li><a class="dropdown-item" href="{{ locale_url('en') }}">{{ __('locale.en') }}</a></li>
+							@endif
+							@if (!App::isLocale('ja'))
+								<li><a class="dropdown-item" href="{{ locale_url('ja') }}">{{ __('locale.ja') }}</a></li>
+							@endif
+						</ul>
+					</li>
+					<li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+						<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+							@csrf
+						</form></li>
 				@endguest
 			</ul>
 		</div>
