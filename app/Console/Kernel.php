@@ -52,35 +52,38 @@ class Kernel extends ConsoleKernel
 			->appendOutputTo($realpath_log);
 
 		// --------------------------------------
-		// Indig による予約配信処理
+		// Indigo: Indig による予約配信処理
 		$schedule->command(
 				IndigoCronCommand::class,
 				[]
 			)
-			->withoutOverlapping(60)
+			->onOneServer()
+			->withoutOverlapping(60) // 排他ロックの有効期限(分)
 			->everyMinute()
 			->appendOutputTo($realpath_log);
 
 
 		// --------------------------------------
-		// 予約配信の後処理
+		// Burdock: 予約配信の後処理
 		$schedule->command(
 				DeployScriptCommand::class,
 				[]
 			)
-			->withoutOverlapping(60)
+			->onOneServer()
+			->withoutOverlapping(60) // 排他ロックの有効期限(分)
 			->everyMinute()
 			->appendOutputTo($realpath_log);
 
 
 		// --------------------------------------
-		// VirtualHost設定ファイルの生成処理
+		// Burdock: VirtualHost設定ファイルの生成処理
 		$schedule->command(
 				GenerateVirtualHostsCommand::class,
 				[]
 			)
-			->withoutOverlapping(60)
-			->everyTenMinutes()
+			// ->onOneServer()
+			->withoutOverlapping(60) // 排他ロックの有効期限(分)
+			->hourlyAt(47) // 毎時 47分に実行する
 			->appendOutputTo($realpath_log);
 
 
