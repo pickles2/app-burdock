@@ -231,6 +231,7 @@ Apache 用の Virtual Hosts の設定ファイルを出力します。
 - 本番環境に、自動のホスト名 `{$project_code}---production` を発行するようになった。
 - 本番配信予約、配信済み、および バックアップ を閲覧するためのホスト名を発行するようになった。
 - `bd:generate_vhosts` の実行間隔を 1時間毎 に変更した。
+- コンテンツエディタを、 viewport `width=1366` に変更した。
 - その他の細かい修正。
 
 ### Pickles 2 Burdock v0.1.0 (2021年5月28日)
