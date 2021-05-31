@@ -46,7 +46,7 @@
 								<span class="caret"></span>
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
-							<ul class="dropdown-menu cont_page-dropdown-menu">
+							<ul class="dropdown-menu cont_page-dropdown-menu" style="left:auto;right:0;">
 								{{-- <!-- <li style="max-width: 476px; overflow: hidden;">
 									<a data-content="/index.html" href="javascript:;">フォルダを開く</a>
 								</li>
@@ -75,35 +75,108 @@
 								<li class="divider" style="max-width: 476px; overflow: hidden;"></li>
 								<li style="max-width: 476px; overflow: hidden;">
 									<a data-path="/index.html" data-proc_type="html" href="javascript:;">他のページから複製して取り込む</a>
-								</li>
-								<li style="max-width: 476px; overflow: hidden;">
-									<a data-path="/index.html" data-proc_type="html" href="javascript:;">編集方法を変更</a>
 								</li> --> --}}
 								<li style="max-width: 476px; overflow: hidden;">
-									<a data-param="{{ $page_path }}" onClick="publishSingle(this)">このページを単体でパブリッシュ</a>
+									<a href="javascript:;" data-path="{{ $page_path }}" data-proc_type="{{ $editor_type }}" onClick="contChangeContentEditorMode(this)">編集方法を変更</a>
+								</li>
+								<script id="template-change-proctype" type="text/template">
+									<ul>
+										<li><label><input type="radio" name="proc_type" value="html.gui" /> HTML + GUI Editor</label></li>
+										<li><label><input type="radio" name="proc_type" value="html" /> HTML</label></li>
+										<li><label><input type="radio" name="proc_type" value="md" /> Markdown</label></li>
+									</ul>
+								</script>
+								<script>
+									function contChangeContentEditorMode(elm) {
+										var $this = $(elm);
+										var path = $this.attr('data-path');
+										var proc_type = $this.attr('data-proc_type');
+										var $body = $('<div>')
+											.append( $('#template-change-proctype').html() )
+										;
+
+										$body.find('input[name=proc_type]').val( [proc_type] );
+										px2style.modal({
+											'title': '編集方法を変更する',
+											'body': $body,
+											'buttons':[
+												$('<button class="px2-btn px2-btn--primary">')
+													.text('OK')
+													.on('click', function(){
+														var pagePath = $this.attr('data-path');
+														var editorModeTo = $body.find('input[name=proc_type]:checked').val();
+
+														$.ajax({
+															url: "/contents/{{ $project->project_code }}/{{ $branch_name }}/gpi",
+															headers: {
+																'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+															},
+															type: 'post',
+															data : {
+																"api" : "change_content_editor_mode",
+																"page_path" : pagePath,
+																"editor_mode_to": editorModeTo,
+															},
+														}).done(function(data){
+															console.log('----:', data);
+															px2style.closeModal();
+															if( !data[0] ){
+																var flashAlert = document.getElementById("flash_alert");
+																var flashAlertInner = document.getElementById("flash_alert_inner");
+																flashAlertInner.innerHTML = '「{{ $current->page_info->title }}」の編集方法変更に失敗しました。'+data[1];
+																flashAlert.style.display = "block";
+																setTimeout(function() {
+																	$('#flash_alert').fadeOut(500);
+																}, 2000);
+																return;
+															}
+															var flashAlert = document.getElementById("flash_alert");
+															var flashAlertInner = document.getElementById("flash_alert_inner");
+															flashAlertInner.innerHTML = '「{{ $current->page_info->title }}」の編集方法を変更しました。';
+															flashAlert.style.display = "block";
+															setTimeout(function() {
+																$('#flash_alert').fadeOut(500);
+																window.location.reload();
+															}, 2000);
+														});
+													})
+											],
+											'buttonsSecondary': [
+												$('<button class="px2-btn">')
+													.text('キャンセル')
+													.on('click', function(){
+														px2style.closeModal();
+													}),
+											]
+										});
+
+									};
+								</script>
+								<li style="max-width: 476px; overflow: hidden;">
+									<a href="javascript:;" data-param="{{ $page_path }}" onClick="contPublishSingle(this)">このページを単体でパブリッシュ</a>
 								</li>
 								<script>
-								function publishSingle(e) {
-									// 受信したイベントデータをajaxでコントローラーに送信
-									var path_region = e.dataset.param;
-									$.ajax({
-										url: "/publish/{{ $project->project_code }}/{{ $branch_name }}/publishSingleAjax",
-										type: 'post',
-										data : {
-											"path_region" : path_region,
-											_token : '{{ csrf_token() }}'
-										},
-									}).done(function(data){
-										// ajaxで取得してきたデータをアラートで表示
-										var flashAlert = document.getElementById("flash_alert");
-										var flashAlertInner = document.getElementById("flash_alert_inner");
-										flashAlertInner.innerHTML = '「{{ $current->page_info->title }}」'+data.info;
-										flashAlert.style.display = "block";
-										setTimeout(function() {
-											$('#flash_alert').fadeOut(500);
-										}, 2000);
-									});
-								};
+									function contPublishSingle(e) {
+										// 受信したイベントデータをajaxでコントローラーに送信
+										var path_region = e.dataset.param;
+										$.ajax({
+											url: "/publish/{{ $project->project_code }}/{{ $branch_name }}/publishSingleAjax",
+											type: 'post',
+											data : {
+												"path_region" : path_region,
+												_token : '{{ csrf_token() }}'
+											},
+										}).done(function(data){
+											// ajaxで取得してきたデータをアラートで表示
+											var flashAlert = document.getElementById("flash_alert");
+											var flashAlertInner = document.getElementById("flash_alert_inner");
+											flashAlertInner.innerHTML = '「{{ $current->page_info->title }}」'+data.info;
+											flashAlert.style.display = "block";
+											setTimeout(function() {
+												$('#flash_alert').fadeOut(500);
+											}, 2000);
+										});
+									};
 								</script>
 								{{-- <!-- <li style="max-width: 476px; overflow: hidden;">
 									<a data-path="/index.html" href="javascript:;">コンテンツをコミット</a>
@@ -137,23 +210,9 @@
 					};
 					// メッセージ受信イベント
 					window.addEventListener('message', function(event) {
-						// オリジンがpreview_urlではなかった場合終了
-						if (event.origin !== preview_url) {
-							return;
-						};
-						// 受信したイベントデータをajaxでコントローラーに送信
-						var decodeEventData = decodeURIComponent(escape(atob(event.data)));
-						$.ajax({
-							url: "/contents/{{ urlencode($project->project_code) }}/{{ urlencode($branch_name) }}/ajax?page_path={{ urlencode($page_path) }}",
-							type: 'post',
-							data : {
-								"page_path" : JSON.stringify(decodeEventData),
-								_token : '{{ csrf_token() }}'
-							},
-						}).done(function(data){
-							// ajaxで取得してきたパスとIDでページ遷移
-							window.location.href = '?page_path='+data.path+'&page_id='+data.id;
-						});
+						console.log('=-=-=-=-=-=', event, preview_url);
+						// TODO: ここで受けるメッセージは、プレビューのURLが遷移したメッセージ。
+						// イベントハンドリングが未実装。
 					}, false);
 					</script>
 					<iframe id="ifrm" src="{{ url($preview_url) }}"></iframe>

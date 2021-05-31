@@ -77,27 +77,37 @@ class ContentController extends Controller
 		);
 	}
 
-
-	public function ajax(Request $request, Project $project, $branch_name)
+	/**
+	 * GPI
+	 */
+	public function gpi(Request $request, Project $project, $branch_name)
 	{
-		$page_path = $request->page_path;
-		$page_path = json_decode($page_path);
-		if( !strlen($page_path) ){
-			$page_path = '/';
-		}
-		$info = px2query(
-			$project->project_code,
-			$branch_name,
-			$page_path.'?PX=px2dthelper.get.all'
-		);
-		$info = json_decode($info);
+		$api = $request->api;
+		switch( $api ){
+			case "change_content_editor_mode":
+				// --------------------------------------
+				// コンテンツの編集モードを変更する
+				$editor_mode_to = $request->editor_mode_to;
+				$page_path = $request->page_path;
+				if( !strlen($page_path) ){
+					$page_path = '/';
+				}
+				$result = px2query(
+					$project->project_code,
+					$branch_name,
+					$page_path.'?PX=px2dthelper.change_content_editor_mode&editor_mode='.urlencode($editor_mode_to)
+				);
+				$result = json_decode($result);
+				return $result;
+				break;
 
-		$path = $info->page_info->path;
-		$id = $info->page_info->id;
+			default:
+				break;
+		}
 
 		$data = array(
-			"path" => $path,
-			"id" => $id,
+			"result" => false,
+			"message" => 'undefined api',
 		);
 		return $data;
 	}

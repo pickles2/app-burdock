@@ -91,7 +91,7 @@ Route::middleware(['boot'])
 		// --------------------------------------
 		// コンテンツ
 		Route::get('contents/{project}/{branch_name}', 'ContentController@index');
-		Route::post('contents/{project}/{branch_name}/ajax', 'ContentController@ajax');
+		Route::post('contents/{project}/{branch_name}/gpi', 'ContentController@gpi');
 		Route::post('contents/{project}/{branch_name}/editAjax', 'Ajax\ContentController@editAjax');
 		Route::post('contents/{project}/{branch_name}/searchAjax', 'Ajax\ContentController@searchAjax');
 
