@@ -1,6 +1,7 @@
 <?php
 namespace App\Helpers;
 
+use Illuminate\Support\Facades\View;
 use App\Project;
 
 class utils{
@@ -45,6 +46,22 @@ class utils{
 			$rtn .= $subdomain.'.'.$domain_conf;
 		}
 		return $rtn;
+	}
+
+	/**
+	 * 現在のプロジェクトの path_controot を得る
+	 */
+	public static function get_path_controot(){
+		$fs = new \tomk79\filesystem();
+		$global = View::shared('global');
+
+		$tmp_preview_path = '';
+		if( property_exists( $global->px2all, 'config' ) && property_exists( $global->px2all->config, 'path_controot' ) ){
+			if( strlen( $global->px2all->config->path_controot ) ){
+				$tmp_preview_path = $fs->get_realpath($global->px2all->config->path_controot);
+			}
+		}
+		return $tmp_preview_path;
 	}
 
 }

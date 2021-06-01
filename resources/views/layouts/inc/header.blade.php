@@ -69,7 +69,7 @@
 					<li><a href="{{ url('/') }}">ダッシュボード</a></li>
 					@if( isset($project) && ! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
 						@if( $global->project_status->isPxStandby )
-							<li><a href="{{ '//'.\App\Helpers\utils::preview_host_name( $project->project_code, $branch_name ) }}" target="_blank">新規ウィンドウでプレビュー</a></li>
+							<li><a href="{{ '//'.\App\Helpers\utils::preview_host_name( $project->project_code, $branch_name ).\App\Helpers\utils::get_path_controot() }}" target="_blank">新規ウィンドウでプレビュー</a></li>
 						@endif
 						<li>
 							<a href="javascript:void(0)">設定</a>

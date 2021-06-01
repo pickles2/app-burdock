@@ -41,7 +41,7 @@ foreach($px2ce_client_resources->js as $value) {
 		var layout_id = <?php echo json_encode($layout_id, JSON_UNESCAPED_SLASHES); ?>;
 		var target_mode = 'page_content';
 		// .envよりプレビューサーバーのURLを取得
-		var preview_url = '{{ '//'.\App\Helpers\utils::preview_host_name($project->project_code, $branch_name) }}';
+		var preview_url = '{{ '//'.\App\Helpers\utils::preview_host_name($project->project_code, $branch_name).\App\Helpers\utils::get_path_controot() }}';
 		var resizeTimer;
 
 		if( page_path ){

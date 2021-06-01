@@ -31,7 +31,7 @@
 
 	<ul class="px2-horizontal-list px2-horizontal-list--right">
 		<li><a href="{{ url('files-and-folders/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" class="px2-link px2-link--burette">フォルダを開く</a></li>
-		<li><a href="{{ '//'.\App\Helpers\utils::preview_host_name( $project->project_code, $branch_name ) }}" target="_blank" class="px2-link px2-link--burette">新規ウィンドウでプレビュー</a></li>
+		<li><a href="{{ '//'.\App\Helpers\utils::preview_host_name( $project->project_code, $branch_name ).\App\Helpers\utils::get_path_controot() }}" target="_blank" class="px2-link px2-link--burette">新規ウィンドウでプレビュー</a></li>
 		<!-- <li><a href="javascript:main.openAppInBrowser();" class="px2-link px2-link--burette">新規ウィンドウでパブリッシュプレビュー</a></li> -->
 		<li><a href="{{ url('git/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" class="px2-link px2-link--burette">Git を操作する</a></li>
 		<!-- <li><a href="javascript:main.openInTextEditor( contApp.pj.get('path') );" class="px2-link px2-link--burette">外部テキストエディタで開く</a></li> -->

@@ -70,8 +70,7 @@ class StagingController extends Controller
 
 		$plumHelper = new \App\Helpers\plumHelper($project, $user->id);
 		$plum = $plumHelper->create_plum();
-
-		$json = $plum->gpi( $_POST['data'] );
+		$json = $plum->gpi( $request->data );
 
 
 
