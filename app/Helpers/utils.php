@@ -51,9 +51,23 @@ class utils{
 	/**
 	 * 現在のプロジェクトの path_controot を得る
 	 */
-	public static function get_path_controot(){
+	public static function get_path_controot( $project_code = null, $staging_name = null ){
 		$fs = new \tomk79\filesystem();
 		$global = View::shared('global');
+		if( !is_object($global) ){
+			$global = new \stdClass();
+		}
+
+		if( strlen($project_code) && strlen($staging_name) ){
+			$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( config('burdock.data_dir') );
+			$project_branch = $burdockProjectManager->project($project_code)->branch($staging_name, 'preview');
+			$global->px2all = $project_branch->get_project_info();
+		}
+
+		if( !property_exists( $global, 'px2all' ) ){
+			return '';
+		}
+
 
 		$tmp_preview_path = '';
 		if( property_exists( $global->px2all, 'config' ) && property_exists( $global->px2all->config, 'path_controot' ) ){

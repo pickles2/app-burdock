@@ -30,7 +30,7 @@ class plumHelper{
 			array_push($staging_server, array(
 				'name' => 'Staging No.'.$i.'',
 				'path' => config('burdock.data_dir').'/stagings/'.urlencode($this->project->project_code).'---stg'.$i.'/',
-				'url' => '//'.\App\Helpers\utils::staging_host_name($this->project->project_code, 'stg'.$i).\App\Helpers\utils::get_path_controot().'/',
+				'url' => '//'.\App\Helpers\utils::staging_host_name($this->project->project_code, 'stg'.$i).\App\Helpers\utils::get_path_controot($this->project->project_code, $this->project->git_main_branch_name).'/',
 			));
 		}
 
