@@ -198,7 +198,7 @@ class FilesAndFoldersController extends Controller
 
 		// --------------------------------------
 		// 外部パスを求める
-		if( preg_match( '/^'.preg_quote($pageInfoAll->realpath_docroot, '/').'/', $realpath_file) ){
+		if( is_object($pageInfoAll) && preg_match( '/^'.preg_quote($pageInfoAll->realpath_docroot, '/').'/', $realpath_file) ){
 			$pxExternalPath = preg_replace('/^'.preg_quote($pageInfoAll->realpath_docroot, '/').'/', '/', $realpath_file);
 			$pxExternalPath = preg_replace('/\/+/', '/', $pxExternalPath);
 			if( preg_match( '/^'.preg_quote($pageInfoAll->path_controot, '/').'/', $pxExternalPath) ){
@@ -217,18 +217,20 @@ class FilesAndFoldersController extends Controller
 		// パスの種類を求める
 		// theme_collection, home_dir, contents, or unknown
 		$path_type = 'unknown';
-		$realpath_target = $fs->normalize_path($realpath_file);
-		$realpath_homedir = $fs->normalize_path($pageInfoAll->realpath_homedir);
-		$realpath_theme_collection_dir = $fs->normalize_path($pageInfoAll->realpath_theme_collection_dir);
-		$realpath_docroot = $fs->normalize_path($pageInfoAll->realpath_docroot);
-		if( preg_match('/^'.preg_quote($realpath_theme_collection_dir, '/').'/', $realpath_target) ){
-			$path_type = 'theme_collection';
-		}elseif( preg_match('/^'.preg_quote($realpath_homedir, '/').'/', $realpath_target) ){
-			$path_type = 'home_dir';
-		}elseif( preg_match('/^'.preg_quote($realpath_docroot, '/').'/', $realpath_target)  && $pxExternalPath ){
-			$path_type = 'contents';
+		if( is_object($pageInfoAll) ){
+			$realpath_target = $fs->normalize_path($realpath_file);
+			$realpath_homedir = $fs->normalize_path($pageInfoAll->realpath_homedir);
+			$realpath_theme_collection_dir = $fs->normalize_path($pageInfoAll->realpath_theme_collection_dir);
+			$realpath_docroot = $fs->normalize_path($pageInfoAll->realpath_docroot);
+			if( preg_match('/^'.preg_quote($realpath_theme_collection_dir, '/').'/', $realpath_target) ){
+				$path_type = 'theme_collection';
+			}elseif( preg_match('/^'.preg_quote($realpath_homedir, '/').'/', $realpath_target) ){
+				$path_type = 'home_dir';
+			}elseif( preg_match('/^'.preg_quote($realpath_docroot, '/').'/', $realpath_target)  && $pxExternalPath ){
+				$path_type = 'contents';
+			}
+			$rtn['pathType'] = $path_type;
 		}
-		$rtn['pathType'] = $path_type;
 
 		$rtn['pathFiles'] = false;
 		if( $rtn['pxExternalPath'] && $rtn['pathType'] == 'contents' ){

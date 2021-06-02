@@ -16,6 +16,7 @@
 
 @section('foot')
 <script>
+window.isPx2Standby = {{ json_encode(is_object($global->project_status) && $global->project_status->isPxStandby) }};
 window.contRemoteFinderGpiEndpoint = "/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/gpi";
 window.contCommonFileEditorEndpoint = '/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/common-file-editor';
 window.contCommonFileEditorGpiEndpoint = '/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/common-file-editor/gpi';
