@@ -526,11 +526,11 @@ class GenerateVirtualHostsCommand extends Command
 			$path_entry_script = preg_replace('/^\/*/', '', $path_entry_script);
 			$tpl_vars['nginx_rewrite_entry_script'] .= '	# Pickles Framework へ転送'."\n";
 			$tpl_vars['nginx_rewrite_entry_script'] .= '	location ~ ^(?!/'.preg_quote($path_entry_script, '').'/).*?(/|\.(html|htm|css|js))$ {'."\n";
-			$tpl_vars['nginx_rewrite_entry_script'] .= '		rewrite ^/(.*)$ /'.$path_entry_script.'/$1 last;'."\n";
+			$tpl_vars['nginx_rewrite_entry_script'] .= '		rewrite ^'.$project_branch_info->config->path_controot.'(.*)$ /'.$path_entry_script.'/$1 last;'."\n";
 			$tpl_vars['nginx_rewrite_entry_script'] .= '	}'."\n";
 			$tpl_vars['nginx_rewrite_entry_script'] .= '	# 除外ファイルへのアクセスを拒否'."\n";
 			$tpl_vars['nginx_rewrite_entry_script'] .= '	location ~ ^/(?!'.preg_quote($path_entry_script, '').'/).*?\.(?:ignore)([\.\/].*)?$ {'."\n";
-			$tpl_vars['nginx_rewrite_entry_script'] .= '		rewrite ^/(.*)$ /'.$path_entry_script.'/.ignore.html last;'."\n";
+			$tpl_vars['nginx_rewrite_entry_script'] .= '		rewrite ^'.$project_branch_info->config->path_controot.'(.*)$ /'.$path_entry_script.'/.ignore.html last;'."\n";
 			$tpl_vars['nginx_rewrite_entry_script'] .= '	}'."\n";
 
 			$src_vhosts = '';
