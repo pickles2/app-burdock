@@ -16,14 +16,8 @@ server {
 	# --------------------------------------
 	# Pickles 2
 
-	# Pickles Framework へ転送
-	location ~ ^(?!/\.px_execute\.php/).*?(/|\.(html|htm|css|js))$ {
-		rewrite ^/(.*)$ /.px_execute.php/$1 last;
-	}
-	# 除外ファイルへのアクセスを拒否
-	location ~ ^/(?!\.px_execute\.php/).*?\.(?:ignore)([\.\/].*)?$ {
-		rewrite ^/(.*)$ /.px_execute.php/.ignore.html last;
-	}
+{{ nginx_rewrite_entry_script }}
+
 	# / Pickles 2
 	# --------------------------------------
 

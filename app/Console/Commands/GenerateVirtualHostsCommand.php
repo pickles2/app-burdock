@@ -199,6 +199,8 @@ class GenerateVirtualHostsCommand extends Command
 		return 0; // 終了コード
 	}
 
+
+
 	/**
 	 * プロジェクト１件分のタスクを実行する
 	 */
@@ -313,6 +315,7 @@ class GenerateVirtualHostsCommand extends Command
 		// (Pickles 2 のコンフィグより)
 		$src_vhosts = '';
 		$src_vhosts .= "\n";
+		$src_vhosts .= '# --------------------------------------'."\n";
 		$src_vhosts .= '# Production (Project Config)'."\n";
 		$this->put_tmp_contents( $src_vhosts );
 
@@ -352,6 +355,7 @@ class GenerateVirtualHostsCommand extends Command
 		// 基本認証設定は プレビューと同様、プロジェクトのデフォルトを使う。
 		$src_vhosts = '';
 		$src_vhosts .= "\n";
+		$src_vhosts .= '# --------------------------------------'."\n";
 		$src_vhosts .= '# Production (Burdock provided)'."\n";
 		$this->put_tmp_contents( $src_vhosts );
 
@@ -412,6 +416,7 @@ class GenerateVirtualHostsCommand extends Command
 		// 基本認証設定は プレビューと同様、プロジェクトのデフォルトを使う。
 		$src_vhosts = '';
 		$src_vhosts .= "\n";
+		$src_vhosts .= '# --------------------------------------'."\n";
 		$src_vhosts .= '# Pre-Production'."\n";
 		$this->put_tmp_contents( $src_vhosts );
 
@@ -480,13 +485,20 @@ class GenerateVirtualHostsCommand extends Command
 
 
 		// --------------------------------------
-		// Preview dirs
+		// Preview
 		$src_vhosts = '';
 		$src_vhosts .= "\n";
-		$src_vhosts .= '# Previews'."\n";
+		$src_vhosts .= '# --------------------------------------'."\n";
+		$src_vhosts .= '# Preview'."\n";
 		$this->put_tmp_contents( $src_vhosts );
 
 		foreach($this->list_preview_dirs[$project->project_code] as $branch_name){
+
+			$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( config('burdock.data_dir') );
+			$project_branch = $burdockProjectManager->project($project->project_code)->branch($branch_name, 'preview');
+			$project_branch_status = $project_branch->status();
+			$project_branch_entry_script = $project_branch->get_entry_script();
+			$project_branch_info = $project_branch->get_project_info();
 
 			$bd_config_preview_domain = \App\Helpers\utils::preview_host_name($project->project_code, $branch_name);
 			$bd_config_preview_port = 80;
@@ -502,12 +514,25 @@ class GenerateVirtualHostsCommand extends Command
 				'document_root' => $this->fs->get_realpath( config('burdock.data_dir').'/repositories/'.urlencode($project->project_code).'----'.urlencode($branch_name).'/'.$relpath_docroot_preview ),
 				'branch_name' => $branch_name,
 				'path_htpasswd' => false,
+				'nginx_rewrite_entry_script' => '',
 			];
 			if( $this->fs->is_file( config('burdock.data_dir').'/projects/'.urlencode($project->project_code).'/preview.htpasswd' ) ){
 				$tpl_vars['path_htpasswd'] = $this->fs->get_realpath( config('burdock.data_dir').'/projects/'.urlencode($project->project_code).'/preview.htpasswd' );
 			}elseif( $this->fs->is_file( $this->realpath_basicauth_default_htpasswd ) ){
 				$tpl_vars['path_htpasswd'] = $this->realpath_basicauth_default_htpasswd;
 			}
+
+			$path_entry_script = $project_branch_info->config->path_controot.basename($project_branch_entry_script);
+			$path_entry_script = preg_replace('/^\/*/', '', $path_entry_script);
+			$tpl_vars['nginx_rewrite_entry_script'] .= '	# Pickles Framework へ転送'."\n";
+			$tpl_vars['nginx_rewrite_entry_script'] .= '	location ~ ^(?!/'.preg_quote($path_entry_script, '').'/).*?(/|\.(html|htm|css|js))$ {'."\n";
+			$tpl_vars['nginx_rewrite_entry_script'] .= '		rewrite ^/(.*)$ /'.$path_entry_script.'/$1 last;'."\n";
+			$tpl_vars['nginx_rewrite_entry_script'] .= '	}'."\n";
+			$tpl_vars['nginx_rewrite_entry_script'] .= '	# 除外ファイルへのアクセスを拒否'."\n";
+			$tpl_vars['nginx_rewrite_entry_script'] .= '	location ~ ^/(?!'.preg_quote($path_entry_script, '').'/).*?\.(?:ignore)([\.\/].*)?$ {'."\n";
+			$tpl_vars['nginx_rewrite_entry_script'] .= '		rewrite ^/(.*)$ /'.$path_entry_script.'/.ignore.html last;'."\n";
+			$tpl_vars['nginx_rewrite_entry_script'] .= '	}'."\n";
+
 			$src_vhosts = '';
 			if( is_file( $realpath_template_root_dir.'preview.twig' ) ){
 				$template = $twig->load('preview.twig');
@@ -536,10 +561,11 @@ class GenerateVirtualHostsCommand extends Command
 
 
 		// --------------------------------------
-		// Staging dirs
+		// Staging
 		$src_vhosts = '';
 		$src_vhosts .= "\n";
-		$src_vhosts .= '# Stagings'."\n";
+		$src_vhosts .= '# --------------------------------------'."\n";
+		$src_vhosts .= '# Staging'."\n";
 		$this->put_tmp_contents( $src_vhosts );
 
 		for( $i = 0; $i < 10; $i ++ ){
