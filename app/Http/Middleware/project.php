@@ -23,6 +23,8 @@ class project
 		$global->project_code = null;
 		$global->branch_name = null;
 		$global->px2all = null;
+		$global->appearance = null;
+		$global->main_menu = null;
 		$global->cce = null;
 		$global->project = null;
 		$global->project_status = null;
@@ -64,16 +66,30 @@ class project
 			}
 		}
 
-		if( is_object($global->px2all) && property_exists($global->px2all, 'px2dtconfig') && property_exists($global->px2all->px2dtconfig, 'custom_console_extensions') ){
-			$cceResult = px2query(
-				$global->project_code,
-				$global->branch_name,
-				'/?PX=px2dthelper.custom_console_extensions',
-				array(
-					'output' => 'json',
-				)
-			);
-			$global->cce = $cceResult->list;
+		if( is_object($global->px2all) && property_exists($global->px2all, 'px2dtconfig') ){
+			if( property_exists($global->px2all->px2dtconfig, 'appearance') && is_object($global->px2all->px2dtconfig->appearance) ){
+				$global->appearance = $global->px2all->px2dtconfig->appearance;
+				if( !property_exists($global->appearance, 'main_color') || !strlen($global->appearance->main_color) ){
+					$global->appearance->main_color = '#000';
+				}
+			}
+
+			if( property_exists($global->px2all->px2dtconfig, 'main_menu') && is_array($global->px2all->px2dtconfig->main_menu) ){
+				$global->main_menu = $global->px2all->px2dtconfig->main_menu;
+			}
+
+
+			if( property_exists($global->px2all->px2dtconfig, 'custom_console_extensions') ){
+				$cceResult = px2query(
+					$global->project_code,
+					$global->branch_name,
+					'/?PX=px2dthelper.custom_console_extensions',
+					array(
+						'output' => 'json',
+					)
+				);
+				$global->cce = $cceResult->list;
+			}
 		}
 
 		return $next($request);
