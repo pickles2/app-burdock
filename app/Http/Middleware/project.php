@@ -25,6 +25,7 @@ class project
 		$global->px2all = null;
 		$global->appearance = null;
 		$global->main_menu = null;
+		$global->shoulder_menu = null;
 		$global->cce = null;
 		$global->project = null;
 		$global->project_status = null;
@@ -74,9 +75,15 @@ class project
 				}
 			}
 
-			if( property_exists($global->px2all->px2dtconfig, 'main_menu') && is_array($global->px2all->px2dtconfig->main_menu) ){
-				$global->main_menu = $global->px2all->px2dtconfig->main_menu;
-			}
+			$overwritableMenuItems = $this->get_overwritable_menu_definition($global->project_code, $global->branch_name);
+
+			$main_menu = array(
+				'*home' => true,
+				'*sitemaps' => true,
+				'*themes' => true,
+				'*contents' => true,
+				'*publish' => true,
+			);
 
 
 			if( property_exists($global->px2all->px2dtconfig, 'custom_console_extensions') ){
@@ -88,10 +95,134 @@ class project
 						'output' => 'json',
 					)
 				);
-				$global->cce = $cceResult->list;
+
+				$global->cce = (object) array();
+				foreach( $cceResult->list as $cce_id=>$cce_row ){
+					if( !$cce_row->class_name ){
+						$global->cce->{$cce_id} = false;
+						continue;
+					}
+					if( property_exists( $overwritableMenuItems, $cce_id ) ){
+						$overwritableMenuItems->{$cce_id} = (object) array(
+							"id" => $cce_id,
+							"label" => $cce_row->label,
+							"href" => 'custom_console_extensions/'.urlencode($cce_id).'/'.urlencode($global->project_code).'/'.urlencode($global->branch_name).'/',
+							"app" => 'custom_console_extensions.'.urlencode($cce_id),
+						);
+						continue;
+					}
+					$global->cce->{$cce_id} = (object) array(
+						"id" => $cce_id,
+						"label" => $cce_row->label,
+						"href" => 'custom_console_extensions/'.urlencode($cce_id).'/'.urlencode($global->project_code).'/'.urlencode($global->branch_name).'/',
+						"app" => 'custom_console_extensions.'.urlencode($cce_id),
+					);
+				}
+				// $global->cce = $cceResult->list;
 			}
+
+			if( property_exists($global->px2all->px2dtconfig, 'main_menu') && is_array($global->px2all->px2dtconfig->main_menu) ){
+				$main_menu = array();
+				foreach( $global->px2all->px2dtconfig->main_menu as $main_menu_id ){
+					$main_menu[$main_menu_id] = true;
+				}
+
+			}
+
+			$global->main_menu = (object) array();
+			$global->shoulder_menu = (object) array();
+			foreach( $main_menu as $main_menu_id => $row ){
+				if( property_exists( $overwritableMenuItems, $main_menu_id ) ){
+					$global->main_menu->{$main_menu_id} = $overwritableMenuItems->{$main_menu_id};
+					unset($overwritableMenuItems->{$main_menu_id});
+				}elseif( property_exists( $global->cce, $main_menu_id ) ){
+					$global->main_menu->{$main_menu_id} = $global->cce->{$main_menu_id};
+					unset($global->cce->{$main_menu_id});
+				}
+			}
+			$global->shoulder_menu = $overwritableMenuItems;
+
 		}
 
 		return $next($request);
 	}
+
+
+	/**
+	 * 上書き可能なメニューの定義を取得
+	 */
+	private function get_overwritable_menu_definition($project_code, $branch_name){
+
+		$overwritableMenuItems = (object) array(
+			'*home' => (object) array(
+				"id" => "*home",
+				"label" => 'ホーム',
+				"href" => 'home/'.urlencode($project_code).'/'.urlencode($branch_name).'/',
+				"app" => "home",
+			),
+			'*sitemaps' => (object) array(
+				"id" => "*sitemaps",
+				"label" => 'サイトマップ',
+				"href" => 'sitemaps/'.urlencode($project_code).'/'.urlencode($branch_name).'/',
+				"app" => "sitemaps",
+			),
+			'*themes' => (object) array(
+				"id" => "*themes",
+				"label" => 'テーマ',
+				"href" => 'themes/'.urlencode($project_code).'/'.urlencode($branch_name).'/',
+				"app" => "themes",
+			),
+			'*contents' => (object) array(
+				"id" => "*contents",
+				"label" => 'コンテンツ',
+				"href" => 'contents/'.urlencode($project_code).'/'.urlencode($branch_name).'/',
+				"app" => "contents",
+			),
+			'*publish' => (object) array(
+				"id" => "*publish",
+				"label" => 'パブリッシュ',
+				"href" => 'publish/'.urlencode($project_code).'/'.urlencode($branch_name).'/',
+				"app" => "publish",
+			),
+			'*composer' => (object) array(
+				"id" => "*composer",
+				"label" => 'Composerを操作する',
+				"href" => 'composer/'.urlencode($project_code).'/'.urlencode($branch_name).'/',
+				"app" => "composer",
+			),
+			'*modules' => (object) array(
+				"id" => "*modules",
+				"label" => 'モジュールを編集する',
+				"href" => 'modules/'.urlencode($project_code).'/'.urlencode($branch_name).'/',
+				"app" => "modules",
+			),
+			'*git' => (object) array(
+				"id" => "*git",
+				"label" => 'Gitを操作する',
+				"href" => 'git/'.urlencode($project_code).'/'.urlencode($branch_name).'/',
+				"app" => "git",
+			),
+			'*staging' => (object) array(
+				"id" => "*staging",
+				"label" => 'ステージング管理',
+				"href" => 'staging/'.urlencode($project_code).'/'.urlencode($branch_name).'/',
+				"app" => "staging",
+			),
+			'*delivery' => (object) array(
+				"id" => "*delivery",
+				"label" => '配信管理',
+				"href" => 'delivery/'.urlencode($project_code).'/'.urlencode($branch_name).'/',
+				"app" => "delivery",
+			),
+			'*clearcache' => (object) array(
+				"id" => "*clearcache",
+				"label" => 'キャッシュを消去する',
+				"href" => 'clearcache/'.urlencode($project_code).'/'.urlencode($branch_name).'/',
+				"app" => "clearcache",
+			),
+		);
+
+		return $overwritableMenuItems;
+	}
+
 }
