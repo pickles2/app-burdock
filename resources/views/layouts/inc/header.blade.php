@@ -77,13 +77,12 @@
 								<li><a href="{{ url('projects/'.urlencode($project->project_code).'/edit') }}" data-name="projects">プロジェクト環境設定</a></li>
 							</ul>
 						</li>
-						@if( $global->project_status->composerJsonExists )
-							<li><a href="{{ url('composer/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="composer">Composerを操作する</a></li>
-						@endif
-						@if( $global->project_status->pathExists )
-							<li><a href="{{ url('git/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="git">Gitを操作する</a></li>
-						@endif
 						@if( $global->project_status->isPxStandby )
+
+							@foreach($global->shoulder_menu as $shoulder_menu_id=>$shoulder_menu_info)
+							<li><a href="{{ url($shoulder_menu_info->href) }}" data-name="{{ $shoulder_menu_info->app }}">{{ $shoulder_menu_info->label }}</a></li>
+							@endforeach
+
 							<li><a href="javascript:;">ツール</a>
 								<ul>
 									<li><a href="{{ url('search/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="search">検索</a></li>
@@ -102,19 +101,13 @@
 								</li>
 							@endif
 
-							<li><a href="{{ url('staging/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="staging">ステージング管理</a></li>
-							<li><a href="{{ url('delivery/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="delivery">配信管理</a></li>
-							<li><a href="{{ url('clearcache/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="clearcache">キャッシュを消去する</a></li>
-
-
-
-
-							@foreach($global->shoulder_menu as $shoulder_menu_id=>$shoulder_menu_info)
-							<li><a href="{{ url($shoulder_menu_info->href) }}" data-name="{{ $shoulder_menu_info->app }}">{{ $shoulder_menu_info->label }}</a></li>
-							@endforeach
-
-
-
+						@else
+						@if( $global->project_status->composerJsonExists )
+							<li><a href="{{ url('composer/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="composer">Composerを操作する</a></li>
+						@endif
+						@if( $global->project_status->pathExists )
+							<li><a href="{{ url('git/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="git">Gitを操作する</a></li>
+						@endif
 
 						@endif
 						@if( $global->project_status->pathExists )

@@ -190,12 +190,12 @@ class project
 				"href" => 'composer/'.urlencode($project_code).'/'.urlencode($branch_name).'/',
 				"app" => "composer",
 			),
-			'*modules' => (object) array(
-				"id" => "*modules",
-				"label" => 'モジュールを編集する',
-				"href" => 'modules/'.urlencode($project_code).'/'.urlencode($branch_name).'/',
-				"app" => "modules",
-			),
+			// '*modules' => (object) array(
+			// 	"id" => "*modules",
+			// 	"label" => 'モジュールを編集する',
+			// 	"href" => 'modules/'.urlencode($project_code).'/'.urlencode($branch_name).'/',
+			// 	"app" => "modules",
+			// ),
 			'*git' => (object) array(
 				"id" => "*git",
 				"label" => 'Gitを操作する',
