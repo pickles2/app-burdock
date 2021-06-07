@@ -236,6 +236,7 @@ Apache 用の Virtual Hosts の設定ファイルを出力します。
 - ファイルとフォルダ で、Pickles 2 プロジェクトの準備が整っていない場合に、いくつかのCRUD操作ができない不具合を修正。
 - プロジェクトの `$conf->plugins->px2dt->main_menu` に対応。メインメニューをプロジェクト毎にカスタマイズできるようになった。
 - プロジェクトの `$conf->plugins->px2dt->appearance->main_color` に対応。
+- ファイルのアップロードダイアログが操作できない不具合を修正。
 - その他の細かい修正。
 
 ### Pickles 2 Burdock v0.1.0 (2021年5月28日)

@@ -1,95 +1,102 @@
 @php
-    $id_attr = 'modal-sitemap_upload' . $controller;
+	$id_attr = 'modal-sitemap_upload' . $controller;
 @endphp
 
 {{-- 削除ボタン --}}
-<button class="btn px2-btn" data-toggle="modal" data-target="#{{ $id_attr }}">
-    サイトマップをアップロードする
+<button class="btn px2-btn cont-btn-sitemap-upload-dialog">
+	サイトマップをアップロードする
 </button>
+<script>
+$(window).on('load', function(){
+	var modal;
+	var $btnUpload = $('<button class="px2-btn px2-btn--primary">')
+		.text('アップロードする')
+		.attr({
+			'type': 'submit',
+			'disabled': true,
+		});
 
-{{-- モーダルウィンドウ --}}
-<div class="modal fade" id="{{ $id_attr }}" role="dialog" aria-labelledby="{{ $id_attr }}-label" aria-hidden="true">
-    <div style="position: absolute; left: 0px; top: 0px; padding-top: 4em; overflow: auto; width: 100%; height: 100%;">
-	    <div class="dialog_box" style="width: 80%; margin: 3em auto;">
-	        <h1>サイトマップのアップロード</h1>
-	        <div>
-	            <div class="px2dt-git-commit">
-                    <ul class="listview" style="margin: 20px 20px;">
-        				<li>
-                            <ul class="cont_filelist_sitemap__ext-list" style="margin: 40px 20px;">
-                                <li>
-        							<form class="form-inline" method="POST" action="{{ url('/sitemaps/'.urlencode($project_code).'/'.urlencode($branch_name).'/upload') }}" enctype="multipart/form-data">
-        								@csrf
-        								@method('POST')
-        								<div class="form-group">
-        									<input type="file" class="form-control @if($errors->has('file')) is-invalid @endif" name="file" value="{{ old('file') }}" placeholder="aファイル選択..." accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="width: 700px;" onchange="uploadFile(event);">
-                                            <script>
-                                                function uploadFile(e) {
-                                                    // 処理前に Loading 画像を表示
-                                                    px2style.loading();
-													px2style.loadingMessage("しばらくお待ちください。");
+	$('.cont-btn-sitemap-upload-dialog').on('click', function(){
+		var $body = $($('#cont-template-sitemap-upload-dialog').html());
+		px2style.modal({
+			"title": 'サイトマップのアップロード',
+			"body": $body,
+			"form": {
+				"action": "{{ url('/sitemaps/'.urlencode($project_code).'/'.urlencode($branch_name).'/upload') }}",
+				"method": "post",
+				"submit": function(){
+					// modal.lock(); // TODO: ここで lockしてからフォーム送信すると 419 エラーで弾かれる。なぜ・・・？？
+					px2style.loading();
+				}
+			},
+			"buttons": [
+				$btnUpload
+			],
+			"buttonsSecondary": [
+				$('<button>')
+					.text('キャンセル')
+					.on('click', function(){
+						px2style.closeModal();
+					})
+			],
+		}, function(_modal){
+			modal = _modal;
+			modal.$modal.find('form').attr({'enctype': 'multipart/form-data'});
+			// modal.$modal.find('input[name=_token]').val($('meta[name=csrf-token]').attr('content'));
+		});
 
-                    								var errorMessage = document.getElementById("errorMessage");
-                                                    var submitStatus = document.getElementById("submitStatus");
-                                                    var file = e.target.files;  //選択ファイルを配列形式で取得
-                                                    var num  = file.length;       //選択されたファイル数を格納
-                                                    var str = "";                 //ファイル情報を格納する変数
-                                                    for ( var i = 0 ; i < num ; i++ ) {
-                                                        str += file[i].type;
-                                                    }
-                                                    // ajaxでファイルのmimetypeを取得しコントローラーに送信
-                    								$.ajax({
-                    									url: "/sitemaps/{{ urlencode($project_code) }}/{{ urlencode($branch_name) }}/uploadAjax",
-                    									type: 'post',
-                    									data : {
-                    										"str" : str,
-                    										_token : '{{ csrf_token() }}'
-                    									},
-                    								}).done(function(data){
-                    									// ajaxで取得してきた値で処理分け
-                                                        if(data.status === 0) {
-                                                            errorMessage.innerHTML = data.error;
-                                                            submitStatus.disabled = true;
-                                                        } else {
-                                                            errorMessage.innerHTML = data.error;
-                                                            submitStatus.disabled = false;
-                                                        }
-                                                    }).always(function(data){
-                                                        // 処理終了時にLading 画像を消す
-                                                        px2style.closeLoading();
-                    								});
-                    							}
-                							</script>
-        								</div>
-        								<button id="submitStatus" type="submit" class="px2-btn px2-btn--primary" disabled="disabled">送信</button>
-        								<button type="reset" class="px2-btn" onclick="cancelButton();">キャンセル</button>
-                                        <script>
-                                            // キャンセルボタンを押した際に送信ボタンをdisabledにする
-                                            function cancelButton() {
-                                                var errorMessage = document.getElementById("errorMessage");
-                                                var submitStatus = document.getElementById("submitStatus");
-                                                errorMessage.innerHTML = '';
-                                                submitStatus.disabled = true;
-                                            }
-                                        </script>
-        							</form>
-                                </li>
-                                <li>
-                                    <span id="errorMessage" class="invalid-feedback" role="alert"></span>
-                                    @if($errors->has('file'))
-                                        <span class="invalid-feedback" role="alert">
-                                            {{ $errors->first('file') }}
-                                        </span>
-                                    @endif
-                                </li>
-                            </ul>
-        				</li>
-        			</ul>
-	            </div>
-	        </div>
-	        <div class="dialog-buttons px2-text-align-center">
-	            <button type="button" class="px2-btn" data-dismiss="modal">閉じる</button>
-	        </div>
-	    </div>
+
+		$body.find('input[type=file]').on('change', function(e){
+			px2style.loading();
+			px2style.loadingMessage("しばらくお待ちください。");
+
+			var $errorMessage = $(".cont-sitemap-upload-error-message");
+			var file = e.target.files;  //選択ファイルを配列形式で取得
+			var num  = file.length;     //選択されたファイル数を格納
+			var mimeType = "";          //ファイル情報を格納する変数
+			for ( var i = 0 ; i < num ; i++ ) {
+				mimeType += file[i].type;
+			}
+
+			// ajaxでファイルのmimetypeを取得しコントローラーに送信
+			$.ajax({
+				url: "/sitemaps/{{ urlencode($project_code) }}/{{ urlencode($branch_name) }}/uploadAjax",
+				type: 'post',
+				data : {
+					"str" : mimeType,
+					_token : $('meta[name=csrf-token]').attr('content'),
+				},
+			}).done(function(data){
+				// ajaxで取得してきた値で処理分け
+				$errorMessage.html( data.error );
+				if(data.status === 0) {
+					$btnUpload.attr({'disabled': true});
+				} else {
+					$btnUpload.attr({'disabled': false});
+				}
+			}).always(function(data){
+				px2style.closeLoading();
+			});
+		});
+	})
+
+});
+
+</script>
+
+<script id="cont-template-sitemap-upload-dialog" type="text/template">
+	<div>
+		@csrf
+		@method('POST')
+		<div class="form-group">
+			<input type="file"
+				class="form-control @if($errors->has('file')) is-invalid @endif"
+				name="file"
+				value="{{ old('file') }}"
+				placeholder="aファイル選択..."
+				accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+				/>
+		</div>
+		<span class="cont-sitemap-upload-error-message invalid-feedback" role="alert"></span>
 	</div>
-</div>
+</script>
