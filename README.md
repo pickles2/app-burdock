@@ -223,7 +223,7 @@ Apache 用の Virtual Hosts の設定ファイルを出力します。
 
 ## 更新履歴 - Change log
 
-### Pickles 2 Burdock v0.1.1 (リリース日未定)
+### Pickles 2 Burdock v0.1.1 (2021年6月7日)
 
 - Git機能で、ステータス情報を表示できない不具合を修正。
 - Composer 操作とキャッシュの消去で、結果を表示できない不具合を修正。
