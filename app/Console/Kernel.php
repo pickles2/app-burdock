@@ -76,6 +76,18 @@ class Kernel extends ConsoleKernel
 
 
 		// --------------------------------------
+		// Burdock: 論理削除されている古いデータを消去する
+		$schedule->command(
+				HardDeleteGarbagesCommand::class,
+				[]
+			)
+			// ->onOneServer()
+			->withoutOverlapping(60) // 排他ロックの有効期限(分)
+			->hourlyAt(17) // 毎時 17分に実行する
+			->appendOutputTo($realpath_log);
+
+
+		// --------------------------------------
 		// Burdock: VirtualHost設定ファイルの生成処理
 		$schedule->command(
 				GenerateVirtualHostsCommand::class,

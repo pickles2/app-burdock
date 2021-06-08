@@ -156,7 +156,7 @@ BROADCAST_DRIVER=redis
 
 ## 起動する
 
-次のコマンドで Redis と Laravel Echo Server、 Laravel Queue を起動します。
+次のコマンドで Redis と Laravel Echo Server、 Laravel Queue などを起動します。
 
 ```
 redis-server --daemonize yes;
@@ -222,6 +222,10 @@ Apache 用の Virtual Hosts の設定ファイルを出力します。
 
 
 ## 更新履歴 - Change log
+
+### Pickles 2 Burdock v0.1.2 (リリース日未定)
+
+- 定期バッチに、論理削除された古いデータを、物理削除する処理を追加した。
 
 ### Pickles 2 Burdock v0.1.1 (2021年6月7日)
 

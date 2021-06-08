@@ -27,7 +27,8 @@ class StartpageController extends Controller
      */
     public function startpage(User $user)
     {
-        $user = Auth::user();   #ログインユーザー情報を取得します。
+        $user = Auth::user();
+
 		if( !$user ){
 			return view('startpage.index');
 		}
@@ -35,7 +36,6 @@ class StartpageController extends Controller
 			return view('auth.verify');
 		}
 
-		//全プロジェクトが見えるように一時的に変更
 		$projects = Project::latest()->paginate();
         return view(
             'startpage.dashboard',
