@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Project;
+use App\User;
 use App\EventLog;
 use App\Helpers\applock;
 
@@ -61,10 +62,43 @@ class HardDeleteGarbagesCommand extends Command
 		$this->info('----------------------------------------------------------------');
 		$this->line( '' );
 
+		// イベントログを記録する
+		$this->event_log('start', 'Starting Hard Delete Garbages.');
+
+		// --------------------------------------
+		// メールアドレス変更のための一時テーブル
+		// TODO: 実装する
+
+
+		// --------------------------------------
+		// パスワードリセットのための一時テーブル
+		// TODO: 実装する
+
 
 		// --------------------------------------
 		// ユーザーデータを物理削除する
 		// TODO: 実装する
+		$softDeletedUsers = User::onlyTrashed()
+			->where( 'deleted_at', '<', date('Y-m-d H:i:s', $this->retention_period) )
+			->get();
+
+		foreach( $softDeletedUsers as $user ){
+			$this->line( '' );
+			$this->info( $user->project_name );
+			$this->line( ' ('.$user->id.' - '.$user->name.')' );
+			$this->line( ' This project was deleted at '.$user->deleted_at.'.' );
+
+
+			// ------------
+			// DBレコードの物理削除
+			// $user->forceDelete();
+
+			$this->line( '' );
+			sleep(1);
+			continue;
+		}
+
+
 
 		// --------------------------------------
 		// プロジェクトデータを物理削除する
@@ -79,6 +113,7 @@ class HardDeleteGarbagesCommand extends Command
 			$this->line( ' This project was deleted at '.$project->deleted_at.'.' );
 
 			$errored_directories = array();
+			$removed_directories = array();
 
 			// ------------
 			// ステージングを削除
@@ -88,10 +123,12 @@ class HardDeleteGarbagesCommand extends Command
 				if( preg_match('/^'.preg_quote($project->project_code, '/').'\-\-\-\-/', $dirname) ){
 					$this->line( ' remove dir: '.$dirname.'' );
 					$realpath_dir = $this->fs->get_realpath( $this->realpath_stagings_base_dir.'/'.$dirname.'/' );
-					// $result = $this->fs->rm( $realpath_dir );
-					$result = false;
+					$result = $this->fs->chmod_r( $realpath_dir, 0777 );
+					$result = $this->fs->rm( $realpath_dir );
 					if( !$result ){
 						array_push($errored_directories, $realpath_dir);
+					}else{
+						array_push($removed_directories, $realpath_dir);
 					}
 				}
 			}
@@ -104,10 +141,12 @@ class HardDeleteGarbagesCommand extends Command
 				if( preg_match('/^'.preg_quote($project->project_code, '/').'\-\-\-/', $dirname) ){
 					$this->line( ' remove dir: '.$dirname.'' );
 					$realpath_dir = $this->fs->get_realpath( $this->realpath_repositories_base_dir.'/'.$dirname.'/' );
-					// $result = $this->fs->rm( $realpath_dir );
-					$result = false;
+					$result = $this->fs->chmod_r( $realpath_dir, 0777 );
+					$result = $this->fs->rm( $realpath_dir );
 					if( !$result ){
 						array_push($errored_directories, $realpath_dir);
+					}else{
+						array_push($removed_directories, $realpath_dir);
 					}
 				}
 			}
@@ -120,10 +159,12 @@ class HardDeleteGarbagesCommand extends Command
 				if( $project->project_code == $dirname ){
 					$this->line( ' remove dir: '.$dirname.'' );
 					$realpath_dir = $this->fs->get_realpath( $this->realpath_projects_base_dir.'/'.$dirname.'/' );
-					// $result = $this->fs->rm( $realpath_dir );
-					$result = false;
+					$result = $this->fs->chmod_r( $realpath_dir, 0777 );
+					$result = $this->fs->rm( $realpath_dir );
 					if( !$result ){
 						array_push($errored_directories, $realpath_dir);
+					}else{
+						array_push($removed_directories, $realpath_dir);
 					}
 				}
 			}
@@ -139,14 +180,16 @@ class HardDeleteGarbagesCommand extends Command
 				}
 				$this->line( '' );
 
-				// TODO: ログテーブルにエラー情報を挿入する
+				$this->event_log('progress', '[ERROR] Failed to hard delete project "'.$project->project_code.'". Failed to remove any directories. '.implode(', ', $errored_directories), 'error');
 
 				continue;
 			}
 
 			// ------------
 			// DBレコードの物理削除
-			// $softDeletedProject->forceDelete();
+			// $project->forceDelete();
+
+			$this->event_log('progress', 'Completed to hard delete project "'.$project->project_code.'". '.implode(', ', $removed_directories));
 
 			$this->line( '' );
 			sleep(1);
@@ -157,7 +200,28 @@ class HardDeleteGarbagesCommand extends Command
 		// --------------------------------------
 		// 古いログデータを物理削除する
 		// TODO: 実装する
+		$softDeletedEventLogs = EventLog::onlyTrashed()
+			->where( 'deleted_at', '<', date('Y-m-d H:i:s', $this->retention_period) )
+			->get();
 
+		foreach( $softDeletedEventLogs as $eventLog ){
+			$this->line( '' );
+			$this->info( $eventLog->created_at );
+
+
+			// ------------
+			// DBレコードの物理削除
+			// $eventLog->forceDelete();
+
+			$this->line( '' );
+			sleep(1);
+			continue;
+		}
+
+
+
+		// イベントログを記録する
+		$this->event_log('exit', 'Finished Hard Delete Garbages.');
 
 		$this->line( '' );
 		$this->line(' finished!');
@@ -169,6 +233,22 @@ class HardDeleteGarbagesCommand extends Command
 		$this->line( '' );
 
 		return 0; // 終了コード
+	}
+
+	/**
+	 * イベントログを記録する
+	 */
+	private function event_log( $progress, $message, $error_level = null ){
+		// イベントログを記録する
+		$eventLog = new EventLog;
+		$eventLog->pid = getmypid();
+		$eventLog->function_name = 'hard_delete_garbages';
+		$eventLog->event_name = 'hard_delete';
+		$eventLog->progress = $progress;
+		$eventLog->message = $message;
+		$eventLog->error_level = $error_level;
+		$eventLog->save();
+		return;
 	}
 
 }
