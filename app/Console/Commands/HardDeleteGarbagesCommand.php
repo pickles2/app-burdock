@@ -109,8 +109,23 @@ class HardDeleteGarbagesCommand extends Command
 
 			// ------------
 			// DBレコードの物理削除
-			// TODO: リレーションされている周辺テーブルのクリーニング後に実行する
-			// $user->forceDelete();
+
+			// メールアドレス変更のための一時テーブル
+			$affectedRows = DB::table('users_email_changes')
+				->where( 'user_id', $user->id )
+				->delete();
+			$this->event_log('progress', $affectedRows.' records were hard deleted from `users_email_changes`.');
+
+			// プロジェクトの作成ユーザーだった場合、 null に置き換える
+			$affectedRows = DB::table('projects')
+				->where( 'user_id', $user->id )
+				->update( [
+					'user_id' => null
+				] );
+			$this->event_log('progress', $affectedRows.' records were set `user_id` to `null` from `projects`.');
+
+			// ユーザー自体の削除
+			$user->forceDelete();
 
 			$this->event_log('progress', 'Completed to hard delete user "'.$user->name.' - ('.$user->id.')".');
 
