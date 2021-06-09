@@ -76,8 +76,38 @@ class HardDeleteGarbagesCommand extends Command
 		$this->info('----------------------------------------------------------------');
 		$this->line( '' );
 
-		// イベントログを記録する
+		// イベントログの記録を開始する
 		$this->event_log('start', 'Starting Hard Delete Garbages.');
+
+
+		// 保存期間を過ぎたデータを削除する
+		$this->hard_delete_user_temporary_data();
+		$this->hard_delete_softdelete_data();
+		$this->hard_delete_old_log_data();
+
+
+		// イベントログの記録を終了する
+		$this->event_log('exit', 'Finished Hard Delete Garbages.');
+
+
+		$this->line( '' );
+		$this->line(' finished!');
+		$this->line( '' );
+
+		$this->line('Local Time: '.date('Y-m-d H:i:s'));
+		$this->line('GMT: '.gmdate('Y-m-d H:i:s'));
+		$this->comment('------------ '.$this->signature.' successful ------------');
+		$this->line( '' );
+
+		return 0; // 終了コード
+	}
+
+
+
+	/**
+	 * 保存期間を過ぎたユーザー情報更新用一時テーブルを削除する
+	 */
+	private function hard_delete_user_temporary_data(){
 
 		// --------------------------------------
 		// メールアドレス変更のための一時テーブル
@@ -93,6 +123,13 @@ class HardDeleteGarbagesCommand extends Command
 			->delete();
 		$this->event_log('progress', $affectedRows.' records were hard deleted from `password_resets`.');
 
+		return;
+	}
+
+	/**
+	 * 保存期間を過ぎた論理削除データを削除する
+	 */
+	private function hard_delete_softdelete_data(){
 
 		// --------------------------------------
 		// ユーザーデータを物理削除する
@@ -252,7 +289,13 @@ class HardDeleteGarbagesCommand extends Command
 			continue;
 		}
 
+		return;
+	}
 
+	/**
+	 * 保存期間を過ぎた各種ログデータを削除する
+	 */
+	private function hard_delete_old_log_data(){
 		// --------------------------------------
 		// 古いログデータを物理削除する
 
@@ -334,22 +377,10 @@ class HardDeleteGarbagesCommand extends Command
 			$this->event_log('progress', '[ERROR] Failed to remove old log directories. '.implode(', ', $errored_directories), 'error');
 		}
 
-
-
-		// イベントログを記録する
-		$this->event_log('exit', 'Finished Hard Delete Garbages.');
-
-		$this->line( '' );
-		$this->line(' finished!');
-		$this->line( '' );
-
-		$this->line('Local Time: '.date('Y-m-d H:i:s'));
-		$this->line('GMT: '.gmdate('Y-m-d H:i:s'));
-		$this->comment('------------ '.$this->signature.' successful ------------');
-		$this->line( '' );
-
-		return 0; // 終了コード
+		return;
 	}
+
+
 
 	/**
 	 * イベントログを記録する
