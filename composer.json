@@ -77,6 +77,9 @@
         "stop-echo-server": [
             "pm2 stop laravel-echo-server-pm2.json",
             "redis-cli shutdown"
+        ],
+        "test": [
+            "php ./vendor/phpunit/phpunit/phpunit"
         ]
     },
     "config": {

@@ -28,6 +28,9 @@ class HardDeleteGarbagesCommand extends Command
 	/** $fs */
 	private $fs;
 
+	/** 現在時刻のタイムスタンプ */
+	private $now;
+
 	/** 論理削除データの保存期間設定 */
 	private $softdelete_retention_period;
 
@@ -48,17 +51,19 @@ class HardDeleteGarbagesCommand extends Command
 
 		$this->fs = new \tomk79\filesystem();
 
-		$now = time();
+		$this->now = time();
+
+        $utils = new \App\Helpers\utils();
 
 		// 論理削除データの保存期間設定
 		// この時刻よりも前に論理削除されたデータを削除対象とする。
-		$this->softdelete_retention_period = $now - (14 * 24 * 60 * 60); // 14日間
+		$this->softdelete_retention_period = $utils->resolve_period_config( config('burdock.softdelete_retention_period') );
 
 		// 各種ログデータの保存期間設定
-		$this->log_retention_period = $now - (365 * 24 * 60 * 60); // 1年間
+		$this->log_retention_period = $utils->resolve_period_config( config('burdock.log_retention_period') );
 
 		// ユーザー情報更新用一時テーブルの保存期間設定
-		$this->user_temporary_retention_period = $now - (1 * 24 * 60 * 60); // 24時間
+		$this->user_temporary_retention_period = $utils->resolve_period_config( config('burdock.user_temporary_retention_period') );
 	}
 
 	/**
@@ -73,6 +78,12 @@ class HardDeleteGarbagesCommand extends Command
 		$this->info('  Start '.$this->signature);
 		$this->info('    - Local Time: '.date('Y-m-d H:i:s'));
 		$this->info('    - GMT: '.gmdate('Y-m-d H:i:s'));
+		$this->info('----------------------------------------------------------------');
+		$this->line( '' );
+		$this->line( 'BD_SOFTDELETE_RETENTION_PERIOD='.config('burdock.softdelete_retention_period').' ('.(is_int($this->softdelete_retention_period) ? $this->softdelete_retention_period.' sec' : 'false').')' );
+		$this->line( 'BD_LOG_RETENTION_PERIOD='.config('burdock.log_retention_period').' ('.(is_int($this->log_retention_period) ? $this->log_retention_period.' sec' : 'false').')' );
+		$this->line( 'BD_USER_TEMPORARY_RETENTION_PERIOD='.config('burdock.user_temporary_retention_period').' ('.(is_int($this->user_temporary_retention_period) ? $this->user_temporary_retention_period.' sec' : 'false').')' );
+		$this->line( '' );
 		$this->info('----------------------------------------------------------------');
 		$this->line( '' );
 
@@ -109,17 +120,21 @@ class HardDeleteGarbagesCommand extends Command
 	 */
 	private function hard_delete_user_temporary_data(){
 
+		if( !is_int( $this->user_temporary_retention_period ) ){
+			return false;
+		}
+
 		// --------------------------------------
 		// メールアドレス変更のための一時テーブル
 		$affectedRows = DB::table('users_email_changes')
-			->where( 'created_at', '<', date('Y-m-d H:i:s', $this->user_temporary_retention_period) )
+			->where( 'created_at', '<', date('Y-m-d H:i:s', $this->now - $this->user_temporary_retention_period) )
 			->delete();
 		$this->event_log('progress', $affectedRows.' records were hard deleted from `users_email_changes`.');
 
 		// --------------------------------------
 		// パスワードリセットのための一時テーブル
 		$affectedRows = DB::table('password_resets')
-			->where( 'created_at', '<', date('Y-m-d H:i:s', $this->user_temporary_retention_period) )
+			->where( 'created_at', '<', date('Y-m-d H:i:s', $this->now - $this->user_temporary_retention_period) )
 			->delete();
 		$this->event_log('progress', $affectedRows.' records were hard deleted from `password_resets`.');
 
@@ -131,10 +146,14 @@ class HardDeleteGarbagesCommand extends Command
 	 */
 	private function hard_delete_softdelete_data(){
 
+		if( !is_int( $this->softdelete_retention_period ) ){
+			return false;
+		}
+
 		// --------------------------------------
 		// ユーザーデータを物理削除する
 		$softDeletedUsers = User::onlyTrashed()
-			->where( 'deleted_at', '<', date('Y-m-d H:i:s', $this->softdelete_retention_period) )
+			->where( 'deleted_at', '<', date('Y-m-d H:i:s', $this->now - $this->softdelete_retention_period) )
 			->get();
 
 		foreach( $softDeletedUsers as $user ){
@@ -176,7 +195,7 @@ class HardDeleteGarbagesCommand extends Command
 		// --------------------------------------
 		// プロジェクトデータを物理削除する
 		$softDeletedProjects = Project::onlyTrashed()
-			->where( 'deleted_at', '<', date('Y-m-d H:i:s', $this->softdelete_retention_period) )
+			->where( 'deleted_at', '<', date('Y-m-d H:i:s', $this->now - $this->softdelete_retention_period) )
 			->get();
 
 		foreach( $softDeletedProjects as $project ){
@@ -296,13 +315,18 @@ class HardDeleteGarbagesCommand extends Command
 	 * 保存期間を過ぎた各種ログデータを削除する
 	 */
 	private function hard_delete_old_log_data(){
+
+		if( !is_int( $this->log_retention_period ) ){
+			return false;
+		}
+
 		// --------------------------------------
 		// 古いログデータを物理削除する
 
 		// ------------
 		// DBレコードの物理削除
 		$affectedRows = $softDeletedEventLogs = EventLog
-			::where( 'created_at', '<', date('Y-m-d H:i:s', $this->log_retention_period) )
+			::where( 'created_at', '<', date('Y-m-d H:i:s', $this->now - $this->log_retention_period) )
 			->forceDelete();
 		$this->event_log('progress', $affectedRows.' records were hard deleted from EventLog.');
 
@@ -310,8 +334,8 @@ class HardDeleteGarbagesCommand extends Command
 		// 古いログディレクトリを削除
 		$realpath_logs_base_dir = config('burdock.data_dir').'/logs/';
 		$dirs = $this->fs->ls( $realpath_logs_base_dir );
-		$period_year_month = intval( date('Ym', $this->log_retention_period) );
-		$period_date = intval( date('j', $this->log_retention_period) );
+		$period_year_month = intval( date('Ym', $this->now - $this->log_retention_period) );
+		$period_date = intval( date('j', $this->now - $this->log_retention_period) );
 		$removed_directories = array();
 		$errored_directories = array();
 		foreach( $dirs as $dirname ){

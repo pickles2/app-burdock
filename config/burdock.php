@@ -110,4 +110,23 @@ return [
     */
     'user_email_allowlist' => env('BD_USER_EMAIL_ALLOWLIST', ''),
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | 古いデータの保持期間設定
+    |--------------------------------------------------------------------------
+    |
+    | Y = 年 (×365日)
+    | M = 月 (×30日)
+    | D = 日 (×24時間)
+    | H = 時間 (×60分)
+    | I = 分 (×60秒)
+    | 単位なし = 秒
+    | ※単位は大文字小文字を区別しない
+    |
+    */
+    'softdelete_retention_period' => env('BD_SOFTDELETE_RETENTION_PERIOD', '14D'),
+    'log_retention_period' => env('BD_LOG_RETENTION_PERIOD', '1Y'),
+    'user_temporary_retention_period' => env('BD_USER_TEMPORARY_RETENTION_PERIOD', '24H'),
+
 ];

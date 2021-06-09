@@ -78,4 +78,87 @@ class utils{
 		return $tmp_preview_path;
 	}
 
+	/**
+	 * 保持期間設定値を解釈し、タイムスタンプを導く
+	 * @return int 保持期間
+	 */
+	public function resolve_period_config( $conf_value ){
+
+		if( !strlen($conf_value) ){
+			// 空白ならNG
+			trigger_error('The retention period setting value "'.$conf_value.'" is invalid format.');
+			return false;
+		}
+
+		if( strtolower($conf_value) == 'forever' ){
+			// キーワード `forever` の場合、期限を設けない。 (= false)
+			return false;
+		}
+
+		$rtn = 0;
+		$tmpValStr = strtolower($conf_value);
+
+		while(1){
+
+			if( !strlen($tmpValStr) ){
+				break;
+			}
+
+			if( !preg_match('/^([0-9]+)([a-z]+)?(.*)$/', $tmpValStr, $matched) ){
+				// 形式エラー
+				trigger_error('The retention period setting value "'.$conf_value.'" is invalid format.');
+				return false;
+			}
+
+			$int = $matched[1];
+			$unit = $matched[2];
+			$tmpValStr = $matched[3];
+
+			if( $int !== '0' && strpos($int, '0') === 0 ){
+				// 形式エラー: ゼロから始まる数値を含むため。
+				trigger_error('The retention period setting value "'.$conf_value.'" is invalid format.');
+				return false;
+			}
+
+			$int = intval($int);
+
+			switch( $unit ){
+				case '':
+					// 秒
+					break;
+				case 'min':
+					// 分
+					$int = $int * 60;
+					break;
+				case 'h':
+					// 時
+					$int = $int * 60 * 60;
+					break;
+				case 'd':
+					// 日
+					$int = $int * 60 * 60 * 24;
+					break;
+				case 'm':
+					// 月
+					$int = $int * 60 * 60 * 24 * 30;
+					break;
+				case 'y':
+					// 年
+					$int = $int * 60 * 60 * 24 * 365;
+					break;
+				default:
+					// 形式エラー: 未定義の単位
+					trigger_error('The retention period setting value "'.$conf_value.'" is invalid format.');
+					return false;
+					break;
+			}
+
+
+			$rtn += $int;
+			continue;
+		}
+
+		return $rtn;
+	}
+
 }
