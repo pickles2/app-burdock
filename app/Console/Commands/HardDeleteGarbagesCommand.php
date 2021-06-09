@@ -153,12 +153,12 @@ class HardDeleteGarbagesCommand extends Command
 
 			// ------------
 			// ステージングを削除
-			$this->realpath_stagings_base_dir = config('burdock.data_dir').'/stagings/';
-			$dirs = $this->fs->ls( $this->realpath_stagings_base_dir );
+			$realpath_stagings_base_dir = config('burdock.data_dir').'/stagings/';
+			$dirs = $this->fs->ls( $realpath_stagings_base_dir );
 			foreach( $dirs as $dirname ){
 				if( preg_match('/^'.preg_quote($project->project_code, '/').'\-\-\-\-/', $dirname) ){
 					$this->line( ' remove dir: '.$dirname.'' );
-					$realpath_dir = $this->fs->get_realpath( $this->realpath_stagings_base_dir.'/'.$dirname.'/' );
+					$realpath_dir = $this->fs->get_realpath( $realpath_stagings_base_dir.'/'.$dirname.'/' );
 					$result = $this->fs->chmod_r( $realpath_dir, 0777 );
 					$result = $this->fs->rm( $realpath_dir );
 					if( !$result ){
@@ -171,12 +171,12 @@ class HardDeleteGarbagesCommand extends Command
 
 			// ------------
 			// プレビューを削除
-			$this->realpath_repositories_base_dir = config('burdock.data_dir').'/repositories/';
-			$dirs = $this->fs->ls( $this->realpath_repositories_base_dir );
+			$realpath_repositories_base_dir = config('burdock.data_dir').'/repositories/';
+			$dirs = $this->fs->ls( $realpath_repositories_base_dir );
 			foreach( $dirs as $dirname ){
 				if( preg_match('/^'.preg_quote($project->project_code, '/').'\-\-\-/', $dirname) ){
 					$this->line( ' remove dir: '.$dirname.'' );
-					$realpath_dir = $this->fs->get_realpath( $this->realpath_repositories_base_dir.'/'.$dirname.'/' );
+					$realpath_dir = $this->fs->get_realpath( $realpath_repositories_base_dir.'/'.$dirname.'/' );
 					$result = $this->fs->chmod_r( $realpath_dir, 0777 );
 					$result = $this->fs->rm( $realpath_dir );
 					if( !$result ){
@@ -189,12 +189,12 @@ class HardDeleteGarbagesCommand extends Command
 
 			// ------------
 			// プロジェクトディレクトリを削除
-			$this->realpath_projects_base_dir = config('burdock.data_dir').'/projects/';
-			$dirs = $this->fs->ls( $this->realpath_projects_base_dir );
+			$realpath_projects_base_dir = config('burdock.data_dir').'/projects/';
+			$dirs = $this->fs->ls( $realpath_projects_base_dir );
 			foreach( $dirs as $dirname ){
 				if( $project->project_code == $dirname ){
 					$this->line( ' remove dir: '.$dirname.'' );
-					$realpath_dir = $this->fs->get_realpath( $this->realpath_projects_base_dir.'/'.$dirname.'/' );
+					$realpath_dir = $this->fs->get_realpath( $realpath_projects_base_dir.'/'.$dirname.'/' );
 					$result = $this->fs->chmod_r( $realpath_dir, 0777 );
 					$result = $this->fs->rm( $realpath_dir );
 					if( !$result ){
@@ -263,8 +263,76 @@ class HardDeleteGarbagesCommand extends Command
 			->forceDelete();
 		$this->event_log('progress', $affectedRows.' records were hard deleted from EventLog.');
 
+		// ------------
+		// 古いログディレクトリを削除
+		$realpath_logs_base_dir = config('burdock.data_dir').'/logs/';
+		$dirs = $this->fs->ls( $realpath_logs_base_dir );
+		$period_year_month = intval( date('Ym', $this->log_retention_period) );
+		$period_date = intval( date('j', $this->log_retention_period) );
+		$removed_directories = array();
+		$errored_directories = array();
+		foreach( $dirs as $dirname ){
+			if( preg_match('/^[1-9][0-9]*$/', $dirname) ){
+				$dirname_int = intval($dirname);
+				if( $dirname_int < $period_year_month ){
+					// 年月が期限日より過去なら、年月ディレクトリごと消去
+					$this->line( ' remove dir: '.$dirname.'' );
+					$realpath_dir = $this->fs->get_realpath( $realpath_logs_base_dir.'/'.$dirname.'/' );
+					$result = $this->fs->chmod_r( $realpath_dir, 0777 );
+					$result = $this->fs->rm( $realpath_dir );
+					if( !$result ){
+						array_push($errored_directories, $realpath_dir);
+					}else{
+						array_push($removed_directories, $realpath_dir);
+					}
+				}elseif( $dirname_int == $period_year_month ){
+					// 年月が期限日と一致なら、ディレクトリを開いて日ごとに評価
 
+					$subdirs = $this->fs->ls( $realpath_logs_base_dir.'/'.$dirname.'/' );
+					foreach( $subdirs as $subdirname ){
+						if( preg_match('/^[0-9]{2}$/', $dirname) ){
+							$subdirname_int = intval( preg_replace('/^0*/', '', $dirname) );
+							if( $subdirname_int < $period_date ){
+								// 日が期限日より過去なら、日ディレクトリごと消去
+								$this->line( ' remove dir: '.$dirname.'/'.$subdirname );
+								$realpath_dir = $this->fs->get_realpath( $realpath_logs_base_dir.'/'.$dirname.'/'.$subdirname.'/' );
+								$result = $this->fs->chmod_r( $realpath_dir, 0777 );
+								$result = $this->fs->rm( $realpath_dir );
+								if( !$result ){
+									array_push($errored_directories, $realpath_dir);
+								}else{
+									array_push($removed_directories, $realpath_dir);
+								}
+							}else{
+								// 年月が期限日と一致、またはより新しければ、何もしない
+							}
 
+						}
+					}
+
+				}else{
+					// 年月が期限日より新しければ、何もしない
+				}
+
+			}
+		}
+
+		if( count($removed_directories) ){
+			$this->event_log('progress', 'Completed to remove old log directories. '.implode(', ', $removed_directories));
+		}
+
+		// ------------
+		// ディレクトリの削除に問題がある場合、エラーを報告する
+		if( count($errored_directories) ){
+			$this->line( '' );
+			$this->error( '[ERROR] Failed to remove any directories.' );
+			foreach( $errored_directories as $errored_directory ){
+				$this->error( ' - '.$errored_directory );
+			}
+			$this->line( '' );
+
+			$this->event_log('progress', '[ERROR] Failed to remove old log directories. '.implode(', ', $errored_directories), 'error');
+		}
 
 
 
