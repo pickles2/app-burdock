@@ -114,7 +114,7 @@ class HardDeleteGarbagesCommand extends Command
 			$affectedRows = DB::table('users_email_changes')
 				->where( 'user_id', $user->id )
 				->delete();
-			$this->event_log('progress', $affectedRows.' records were hard deleted from `users_email_changes`.');
+			$this->event_log('progress', $affectedRows.' records were hard deleted from `users_email_changes`. (via: user_id = "'.$user->id.'")');
 
 			// プロジェクトの作成ユーザーだった場合、 null に置き換える
 			$affectedRows = DB::table('projects')
@@ -122,7 +122,7 @@ class HardDeleteGarbagesCommand extends Command
 				->update( [
 					'user_id' => null
 				] );
-			$this->event_log('progress', $affectedRows.' records were set `user_id` to `null` from `projects`.');
+			$this->event_log('progress', $affectedRows.' records were set `user_id` to `null` from `projects`. (via: user_id = "'.$user->id.'")');
 
 			// ユーザー自体の削除
 			$user->forceDelete();
@@ -205,6 +205,10 @@ class HardDeleteGarbagesCommand extends Command
 				}
 			}
 
+			if( count($removed_directories) ){
+				$this->event_log('progress', 'Completed to remove any directories. (via: project_code = "'.$project->project_code.'"). '.implode(', ', $removed_directories));
+			}
+
 			// ------------
 			// ディレクトリの削除に問題がある場合、
 			// ここで抜けてエラーを報告する
@@ -223,8 +227,23 @@ class HardDeleteGarbagesCommand extends Command
 
 			// ------------
 			// DBレコードの物理削除
-			// TODO: リレーションされている周辺テーブルのクリーニング後に実行する
-			// $project->forceDelete();
+
+			// Indigo関連テーブル
+			$affectedRows = DB::table('TS_BACKUP')
+				->where( 'space_name', $project->project_code )
+				->delete();
+			$this->event_log('progress', $affectedRows.' records were hard deleted from `TS_BACKUP`. (via: project_code = "'.$project->project_code.'")');
+			$affectedRows = DB::table('TS_OUTPUT')
+				->where( 'space_name', $project->project_code )
+				->delete();
+			$this->event_log('progress', $affectedRows.' records were hard deleted from `TS_OUTPUT`. (via: project_code = "'.$project->project_code.'")');
+			$affectedRows = DB::table('TS_RESERVE')
+				->where( 'space_name', $project->project_code )
+				->delete();
+			$this->event_log('progress', $affectedRows.' records were hard deleted from `TS_RESERVE`. (via: project_code = "'.$project->project_code.'")');
+
+			// プロジェクト自体の削除
+			$project->forceDelete();
 
 			$this->event_log('progress', 'Completed to hard delete project "'.$project->project_code.'". '.implode(', ', $removed_directories));
 
