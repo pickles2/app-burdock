@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use App\Project;
 use App\User;
 use App\EventLog;
@@ -27,8 +28,14 @@ class HardDeleteGarbagesCommand extends Command
 	/** $fs */
 	private $fs;
 
-	/** 保存期間設定 */
-	private $retention_period;
+	/** 論理削除データの保存期間設定 */
+	private $softdelete_retention_period;
+
+	/** 各種ログデータの保存期間設定 */
+	private $log_retention_period;
+
+	/** ユーザー情報更新用一時テーブルの保存期間設定 */
+	private $user_temporary_retention_period;
 
 	/**
 	 * Create a new command instance.
@@ -41,10 +48,17 @@ class HardDeleteGarbagesCommand extends Command
 
 		$this->fs = new \tomk79\filesystem();
 
-		// 保存期間設定
-		// この時刻よりも前に論理削除されたデータを削除対象とする。
 		$now = time();
-		$this->retention_period = $now - (14 * 24 * 60 * 60); // 14日間
+
+		// 論理削除データの保存期間設定
+		// この時刻よりも前に論理削除されたデータを削除対象とする。
+		$this->softdelete_retention_period = $now - (14 * 24 * 60 * 60); // 14日間
+
+		// 各種ログデータの保存期間設定
+		$this->log_retention_period = $now - (365 * 24 * 60 * 60); // 1年間
+
+		// ユーザー情報更新用一時テーブルの保存期間設定
+		$this->user_temporary_retention_period = $now - (1 * 24 * 60 * 60); // 24時間
 	}
 
 	/**
@@ -67,19 +81,23 @@ class HardDeleteGarbagesCommand extends Command
 
 		// --------------------------------------
 		// メールアドレス変更のための一時テーブル
-		// TODO: 実装する
-
+		$affectedRows = DB::table('users_email_changes')
+			->where( 'created_at', '<', date('Y-m-d H:i:s', $this->user_temporary_retention_period) )
+			->delete();
+		$this->event_log('progress', $affectedRows.' records were hard deleted from `users_email_changes`.');
 
 		// --------------------------------------
 		// パスワードリセットのための一時テーブル
-		// TODO: 実装する
+		$affectedRows = DB::table('password_resets')
+			->where( 'created_at', '<', date('Y-m-d H:i:s', $this->user_temporary_retention_period) )
+			->delete();
+		$this->event_log('progress', $affectedRows.' records were hard deleted from `password_resets`.');
 
 
 		// --------------------------------------
 		// ユーザーデータを物理削除する
-		// TODO: 実装する
 		$softDeletedUsers = User::onlyTrashed()
-			->where( 'deleted_at', '<', date('Y-m-d H:i:s', $this->retention_period) )
+			->where( 'deleted_at', '<', date('Y-m-d H:i:s', $this->softdelete_retention_period) )
 			->get();
 
 		foreach( $softDeletedUsers as $user ){
@@ -91,7 +109,10 @@ class HardDeleteGarbagesCommand extends Command
 
 			// ------------
 			// DBレコードの物理削除
+			// TODO: リレーションされている周辺テーブルのクリーニング後に実行する
 			// $user->forceDelete();
+
+			$this->event_log('progress', 'Completed to hard delete user "'.$user->name.' - ('.$user->id.')".');
 
 			$this->line( '' );
 			sleep(1);
@@ -103,7 +124,7 @@ class HardDeleteGarbagesCommand extends Command
 		// --------------------------------------
 		// プロジェクトデータを物理削除する
 		$softDeletedProjects = Project::onlyTrashed()
-			->where( 'deleted_at', '<', date('Y-m-d H:i:s', $this->retention_period) )
+			->where( 'deleted_at', '<', date('Y-m-d H:i:s', $this->softdelete_retention_period) )
 			->get();
 
 		foreach( $softDeletedProjects as $project ){
@@ -187,6 +208,7 @@ class HardDeleteGarbagesCommand extends Command
 
 			// ------------
 			// DBレコードの物理削除
+			// TODO: リレーションされている周辺テーブルのクリーニング後に実行する
 			// $project->forceDelete();
 
 			$this->event_log('progress', 'Completed to hard delete project "'.$project->project_code.'". '.implode(', ', $removed_directories));
@@ -199,24 +221,16 @@ class HardDeleteGarbagesCommand extends Command
 
 		// --------------------------------------
 		// 古いログデータを物理削除する
-		// TODO: 実装する
-		$softDeletedEventLogs = EventLog::onlyTrashed()
-			->where( 'deleted_at', '<', date('Y-m-d H:i:s', $this->retention_period) )
-			->get();
 
-		foreach( $softDeletedEventLogs as $eventLog ){
-			$this->line( '' );
-			$this->info( $eventLog->created_at );
+		// ------------
+		// DBレコードの物理削除
+		$affectedRows = $softDeletedEventLogs = EventLog
+			::where( 'created_at', '<', date('Y-m-d H:i:s', $this->log_retention_period) )
+			->forceDelete();
+		$this->event_log('progress', $affectedRows.' records were hard deleted from EventLog.');
 
 
-			// ------------
-			// DBレコードの物理削除
-			// $eventLog->forceDelete();
 
-			$this->line( '' );
-			sleep(1);
-			continue;
-		}
 
 
 
