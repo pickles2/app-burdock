@@ -129,4 +129,22 @@ return [
     'log_retention_period' => env('BD_LOG_RETENTION_PERIOD', '1Y'),
     'user_temporary_retention_period' => env('BD_USER_TEMPORARY_RETENTION_PERIOD', '24H'),
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | URL のスキーマを強制的にセットする
+    |--------------------------------------------------------------------------
+    |
+    | Y = 年 (×365日)
+    | M = 月 (×30日)
+    | D = 日 (×24時間)
+    | H = 時間 (×60分)
+    | I = 分 (×60秒)
+    | 単位なし = 秒
+    | ※単位は大文字小文字を区別しない
+    |
+    */
+    'url_scheme' => env('BD_URL_SCHEME', null),
+
+
 ];

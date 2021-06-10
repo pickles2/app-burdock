@@ -15,18 +15,20 @@ class AppServiceProvider extends ServiceProvider
 	{
 
 		// --------------------------------------
-		// NOTE: MySQL5.7.7、またはMariaDB10.2.2より古い場合に必要です。
+		// MySQL5.7.7、またはMariaDB10.2.2より古い場合に必要です。
 		\Illuminate\Support\Facades\Schema::defaultStringLength(191);
 
+
 		// --------------------------------------
-		// NOTE: 強制的にHTTPS環境にします。
-		// `asset()` などに影響します。
-		// デフォルトは環境変数から自動的にセットされますが、
-		// ↓この行を書くことで強制的に HTTPS 環境として認識させます。
-		if (config('app.env') === 'production'){
-			// ローカルの開発環境では、 https ではないほうがよい場合が多いので、
-			// 本番(production)環境でのみ強制設定する。
-			\URL::forceScheme('https');
+		// 強制的に HTTPS (または HTTP) 環境にします。
+		$forceScheme = config('burdock.url_scheme');
+		if ( strlen( $forceScheme ) ){
+			// `url()` や `asset()` などに影響します。
+			// .env の `BD_FORCE_SCHEME` に設定したスキームに従います。
+			// デフォルトは `強制しない` (=環境変数から得た値と同じ) です。
+
+			// ↓この行を書くことで強制的に HTTPS (または HTTP) 環境として認識させます。
+			\URL::forceScheme( $forceScheme );
 		}
 
 	}
