@@ -70,7 +70,7 @@ class utils{
 
 
 		$tmp_preview_path = '';
-		if( property_exists( $global->px2all, 'config' ) && property_exists( $global->px2all->config, 'path_controot' ) ){
+		if( isset($global->px2all) && property_exists( $global->px2all, 'config' ) && property_exists( $global->px2all->config, 'path_controot' ) ){
 			if( strlen( $global->px2all->config->path_controot ) ){
 				$tmp_preview_path = $fs->get_realpath($global->px2all->config->path_controot);
 			}
