@@ -22,7 +22,7 @@ NOTE: CSS `px2style.css` は、 `app.css` 内にビルドされるので、こ�
 <!-- App Resources -->
 <link rel="stylesheet" href="{{ asset('css/app.css') }}" type="text/css" />
 
-@if (property_exists($global, 'appearance') && $global->appearance)
+@if (isset($global) && property_exists($global, 'appearance') && $global->appearance)
 <style>
 :root {--px2-main-color: {{ $global->appearance->main_color }};}
 </style>

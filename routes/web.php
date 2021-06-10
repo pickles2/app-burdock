@@ -37,6 +37,15 @@ Route::middleware(['boot'])
 
 
 	// --------------------------------------
+	// スペース管理
+	Route::get('space', 'Space\IndexController@index');
+	Route::get('space/bd_data_dir', 'Space\BdDataDirController@index');
+	Route::post('space/bd_data_dir/gpi', 'Space\BdDataDirController@remoteFinderGPI');
+	Route::get('space/bd_data_dir/common-file-editor', 'Space\BdDataDirController@commonFileEditor');
+	Route::post('space/bd_data_dir/common-file-editor/gpi', 'Space\BdDataDirController@commonFileEditorGPI');
+
+
+	// --------------------------------------
 	// システムメンテナンス画面 System Maintenance
 	Route::middleware(['isDebugMode'])
 	->group(function(){

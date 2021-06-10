@@ -67,6 +67,7 @@
 				</li>
 				@else
 					<li><a href="{{ url('/') }}">ダッシュボード</a></li>
+					<li><a href="{{ url('/space') }}" data-name="space">スペース管理</a></li>
 					@if( isset($project) && ! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
 						@if( isset($global->project_status) && $global->project_status->isPxStandby )
 							<li><a href="{{ '//'.\App\Helpers\utils::preview_host_name( $project->project_code, $branch_name ).\App\Helpers\utils::get_path_controot() }}" target="_blank">新規ウィンドウでプレビュー</a></li>

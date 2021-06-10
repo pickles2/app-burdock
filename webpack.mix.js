@@ -28,12 +28,18 @@ mix
 	.js('resources/js/app.js', 'public/js')
 	.sass('resources/sass/app.scss', 'public/css')
 
+
 	// --------------------------------------
 	// Project Local Resources
 
 	// Dashboard
 	.js('resources/cont/dashboard/script.js', 'public/cont/dashboard/script.js')
 	.sass('resources/cont/dashboard/style.scss', 'public/cont/dashboard/style.css')
+
+	// Space
+	.js('resources/cont/space/bd_data_dir/script.js', 'public/cont/space/bd_data_dir/script.js')
+	.sass('resources/cont/space/bd_data_dir/style.scss', 'public/cont/space/bd_data_dir/style.css')
+
 
 	// Home
 	.sass('resources/cont/home/style.scss', 'public/cont/home/style.css')

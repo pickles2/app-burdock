@@ -18,6 +18,7 @@ class GitBranchDelete
 		$result = $fs->chmod_r($realpath_pj_git_target_branch_root, 0777);
 
 		// ディレクトリごと削除
+		$fs->chmod_r( $realpath_pj_git_target_branch_root, 0777 );
 		$result = $fs->rm($realpath_pj_git_target_branch_root);
 
 

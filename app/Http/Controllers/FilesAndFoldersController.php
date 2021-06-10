@@ -137,6 +137,7 @@ class FilesAndFoldersController extends Controller
 			$rtn['result'] = file_exists( $realpath_filename );
 
 		}elseif( $request->method == 'remove' ){
+			$fs->chmod_r( $realpath_filename, 0777 );
 			$rtn['result'] = $fs->rm( $realpath_filename );
 
 		}elseif( $request->method == 'px_command' ){

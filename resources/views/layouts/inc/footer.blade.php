@@ -3,6 +3,7 @@ window.addEventListener('load', function(){
 	var current = '';
 	@if (Request::is('login') || Request::is('login/*')) current = 'login'; @endif
 	@if (Request::is('register') || Request::is('register/*')) current = 'register'; @endif
+	@if (Request::is('space') || Request::is('space/*')) current = 'space'; @endif
 	@if (Request::is('home/*')) current = 'home'; @endif
 	@if (Request::is('sitemaps/*')) current = 'sitemaps'; @endif
 	@if (Request::is('themes/*')) current = 'themes'; @endif
