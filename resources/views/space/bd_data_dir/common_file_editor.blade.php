@@ -24,7 +24,7 @@
 				"read": function(filename, callback){ // required
 					$.ajax({
 						type : 'post',
-						url : "/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/common-file-editor/gpi",
+						url : "/space/bd_data_dir/common-file-editor/gpi",
 						headers: {
 							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 						},
@@ -42,7 +42,7 @@
 				"write": function(filename, base64, callback){ // required
 					$.ajax({
 						type : 'post',
-						url : "/files-and-folders/{{ $project->project_code }}/{{ $branch_name }}/common-file-editor/gpi",
+						url : "/space/bd_data_dir/common-file-editor/gpi",
 						headers: {
 							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 						},
