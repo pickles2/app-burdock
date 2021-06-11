@@ -74,9 +74,17 @@ if( !isset($branch_name) || !strlen($branch_name) ){
 					@endif
 				</div>
 
-				<div class="contents">
-					@yield('content')
+				<div class="theme-main-container__body">
+					<div class="contents">
+						@yield('content')
+					</div>
+					@if( Request::is('space/*'))
+					<div>
+						<p><a href="/space" class="px2-a">スペース管理へ戻る</a></p>
+					</div>
+					@endif
 				</div>
+
 			</div>
 		</div>
 

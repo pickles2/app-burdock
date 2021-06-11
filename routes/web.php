@@ -43,6 +43,7 @@ Route::middleware(['boot'])
 	Route::post('space/bd_data_dir/gpi', 'Space\BdDataDirController@remoteFinderGPI');
 	Route::get('space/bd_data_dir/common-file-editor', 'Space\BdDataDirController@commonFileEditor');
 	Route::post('space/bd_data_dir/common-file-editor/gpi', 'Space\BdDataDirController@commonFileEditorGPI');
+	Route::get('space/members', 'Space\MembersController@index');
 
 
 	// --------------------------------------

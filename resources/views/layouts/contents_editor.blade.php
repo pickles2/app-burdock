@@ -44,23 +44,6 @@
 				flex-grow: 1;
 			}
 
-			/* via: styles.css */
-			/*
-			.contents {
-				top: 0;
-				left: 0;
-				width: 100%;
-				min-height: 150px;
-				z-index: 50;
-			}
-			.contents iframe {
-				width: 100%;
-				max-height: 100%;
-				border: none;
-				margin: 0;
-				padding: 0;
-			}
-			*/
 		</style>
 
 		@yield('head')

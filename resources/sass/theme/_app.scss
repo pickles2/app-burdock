@@ -72,7 +72,7 @@ body {
 	z-index: 900;
 
 	&__header-info,
-	.contents {
+	&__body {
 		max-width: 1170px;
 		width: calc(100% - 57px - 57px);
 		margin: 0 auto;
@@ -114,6 +114,7 @@ body.theme-content-fit-to-window {
 		margin: 0 auto !important;
 		padding-top: 0;
 
+		&__body,
 		.contents {
 			max-width: 100% !important;
 			width: 100%;

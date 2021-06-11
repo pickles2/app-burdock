@@ -10,6 +10,7 @@
 		flex-direction: column;
 		height: 100px;
 
+		&__body,
 		.contents {
 			flex-grow: 100;
 			overflow: auto;

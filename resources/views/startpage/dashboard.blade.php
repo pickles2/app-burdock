@@ -13,15 +13,15 @@
 	<div class="col-sm-6">
 		<h2>プロジェクトを選択してください</h2>
 		<div class="cont_project_list unit">
+			@if( count($projects) )
 			<div class="list-group">
-				{{-- 全プロジェクトが見える用に一時的に変更した箇所 --}}
-				{{-- @foreach($user->projects as $project)
-					<a class="list-group-item" href="{{ url('home/'.$project->project_code) }}">{{ $project->project_name }}</a>
-				@endforeach --}}
 				@foreach($projects as $project)
 					<a class="list-group-item" href="{{ url('home/'.$project->project_code) }}">{{ $project->project_name }}</a>
 				@endforeach
 			</div>
+			@else
+				<p>プロジェクトは登録されていません。</p>
+			@endif
 		</div>
 	</div>
 	<div class="col-sm-6">

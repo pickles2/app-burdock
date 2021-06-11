@@ -22,9 +22,12 @@
 						<li><a href="{{ route('register') }}" data-name="register">{{ __('Register') }}</a></li>
 					@else
 						@if( isset($project) && ! Request::is('*mypage*') && ! Request::is('/') && ! Request::is('setup/*'))
-							@if( isset($global->project_status) && $global->project_status->isPxStandby && isset($global->main_menu) && is_array($global->main_menu) )
+							@if( isset($global->project_status) && $global->project_status->isPxStandby && isset($global->main_menu) && is_object($global->main_menu) )
 							@foreach($global->main_menu as $main_menu_id=>$main_menu_info)
-							<li><a href="{{ url($main_menu_info->href) }}" data-name="{{ $main_menu_info->app }}">{{ $main_menu_info->label }}</a></li>
+								@if ( !$main_menu_info )
+									@continue
+								@endif
+								<li><a href="{{ url($main_menu_info->href) }}" data-name="{{ $main_menu_info->app }}">{{ $main_menu_info->label }}</a></li>
 							@endforeach
 							@else
 							<li><a href="{{ url('home/'.urlencode($project->project_code).'/'.urlencode($branch_name).'/') }}" data-name="home">ホーム</a></li>
@@ -78,10 +81,13 @@
 								<li><a href="{{ url('projects/'.urlencode($project->project_code).'/edit') }}" data-name="projects">プロジェクト環境設定</a></li>
 							</ul>
 						</li>
-						@if( isset($global->project_status) && $global->project_status->isPxStandby && isset($global->shoulder_menu) && is_array($global->shoulder_menu) )
+						@if( isset($global->project_status) && $global->project_status->isPxStandby && isset($global->shoulder_menu) && is_object($global->shoulder_menu) )
 
 							@foreach($global->shoulder_menu as $shoulder_menu_id=>$shoulder_menu_info)
-							<li><a href="{{ url($shoulder_menu_info->href) }}" data-name="{{ $shoulder_menu_info->app }}">{{ $shoulder_menu_info->label }}</a></li>
+								@if ( !$shoulder_menu_info )
+									@continue
+								@endif
+								<li><a href="{{ url($shoulder_menu_info->href) }}" data-name="{{ $shoulder_menu_info->app }}">{{ $shoulder_menu_info->label }}</a></li>
 							@endforeach
 
 							<li><a href="javascript:;">ツール</a>
