@@ -143,7 +143,6 @@ class GenerateVirtualHostsCommand extends Command
 
 			$this->line( ' ----- '.$result['message'] );
 			$this->line( '' );
-			sleep(1);
 		}
 
 		if( !is_file($this->realpath_vhosts_dir.'vhosts.conf') || md5_file($this->realpath_vhosts_dir.'vhosts.conf') != md5_file($this->realpath_vhosts_dir.$this->vhosts_tmp_filename) ){

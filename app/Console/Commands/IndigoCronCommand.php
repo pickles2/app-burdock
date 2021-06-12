@@ -89,7 +89,6 @@ class IndigoCronCommand extends Command
 			$result = $indigo->cron_run();
 			$this->line( '                     -----> OK' );
 			$this->line( '' );
-			sleep(1);
 		}
 
 		$this->line(' finished!');

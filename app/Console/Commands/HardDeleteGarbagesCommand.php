@@ -186,7 +186,6 @@ class HardDeleteGarbagesCommand extends Command
 			$this->event_log('progress', 'Completed to hard delete user "'.$user->name.' - ('.$user->id.')".');
 
 			$this->line( '' );
-			sleep(1);
 			continue;
 		}
 
@@ -304,7 +303,6 @@ class HardDeleteGarbagesCommand extends Command
 			$this->event_log('progress', 'Completed to hard delete project "'.$project->project_code.'". '.implode(', ', $removed_directories));
 
 			$this->line( '' );
-			sleep(1);
 			continue;
 		}
 
