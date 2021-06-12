@@ -1,6 +1,13 @@
 @extends('layouts.default')
 @section('title') {{ config('app.name') }} @endsection
 
+@section('first-view')
+<div class="cont-top-jumbotron">
+	<h1><img src="common/images/logo_2017.svg" style="width:50%; max-height:120px;" alt="Pickles 2" /></h1>
+	<p>Web Tool</p>
+</div>
+@endsection
+
 @section('content')
 
 <div class="container">
@@ -63,4 +70,8 @@
 	</div>
 </div>
 
+@endsection
+
+@section('head')
+<link href="{{ asset('/cont/dashboard/style.css') }}" rel="stylesheet" />
 @endsection
