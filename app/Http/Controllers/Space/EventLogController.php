@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\SystemMaintenance;
+namespace App\Http\Controllers\Space;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +28,7 @@ class EventLogController extends \App\Http\Controllers\Controller
 		$eventLogs = EventLog::paginate(10);
 
 		return view(
-			'system-maintenance.event-logs.index',
+			'space.event-logs.index',
 			array(
 				'eventLogs' => $eventLogs,
 			)

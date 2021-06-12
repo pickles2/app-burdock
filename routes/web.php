@@ -45,6 +45,7 @@ Route::middleware(['boot'])
 	Route::post('space/bd_data_dir/common-file-editor/gpi', 'Space\BdDataDirController@commonFileEditorGPI');
 	Route::get('space/members', 'Space\MembersController@index');
 	Route::get('space/project', 'Space\ProjectController@index');
+	Route::get('space/event-logs', 'Space\EventLogController@index');
 
 
 	// --------------------------------------
@@ -52,7 +53,6 @@ Route::middleware(['boot'])
 	Route::middleware(['isDebugMode'])
 	->group(function(){
 		Route::get('system-maintenance', 'SystemMaintenance\IndexController@index');
-		Route::get('system-maintenance/event-logs', 'SystemMaintenance\EventLogController@index');
 		Route::get('system-maintenance/phpinfo', 'SystemMaintenance\IndexController@phpinfo');
 		Route::get('system-maintenance/generate_vhosts', 'SystemMaintenance\GenerateVhostsController@index');
 		Route::post('system-maintenance/generate_vhosts/ajax_generate_vhosts', 'SystemMaintenance\GenerateVhostsController@ajaxGenerateVhosts');
