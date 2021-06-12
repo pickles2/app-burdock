@@ -36,7 +36,7 @@ class StartpageController extends Controller
 			return view('auth.verify');
 		}
 
-		$projects = Project::latest()->paginate();
+		$projects = Project::orderBy('project_name', 'asc')->get();
         return view(
             'startpage.dashboard',
             [
