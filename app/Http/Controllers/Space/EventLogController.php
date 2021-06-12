@@ -22,10 +22,16 @@ class EventLogController extends \App\Http\Controllers\Controller
 	/**
 	 * Show the application dashboard.
 	 */
-	public function index()
+	public function index(Request $request)
 	{
 
-		$eventLogs = EventLog::paginate(10);
+		$eventLogs = EventLog::paginate(100);
+
+		if( !isset( $request->page ) ){
+			// 最後のページ(=最新のログ)をデフォルトにする
+			return redirect('/space/event-logs?page='.urlencode($eventLogs->lastPage()));
+		}
+
 
 		return view(
 			'space.event-logs.index',
