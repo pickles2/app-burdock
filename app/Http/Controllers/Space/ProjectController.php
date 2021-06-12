@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Space;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\User;
+use App\Project;
 use App\Http\Requests\StoreSitemap;
 
 class ProjectController extends Controller
@@ -28,8 +28,8 @@ class ProjectController extends Controller
 	 */
 	public function index(Request $request){
 
-		$activeUsers = User::get();
-		$softDeletedUsers = User::onlyTrashed()->get();
+		$activeProjects = Project::orderBy('project_name', 'asc')->get();
+		$softDeletedProjects = Project::onlyTrashed()->orderBy('project_name', 'asc')->get();
 
 		$utils = new \App\Helpers\utils();
 		$sec_softdelete_retention_period = $utils->resolve_period_config( config('burdock.softdelete_retention_period') );
@@ -49,10 +49,10 @@ class ProjectController extends Controller
 		}
 
 		return view(
-			'space.members.index',
+			'space.project.index',
 			[
-				'activeUsers' => $activeUsers,
-				'softDeletedUsers' => $softDeletedUsers,
+				'activeProjects' => $activeProjects,
+				'softDeletedProjects' => $softDeletedProjects,
 				'sec_softdelete_retention_period' => $sec_softdelete_retention_period,
 				'softdelete_retention_period' => intval($softdelete_retention_period).$denomination,
 				'datetime_to_display' => function($datetime){

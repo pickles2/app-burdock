@@ -28,8 +28,8 @@ class MembersController extends Controller
 	 */
 	public function index(Request $request){
 
-		$activeUsers = User::get();
-		$softDeletedUsers = User::onlyTrashed()->get();
+		$activeUsers = User::orderBy('name', 'asc')->get();
+		$softDeletedUsers = User::onlyTrashed()->orderBy('name', 'asc')->get();
 
 		$utils = new \App\Helpers\utils();
 		$sec_softdelete_retention_period = $utils->resolve_period_config( config('burdock.softdelete_retention_period') );
