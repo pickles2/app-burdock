@@ -223,7 +223,7 @@ Apache 用の Virtual Hosts の設定ファイルを出力します。
 
 ## 更新履歴 - Change log
 
-### Pickles 2 Burdock v0.1.2 (リリース日未定)
+### Pickles 2 Burdock v0.1.2 (2021年6月12日)
 
 - 定期バッチに、論理削除された古いデータを、物理削除する処理を追加した。
 - 新しい設定項目 `BD_SOFTDELETE_RETENTION_PERIOD`、 `BD_LOG_RETENTION_PERIOD`、 `BD_USER_TEMPORARY_RETENTION_PERIOD` を追加。
