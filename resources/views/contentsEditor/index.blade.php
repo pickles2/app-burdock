@@ -1,5 +1,6 @@
 @php
 	$title = __('Contents');
+	$bootstrap = 3;
 @endphp
 @extends('layouts.contents_editor')
 
