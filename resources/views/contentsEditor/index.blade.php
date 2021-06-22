@@ -66,12 +66,17 @@ foreach($px2ce_client_resources->js as $value) {
 				'lang': 'ja', // language
 				'gpiBridge': function(input, callback){
 					console.log('====== GPI Request:', input);
+					console.log(JSON.stringify(input));
 					$.ajax({
 						"url": '/contentsEditor/'+project_code+'/'+branch_name+'/px2ceGpi?page_path='+page_path+'&target_mode='+target_mode, // ←呼び出し元が決める
 						"method": 'post',
 						'data': {
 							'data':JSON.stringify(input),
 							_token: '{{ csrf_token() }}'
+						},
+						"error": function(error){
+							console.error('------ GPI Response Error:', typeof(error), error);
+							callback(data.res);
 						},
 						"success": function(data){
 							console.log('------ GPI Response:', typeof(data), data);

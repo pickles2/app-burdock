@@ -90,7 +90,7 @@ class ContentsEditorController extends Controller
 			$branch_name,
 			$page_path.'?PX=px2dthelper.px2ce.gpi&data_filename='.urlencode($tmpFileName).'&target_mode='.urlencode($target_mode)
 		);
-		$result = json_decode($result, true);
+		$result = json_decode($result);
 
 		// 作成した一時ファイルを削除
 		unlink($file);
