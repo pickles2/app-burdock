@@ -73,7 +73,7 @@ class ComposerController extends Controller
 		$bdAsync = new \App\Helpers\async( $project, $branch_name );
 		$bdAsync->set_channel_name( urlencode($project->project_code).'----'.urlencode($branch_name).'___composer.'.$user_id );
 		$bdAsync->cmd(
-			array('composer', 'install'),
+			array('composer', 'update'),
 			array()
 		);
 		return array(
