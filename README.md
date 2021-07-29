@@ -223,6 +223,10 @@ Apache 用の Virtual Hosts の設定ファイルを出力します。
 
 ## 更新履歴 - Change log
 
+### Pickles 2 Burdock v0.1.5 (リリース日未定)
+
+- 同梱の `composer` コマンドを更新した。 (v1.10.10 to v2.1.5)
+
 ### Pickles 2 Burdock v0.1.4 (2021年7月10日)
 
 - `composer update` ができない不具合を修正。
