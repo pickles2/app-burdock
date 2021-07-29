@@ -226,6 +226,7 @@ Apache 用の Virtual Hosts の設定ファイルを出力します。
 ### Pickles 2 Burdock v0.1.5 (リリース日未定)
 
 - 同梱の `composer` コマンドを更新した。 (v1.10.10 to v2.1.5)
+- Config修正: `SESSION_SECURE_COOKIE` のデフォルトを `true` に変更した。
 
 ### Pickles 2 Burdock v0.1.4 (2021年7月10日)
 
