@@ -78,6 +78,10 @@ class AsyncPxCommand extends Command
 
 		$query = $path.'?PX='.$pxcommand.'&'.http_build_query($params);
 
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( config('burdock.data_dir') );
+		$project_branch = $burdockProjectManager->project($project_code)->branch($branch_name, 'preview');
+
+
 
 		$project_path = \get_project_workingtree_dir($project_code, $branch_name);
 		$path_current_dir = realpath('.'); // 元のカレントディレクトリを記憶
@@ -150,6 +154,10 @@ class AsyncPxCommand extends Command
 		proc_close($proc);
 		chdir($path_current_dir); // 元いたディレクトリへ戻る
 
+
+
+		// Burdockが持っているキャッシュもクリア
+		$project_branch->clearcache();
 
 
 		$this->line(' finished!');
