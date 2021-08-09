@@ -87,14 +87,7 @@ class project
 
 
 			if( property_exists($global->px2all->px2dtconfig, 'custom_console_extensions') ){
-				$cceResult = px2query(
-					$global->project_code,
-					$global->branch_name,
-					'/?PX=px2dthelper.custom_console_extensions',
-					array(
-						'output' => 'json',
-					)
-				);
+				$cceResult = $project_branch->get_cce_info();
 
 				$global->cce = (object) array();
 				foreach( $cceResult->list as $cce_id=>$cce_row ){
