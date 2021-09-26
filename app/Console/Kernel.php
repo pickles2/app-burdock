@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\IndigoCronCommand;
 use App\Console\Commands\DeployScriptCommand;
+use App\Console\Commands\HardDeleteGarbagesCommand;
 use App\Console\Commands\GenerateVirtualHostsCommand;
 
 class Kernel extends ConsoleKernel
@@ -18,6 +19,7 @@ class Kernel extends ConsoleKernel
 	protected $commands = [
 		Commands\IndigoCronCommand::class,
 		Commands\DeployScriptCommand::class,
+		Commands\HardDeleteGarbagesCommand::class,
 		Commands\GenerateVirtualHostsCommand::class
 	];
 
