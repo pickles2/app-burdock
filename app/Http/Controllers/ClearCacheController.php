@@ -49,7 +49,13 @@ class ClearCacheController extends Controller
 	 */
 	public function clearcache(Request $request, Project $project, $branch_name){
 		$user_id = Auth::id();
-		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( config('burdock.data_dir') );
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main(
+			config('burdock.data_dir'),
+			array(
+				'php' => config('burdock.command_path.php'),
+				'php_ini' => config('burdock.command_path.php_ini'),
+			)
+		);
 		$project_branch = $burdockProjectManager->project($project->project_code)->branch($branch_name, 'preview');
 
 		$bdAsync = new \App\Helpers\async( $project, $branch_name );

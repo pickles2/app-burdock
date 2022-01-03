@@ -59,7 +59,13 @@ class project
 
 
 		if( strlen($global->project_code) && strlen($global->branch_name) ){
-			$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( config('burdock.data_dir') );
+			$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main(
+				config('burdock.data_dir'),
+				array(
+					'php' => config('burdock.command_path.php'),
+					'php_ini' => config('burdock.command_path.php_ini'),
+				)
+			);
 			$project_branch = $burdockProjectManager->project($global->project_code)->branch($global->branch_name, 'preview');
 			$global->project_status = $project_branch->status();
 			if( $global->project_status->isPxStandby ){

@@ -78,7 +78,13 @@ class AsyncPxCommand extends Command
 
 		$query = $path.'?PX='.$pxcommand.'&'.http_build_query($params);
 
-		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( config('burdock.data_dir') );
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main(
+			config('burdock.data_dir'),
+			array(
+				'php' => config('burdock.command_path.php'),
+				'php_ini' => config('burdock.command_path.php_ini'),
+			)
+		);
 		$project_branch = $burdockProjectManager->project($project_code)->branch($branch_name, 'preview');
 
 

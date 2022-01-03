@@ -56,7 +56,13 @@ class SearchController extends Controller
 		$project_path = \get_project_workingtree_dir($project->project_code, $branch_name);
 		$this->project_path = $project_path;
 
-		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( config('burdock.data_dir') );
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main(
+			config('burdock.data_dir'),
+			array(
+				'php' => config('burdock.command_path.php'),
+				'php_ini' => config('burdock.command_path.php_ini'),
+			)
+		);
 		$project_branch = $burdockProjectManager->project($project->project_code)->branch($branch_name, 'preview');
 		$pageInfoAll = $project_branch->query(
 			'/?PX=px2dthelper.get.all',

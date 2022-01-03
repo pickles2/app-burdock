@@ -215,7 +215,13 @@ class ProjectController extends Controller
 		$project_code = $project->project_code;
 
 		// // プロジェクトフォルダが存在していれば削除 <- ※softDeleteに変更したため、ここでは削除しない
-		// $burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( config('burdock.data_dir') );
+		// $burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main(
+		// 	config('burdock.data_dir'),
+		// 	array(
+		// 		'php' => config('burdock.command_path.php'),
+		// 		'php_ini' => config('burdock.command_path.php_ini'),
+		// 	)
+		// );
 		// $pj = $burdockProjectManager->project($project->project_code);
 		// $result = $pj->delete();
 

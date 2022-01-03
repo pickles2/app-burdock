@@ -24,7 +24,13 @@ class ProjectDirsController extends \App\Http\Controllers\Controller
 	 */
 	public function index()
 	{
-		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( config('burdock.data_dir') );
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main(
+			config('burdock.data_dir'),
+			array(
+				'php' => config('burdock.command_path.php'),
+				'php_ini' => config('burdock.command_path.php_ini'),
+			)
+		);
 		$projects = $burdockProjectManager->get_project_list();
 		$project_dirs = array();
 		foreach( $projects as $project_code ){
@@ -52,7 +58,13 @@ class ProjectDirsController extends \App\Http\Controllers\Controller
 	 */
 	public function show($project_code)
 	{
-		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( config('burdock.data_dir') );
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main(
+			config('burdock.data_dir'),
+			array(
+				'php' => config('burdock.command_path.php'),
+				'php_ini' => config('burdock.command_path.php_ini'),
+			)
+		);
 		$project = Project::where('project_code', $project_code)->first();
 
 		return view(
@@ -69,7 +81,13 @@ class ProjectDirsController extends \App\Http\Controllers\Controller
 	 */
 	public function store($project_code, Request $request)
 	{
-		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( config('burdock.data_dir') );
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main(
+			config('burdock.data_dir'),
+			array(
+				'php' => config('burdock.command_path.php'),
+				'php_ini' => config('burdock.command_path.php_ini'),
+			)
+		);
 
 		$project = new Project;
 		$project->project_code = $project_code;
